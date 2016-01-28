@@ -1,0 +1,50 @@
+{
+    "common": {
+        "name":                     "text2command",
+        "version": "0.0.1",
+        "title":                    "Text to command",
+        "desc":                     {
+			"en": "This adapter allows convert texts to commands.",
+			"de": "Adapter konvertiert Text in die Kommandos.",
+			"ru": "Позволяет преобразовывать словесные выражения в команды."
+		},
+        "authors": [
+            "bluefox <dogafox@gmail.com>"
+        ],
+        "license":                  "MIT",
+        "platform":                 "Javascript/Node.js",
+        "mode":                     "daemon",
+        "readme":                   "https://github.com/ioBroker/ioBroker.text2command/blob/master/README.md",
+        "loglevel":                 "info",
+        "icon":                     "text2command.png",
+        "keywords":                 ["text", "commands"],
+        "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
+        "localLink":                "/adapter/text2command/tab.html",
+		"type":                     "script",
+        "adminTab": {
+            "name":                 {"en": "Text-&gt;Commands", "de": "Text-&gt;Kommandos", "ru": "Текст-&gt;Команды"},
+            "singleton":            false
+        }
+    },
+    "native": {
+        "rules": [
+
+        ],
+        "sayitInstance": ""
+    },
+    "instanceObjects": [
+        {
+            "_id": "text",
+            "type": "state",
+            "common": {
+                "name":  "Text to process",
+                "type":  "string",
+                "role":  "text",
+                "read":  true,
+                "write": true,
+                "desc":  "Write your text here with ack=false, and you will get answer with ack=true"
+            },
+            "native": {}
+        }
+    ]
+}
