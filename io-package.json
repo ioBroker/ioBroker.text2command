@@ -21,6 +21,7 @@
         "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
         "localLink":                "/adapter/text2command/tab.html",
 		"type":                     "script",
+        "noConfig":                 true,
         "adminTab": {
             "name":                 {"en": "Text-&gt;Commands", "de": "Text-&gt;Kommandos", "ru": "Текст-&gt;Команды"},
             "singleton":            false
