@@ -428,7 +428,7 @@ function sayNoSuchRole (lang) {
     return toSay;
 }
 
-if (module && module.parent) {
+if (typeof module !== 'undefined' && module.parent) {
     module.exports = {
         commands:           commands,
         rooms:              rooms,

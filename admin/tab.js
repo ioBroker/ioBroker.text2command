@@ -2,11 +2,11 @@ function Text2Commands() {
     var that            = this;
 
     this.list           = [];
-    this.$grid          =  $('#grid-rules');
     this.main           = main;
     this.currentFilter  = '';
     this.$dialogReplace = $('#dialog-replace');
     this.timer          = null;
+    this.rules          = [];
 
     function installColResize() {
         if (!$.fn.colResizable) return;
@@ -23,7 +23,7 @@ function Text2Commands() {
     }
 
     function showArgument(index, argIndex, type, value) {
-        var text = type ? '<input data-index="' + index + '" data-field="args" data-args-index="' + argIndex + '" value="' + (value === undefined ? '' : value) + '" />' : '';
+        var text = type ? '<input class="edit-field" data-index="' + index + '" data-field="args" data-args-index="' + argIndex + '" value="' + (value === undefined ? '' : value) + '" />' : '';
         switch (type) {
             case 'value': 
                 break;
@@ -38,48 +38,80 @@ function Text2Commands() {
     }
     
     function showOneRule(index, rule) {
-        var text = "<tr>";
+        var template = null;
+
+        var text = '<tr>';
         // type
-        text += '<td><select data-index="' + index + '" data-field="template">';
+        text += '<td><select class="select-field" data-index="' + index + '" data-field="template">' +
+            '<option value="">' + _('Select template') + '</option>';
+
         for (var r in commands) {
-            text += '<option ' + (rule.template === r ? 'selected' : '') + ' value="' + r + '">' + commands[r].description + '</option>';
+            var desc = commands[r].description;
+            if (typeof desc === 'object') {
+                desc = desc[systemLang] || desc.en;
+            }
+
+            if (rule.template === r) {
+                text += '<option selected value="' + r + '">' + desc + '</option>';
+                template = commands[r];
+            } else {
+                text += '<option value="' + r + '">' + desc + '</option>';
+            }
         }
         text += '</select>';
 
-        // Words
-        text += '<td><input data-index="' + index + '" data-field="words" value="' + rule.words + '" /></td>';
+        if (typeof desc === 'object') {
+            desc = desc[systemLang] || desc.en;
+        }
 
-        // Arg1
-        text += '<td>' + showArgument(index, 0, (commands[rule.template] && commands[rule.template].args && commands[rule.template].args[0]) ? commands[rule.template].args[0].type : '', rule.args ? rule.args[0] : null) + '</td>';
+        if (!template) {
+            text += '<td></td><td></td><td></td><td></td>';
+        } else {
+            // Words
+            var words = template.words;
+            if (words === undefined) {
+                words = rule.words || '';
+            } else if (typeof words === 'object') {
+                words = desc[systemLang] || desc.en;
+            }
 
-        // Arg2
-        text += '<td>' + showArgument(index, 1, (commands[rule.template] && commands[rule.template].args && commands[rule.template].args[1]) ? commands[rule.template].args[1].type : '', rule.args ? rule.args[1] : null) + '</td>';
+            text += '<td><input class="edit-field" data-index="' + index + '" data-field="words" value="' + words + '" ' + (commands[r].editable ? '' : 'readonly') + '/></td>';
 
-        // ack
-        text += '<td><input data-index="' + index + '" data-field="ack" type="checkbox" ></td>';
+            // Arg1
+            text += '<td>' + showArgument(index, 0, (commands[rule.template] && commands[rule.template].args && commands[rule.template].args[0]) ? commands[rule.template].args[0].type : '', rule.args ? rule.args[0] : null) + '</td>';
+
+            // Arg2
+            text += '<td>' + showArgument(index, 1, (commands[rule.template] && commands[rule.template].args && commands[rule.template].args[1]) ? commands[rule.template].args[1].type : '', rule.args ? rule.args[1] : null) + '</td>';
+
+            // ack
+            text += '<td><input class="edit-field" data-index="' + index + '" data-field="ack" type="checkbox" ></td>';
+        }
 
         // buttons
         text += '<td>';
         if (index == 0) {
-            text = '<span style="width: 20px"> </span>';
+            text += '<span style="width: 20px"> </span>';
         } else {
-            text = '<button class="rule-up" data-index="' + index + '" />';
+            text += '<button class="rule-up" data-index="' + index + '" />';
         }
-        if (rules.length - 1 == index) {
-            text = '<span style="width: 20px"> </span>';
+        if (that.rules.length - 1 == index) {
+            text += '<span style="width: 20px"> </span>';
         } else {
-            text = '<button class="rule-down" data-index="' + index + '" />';
+            text += '<button class="rule-down" data-index="' + index + '" />';
         }
-        text = '<button class="rule-delete" data-index="' + index + '" />';
+        text += '<button class="rule-delete" data-index="' + index + '" />';
         text += '</td>';
         return text;
     }
 
     function showRules() {
         var text = '';
-        for (var r = 0; r < rules.length; r++) {
-            text += showOneRule(r, rules[r]);
-        } 
+        for (var r = 0; r < that.rules.length; r++) {
+            text += showOneRule(r, that.rules[r]);
+        }
+        $('#tab-rules-body').html(text);
+
+        // init buttons and fields
     }
     
     this.prepare = function () {
@@ -113,9 +145,20 @@ function Text2Commands() {
             $('#rules-filter').val('').trigger('change');
         });
 
-        $('#btn_new_rule').button({icons: {primary: 'ui-icon-plus'}, text: false}).css({width: 16, height: 16}).click(function () {
+        var $btnNewRule = $('#btn_new_rule');
+        $btnNewRule.button({icons: {primary: 'ui-icon-plus'}, text: false}).css({width: 21, height: 21}).click(function () {
             that.addNewRule();
         });
+        var background = $btnNewRule.css('background-color');
+        $btnNewRule
+            .css({
+                'background-color': 'red'
+            }, 'red')
+            .animate({'background-color': background}, 500, function () {
+                $btnNewRule.animate({'background-color': 'red'}, 500, function () {
+                    $btnNewRule.animate({'background-color': background}, 3000);
+                });
+            });
         
         that.$dialogReplace.dialog({
             autoOpen: false,
@@ -174,44 +217,11 @@ function Text2Commands() {
     };
 
     this.addNewRule = function () {
-        // find name
-        var i = 1;
-        while (this.list.indexOf('scene.0.' + _('scene') + '_' + i) != -1) i++;
-        var id = 'scene.0.scene' + i;
-
-        var scene = {
-            "common": {
-                "name":    '0.' + _('scene') + ' ' + i,
-                "type":    "boolean",
-                "role":    "scene.state",
-                "desc":    _('scene') + ' ' + i,
-                "enabled": true,
-                "engine":  this.engines[0]
-            },
-            "native": {
-                "onTrue": {
-                    "trigger": {
-
-                    },
-                    "cron":    null,
-                    "astro":   null
-                },
-                "onFalse": {
-                    "enabled": false,
-                    "trigger": {
-
-                    },
-                    "cron":    null,
-                    "astro":   null
-                },
-                "members":  []
-            },
-            "type": "state"
-        };
-
-        this.main.socket.emit('setObject', id, scene, function (err, res) {
-            if (err) that.main.showError(err);
+        this.rules.push({
+            name: '',
+            description: ''
         });
+        showRules();
     };
 
     // ----------------------------- Scenes show and Edit ------------------------------------------------
@@ -265,10 +275,10 @@ function Text2Commands() {
         var rules = [];
         for (var i = 0; i < that.list.length; i++) {
             if (replaceIdInRule(that.list[i], oldId, newId)) {
-                rules.push(that.list[i]);
+                that.rules.push(that.list[i]);
             }
         }
-        if (rules.length) {
+        if (that.rules.length) {
             that.main.showMessage(_('IDs in following rules were replaced: %s', rule.join('<br>')), _('Result'));
         } else {
             that.main.showMessage(_('IDs was not found in any rule'), _('Result'));

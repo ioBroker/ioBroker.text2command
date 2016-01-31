@@ -1,6 +1,5 @@
 // structure of rule
 // {
-//     name: 'What time is it'
 //     description: '',
 //     template: 'templateName'
 //     words: 'key words option1/option2/option3 option* option_'
