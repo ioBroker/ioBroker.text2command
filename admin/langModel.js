@@ -115,7 +115,7 @@ var commands = {
         description: {
             'en': "Open/close door lock",
             'de': "Türschloss auf/zu machen",
-            'ru': "Открыть/закрыить замок на двери"
+            'ru': "Открыть/закрыть замок на двери"
         },
         unique:   true,
         editable: false,

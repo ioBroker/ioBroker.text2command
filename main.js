@@ -3,6 +3,7 @@
 //     description: '',
 //     template: 'templateName'
 //     words: 'key words option1/option2/option3 option* option_'
+//     args: []
 //     groups: ['enum.functions.light', 'enum.rooms.kitchen']
 //     ack: true/false (If acknowledge must be written into .text back
 //     unique
