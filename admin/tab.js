@@ -30,9 +30,9 @@ function Text2Commands(main, instance) {
 
         var text = (arg && arg.type) ? '<input class="edit-field-args" style="width:100%" data-index="' + index + '" data-field="args" data-args-index="' + argIndex + '" value="' + (value === undefined || value === null ? '' : value) + '" />' : '';
         if (typeof arg.name === 'object') {
-            text = '<span style="font-size: small">' + (arg.name[systemLang] || arg.name.en) + '</span><br>' + text;
+            text = '<span style="font-size: x-small">' + (arg.name[systemLang] || arg.name.en) + '</span><br>' + text;
         } else if (arg.name) {
-            text = '<span style="font-size: small">' + arg.name + '<br></span>' + text;
+            text = '<span style="font-size: x-small">' + arg.name + '<br></span>' + text;
         }
 
         switch (arg.type) {
@@ -111,7 +111,7 @@ function Text2Commands(main, instance) {
             // ack
             if (template.ack) {
                 text += '<td style="text-align: center">';
-                text += '<span style="font-size: small">' + (template.ack.name[systemLang] || template.ack.name.en) + '</span><br>';
+                text += '<span style="font-size: x-small">' + (template.ack.name[systemLang] || template.ack.name.en) + '</span><br>';
 
                 if (template.ack.type === 'checkbox') {
                     if (rule.ack === undefined || rule.ack === null) rule.ack = template.ack.default || false;
