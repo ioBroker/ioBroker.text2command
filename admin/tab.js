@@ -29,6 +29,7 @@ function Text2Commands(main, instance) {
         if (arg.default && !value && value !== 0) value = arg.default;
 
         var text = (arg && arg.type) ? '<input class="edit-field-args" style="width:100%" data-index="' + index + '" data-field="args" data-args-index="' + argIndex + '" value="' + (value === undefined || value === null ? '' : value) + '" />' : '';
+
         if (typeof arg.name === 'object') {
             text = '<span style="font-size: x-small">' + (arg.name[systemLang] || arg.name.en) + '</span><br>' + text;
         } else if (arg.name) {
@@ -41,7 +42,7 @@ function Text2Commands(main, instance) {
             
             case 'id':
                 text = text.replace('100%', 'calc(100% - 25px)');
-                text += '<button data-index="' + index + '" data-args-index="' + argIndex + '" class="select-id" title="' + _('select id') + '">...</button>';
+                text += '<button data-role="' + (arg.role || '') + '" data-index="' + index + '" data-args-index="' + argIndex + '" class="select-id" title="' + _('select id') + '">...</button>';
                 break;
             
             default:
@@ -110,7 +111,7 @@ function Text2Commands(main, instance) {
 
             // ack
             if (template.ack) {
-                text += '<td style="text-align: center">';
+                text += '<td style="' + ((template.ack.type === 'checkbox') ? 'text-align: center' : '') + '">';
                 text += '<span style="font-size: x-small">' + (template.ack.name[systemLang] || template.ack.name.en) + '</span><br>';
 
                 if (template.ack.type === 'checkbox') {
@@ -232,6 +233,12 @@ function Text2Commands(main, instance) {
             var index = $(this).data('index');
             var argIndex = $(this).data('args-index');
             var sid = that.main.initSelectId();
+            var role = $(this).data('role');
+            if (role) {
+                sid.selectId('option', 'filterPresets',  {role: role});
+            } else {
+                sid.selectId('option', 'filterPresets',  {role: ''});
+            }
             sid.selectId('show', that.rules[index].args ? (that.rules[index].args[argIndex] || '') : '', function (newId) {
                 $('.edit-field-args[data-index=' + index + '][data-args-index=' + argIndex + ']').val(newId || '');
             });

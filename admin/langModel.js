@@ -1,5 +1,6 @@
 var commands = {
     'whatTimeIsIt' : {
+        icon: '',
         description: {
             'en': "What time is it?",
             'de': "Wie spät ist das?",
@@ -15,6 +16,7 @@ var commands = {
         }
     },
     'whatIsYourName' : {
+        icon: '',
         description: {
             'en': "What is your name?",
             'de': "Wie heißt du?",
@@ -43,6 +45,7 @@ var commands = {
         }
     },
     'outsideTemperature' : {
+        icon: '',
         description: {
             'en': "What is the outside temperature?",
             'de': "Wie kalt/warm ist draußen?",
@@ -55,7 +58,7 @@ var commands = {
             'de': "aussen/draußen kalt/warm/temperatur",
             'ru': "температура снаружи/улице"
         },
-        arg: [{
+        args: [{
             name: {
                 'en': "Outside temperature ID",
                 'de': "Außentemperatur ID",
@@ -79,6 +82,7 @@ var commands = {
         }
     },
     'insideTemperature' : {
+        icon: '',
         description: {
             'en': "What is the inside temperature?",
             'de': "Wie kalt/warm ist drin?",
@@ -115,6 +119,7 @@ var commands = {
         }
     },
     'roleOnOff': {
+        icon: '',
         description: {
             'en': "Switch on/off by function",
             'de': "Schalte an oder aus mit Funktion",
@@ -137,6 +142,7 @@ var commands = {
         }
     },
     'blindsUpDown': {
+        icon: '',
         description: {
             'en': "Open/close blinds",
             'de': "Rollladen auf/zu machen",
@@ -159,6 +165,7 @@ var commands = {
         }
     },
     'openLock': {
+        icon: '',
         description: {
             'en': "Open/close door lock",
             'de': "Türschloss auf/zu machen",
@@ -166,7 +173,6 @@ var commands = {
         },
         unique:   true,
         editable: false,
-        withAck:  true,
         words: {
             'en': "lock open/close",
             'de': "schloß/türschloß auf/zu",
@@ -178,10 +184,12 @@ var commands = {
                 'en': "Answer with acknowledge",
                 'de': "Antworten mit Bestätigung",
                 'ru': "Ответить подтверждением"
-            }
+            },
+            default: true
         }
     },
     'userDeviceControl' : {
+        icon: '',
         description: {
             'en': "Switch something on/off",
             'de': "Schalte irgendwas an oder aus",
@@ -210,10 +218,12 @@ var commands = {
                 'en': "Answer with acknowledge",
                 'de': "Antworten mit Bestätigung",
                 'ru': "Ответить подтверждением"
-            }
+            },
+            default: true
         }
     },
     'userQuery' : {
+        icon: '',
         description: {
             'en': "Ask about something",
             'de': "Fragen über irgendwas",
@@ -244,6 +254,7 @@ var commands = {
         }
     },
     'goodBoy' : {
+        icon: '',
         description: {
             'en': "You are good",
             'de': "Du bist gut",
@@ -272,6 +283,7 @@ var commands = {
         }
     },
     'thankYou' : {
+        icon: '',
         description: {
             'en': "Thank you",
             'de': "Danke",
