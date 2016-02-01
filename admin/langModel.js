@@ -27,6 +27,19 @@ var commands = {
             'en': "your name",
             'de': "heißt du",
             'ru': "тебя зовут"
+        },
+        ack: {
+            type: 'text',
+            name: {
+                'en': "Answer",
+                'de': "Antwort",
+                'ru': "Ответ"
+            },
+            default: {
+                'en': "My name is Alpha/Alpha",
+                'de': "Ich heiße Marvin/Marvin/Leute nennen mich Marvin",
+                'ru': "Меня зовут Сонни/Сонни/Сонни моё имя"
+            }
         }
     },
     'outsideTemperature' : {
@@ -48,8 +61,22 @@ var commands = {
                 'de': "Außentemperatur ID",
                 'ru': "ID сенсора на улице '.TEMPERATURE'"
             },
-            type: 'id'
-        }]
+            type: 'id',
+            role: 'value.temperature'
+        }],
+        ack: {
+            type: 'text',
+            name: {
+                'en': "Answer (use %s for value)",
+                'de': "Antwort (%s wird mit Wert ersetzt)",
+                'ru': "Ответ (%s заменится значением)"
+            },
+            default: {
+                'en': "Outside temperature is %s degree",
+                'de': "Temperature draußen ist %s %u",
+                'ru': "Темература на улице %s %u"
+            }
+        }
     },
     'insideTemperature' : {
         description: {
@@ -70,13 +97,27 @@ var commands = {
                 'de': "Innentemperature ID",
                 'ru': "ID сенсора дома '.TEMPERATURE'"
             },
-            type: 'id'
-        }]
+            type: 'id',
+            role: 'value.temperature'
+        }],
+        ack: {
+            type: 'text',
+            name: {
+                'en': "Answer (use %s for value)",
+                'de': "Antwort (%s wird mit Wert ersetzt)",
+                'ru': "Ответ (%s заменится значением)"
+            },
+            default: {
+                'en': "Inside temperature is %s degree",
+                'de': "Temperature drin ist %s %u",
+                'ru': "Темература дома %s %u"
+            }
+        }
     },
     'roleOnOff': {
         description: {
-            'en': "Switch role on/off",
-            'de': "Schalte Gewerk an oder aus",
+            'en': "Switch on/off by function",
+            'de': "Schalte an oder aus mit Funktion",
             'ru': "Включить/выключить приборы"
         },
         unique:   true,
@@ -86,10 +127,13 @@ var commands = {
             'de': "einschalten/ausschalten/ein/aus/an",
             'ru': "ключи/включи/включить/выключи/выключить/потушить/потуши/зажги/зажечь"
         },
-        ack:  {
-            'en': "If acknowledge must be spoken",
-            'de': "Ob Ergebniss gesprochen werden soll",
-            'ru': "Проговорить команду"
+        ack: {
+            type: 'checkbox',
+            name: {
+                'en': "Answer with acknowledge",
+                'de': "Antworten mit Bestätigung",
+                'ru': "Ответить подтверждением"
+            }
         }
     },
     'blindsUpDown': {
@@ -105,10 +149,13 @@ var commands = {
             'de': "rollladen/rolllade/fenster/laden auf/zu/hoch/runter/machen",
             'ru': "ставни/окно/окна/жалюзи поднять/подними/опустить/опусти/открой/открою/открыть/закрыть/закрою/закрой"
         },
-        ack:  {
-            'en': "If acknowledge must be spoken",
-            'de': "Ob Ergebniss gesprochen werden soll",
-            'ru': "Проговорить команду"
+        ack: {
+            type: 'checkbox',
+            name: {
+                'en': "Answer with acknowledge",
+                'de': "Antworten mit Bestätigung",
+                'ru': "Ответить подтверждением"
+            }
         }
     },
     'openLock': {
@@ -125,10 +172,13 @@ var commands = {
             'de': "schloß/türschloß auf/zu",
             'ru': "замок открой/открою/открыть/закрыть/закрою/закрой"
         },
-        ack:  {
-            'en': "If acknowledge must be spoken",
-            'de': "Ob Ergebniss gesprochen werden soll",
-            'ru': "Проговорить команду"
+        ack: {
+            type: 'checkbox',
+            name: {
+                'en': "Answer with acknowledge",
+                'de': "Antworten mit Bestätigung",
+                'ru': "Ответить подтверждением"
+            }
         }
     },
     'userDeviceControl' : {
@@ -153,7 +203,45 @@ var commands = {
                 'ru': "Записываемое значение"
             },
             type: 'value'
-        }]
+        }],
+        ack: {
+            type: 'checkbox',
+            name: {
+                'en': "Answer with acknowledge",
+                'de': "Antworten mit Bestätigung",
+                'ru': "Ответить подтверждением"
+            }
+        }
+    },
+    'userQuery' : {
+        description: {
+            'en': "Ask about something",
+            'de': "Fragen über irgendwas",
+            'ru': "Спросить о чём-нибудь"
+        },
+        unique:   false,
+        editable: true,
+        args: [{
+            name: {
+                'en': "Device or variable ID",
+                'de': "Gerät- oder Variablen- ID",
+                'ru': "ID сенсора или переменной"
+            },
+            type: 'id'
+        }],
+        ack: {
+            type: 'text',
+            name: {
+                'en': "Answer (use %s for value)",
+                'de': "Antwort (%s wird mit Wert ersetzt)",
+                'ru': "Ответ (%s заменится значением)"
+            },
+            default: {
+                'en': "%s",
+                'de': "%s",
+                'ru': "%s"
+            }
+        }
     },
     'goodBoy' : {
         description: {
@@ -170,9 +258,17 @@ var commands = {
             'ru': "молодец/хорошая/хороший"
         },
         ack: {
-            'en': ["Thank you", "You are welcome"],
-            'de': ["Danke", "Freut mich"],
-            'ru': ["Спасибо"]
+            type: 'text',
+            name: {
+                'en': 'Answer',
+                'de': 'Antwort',
+                'ru': 'Ответ'
+            },
+            default: {
+                'en': "Thank you/You are welcome",
+                'de': "Danke/Freut mich",
+                'ru': "Спасибо"
+            }
         }
     },
     'thankYou' : {
@@ -190,9 +286,17 @@ var commands = {
             'ru': "спасибо"
         },
         ack: {
-            'en': ["No problem", "You are welcome"],
-            'de': ["Kein problem", "Bitte", "Bitte sehr"],
-            'ru': ["Пожалуйста", "Всегда пожалуйста", "Не за что", "С радостью"]
+            type: 'text',
+            name: {
+                'en': 'Answer',
+                'de': 'Antwort',
+                'ru': 'Ответ'
+            },
+            default: {
+                'en': "No problem/You are welcome",
+                'de': "Kein problem/Bitte/Bitte sehr",
+                'ru': "Пожалуйста/Всегда пожалуйста/Не за что/С радостью"
+            }
         }
     }
 };
@@ -285,21 +389,26 @@ var rolesAccusative = {
     "all":        {"ru" : "всё",                "de": "alles",          "en": "all" }
 };
 
-function getRandomPhrase (arr) {
-    if (typeof arr === "object") {
-        if (arr.length > 1) {
-            var randomNumber = Math.floor(Math.random() * arr.length);
-            if (randomNumber > arr.length - 1) {
-                randomNumber = arr.length - 1;
+function getRandomPhrase (arrOrText) {
+    if (typeof arrOrText === 'string') {
+        arrOrText = arrOrText.split('/');
+    }
+
+    if (typeof arrOrText === 'object') {
+        if (arrOrText.length > 1) {
+            var randomNumber = Math.floor(Math.random() * arrOrText.length);
+            if (randomNumber > arrOrText.length - 1) {
+                randomNumber = arrOrText.length - 1;
             }
-            return arr[randomNumber];
+            return arrOrText[randomNumber];
         } else {
-            return arr[0];
+            return arrOrText[0];
         }
     } else {
-        return arr;
+        return arrOrText;
     }
 }
+
 function sayIDontKnow (lang) {
     var toSay;
     if (lang == "ru") {
@@ -332,21 +441,7 @@ function sayNoName (lang) {
 
     return toSay;
 }
-function sayName (lang, name) {
-    var toSay;
 
-    if (lang == "ru") {
-        toSay ="Меня зовут " + name;
-    }
-    else if (lang == "de") {
-        toSay ="Ich heisse " + name;
-    }
-    else if (lang == "en") {
-        toSay ="My name is " + name;
-    }
-
-    return toSay;
-}
 function sayIDontUnderstand (lang, text) {
     var toSay;
     if (lang == "ru") {
@@ -414,13 +509,13 @@ function sayNothingToDo (lang) {
 function sayNoSuchRole (lang) {
     var toSay;
     if (lang == 'en') {
-        toSay = getRandomPhrase(['Role not present', 'Role not found', 'You don\'t have such a device']);
+        toSay = getRandomPhrase('Function not present/Function not found/You don\'t have such a device');
     } else
     if (lang == 'de') {
-        toSay = getRandomPhrase(['Die Rolle ist nicht gefunden', 'Es gibt keine Rolle mit dem Namen', 'Man muss sagen womit man was machen will']);
+        toSay = getRandomPhrase('Die Rolle ist nicht gefunden', 'Es gibt keine Rolle mit dem Namen', 'Man muss sagen womit man was machen will');
     } else
     if (lang == 'ru') {
-        toSay = getRandomPhrase(['Устройство не найдено', 'Надо сказать с чем произвести действие']);
+        toSay = getRandomPhrase('Устройство не найдено/Надо сказать с чем произвести действие');
     } else {
         toSay = "";
     }

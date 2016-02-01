@@ -37,6 +37,15 @@
         #tab-rules-body td {
             vertical-align: bottom;
         }
+        .tr-even {
+            background-color: #dddddd;
+        }
+        .tr-odd {
+            background-color: #ececec;
+        }
+        #grid-rules tr {
+            border-spacing: 0;
+        }
     </style>
 
 </header>
@@ -54,14 +63,14 @@
         </tr></table>
         <div id="process_running_rules" class="translate" style="position:absolute; top:50%; left:50%; width: 150px; height: 25px; padding: 12px; background: rgba(30, 30, 30, 0.5); display: none; text-align:center; font-size: 1.2em; color: white; font-weight: bold; border-radius: 5px">Processing...</div>
         <div style="width:100%; height:400px; overflow-y: auto" id="grid-rules-div">
-            <table id="grid-rules" style="width: 100%; table-layout: fixed;">
+            <table id="grid-rules" style="width: calc(100% - 20px); table-layout: fixed;">
             <colgroup>
                 <col width="250px"/>
                 <col width="*"/>
                 <col width="200px"/>
                 <col width="200px"/>
                 <!--col width="100px"/-->
-                <col width="150px"/>
+                <col width="250px"/>
                 <col width="25px"/>
                 <col width="25px"/>
                 <col width="25px"/>
@@ -69,9 +78,9 @@
             <thead>
             <tr>
                 <th class="translate ui-widget-header">Type</th>
-                <th class="translate ui-widget-header">Words</th>
-                <th class="translate ui-widget-header">Argument 1</th>
-                <th class="translate ui-widget-header">Argument 2</th>
+                <th class="translateT ui-widget-header" title="words help"><span class="translate">Words (see tooltip)</span></th>
+                <th class="translate ui-widget-header">Argument</th>
+                <th class="translate ui-widget-header">Argument</th>
                 <!--th class="translate ui-widget-header">Argument 3</th-->
                 <th class="translate ui-widget-header">Acknowledge</th>
                 <th class="translate ui-widget-header" colspan="3"></th>

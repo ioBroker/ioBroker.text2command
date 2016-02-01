@@ -1,7 +1,5 @@
 function Text2Commands(main, instance) {
     var that            = this;
-
-
     this.list           = [];
     this.main           = main;
     this.currentFilter  = '';
@@ -26,6 +24,10 @@ function Text2Commands(main, instance) {
     }
 
     function showArgument(index, argIndex, arg, value) {
+        value = (value === undefined || value === null ? '' : value);
+        // set default value
+        if (arg.default && !value && value !== 0) value = arg.default;
+
         var text = (arg && arg.type) ? '<input class="edit-field-args" style="width:100%" data-index="' + index + '" data-field="args" data-args-index="' + argIndex + '" value="' + (value === undefined || value === null ? '' : value) + '" />' : '';
         if (typeof arg.name === 'object') {
             text = '<span style="font-size: small">' + (arg.name[systemLang] || arg.name.en) + '</span><br>' + text;
@@ -51,12 +53,23 @@ function Text2Commands(main, instance) {
     function showOneRule(index, rule) {
         var template = null;
 
-        var text = '<tr class="line-rule" data-index="' + index + '">';
+        var text = '<tr class="line-rule ' + ((index & 1) ? 'tr-odd' : 'tr-even') + '" data-index="' + index + '">';
         // type
         text += '<td><select class="select-field" data-index="' + index + '" data-field="template">' +
             '<option value="">' + _('Select template') + '</option>';
 
         for (var r in commands) {
+            if (commands[r].unique) {
+                var found = false;
+                // check if such a template exists
+                for (var i = 0; i < index; i++) {
+                    if (that.rules[i].template == r) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found && rule.template !== r) continue;
+            }
             var desc = commands[r].description;
             if (typeof desc === 'object') {
                 desc = desc[systemLang] || desc.en;
@@ -69,6 +82,7 @@ function Text2Commands(main, instance) {
                 text += '<option value="' + r + '">' + desc + '</option>';
             }
         }
+
         text += '</select>';
 
         if (typeof desc === 'object') {
@@ -95,7 +109,26 @@ function Text2Commands(main, instance) {
             text += '<td>' + showArgument(index, 1, (commands[rule.template] && commands[rule.template].args && commands[rule.template].args[1]) ? commands[rule.template].args[1] : '', rule.args ? rule.args[1] : null) + '</td>';
 
             // ack
-            text += '<td style="text-align: center"><input class="edit-field" data-index="' + index + '" data-field="ack" type="checkbox" ></td>';
+            if (template.ack) {
+                text += '<td style="text-align: center">';
+                text += '<span style="font-size: small">' + (template.ack.name[systemLang] || template.ack.name.en) + '</span><br>';
+
+                if (template.ack.type === 'checkbox') {
+                    if (rule.ack === undefined || rule.ack === null) rule.ack = template.ack.default || false;
+                    text += '<input class="edit-field" data-index="' + index + '" data-field="ack" type="checkbox" ' + (rule.ack ? 'checked' : '') + '/></td>';
+                } else {
+                    if (rule.ack === undefined || rule.ack === null) {
+                        if (typeof template.ack.default === 'object') {
+                            rule.ack = template.ack.default[systemLang] || template.ack.default.en;
+                        } else {
+                            rule.ack = template.ack.default || '';
+                        }
+                    }
+                    text += '<input class="edit-field" data-index="' + index + '" data-field="ack" value="' + rule.ack + '" style="width: 100%"/></td>';
+                }
+            } else {
+                text += '<td></td>';
+            }
         }
 
         // buttons
@@ -103,14 +136,14 @@ function Text2Commands(main, instance) {
         if (index == 0) {
             text += '<td></td>';
         } else {
-            text += '<td><button class="rule-up" data-index="' + index + '" /></td>';
+            text += '<td style="text-align: center"><button class="rule-up" data-index="' + index + '" /></td>';
         }
         if (that.rules.length - 1 == index) {
             text += '<td></td>';
         } else {
-            text += '<td><button class="rule-down" data-index="' + index + '" /></td>';
+            text += '<td style="text-align: center"><button class="rule-down" data-index="' + index + '" /></td>';
         }
-        text += '<td><button class="rule-delete" data-index="' + index + '" /></td>';
+        text += '<td style="text-align: center"><button class="rule-delete" data-index="' + index + '" /></td>';
         return text;
     }
 
@@ -127,10 +160,8 @@ function Text2Commands(main, instance) {
             $(this).change(function () {
                 var index = $(this).data('index');
                 that.rules[index].template = $(this).val();
-                setTimeout(function () {
-                    showRules();
-                    saveSettings();
-                }, 100);
+                showRules();
+                saveSettings();
             });
         });
 
@@ -162,7 +193,7 @@ function Text2Commands(main, instance) {
             }, 100);
         });
 
-        $('.rule-down').button().css({width: 21, height: 21}).click(function () {
+        $('.rule-down').button({icons: {primary: 'ui-icon ui-icon-arrowthick-1-s'}, text: false}).css({width: 21, height: 21}).click(function () {
             var index = $(this).data('index');
             var rule = that.rules[index + 1];
             that.rules[index + 1] = that.rules[index];
@@ -175,7 +206,7 @@ function Text2Commands(main, instance) {
 
         $('.rule-delete').button({icons: {primary: 'ui-icon-trash'}, text: false}).css({width: 21, height: 21}).click(function () {
             var index = $(this).data('index');
-            that.main.confirmMessage(_('Are you sure?'), function (result) {
+            that.main.confirmMessage(_('Are you sure?'), _('Confirm deletion'), 'trash', function (result) {
                 if (result) {
                     that.rules.splice(index, 1);
                     saveSettings();

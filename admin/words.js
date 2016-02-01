@@ -7,10 +7,7 @@ systemDictionary = {
     "Enabled:":         {"en": "Enabled:",      "de": "Aktiviert:",       "ru": "Активно:"},
     "Position":         {"en": "Position",      "de": "Position",         "ru": "Номер"},
     "Type":             {"en": "Type",          "de": "Typ",              "ru": "Тип"},
-    "Words":            {"en": "Words",         "de": "Worte",            "ru": "Слова"},
-    "Argument 1":       {"en": "Argument 1",    "de": "Parameter 1",      "ru": "Параметр 1"},
-    "Argument 2":       {"en": "Argument 2",    "de": "Parameter 2",      "ru": "Параметр 2"},
-    "Argument 3":       {"en": "Argument 3",    "de": "Parameter 3",      "ru": "Параметр 3"},
+    "Argument":         {"en": "Argument",      "de": "Parameter",        "ru": "Параметр"},
     "Acknowledge":      {"en": "Acknowledge",   "de": "Quittungstext",    "ru": "Текст подтверждения"},
     "add rule":         {"en": "Add rule",      "de": "Regel hinzufügen", "ru": "Добавить правило"},
     "remove rule":      {"en": "Remove rule",   "de": "Regel löschen",    "ru": "Удалить"},
@@ -21,5 +18,10 @@ systemDictionary = {
         "en": " ",
         "de": " ",
         "ru": " "
+    },
+    "Words (see tooltip)": {
+        "en": "Trigger words (see tooltip for help)",
+        "de": "Trigger-Worte (sehe Tooltip für Hilfe)",
+        "ru": "Ключевые слова (см. подсказку)"
     }
 };
