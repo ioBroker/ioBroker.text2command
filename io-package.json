@@ -25,7 +25,8 @@
         "noConfig":                 true,
         "adminTab": {
             "name":                 {"en": "Text-&gt;Commands", "de": "Text-&gt;Kommandos", "ru": "Текст-&gt;Команды"},
-            "singleton":            false
+            "singleton":            false,
+            "ignoreConfigUpdate":   true
         }
     },
     "native": {
