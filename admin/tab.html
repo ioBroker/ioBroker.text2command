@@ -46,6 +46,19 @@
         #grid-rules tr {
             border-spacing: 0;
         }
+        .toast {
+            font-size: large;
+            position: absolute;
+            top: 30px;
+            left: 100px;
+            background: darkgrey;
+            color: white;
+            padding: 20px;
+            border: 1px solid white;
+            border-radius: 10px;
+            display: none;
+            opacity: 0.9;
+        }
     </style>
 
 </header>
@@ -53,15 +66,23 @@
     <div id="tab-rules">
         <table><tr>
             <td></td>
-            <td><button id="btn_new_rule"      class="translateT" title="new rule"></button></td>
-            <td><button id="btn_save_settings" class="translateT" title="save settings"></button></td>
+            <td><button id="btn_new_rule"       class="translateT" title="new rule"></button></td>
+            <td><button id="btn_save_settings"  class="translateT" title="save settings"></button></td>
             <td><button id="btn_refresh_text2command" class="translateT" title="reload settings"></button></td>
-            <td style="width:30px"></td>
-            <td><div style="padding-left: 100px"><label class="translate" for="rules-filter">Filter:</label> <input id="rules-filter" style="width:100px;margin-right:3px"/><button id="rules-filter-clear"></button></div></td>
-            <td style="width:30px"></td>
-            <td><div style="padding-left: 30px"><label class="translate" for="rules-filter">Test:</label> <input id="rules-test" style="width: 250px; margin-right: 3px"/><button id="rules-test-clear"></button></div></td>
-            <td style="width:30px"></td>
-            <td><button id="btn_replace_ids" class="translateT" title="Replace IDs"></button></td>
+            <td><button id="btn_replace_ids"    class="translateT" title="Replace IDs"></button></td>
+            <td style="width: 10px"></td>
+            <td><label class="translate" for="rules-filter">Filter:</label></td><td><input id="rules-filter" style="width:100px;margin-right:3px"/></td><td><button id="rules-filter-clear"></button></td>
+            <td style="width: 10px"></td>
+            <td><label class="translate" for="rules-filter">Test:</label></td><td><input id="rules-test"       style="width: 250px; margin-right: 3px"/></td><td><button id="rules-test-clear"/></td><td><button id="rules-test-real" class="translateT" title="write really"/></td>
+            <td style="width: 10px"></td>
+            <td><label class="translate" for="rules-filter">Language:</label></td><td><select id="rules-language"  style="width: 250px; margin-right: 3px">
+                <option value="" class="translate" >system</option>
+                <option value="en">english</option>
+                <option value="de">deutsch</option>
+                <option value="ru">русский</option>
+            </select></td>
+            <td style="width: 10px"></td>
+            <td><label class="translate" for="rules-filter">SayIt ID:</label></td><td><input id="rules-sayitInstance" style="width: 250px; margin-right: 3px"/></td><td><button id="rules-select-sayitInstance"/></td>
         </tr></table>
         <div id="process_running_rules" class="translate" style="position:absolute; top:50%; left:50%; width: 150px; height: 25px; padding: 12px; background: rgba(30, 30, 30, 0.5); display: none; text-align:center; font-size: 1.2em; color: white; font-weight: bold; border-radius: 5px">Processing...</div>
         <div style="width:100%; height:400px; overflow-y: auto" id="grid-rules-div">
@@ -123,6 +144,7 @@
 
     <!--div id="dialog-select-members" style="display: none"></div-->
     <div id="dialog-select-member"  style="display: none"></div>
+    <div class="toast" id="response"></div>
 
     <script type="text/javascript" src="tab.js"></script>
 </body>

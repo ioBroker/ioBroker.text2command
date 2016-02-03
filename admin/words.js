@@ -44,5 +44,15 @@ systemDictionary = {
     "Cancel":           {"en": "Cancel",                "de": "Abbrechen",              "ru": "Отмена"},
     "enter test phrase": {"en": "enter test phrase",    "de": "Satz eingeben",          "ru": "введите фразу"},
     "Select template":  {"en": "Select rule",           "de": "Regel auswählen",        "ru": "Выбрать правило"},
-    "select id":        {"en": "Select object id",      "de": "Object ID auswählen",    "ru": "Выбрать ID объекта"}
+    "select id":        {"en": "Select object id",      "de": "Object ID auswählen",    "ru": "Выбрать ID объекта"},
+    "Language:":        {"en": "Language:",             "de": "Sprache:",               "ru": "Язык:"},
+    "system":           {"en": "system",                "de": "system",                 "ru": "системный"},
+    "SayIt ID:":        {"en": "Answer to ID:",         "de": "Antwort ins ID:",        "ru": "Ответ в ID:"},
+    "write really":     {
+        "en": "Send test phrase to adapter",
+        "de": "Schicke Testsatz zu Adapter",
+        "ru": "Послать тестовую фразу в драйвер"
+    },
+    "Are you sure?":    {"en": "Are you sure?",         "de": "Sind Sie sicher?",       "ru": "Вы уверенны?"},
+    "Confirm deletion": {"en": "Confirm deletion",      "de": "Löschen bestätigen",     "ru": "Подтвердить удаление"}
 };

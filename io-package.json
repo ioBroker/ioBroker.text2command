@@ -32,7 +32,7 @@
         "rules": [
 
         ],
-        "sayitInstance": "",
+        "sayitInstance": "sayit.0.tts.text",
         "language": ""
     },
     "instanceObjects": [
@@ -46,6 +46,19 @@
                 "read":  true,
                 "write": true,
                 "desc":  "Write your text here with ack=false, and you will get answer with ack=true"
+            },
+            "native": {}
+        },
+        {
+            "_id": "response",
+            "type": "state",
+            "common": {
+                "name":  "Answer on requested question",
+                "type":  "string",
+                "role":  "text",
+                "read":  true,
+                "write": false,
+                "desc":  "Answer for written into text2command.0.text text"
             },
             "native": {}
         }

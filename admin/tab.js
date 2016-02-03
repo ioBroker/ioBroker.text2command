@@ -43,6 +43,9 @@ function Text2Commands(main, instance) {
             case 'id':
                 text = text.replace('100%', 'calc(100% - 25px)');
                 text += '<button data-role="' + (arg.role || '') + '" data-index="' + index + '" data-args-index="' + argIndex + '" class="select-id" title="' + _('select id') + '">...</button>';
+                if (value && that.main.objects[value] &&  that.main.objects[value].common) {
+                    text += '<br><span>' + that.main.objects[value].common.name + '</span>';
+                }
                 break;
             
             default:
@@ -244,6 +247,8 @@ function Text2Commands(main, instance) {
                 that.rules[index].args[argIndex] = $(this).val();
             }
             saveSettings();
+        }).keydown(function () {
+            $(this).trigger('change');
         });
 
         $('.select-id').button({icons: {primary: 'ui-icon ui-icon-folder-open'}, text: false}).css({width: 21, height: 21}).click(function () {
@@ -257,7 +262,7 @@ function Text2Commands(main, instance) {
                 sid.selectId('option', 'filterPresets',  {role: ''});
             }
             sid.selectId('show', that.rules[index].args ? (that.rules[index].args[argIndex] || '') : '', function (newId) {
-                $('.edit-field-args[data-index=' + index + '][data-args-index=' + argIndex + ']').val(newId || '');
+                $('.edit-field-args[data-index=' + index + '][data-args-index=' + argIndex + ']').val(newId || '').trigger('change');
             });
         });
     }
@@ -274,11 +279,16 @@ function Text2Commands(main, instance) {
             that.saveTimer   = null;
             that.saveRunning = true;
 
+            // show
+            test();
+
             that.main.socket.emit('getObject', 'system.adapter.text2command.' + instance, function (err, obj) {
                 if (err) {
                     that.main.showError(err);
                 } else if (obj) {
-                    obj.native.rules = that.rules;
+                    obj.native.rules         = that.rules;
+                    obj.native.sayitInstance = $('#rules-sayitInstance').val();
+                    obj.native.language      = $('#rules-language').val();
                     that.main.socket.emit('setObject', obj._id, obj, function (err) {
                         if (err) {
                             that.main.showError(err);
@@ -377,7 +387,7 @@ function Text2Commands(main, instance) {
             ]
         });
 
-        $('#btn_replace_ids').button({icons: {primary: 'ui-icon ui-icon-transferthick-e-w'}, text: false}).css({width: 16, height: 16}).click(function () {
+        $('#btn_replace_ids').button({icons: {primary: 'ui-icon-transferthick-e-w'}, text: false}).css({width: 16, height: 16}).click(function () {
             that.$dialogReplace.dialog('open');
         });
         
@@ -395,14 +405,48 @@ function Text2Commands(main, instance) {
         }).button('disable');
 
         $('#rules-test').attr('placeholder', _('enter test phrase')).change(function () {
-            test($(this).value);
+            test();
         }).keydown(function () {
             $(this).trigger('change');
-        })
+        });
+
+        $('#rules-select-sayitInstance').button({icons: {primary: 'ui-icon-folder-open'}, text: false}).css({width: 21, height: 21}).click(function () {
+            var sid = that.main.initSelectId();
+            sid.selectId('option', 'filterPresets',  {role: ''});
+            sid.selectId('show', $('#rules-sayitInstance').val() || '', function (newId) {
+                $('#rules-sayitInstance').val(newId).trigger('change');
+            });
+        });
+        $('#rules-sayitInstance').change(function () {
+            saveSettings();
+        });
+        $('#rules-language').change(function () {
+            saveSettings();
+        });
+        $('#rules-test-real').button({icons: {primary: 'ui-icon-play'}, text: false}).css({width: 21, height: 21}).click(function () {
+            that.main.socket.emit('setState', 'text2command.' + instance + '.text', $('#rules-test').val(), function (err) {
+                if (err) console.error(err);
+            });
+        });
     };
 
-    function test(phrase) {
-
+    var testTimer;
+    function test() {
+        if (testTimer) {
+            clearTimeout(testTimer);
+        }
+        testTimer = setTimeout(function () {
+            testTimer = null;
+            var txt = $('#rules-test').val();
+            var matched = txt ? findMatched(txt, JSON.parse(JSON.stringify(that.rules))) : [];
+            for (var r = 0; r < that.rules.length; r++) {
+                if (matched.indexOf(r) != -1) {
+                    $('.line-rule[data-index=' + r + ']').css('background-color', 'lightblue');
+                } else {
+                    $('.line-rule[data-index=' + r + ']').css('background-color', '');
+                }
+            }
+        }, 500);
     }
 
     this.resize = function (width, height) {
@@ -432,6 +476,8 @@ function Text2Commands(main, instance) {
                 }
                 if (obj) {
                     that.main.objects['system.adapter.text2command.' + instance] = obj;
+                    $('#rules-sayitInstance').val(obj.native.sayitInstance);
+                    $('#rules-language').val(obj.native.language);
 
                     if (obj.native) {
                         that.rules = obj.native.rules || [];
@@ -444,6 +490,8 @@ function Text2Commands(main, instance) {
         } else {
             if (this.main.objects['system.adapter.text2command.' + instance] && this.main.objects['system.adapter.text2command.' + instance].native) {
                 this.rules = this.main.objects['system.adapter.text2command.' + instance].native.rules || [];
+                $('#rules-sayitInstance').val(this.main.objects['system.adapter.text2command.' + instance].native.sayitInstance);
+                $('#rules-language').val(this.main.objects['system.adapter.text2command.' + instance].native.language);
             } else {
                 this.rules = [];
             }
@@ -502,6 +550,15 @@ function Text2Commands(main, instance) {
     };
 
     this.stateChange = function (id, state) {
+        if (id == 'text2command.' + instance + '.response') {
+            var pos = $('#rules-test').position();
+            $('#response')
+                .html(state.val || '')
+                .stop()
+                .show()
+                .css({top: pos.top + 30, left: pos.left + 5, opacity: 0.8})
+                .animate({'opacity': 0}, 5000);
+        }
     };
 }
 

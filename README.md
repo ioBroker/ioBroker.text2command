@@ -9,7 +9,9 @@ ioBroker text2command adapter
 
 This adapter can convert normal sentences, like *'Switch light in kitchen on'* to specific command and sets the state *'adapter.0.device.kitchenLight'* to **true**.
 
-To execute command, write state **text2command.<INSTANCE>.text** with sentence.
+To execute command, write state **text2command.<INSTANCE>.text** with sentence. You will always get the answer in **text2command.<INSTANCE>.response**.
+
+If you define **Answer to ID**, the answer will be written in this ID too. This required for e.g. to realise the voice 
 
 You can send a message via messagebox from javascript. The answer will come in the message too:
 

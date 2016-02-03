@@ -120,7 +120,7 @@ var commands = {
             }
         }
     },
-    'roleOnOff': {
+    /*'roleOnOff': {
         icon: '',
         name: {
             'en': "Switch on/off by function",
@@ -189,7 +189,7 @@ var commands = {
             },
             default: true
         }
-    },
+    },*/
     'userDeviceControl' : {
         icon: '',
         name: {
@@ -215,13 +215,17 @@ var commands = {
             type: 'value'
         }],
         ack: {
-            type: 'checkbox',
+            type: 'text',
             name: {
-                'en': "Answer with acknowledge",
-                'de': "Antworten mit Bestätigung",
-                'ru': "Ответить подтверждением"
+                'en': "Answer",
+                'de': "Antworten",
+                'ru': "Ответить"
             },
-            default: true
+            default: {
+                'en': "Switched on",
+                'de': "Eingeschaltet",
+                'ru': "Включено"
+            }
         }
     },
     'userQuery' : {
@@ -560,6 +564,95 @@ function sayNoSuchRole(lang, text, args, ack, cb) {
     }
 }
 
+function sayError(lang, text, args, ack, cb) {
+    var toSay;
+    if (lang == 'en') {
+        toSay = getRandomPhrase('Error. See logs.');
+    } else
+    if (lang == 'de') {
+        toSay = getRandomPhrase('Fehler. Sehe Logs.');
+    } else
+    if (lang == 'ru') {
+        toSay = getRandomPhrase('Ошибка. Смотрите логи.');
+    } else {
+        toSay = "";
+    }
+
+    if (cb) {
+        cb(toSay);
+    } else {
+        return toSay;
+    }
+}
+function findMatched(cmd, _rules) {
+    var matchedRules = [];
+
+    cmd = cmd.toLowerCase();
+
+    var ix = cmd.indexOf(';');
+
+    if (ix != -1) cmd = cmd.substring(ix + 1);
+    var cmdWords = cmd.split(' ');
+
+
+    for (var r = 0; r < _rules.length; r++) {
+        var rule    = _rules[r];
+        if (!rule.words) continue;
+
+        var isFound = true;
+
+        // split rule words one time
+        if (typeof rule.words === 'string') {
+            // if regex
+            if (rule.words[0] === '/') {
+                rule.words = new RegExp(rule.words, 'i');
+            } else {
+                rule.words = rule.words.toLowerCase().split(' ');
+            }
+        }
+
+        // if regexp
+        if (rule.words instanceof RegExp) {
+            isFound = rule.words.test(cmd);
+        } else {
+            // compare every word
+            for (var j = 0; j < rule.words.length; j++) {
+
+                if (rule.words[j].indexOf ('/') != -1) rule.words[j] = rule.words[j].split('/');
+
+                // if one of
+                if (typeof rule.words[j] === 'object') {
+                    var _isFound = false;
+
+                    for (var u = 0; u < rule.words[j].length; u++) {
+                        if (cmdWords.indexOf(rule.words[j][u]) != -1) {
+                            _isFound = true;
+                            break;
+                        }
+                    }
+
+                    if (!_isFound){
+                        isFound = false;
+                        break;
+                    }
+                }
+                else
+                if (cmdWords.indexOf(rule.words[j]) === -1) {
+                    isFound = false;
+                    break;
+                }
+            }
+        }
+
+        if (isFound) {
+            matchedRules.push(r);
+            if (rule._break) break;
+        }
+    }
+    return matchedRules;
+}
+
+
 if (typeof module !== 'undefined' && module.parent) {
     module.exports = {
         commands:           commands,
@@ -574,6 +667,8 @@ if (typeof module !== 'undefined' && module.parent) {
         sayIDontUnderstand: sayIDontUnderstand,
         sayNoSuchRoom:      sayNoSuchRoom,
         sayNoSuchRole:      sayNoSuchRole,
-        sayNothingToDo:     sayNothingToDo
+        sayNothingToDo:     sayNothingToDo,
+        sayError:           sayError,
+        findMatched:        findMatched
     };
 }
