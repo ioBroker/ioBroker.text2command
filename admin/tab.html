@@ -59,6 +59,8 @@
             <td style="width:30px"></td>
             <td><div style="padding-left: 100px"><label class="translate" for="rules-filter">Filter:</label> <input id="rules-filter" style="width:100px;margin-right:3px"/><button id="rules-filter-clear"></button></div></td>
             <td style="width:30px"></td>
+            <td><div style="padding-left: 30px"><label class="translate" for="rules-filter">Test:</label> <input id="rules-test" style="width: 250px; margin-right: 3px"/><button id="rules-test-clear"></button></div></td>
+            <td style="width:30px"></td>
             <td><button id="btn_replace_ids" class="translateT" title="Replace IDs"></button></td>
         </tr></table>
         <div id="process_running_rules" class="translate" style="position:absolute; top:50%; left:50%; width: 150px; height: 25px; padding: 12px; background: rgba(30, 30, 30, 0.5); display: none; text-align:center; font-size: 1.2em; color: white; font-weight: bold; border-radius: 5px">Processing...</div>
@@ -67,6 +69,7 @@
             <colgroup>
                 <col width="250px"/>
                 <col width="*"/>
+                <col width="150px"/>
                 <col width="200px"/>
                 <col width="200px"/>
                 <!--col width="100px"/-->
@@ -79,6 +82,7 @@
             <tr>
                 <th class="translate ui-widget-header">Type</th>
                 <th class="translateT ui-widget-header" title="words help"><span class="translate">Words (see tooltip)</span></th>
+                <th class="translate ui-widget-header">Stop on match</th>
                 <th class="translate ui-widget-header">Argument</th>
                 <th class="translate ui-widget-header">Argument</th>
                 <!--th class="translate ui-widget-header">Argument 3</th-->
@@ -117,7 +121,7 @@
         </p>
     </div>
 
-    <div id="dialog-select-members" style="display: none"></div>
+    <!--div id="dialog-select-members" style="display: none"></div-->
     <div id="dialog-select-member"  style="display: none"></div>
 
     <script type="text/javascript" src="tab.js"></script>

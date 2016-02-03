@@ -1,7 +1,9 @@
+// TODO alarm on/off
+
 var commands = {
     'whatTimeIsIt' : {
         icon: '',
-        description: {
+        name: {
             'en': "What time is it?",
             'de': "Wie spät ist das?",
             'ru': "Сколько время?"
@@ -17,7 +19,7 @@ var commands = {
     },
     'whatIsYourName' : {
         icon: '',
-        description: {
+        name: {
             'en': "What is your name?",
             'de': "Wie heißt du?",
             'ru': "Как тебя зовут?"
@@ -46,7 +48,7 @@ var commands = {
     },
     'outsideTemperature' : {
         icon: '',
-        description: {
+        name: {
             'en': "What is the outside temperature?",
             'de': "Wie kalt/warm ist draußen?",
             'ru': "Какая температура на улице?"
@@ -83,7 +85,7 @@ var commands = {
     },
     'insideTemperature' : {
         icon: '',
-        description: {
+        name: {
             'en': "What is the inside temperature?",
             'de': "Wie kalt/warm ist drin?",
             'ru': "Какая температура дома?"
@@ -120,7 +122,7 @@ var commands = {
     },
     'roleOnOff': {
         icon: '',
-        description: {
+        name: {
             'en': "Switch on/off by function",
             'de': "Schalte an oder aus mit Funktion",
             'ru': "Включить/выключить приборы"
@@ -143,7 +145,7 @@ var commands = {
     },
     'blindsUpDown': {
         icon: '',
-        description: {
+        name: {
             'en': "Open/close blinds",
             'de': "Rollladen auf/zu machen",
             'ru': "Поднять опустить ставни"
@@ -166,7 +168,7 @@ var commands = {
     },
     'openLock': {
         icon: '',
-        description: {
+        name: {
             'en': "Open/close door lock",
             'de': "Türschloss auf/zu machen",
             'ru': "Открыть/закрыть замок на двери"
@@ -190,7 +192,7 @@ var commands = {
     },
     'userDeviceControl' : {
         icon: '',
-        description: {
+        name: {
             'en': "Switch something on/off",
             'de': "Schalte irgendwas an oder aus",
             'ru': "Что нибудь включить/выключить"
@@ -224,7 +226,7 @@ var commands = {
     },
     'userQuery' : {
         icon: '',
-        description: {
+        name: {
             'en': "Ask about something",
             'de': "Fragen über irgendwas",
             'ru': "Спросить о чём-нибудь"
@@ -255,7 +257,7 @@ var commands = {
     },
     'goodBoy' : {
         icon: '',
-        description: {
+        name: {
             'en': "You are good",
             'de': "Du bist gut",
             'ru': "Молодец"
@@ -284,7 +286,7 @@ var commands = {
     },
     'thankYou' : {
         icon: '',
-        description: {
+        name: {
             'en': "Thank you",
             'de': "Danke",
             'ru': "Спасибо"
@@ -339,6 +341,7 @@ var rooms = {
     "hovel":      {"ru" : "сарай/сарае",  "de": "schuppen/scheune",     "en": "hovel" },
     "summerHouse":{"ru" : "теплиц",       "de": "gartenhaus",           "en": "summer" }
 };
+
 // In room
 var roomsDative = {
     "livingRoom": {"ru" : "в зале",       "de": "im Wohnzimmer",        "en": "in the living room" },
@@ -389,6 +392,7 @@ var rolesGenitive = {
     "lock":       {"ru" : "замков",             "de": "e Verschluße",   "en": "lock" },
     "all":        {"ru" : "всего",              "de": " alles",         "en": "all" }
 };
+
 // Switch the role on/off
 var rolesAccusative = {
     "light":      {"ru" : "свет",               "de": "das Licht",      "en": "light" },
@@ -401,7 +405,7 @@ var rolesAccusative = {
     "all":        {"ru" : "всё",                "de": "alles",          "en": "all" }
 };
 
-function getRandomPhrase (arrOrText) {
+function getRandomPhrase(arrOrText) {
     if (typeof arrOrText === 'string') {
         arrOrText = arrOrText.split('/');
     }
@@ -421,7 +425,7 @@ function getRandomPhrase (arrOrText) {
     }
 }
 
-function sayIDontKnow (lang) {
+function sayIDontKnow(lang, text, args, ack, cb) {
     var toSay;
     if (lang == "ru") {
         toSay = getRandomPhrase(["Извините, но ", "Прошу прощения, но ", ""]) +
@@ -435,26 +439,35 @@ function sayIDontKnow (lang) {
         toSay = getRandomPhrase(["I am sorry, but ", "Excus me. ", ""]) +
             getRandomPhrase(["I don't know", "No data available"]);
     }
-    return toSay;
+
+    if (cb) {
+        cb(toSay);
+    } else {
+        return toSay;
+    }
 }
 
-function sayNoName (lang) {
+function sayNoName(lang, text, args, ack, cb) {
     var toSay;
 
     if (lang == "ru") {
-        toSay ="Обращайся ко мне как хочешь. У меня нет имени";
+        toSay = "Обращайся ко мне как хочешь. У меня нет имени";
     }
     else if (lang == "de") {
-        toSay ="Nenne mich wie du willst. Ich habe keinen Namen.";
+        toSay = "Nenne mich wie du willst. Ich habe keinen Namen.";
     }
     else if (lang == "en") {
-        toSay ="Call me as you wish. I don't have name";
+        toSay = "Call me as you wish. I don't have name";
     }
 
-    return toSay;
+    if (cb) {
+        cb(toSay);
+    } else {
+        return toSay;
+    }
 }
 
-function sayIDontUnderstand (lang, text) {
+function sayIDontUnderstand(lang, text, args, ack, cb) {
     var toSay;
     if (lang == "ru") {
         if (!text) {
@@ -481,10 +494,10 @@ function sayIDontUnderstand (lang, text) {
         }
     }
 
-    return toSay;
+    cb(toSay);
 }
 
-function sayNoSuchRoom (lang) {
+function sayNoSuchRoom(lang, text, args, ack, cb) {
     var toSay;
     if (lang == 'en') {
         toSay = getRandomPhrase(['Room not present', 'Room not found', 'You don\'t have such a room']);
@@ -498,10 +511,14 @@ function sayNoSuchRoom (lang) {
         toSay = "";
     }
 
-    return toSay;
+    if (cb) {
+        cb(toSay);
+    } else {
+        return toSay;
+    }
 }
 
-function sayNothingToDo (lang) {
+function sayNothingToDo(lang, text, args, ack, cb) {
     var toSay;
     if (lang == 'en') {
         toSay = getRandomPhrase(['I don\'t know, what to do', 'No action defined']);
@@ -515,16 +532,20 @@ function sayNothingToDo (lang) {
         toSay = "";
     }
 
-    return toSay;
+    if (cb) {
+        cb(toSay);
+    } else {
+        return toSay;
+    }
 }
 
-function sayNoSuchRole (lang) {
+function sayNoSuchRole(lang, text, args, ack, cb) {
     var toSay;
     if (lang == 'en') {
         toSay = getRandomPhrase('Function not present/Function not found/You don\'t have such a device');
     } else
     if (lang == 'de') {
-        toSay = getRandomPhrase('Die Rolle ist nicht gefunden', 'Es gibt keine Rolle mit dem Namen', 'Man muss sagen womit man was machen will');
+        toSay = getRandomPhrase('Die Rolle ist nicht gefunden/Es gibt keine Rolle mit dem Namen/Man muss sagen womit man was machen will');
     } else
     if (lang == 'ru') {
         toSay = getRandomPhrase('Устройство не найдено/Надо сказать с чем произвести действие');
@@ -532,7 +553,11 @@ function sayNoSuchRole (lang) {
         toSay = "";
     }
 
-    return toSay;
+    if (cb) {
+        cb(toSay);
+    } else {
+        return toSay;
+    }
 }
 
 if (typeof module !== 'undefined' && module.parent) {
@@ -546,7 +571,6 @@ if (typeof module !== 'undefined' && module.parent) {
         getRandomPhrase:    getRandomPhrase,
         sayIDontKnow:       sayIDontKnow,
         sayNoName:          sayNoName,
-        sayName:            sayName,
         sayIDontUnderstand: sayIDontUnderstand,
         sayNoSuchRoom:      sayNoSuchRoom,
         sayNoSuchRole:      sayNoSuchRole,

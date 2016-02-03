@@ -71,27 +71,23 @@ function Text2Commands(main, instance) {
                 }
                 if (found && rule.template !== r) continue;
             }
-            var desc = commands[r].description;
-            if (typeof desc === 'object') {
-                desc = desc[systemLang] || desc.en;
+            var name = commands[r].name;
+            if (typeof name === 'object') {
+                name = name[systemLang] || name.en;
             }
 
             if (rule.template === r) {
-                text += '<option selected value="' + r + '">' + desc + '</option>';
+                text += '<option selected value="' + r + '">' + name + '</option>';
                 template = commands[r];
             } else {
-                text += '<option value="' + r + '">' + desc + '</option>';
+                text += '<option value="' + r + '">' + name + '</option>';
             }
         }
 
         text += '</select>';
 
-        if (typeof desc === 'object') {
-            desc = desc[systemLang] || desc.en;
-        }
-
         if (!template) {
-            text += '<td></td><td></td><td></td><td></td>';
+            text += '<td></td><td></td><td></td><td></td><td></td>';
         } else {
             // Words
             var words = template.words;
@@ -102,6 +98,9 @@ function Text2Commands(main, instance) {
             }
 
             text += '<td><input style="width: 100%" class="edit-field" data-index="' + index + '" data-field="words" value="' + words + '" ' + '/></td>';
+
+            // break
+            text += '<td style="text-align: center"><input class="edit-field" data-index="' + index + '" data-field="_break" type="checkbox" ' + (rule._break ? 'checked' : '') + '/></td>';
 
             // Arg1
             text += '<td>' + showArgument(index, 0, (commands[rule.template] && commands[rule.template].args && commands[rule.template].args[0]) ? commands[rule.template].args[0] : '', rule.args ? rule.args[0] : null) + '</td>';
@@ -151,6 +150,24 @@ function Text2Commands(main, instance) {
     function showRules() {
         var text = '';
         for (var r = 0; r < that.rules.length; r++) {
+            if (that.currentFilter) {
+                var reg = new RegExp(that.currentFilter.replace(/\//g, '\/').replace(/\\/g, '\\').replace(/\./g, '\.'), 'i');
+                var template = that.rules[r].template;
+                if (!template) continue;
+                template = commands[template];
+
+                var found = false;
+                var name = template.name;
+                if (typeof name === 'object') {
+                    name = name[systemLang] || name.en;
+                }
+                if (!found && that.rules[r].words                   && reg.test(that.rules[r].words))         found = true;
+                if (!found && typeof that.rules[r].ack === 'object' && reg.test(that.rules[r].ack))           found = true;
+                if (!found && name                                  && reg.test(name))                        found = true;
+                if (!found && that.rules[r].args && that.rules[r].args[0] && reg.test(that.rules[r].args[0])) found = true;
+                if (!found && that.rules[r].args && that.rules[r].args[1] && reg.test(that.rules[r].args[1])) found = true;
+                if (!found) continue;
+            }
             text += showOneRule(r, that.rules[r]);
         }
         $('#tab-rules-body').html(text);
@@ -299,12 +316,16 @@ function Text2Commands(main, instance) {
                 that.filterTimer = null;
                 that.currentFilter = $('#rules-filter').val();
                 that.main.saveConfig('rulesCurrentFilter', that.currentFilter);
-                that.applyFilter(that.currentFilter);
+                showRules();
             }, 400);
         });
 
         $('#rules-filter-clear').button({icons: {primary: 'ui-icon-close'}, text: false}).css({width: 16, height: 16}).click(function () {
             $('#rules-filter').val('').trigger('change');
+        });
+
+        $('#rules-test-clear').button({icons: {primary: 'ui-icon-close'}, text: false}).css({width: 16, height: 16}).click(function () {
+            $('#rules-test').val('').trigger('change');
         });
 
         var $btnNewRule = $('#btn_new_rule');
@@ -327,7 +348,7 @@ function Text2Commands(main, instance) {
             autoOpen: false,
             modal:    true,
             width:    510,
-            height:   215,
+            height:   255,
             buttons: [
                 {
                     text: _('Ok'),
@@ -372,10 +393,15 @@ function Text2Commands(main, instance) {
         $('#btn_save_settings').button({icons: {primary: 'ui-icon-disk'}, text: false}).css({width: 21, height: 21}).click(function() {
             saveSettings(true);
         }).button('disable');
+
+        $('#rules-test').attr('placeholder', _('enter test phrase')).change(function () {
+            test($(this).value);
+        }).keydown(function () {
+            $(this).trigger('change');
+        })
     };
 
-
-    function applyFilter(filter) {
+    function test(phrase) {
 
     }
 
@@ -385,8 +411,8 @@ function Text2Commands(main, instance) {
 
     this.addNewRule = function () {
         this.rules.push({
-            name: '',
-            description: ''
+            template: '',
+            _break: true
         });
         showRules();
     };
@@ -517,7 +543,7 @@ var main = {
         $dialogConfirm.data('callback', callback);
         $dialogConfirm.dialog('open');
     },
-    initSelectIds:   function () {
+/*    initSelectIds:   function () {
         if (main.selectIds) return main.selectIds;
         main.selectIds = $('#dialog-select-members').selectId('init',  {
             objects:       main.objects,
@@ -548,7 +574,7 @@ var main = {
             columns: ['image', 'name', 'role', 'room', 'value']
         });
         return main.selectIds;
-    },
+    },*/
     initSelectId:   function () {
         if (main.selectId) return main.selectId;
         main.selectId = $('#dialog-select-member').selectId('init',  {

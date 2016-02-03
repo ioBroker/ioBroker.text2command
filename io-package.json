@@ -18,6 +18,7 @@
         "loglevel":                 "info",
         "icon":                     "text2command.png",
         "keywords":                 ["text", "commands"],
+        "messagebox":               true,
         "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
         "localLink":                "/adapter/text2command/tab.html",
 		"type":                     "script",
@@ -31,7 +32,8 @@
         "rules": [
 
         ],
-        "sayitInstance": ""
+        "sayitInstance": "",
+        "language": ""
     },
     "instanceObjects": [
         {
