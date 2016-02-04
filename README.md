@@ -21,9 +21,47 @@ sendTo('text2command', 'Switch light in kitchen on', function (err, response) {
 });
 ```
 
+To use "Switch on/off by function" you should care of functions. 
 
+Following functions will be interpreted as 
+
+**light** (Licht | Свет):
+- level.dimmer
+- switch.light
+
+**backlight** (Beleuchtung | Подсветка):
+- level.backlight
+- switch.backlight
+
+**blinds/shutter** (Rolladen | Жалюзи/окна)
+- level.blind
+- switch.blind
+
+**curtain** (Vorhänge | Шторы)
+- level.curtain
+- switch.curtain
+
+**heating** (Heizung | Отопление/Подогрев)
+- level.temperature
+- switch.temperature
+
+**music** (Musik | Музыка)
+- button.play
+- button.stop / button.pause
+
+**Alarm/Security** (Alarmanlage / Alarm | Охрана)
+- switch.security
+
+**lock** (Schloß / Schloss | Замок)
+- switch.open
+- switch.lock
+
+Following rooms are supported:
+
+
+
+You can define default room in []. E.g "switch the light on[sleepingroom]
 ## Changelog
-
 
 ### 0.0.1 (2015-07-29)
 * (bluefox) initial commit

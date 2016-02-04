@@ -90,15 +90,20 @@ function Text2Commands(main, instance) {
         if (!template) {
             text += '<td></td><td></td><td></td><td></td><td></td>';
         } else {
+            if (rule.words === undefined) {
+                rule.words = template.words ? (template.words[systemLang] || template.words.en) : '';
+                saveSettings();
+            }
+
             // Words
-            var words = template.words;
-            if (words === undefined) {
-                words = rule.words || '';
-            } else if (typeof words === 'object') {
+            var words = rule.words;
+            if (!words) words = template.words || '';
+
+            if (typeof words === 'object') {
                 words = words[systemLang] || words.en;
             }
 
-            text += '<td><input style="width: 100%" class="edit-field" data-index="' + index + '" data-field="words" value="' + words + '" ' + '/></td>';
+            text += '<td><input style="width: 100%" class="edit-field" data-index="' + index + '" data-field="words" value="' + words + '" ' + ' ' + (commands[rule.template].editable === false ? 'readonly' : '') + '/></td>';
 
             // break
             text += '<td style="text-align: center"><input class="edit-field" data-index="' + index + '" data-field="_break" type="checkbox" ' + (rule._break ? 'checked' : '') + '/></td>';

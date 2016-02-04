@@ -10,7 +10,6 @@ var commands = {
         },
         invisible: true,
         unique:    true,
-        editable:  false,
         words: {
             'en': "time is it",
             'de': "zeit/spät",
@@ -26,7 +25,6 @@ var commands = {
         },
         invisible: true,
         unique:    true,
-        editable:  false,
         words: {
             'en': "your name",
             'de': "heißt du",
@@ -54,7 +52,6 @@ var commands = {
             'ru': "Какая температура на улице?"
         },
         unique:   true,
-        editable: false,
         words: {
             'en': "outside temperature",
             'de': "aussen/draußen kalt/warm/temperatur",
@@ -91,7 +88,6 @@ var commands = {
             'ru': "Какая температура дома?"
         },
         unique:   true,
-        editable: false,
         words: {
             'en': "inside temperature",
             'de': "intern/drin kalt/warm/temperatur",
@@ -120,7 +116,7 @@ var commands = {
             }
         }
     },
-    /*'roleOnOff': {
+    'functionOnOff': {
         icon: '',
         name: {
             'en': "Switch on/off by function",
@@ -165,7 +161,7 @@ var commands = {
                 'ru': "Ответить подтверждением"
             }
         }
-    },
+    },/*
     'openLock': {
         icon: '',
         name: {
@@ -198,7 +194,6 @@ var commands = {
             'ru': "Что нибудь включить/выключить"
         },
         unique:   false,
-        editable: true,
         args: [{
             name: {
                 'en': "Device or variable ID",
@@ -236,7 +231,6 @@ var commands = {
             'ru': "Спросить о чём-нибудь"
         },
         unique:   false,
-        editable: true,
         args: [{
             name: {
                 'en': "Device or variable ID",
@@ -268,7 +262,6 @@ var commands = {
         },
         invisible: true,
         unique:    true,
-        editable:  false,
         words: {
             'en': "good",
             'de': "gut",
@@ -297,7 +290,6 @@ var commands = {
         },
         invisible: true,
         unique:    true,
-        editable:  false,
         words: {
             'en': "thank",
             'de': "danke",
@@ -319,94 +311,93 @@ var commands = {
     }
 };
 
-// Translations for rooms
-var rooms = {
-    "livingRoom": {"ru" : "зал",          "de": "wohnzimmer",           "en": "living" },
-    "bedroom":    {"ru" : "спальн",       "de": "schlafzimmer",         "en": "bedroom" },
-    "bathroom":   {"ru" : "ванн",         "de": "bad",                  "en": "bath" },
-    "office":     {"ru" : "кабинет",      "de": "arbeitszimmer/kabinet/büro","en": "working/office" },
-    "nursery":    {"ru" : "детск",        "de": "kinder",               "en": "kids/child/nursery" },
-    "wc":         {"ru" : "туалет",       "de": "wc",                   "en": "wc/closet" },
-    "floor":      {"ru" : "прихож/вход/коридор",  "de": "diele/eingang/flur",   "en": "floor/enter" },
-    "kitchen":    {"ru" : "кухня/кухне",  "de": "küche",                "en": "kitchen" },
-    "everywhere": {"ru" : "везде/весь/все/всё", "de": "alle/überall",         "en": "everywhere" },
-    "terrace":    {"ru" : "балкон/терасс","de": "balkon/terrasse",      "en": "balcony/terrace/patio" },
-    "dinningRoom":{"ru" : "столовая",     "de": "esszimmer",            "en": "dinning" },
-    "garage":     {"ru" : "гараж",        "de": "garage",               "en": "garage" },
-    "stairs":     {"ru" : "лестниц",      "de": "treppe",               "en": "stair" },
-    "garden":     {"ru" : "сад",          "de": "garten",               "en": "garden" },
-    "court":      {"ru" : "двор",         "de": "hof",                  "en": "court/yard" },
-    "guestroom":  {"ru" : "гостей",       "de": "gästezimmer/gast",     "en": "guest room" },
-    "attic":      {"ru" : "кладовк",      "de": "speicher",             "en": "attic" },
-    "roof":       {"ru" : "крыше/крыша",  "de": "dachstuhl",            "en": "roof" },
-    "terminal":   {"ru" : "сени/сенях",   "de": "anschlussraum",        "en": "terminal" },
-    "washRoom":   {"ru" : "прачечн",      "de": "waschraum",            "en": "wash room" },
-    "heatRoom":   {"ru" : "котельн",      "de": "heizungsraum",         "en": "heat room" },
-    "hovel":      {"ru" : "сарай/сарае",  "de": "schuppen/scheune",     "en": "hovel" },
-    "summerHouse":{"ru" : "теплиц",       "de": "gartenhaus",           "en": "summer" }
+// Translations for rooms, used for detection
+var rooms =             {
+    "everywhere":                               {"ru" : "везде/весь/все/всё",     "de": "alle/überall",         "en": "everywhere" },
+    "livingroom/wohnzimmer/зал":                {"ru" : "зал",                    "de": "wohnzimmer",           "en": "living" },
+    "bedroom/sleepingroom/schlafzimmer/спальня":{"ru" : "спальн",                 "de": "schlafzimmer",         "en": "bedroom" },
+    "bathroom/bath/badezimmer/bad/ванная":      {"ru" : "ванн",                   "de": "bad",                  "en": "bath" },
+    "office/arbeitszimmer/кабинет":             {"ru" : "кабинет",                "de": "arbeitszimmer/kabinet/büro","en": "working/office" },
+    "nursery/kinderzimmer/детская":             {"ru" : "детск",                  "de": "kinder",               "en": "kids/child/nursery" },
+    "guestwc/gästewc/гостевой туалет":          {"ru" : "гостевой туалет/гостевом туалет", "de": "gäste wc",    "en": "guets wc/guest closet" },
+    "wc/туалет":                                {"ru" : "туалет",                 "de": "wc",                   "en": "wc/closet" },
+    "floor/diele/gang/flur/коридор/прихожая":   {"ru" : "прихож/вход/коридор",    "de": "diele/eingang/flur",   "en": "floor/enter" },
+    "kitchen/küche/kueche/кухня":               {"ru" : "кухня/кухне",            "de": "küche",                "en": "kitchen" },
+    "terrace/balkon/terrasse/терасса/балкон":   {"ru" : "балкон/терасс",          "de": "balkon/terrasse",      "en": "balcony/terrace/patio" },
+    "dinningroom/esszimmer/столовая":           {"ru" : "столовая",               "de": "esszimmer",            "en": "dinning" },
+    "garage/garage/гараж":                      {"ru" : "гараж",                  "de": "garage",               "en": "garage" },
+    "stairs/treppe/treppenhaus/лестница":       {"ru" : "лестниц",                "de": "treppe",               "en": "stair" },
+    "garden/garten/сад":                        {"ru" : "сад",                    "de": "garten",               "en": "garden" },
+    "court/hof/двор":                           {"ru" : "двор",                   "de": "hof",                  "en": "court/yard" },
+    "guestroom/gästezimmer/гостевая":           {"ru" : "гостев",                 "de": "gästezimmer/gast",     "en": "guest room" },
+    "attic/speicher/кладовка":                  {"ru" : "кладовк",                "de": "speicher",             "en": "attic" },
+    "roof/dachstuhl/крыша":                     {"ru" : "крыше/крыша",            "de": "dachstuhl",            "en": "roof" },
+    "terminal/anschlussraum/сени":              {"ru" : "сени/сенях",             "de": "anschlussraum",        "en": "terminal" },
+    "washroom/waschraum/прачечная":             {"ru" : "прачечн",                "de": "waschraum",            "en": "wash room" },
+    "heatroom/heizungsraum/котельная":          {"ru" : "котельн",                "de": "heizungsraum",         "en": "heat room" },
+    "hovel/schuppen/scheune/сарай":             {"ru" : "сарай/сарае",            "de": "schuppen/scheune",     "en": "hovel" },
+    "summerhouse/gartenhaus/теплица":           {"ru" : "теплиц",                 "de": "gartenhaus",           "en": "summer" }
 };
 
-// In room
+// In room: used for answers
 var roomsDative = {
-    "livingRoom": {"ru" : "в зале",       "de": "im Wohnzimmer",        "en": "in the living room" },
-    "bedroom":    {"ru" : "в спальне",    "de": "im Schlafzimmer",      "en": "in the bedroom" },
-    "bathroom":   {"ru" : "в ванной",     "de": "im Bad",               "en": "in the bath" },
-    "office":     {"ru" : "в кабинете",   "de": "im Arbeitszimmer",     "en": "in the office" },
-    "nursery":    {"ru" : "в детской",    "de": "im Kinderzimmer",      "en": "in the kids room" },
-    "wc":         {"ru" : "в туалете",    "de": "im WC",                "en": "in wc" },
-    "floor":      {"ru" : "в прихожей",   "de": "im Flur",              "en": "in the floor" },
-    "kitchen":    {"ru" : "на кухне",     "de": "in der Küche",         "en": "in the kitchen" },
-    "everywhere": {"ru" : "во всём доме", "de": "überall",              "en": "everywhere" },
-    "terrace":    {"ru" : "на балконе",   "de": "auf dem Balkon",       "en": "on the balcony" },
-    "dinningRoom":{"ru" : "в столовой",   "de": "im Esszimmer",         "en": "in the dinning room" },
-    "garage":     {"ru" : "в гараже",     "de": "in der Garage",        "en": "in the garage" },
-    "stairs":     {"ru" : "на лестнице",  "de": "auf der Treppe",       "en": "on the stairs" },
-    "garden":     {"ru" : "в саду",       "de": "im Garten",            "en": "in the garden" },
-    "court":      {"ru" : "во дворе",     "de": "im Hof",               "en": "in the court" },
-    "guestroom":  {"ru" : "в гостевой",   "de": "im Gästezimmer/gast",  "en": "in the guest room" },
-    "attic":      {"ru" : "в кладовке",   "de": "im Speicher",          "en": "in the attic" },
-    "roof":       {"ru" : "на крыше",     "de": "im Dachstuhl",         "en": "on the roof" },
-    "terminal":   {"ru" : "в сенях",      "de": "im Anschlussraum",     "en": "in the terminal" },
-    "washRoom":   {"ru" : "в прачечной",  "de": "im Waschraum",         "en": "in the wash room" },
-    "heatRoom":   {"ru" : "в котельной",  "de": "im Heizungsraum",      "en": "in the heat room" },
-    "hovel":      {"ru" : "в сарае",      "de": "in der Schuppen",      "en": "in the hovel" },
-    "summerHouse":{"ru" : "в теплице",    "de": "im Gartenhaus",        "en": "in the summer house" }
+    "everywhere":                               {"ru" : "во всём доме", "de": "überall",              "en": "everywhere" },
+    "livingroom/wohnzimmer/зал":                {"ru" : "в зале",       "de": "im Wohnzimmer",        "en": "in the living room" },
+    "bedroom/sleepingroom/schlafzimmer/спальня":{"ru" : "в спальне",    "de": "im Schlafzimmer",      "en": "in the bedroom" },
+    "bathroom/bath/badezimmer/bad/ванная":      {"ru" : "в ванной",     "de": "im Bad",               "en": "in the bath" },
+    "office/arbeitszimmer/кабинет":             {"ru" : "в кабинете",   "de": "im Arbeitszimmer",     "en": "in the office" },
+    "nursery/kinderzimmer/детская":             {"ru" : "в детской",    "de": "im Kinderzimmer",      "en": "in the kids room" },
+    "guestwc/gästewc/гостевой туалет":          {"ru" : "в гостевом туалете", "de": "im gäste wc",    "en": "in guets wc" },
+    "wc/туалет":                                {"ru" : "в туалете",    "de": "im WC",                "en": "in wc" },
+    "floor/diele/gang/flur/коридор/прихожая":   {"ru" : "в прихожей",   "de": "im Flur",              "en": "in the floor" },
+    "kitchen/küche/kueche/кухня":               {"ru" : "на кухне",     "de": "in der Küche",         "en": "in the kitchen" },
+    "terrace/balkon/terrasse/терасса/балкон":   {"ru" : "на балконе",   "de": "auf dem Balkon",       "en": "on the balcony" },
+    "dinningroom/esszimmer/столовая":           {"ru" : "в столовой",   "de": "im Esszimmer",         "en": "in the dinning room" },
+    "garage/garage/гараж":                      {"ru" : "в гараже",     "de": "in der Garage",        "en": "in the garage" },
+    "stairs/treppe/treppenhaus/лестница":       {"ru" : "на лестнице",  "de": "auf der Treppe",       "en": "on the stairs" },
+    "garden/garten/сад":                        {"ru" : "в саду",       "de": "im Garten",            "en": "in the garden" },
+    "court/hof/двор":                           {"ru" : "во дворе",     "de": "im Hof",               "en": "in the court" },
+    "guestroom/gästezimmer/гостевая":           {"ru" : "в гостевой",   "de": "im Gästezimmer/gast",  "en": "in the guest room" },
+    "attic/speicher/кладовка":                  {"ru" : "в кладовке",   "de": "im Speicher",          "en": "in the attic" },
+    "roof/dachstuhl/крыша":                     {"ru" : "на крыше",     "de": "im Dachstuhl",         "en": "on the roof" },
+    "terminal/anschlussraum/сени":              {"ru" : "в сенях",      "de": "im Anschlussraum",     "en": "in the terminal" },
+    "washroom/waschraum/прачечная":             {"ru" : "в прачечной",  "de": "im Waschraum",         "en": "in the wash room" },
+    "heatroom/heizungsraum/котельная":          {"ru" : "в котельной",  "de": "im Heizungsraum",      "en": "in the heat room" },
+    "hovel/schuppen/scheune/сарай":             {"ru" : "в сарае",      "de": "in der Schuppen",      "en": "in the hovel" },
+    "summerhouse/gartenhaus/теплица":           {"ru" : "в теплице",    "de": "im Gartenhaus",        "en": "in the summer house" }
 };
 
-// Translation of roles
-var roles = {
-    "backlight":  {"ru" : "подсветк/светильник","de": "beleuchtung/rücklicht", "en": "back light/back light/rear light" },
-    "light":      {"ru" : "свет/лампу/лампа",   "de": "licht/lampe",     "en": "light/lamp" },
-    "heating":    {"ru" : "отопление/батаре",   "de": "heizung",         "en": "heating" },
-    "shutter":    {"ru" : "жалюзи/ставни",      "de": "rolllade",        "en": "shutter" },
-    "music":      {"ru" : "музык",              "de": "musik",           "en": "music" },
-    "security":   {"ru" : "сигнал",             "de": "sicherheit",      "en": "security" },
-    "lock":       {"ru" : "замок",              "de": "verschluß/schloß","en": "lock" },
-    "all":        {"ru" : "всё/все",            "de": "alles",           "en": "all" }
+// Translation of functions, used for detection
+var functions = {
+    "backlight/beleuchtung/подсветка":    {"ru" : "подсветк/светильник","de": "beleuchtung/rücklicht", "en": "back light/back light/rear light" },
+    "light/licht/свет":                   {"ru" : "свет/лампу/лампа",   "de": "licht/lampe",     "en": "light/lamp" },
+    "heating/heizung/отопление":          {"ru" : "отопление/батаре",   "de": "heizung",         "en": "heating" },
+    "blind/rollade/rolladen/жалюзи/окна": {"ru" : "жалюзи/ставни",      "de": "rolllade",        "en": "shutter" },
+    "music/musik/музыка":                 {"ru" : "музык",              "de": "musik",           "en": "music" },
+    "security/sicherheit/alarm/alarmanlage/сигнализация/охрана": {"ru" : "сигнал/охран", "de": "sicherheit/alarm", "en": "security/alarm" },
+    "lock/door/schloß/tür/замок/дверь":   {"ru" : "замок/дверь/ворота", "de": "verschluß/schloß/tür","en": "lock/door" }
 };
 
-// There is no this role
-var rolesGenitive = {
-    "light":      {"ru" : "ламп",               "de": "e Lampen",       "en": "light" },
-    "backlight":  {"ru" : "подсветки",          "de": "e Beleuchtung",  "en": "back light" },
-    "heating":    {"ru" : "отопленияе",         "de": "e Heizung",      "en": "heating" },
-    "shutter":    {"ru" : "жалюзей",            "de": "e Rolllade",     "en": "shutter" },
-    "music":      {"ru" : "музыки",             "de": "e Musik",        "en": "music" },
-    "security":   {"ru" : "сигнализации",       "de": "e Sicherheitssystem", "en": "security" },
-    "lock":       {"ru" : "замков",             "de": "e Verschluße",   "en": "lock" },
-    "all":        {"ru" : "всего",              "de": " alles",         "en": "all" }
+// Used for answer
+var functionsGenitive = {
+    "backlight/beleuchtung/подсветка":    {"ru" : "подсветки",          "de": "e Beleuchtung",  "en": "back light" },
+    "light/licht/свет":                   {"ru" : "ламп",               "de": "e Lampen",       "en": "light" },
+    "heating/heizung/отопление":          {"ru" : "отопление",          "de": "e Heizung",      "en": "heating" },
+    "blind/rollade/rolladen/жалюзи/окна": {"ru" : "жалюзей",            "de": "e Rolllade",     "en": "shutter" },
+    "music/musik/музыка":                 {"ru" : "музыки",             "de": "e Musik",        "en": "music" },
+    "security/sicherheit/alarm/alarmanlage/сигнализация/охрана": {"ru" : "сигнализации", "de": "e Sicherheitssystem", "en": "security" },
+    "lock/door/schloß/tür/замок/дверь":   {"ru" : "замков",             "de": "e Verschluße",   "en": "lock" }
 };
 
-// Switch the role on/off
-var rolesAccusative = {
-    "light":      {"ru" : "свет",               "de": "das Licht",      "en": "light" },
-    "backlight":  {"ru" : "подсветку",          "de": "die Beleuchtung","en": "back light" },
-    "heating":    {"ru" : "отопление",          "de": "die Heizung",    "en": "heating" },
-    "shutter":    {"ru" : "жалюзи",             "de": "die Rolllade",   "en": "shutter" },
-    "music":      {"ru" : "музыку",             "de": "die Musik",      "en": "music" },
-    "security":   {"ru" : "сигнализацию",       "de": "das Sicherheitssystem", "en": "security" },
-    "lock":       {"ru" : "замок",              "de": "den Verschluß",  "en": "lock" },
-    "all":        {"ru" : "всё",                "de": "alles",          "en": "all" }
+// Used for answer
+var functionsAccusative = {
+    "backlight/beleuchtung/подсветка":    {"ru" : "подсветку",          "de": "die Beleuchtung","en": "back light" },
+    "light/licht/свет":                   {"ru" : "свет",               "de": "das Licht",      "en": "light" },
+    "heating/heizung/отопление":          {"ru" : "отопление",          "de": "die Heizung",    "en": "heating" },
+    "blind/rollade/rolladen/жалюзи/окна": {"ru" : "жалюзи",             "de": "die Rolllade",   "en": "shutter" },
+    "music/musik/музыка":                 {"ru" : "музыку",             "de": "die Musik",      "en": "music" },
+    "security/sicherheit/alarm/alarmanlage/сигнализация/охрана": {"ru" : "сигнализацию", "de": "das Sicherheitssystem", "en": "security" },
+    "lock/door/schloß/tür/замок/дверь":   {"ru" : "замок",              "de": "den Verschluß",  "en": "lock" }
 };
 
 function getRandomPhrase(arrOrText) {
@@ -543,7 +534,7 @@ function sayNothingToDo(lang, text, args, ack, cb) {
     }
 }
 
-function sayNoSuchRole(lang, text, args, ack, cb) {
+function sayNoSuchFunction(lang, text, args, ack, cb) {
     var toSay;
     if (lang == 'en') {
         toSay = getRandomPhrase('Function not present/Function not found/You don\'t have such a device');
@@ -557,6 +548,27 @@ function sayNoSuchRole(lang, text, args, ack, cb) {
         toSay = "";
     }
 
+    if (cb) {
+        cb(toSay);
+    } else {
+        return toSay;
+    }
+}
+
+function sayNoFunctionInThisRoom(lang, text, args, ack, cb) {
+    var sRoom     = args[0];
+    var sFunction = args[1];
+
+    var toSay;
+    if (lang == 'en') {
+        toSay = 'There is no ' + functionsGenitive[sFunction][lang] + ' ' + roomsDative[sRoom][lang];
+    } else if (lang == 'de') {
+        toSay = 'Es gibt kein' + functionsGenitive[sFunction][lang] + ' ' + roomsDative[sRoom][lang];
+    } else if (lang == 'ru') {
+        toSay = roomsDative[sRoom][lang] + ' нет ' + functionsGenitive[sFunction][lang];
+    } else {
+        toSay = '';
+    }
     if (cb) {
         cb(toSay);
     } else {
@@ -584,19 +596,22 @@ function sayError(lang, text, args, ack, cb) {
         return toSay;
     }
 }
+
 function findMatched(cmd, _rules) {
     var matchedRules = [];
 
     cmd = cmd.toLowerCase();
 
     var ix = cmd.indexOf(';');
-
     if (ix != -1) cmd = cmd.substring(ix + 1);
+
+    ix = cmd.indexOf('[');
+    if (ix != -1) cmd = cmd.substring(0, ix);
+
     var cmdWords = cmd.split(' ');
 
-
     for (var r = 0; r < _rules.length; r++) {
-        var rule    = _rules[r];
+        var rule = _rules[r];
         if (!rule.words) continue;
 
         var isFound = true;
@@ -652,23 +667,23 @@ function findMatched(cmd, _rules) {
     return matchedRules;
 }
 
-
 if (typeof module !== 'undefined' && module.parent) {
     module.exports = {
-        commands:           commands,
-        rooms:              rooms,
-        roles:              roles,
-        rolesAccusative:    rolesAccusative,
-        rolesGenitive:      rolesGenitive,
-        roomsDative:        roomsDative,
-        getRandomPhrase:    getRandomPhrase,
-        sayIDontKnow:       sayIDontKnow,
-        sayNoName:          sayNoName,
-        sayIDontUnderstand: sayIDontUnderstand,
-        sayNoSuchRoom:      sayNoSuchRoom,
-        sayNoSuchRole:      sayNoSuchRole,
-        sayNothingToDo:     sayNothingToDo,
-        sayError:           sayError,
-        findMatched:        findMatched
+        commands:                commands,
+        rooms:                   rooms,
+        functions:               functions,
+        functionsAccusative:     functionsAccusative,
+        functionsGenitive:       functionsGenitive,
+        roomsDative:             roomsDative,
+        getRandomPhrase:         getRandomPhrase,
+        sayIDontKnow:            sayIDontKnow,
+        sayNoName:               sayNoName,
+        sayIDontUnderstand:      sayIDontUnderstand,
+        sayNoSuchRoom:           sayNoSuchRoom,
+        sayNoSuchFunction:       sayNoSuchFunction,
+        sayNothingToDo:          sayNothingToDo,
+        sayError:                sayError,
+        sayNoFunctionInThisRoom: sayNoFunctionInThisRoom,
+        findMatched:             findMatched
     };
 }
