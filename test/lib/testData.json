@@ -1,67 +1,4 @@
 {
-  "enum.favorites": {
-    "enum.favorites.Admin": {
-      "type": "enum",
-      "common": {
-        "name": "Admin Favorites"
-      },
-      "native": {},
-      "_id": "enum.favorites.Admin"
-    },
-    "enum.favorites.Admin.Licht": {
-      "type": "enum",
-      "common": {
-        "name": "Licht",
-        "members": [
-          "hm-rpc.0.AAA0157588.1",
-          "hm-rpc.0.AAA0102085.1",
-          "hm-rpc.0.AAA0102224.1",
-          "hm-rpc.0.AAA0102095.1",
-          "hm-rpc.0.BBB0042127.1",
-          "hm-rpc.0.AAA0175955.1",
-          "hm-rpc.0.AAA0175417.1"
-        ]
-      },
-      "native": {
-        "id": 1988,
-        "TypeName": "FAVORITE"
-      },
-      "_id": "enum.favorites.Admin.Licht"
-    },
-    "enum.favorites.Admin.Heizung": {
-      "type": "enum",
-      "common": {
-        "name": "Heizung",
-        "members": [
-          "hm-rpc.0.AAA0184380.1"
-        ]
-      },
-      "native": {
-        "id": 3528,
-        "TypeName": "FAVORITE"
-      },
-      "_id": "enum.favorites.Admin.Heizung"
-    },
-    "enum.favorites.Admin.Rolladen": {
-      "type": "enum",
-      "common": {
-        "name": "Rolladen",
-        "members": [
-          "hm-rpc.0.AAA0099171.1",
-          "hm-rpc.0.AAA0120748.1",
-          "hm-rpc.0.AAA0120855.1",
-          "hm-rpc.0.CCC0015998.1",
-          "hm-rpc.0.CCC0014714.1",
-          "hm-rpc.0.AAA0353793.1"
-        ]
-      },
-      "native": {
-        "id": 1985,
-        "TypeName": "FAVORITE"
-      },
-      "_id": "enum.favorites.Admin.Rolladen"
-    }
-  },
   "enum.functions": {
     "enum.functions.Licht": {
       "desc": "",
@@ -868,7 +805,7 @@
         "name": "Bad",
         "desc": "",
         "members": [
-          "hm-rpc.0.AAA0157588.1",
+          "hm-rpc.0.AAA0103754.4",
           "hm-rpc.0.CCC0373515.8",
           "hm-rpc.0.CCC0373515.3",
           "hm-rpc.0.AAA0181507.2",

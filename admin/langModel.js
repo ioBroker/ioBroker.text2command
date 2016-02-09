@@ -161,6 +161,35 @@ var commands = {
                 'ru': "Ответить подтверждением"
             }
         }
+    },
+    'sendText': {
+        icon: '',
+        name: {
+            'en': "Write text to state",
+            'de': "Schreibe Text in den Zustand",
+            'ru': "Записать текст в переменную"
+        },
+        unique:   false,
+        editable: true,
+        removeKeys: true,
+        words: {
+            'en': "send text",
+            'de': "sende text",
+            'ru': "послать текст"
+        },
+        ack: {
+            type: 'text',
+            name: {
+                'en': "Answer",
+                'de': "Antwort",
+                'ru': "Ответ"
+            },
+            default: {
+                'en': "Following text was sent: %s",
+                'de': "Folgender Text gesendet: %s",
+                'ru': "Отосланный текст %s"
+            }
+        }
     },/*
     'openLock': {
         icon: '',

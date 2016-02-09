@@ -2,6 +2,7 @@ var expect = require('chai').expect;
 //var setup  = require(__dirname + '/lib/setup');
 var simpleControl = require(__dirname + '/../lib/simpleControl');
 var debug = true;
+var writtenValue;
 
 var adapter = {
     log: {
@@ -44,7 +45,8 @@ var adapter = {
                 _id: 'someSwitch',
                 common: {
                     name: 'some switch',
-                    units: '%'
+                    units: '%',
+                    type: 'boolean'
                 },
                 type: 'state'
             });
@@ -53,6 +55,7 @@ var adapter = {
         }
     },
     setForeignState: function (id, value, cb) {
+        writtenValue = value;
         cb(null);
     },
     getForeignState: function (id, cb) {
@@ -63,9 +66,9 @@ var systemConfig = {
     tempUnit: '°F'
 };
 
-simpleControl.init(adapter, systemConfig);
+simpleControl.init(systemConfig, adapter);
 
-describe('Test time', function () {
+describe('Commands: Test time', function () {
     it('must return current time', function (done) {
         simpleControl.sayTime(null, null, null, null, function (text) {
             if (debug) console.log('sayTime returned: ' + text);
@@ -79,7 +82,7 @@ describe('Test time', function () {
     });
 });
 
-describe('Test name', function () {
+describe('Commands: Test name', function () {
     it('must return no name in english', function (done) {
         simpleControl.sayName('en', null, null, null, function (text) {
             if (debug) console.log('sayName(en) returned: ' + text);
@@ -117,7 +120,7 @@ describe('Test name', function () {
 
 });
 
-describe('Test temperature', function () {
+describe('Commands: Test temperature', function () {
     it('must say temperature in english and celsius', function (done) {
         simpleControl.sayTemperature('en', null, ['temperatureC'], '%s %u/a %s %u/b %s %u', function (text) {
             if (debug) console.log('sayTemperature(en, C) returned: ' + text);
@@ -177,7 +180,7 @@ describe('Test temperature', function () {
     });
 });
 
-describe('Test userQuery', function () {
+describe('Commands: Test userQuery', function () {
     it('must return temperature on query', function (done) {
         simpleControl.userQuery('en', null, ['temperatureC'], '%s grad/a %s grad/b %s grad', function (text) {
             if (debug) console.log('userQuery(temperatureC) returned: ' + text);
@@ -203,27 +206,48 @@ describe('Test userQuery', function () {
     });
 });
 
-describe('Test device control', function () {
+describe('Commands: Test device control', function () {
     it('must control device with predefined value', function (done) {
         simpleControl.userDeviceControl('en', null, ['someSwitch', 'true'], 'Value %s written', function (text) {
             if (debug) console.log('userDeviceControl(someSwitch) returned: ' + text);
+            expect(writtenValue).to.be.equal(true);
             expect(text).to.be.ok;
             expect(text.indexOf('Value true written')).to.be.at.least(0);
             done();
         });
     });
+
     it('must control device with variable value', function (done) {
         simpleControl.userDeviceControl('en', 'control 60.5% value', ['someSwitch'], '%n %s%u written', function (text) {
             if (debug) console.log('userDeviceControl(someSwitch, 60.5%) returned: ' + text);
+            expect(writtenValue).to.be.equal(60.5);
             expect(text).to.be.ok;
-            expect(text.indexOf('some switch 60% written')).to.be.at.least(0);
+            expect(text.indexOf('some switch 60.5% written')).to.be.at.least(0);
             done();
         });
     });
+
     it('must not return any ack text', function (done) {
         simpleControl.userDeviceControl('en', 'control 60.5% value', ['someSwitch'], '', function (text) {
             if (debug) console.log('userDeviceControl(someSwitch, no ack) returned: ' + text);
             expect(text).to.be.not.ok;
+            done();
+        });
+    });
+});
+
+describe('Commands: Test extract text', function () {
+    it('Must return text except key words', function (done) {
+        simpleControl.userText('en', simpleControl.extractText('say to computer I will be back', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
+            if (debug) console.log('userText(say to computer I will be late, someSwitch) returned: ' + text);
+            expect(text).to.be.equal('Text: I will be back');
+            done();
+        });
+    });
+    it('Must return value except key words', function (done) {
+        simpleControl.userText('en', simpleControl.extractText('say to computer active', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
+            if (debug) console.log('userText(say to computer I will be late, someSwitch) returned: ' + text);
+            expect(text).to.be.equal('Text: active');
             done();
         });
     });

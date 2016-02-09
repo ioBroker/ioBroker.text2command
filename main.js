@@ -105,6 +105,11 @@ function processText(cmd, cb) {
     var result = '';
     var count = matchedRules.length;
     for (var m = 0; m < matchedRules.length; m++) {
+
+        if (model[rules[matchedRules[m]].template] && model[rules[matchedRules[m]].template].extractText) {
+            cmd = simpleControl.extractText(cmd, model[rules[matchedRules[m]].template].words);
+        }
+
         if (commandsCallbacks[rules[matchedRules[m]].template]) {
             commandsCallbacks[rules[matchedRules[m]].template](lang, cmd, rules[matchedRules[m]].args, rules[matchedRules[m]].ack, function (response) {
                 // somehow combine answers
@@ -144,6 +149,7 @@ function main() {
         functionOnOff:      devicesControl.controlByFunction,
         blindsUpDown:       devicesControl.controlBlinds,
         userDeviceControl:  simpleControl.userDeviceControl,
+        userText:           simpleControl.userText,
 /*        openLock:           openLock,*/
         userQuery:          simpleControl.userQuery
     };
@@ -153,7 +159,7 @@ function main() {
     // read system configuration
     adapter.getForeignObject('system.config', function (err, obj) {
         systemConfig = (obj ? obj.common : {}) || {};
-        simpleControl.init(adapter, systemConfig);
+        simpleControl.init(systemConfig, adapter);
     });
 
 
