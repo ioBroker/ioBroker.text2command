@@ -28,6 +28,7 @@ Following functions will be interpreted as
 **light** (Licht | Свет):
 - level.dimmer
 - switch.light
+- enum.functions: 
 
 **backlight** (Beleuchtung | Подсветка):
 - level.backlight
@@ -57,10 +58,42 @@ Following functions will be interpreted as
 - switch.lock
 
 Following rooms are supported:
+---------------------------------------------------------------------------------------------------------------
+| key word in phrase    | Possible enum.rooms in english  | in german                | in russian             |
+---------------------------------------------------------------------------------------------------------------
+| everywhere            | everywhere                      | -                        | -                    
+| living                | livingroom                      | wohnzimmer               | зал             
+| bedroom               | bedroom/sleepingroom            | schlafzimmer             | спальня
+| bath                  | bathroom/bath                   | badezimmer/bad           | ванная     
+| working/office        | office                          | arbeitszimmer            | кабинет            
+| kids/child/nursery    | nursery                         | kinderzimmer             | детская            
+| guets wc/guest closet | guestwc                         | gästewc                  | гостевойтуалет
+| wc/closet             | wc                              | wc                       | туалет                  
+| floor/enter           | floor                           | diele/gang/flur          | коридор/прихожая
+| kitchen               | kitchen                         | küche/kueche             | кухня    
+| balcony/terrace/patio | terrace                         | balkon/terrasse          | терасса/балкон
+| dinning               | dinningroom                     | esszimmer                | столовая
+| garage                | garage                          | garage                   | гараж
+| stair                 | stairs                          | trepe/treppenhaus        | лестница
+| garden                | garden                          | garten                   | сад
+| court/yard            | court                           | hof                      | двор      
+| guest room            | guestroom                       | gästezimmer              | гостевая 
+| attic                 | attic                           | speicher                 | кладовка   
+| roof                  | roof                            | dachstuhl                | крыша      
+| terminal              | terminal                        | anschlussraum            | сени         
+| wash room             | washroom                        | waschraum                | прачечная 
+| heat room             | heatroom                        | heatingroom/heizungsraum | котельная
+| hovel                 | hovel                           | schuppen/scheune         | сарай   
+| summer house          | summerhouse                     | gartenhaus               | теплица
+-------------------------------------------------------------------------------------------------------------
 
+You can define default room in []. E.g "switch the light on[sleepingroom]"
 
+You can use patterns: 
+- %s : value
+- %u : unit
+- %n : name (planned!)
 
-You can define default room in []. E.g "switch the light on[sleepingroom]
 ## Changelog
 
 ### 0.0.1 (2015-07-29)

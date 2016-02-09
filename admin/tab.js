@@ -573,7 +573,7 @@ function Text2Commands(main, instance) {
                 .html(state.val || '')
                 .stop()
                 .show()
-                .css({top: pos.top + 30, left: pos.left + 5, opacity: 0.8})
+                .css({top: pos.top + 30, left: pos.left + 5, opacity: 1})
                 .animate({'opacity': 0}, 5000);
         }
     };
