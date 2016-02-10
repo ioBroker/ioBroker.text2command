@@ -74,7 +74,7 @@ var commands = {
                 'ru': "Ответ (%s заменится значением)"
             },
             default: {
-                'en': "Outside temperature is %s degree",
+                'en': "Outside temperature is %s %u",
                 'de': "Temperature draußen ist %s %u",
                 'ru': "Темература на улице %s %u"
             }
@@ -110,7 +110,7 @@ var commands = {
                 'ru': "Ответ (%s заменится значением)"
             },
             default: {
-                'en': "Inside temperature is %s degree",
+                'en': "Inside temperature is %s %u",
                 'de': "Temperature drin ist %s %u",
                 'ru': "Темература дома %s %u"
             }
