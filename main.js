@@ -57,8 +57,11 @@ adapter.on('message', function (obj) {
         switch (obj.command) {
             case 'send':
                 if (obj.message) {
-                    processText(obj.message, function (res) {
-                        if (obj.callback) adapter.sendTo(obj.from, obj.command, res, obj.callback);
+                    processText(typeof obj.message === 'object' ? obj.message.text : obj.message, function (res) {
+                        var responseObj = JSON.parse(JSON.stringify(obj.message));
+                        if (typeof responseObj !== 'object') responseObj = {text: responseObj};
+                        responseObj.response = res;
+                        if (obj.callback) adapter.sendTo(obj.from, obj.command, responseObj, obj.callback);
                     });
                 }
                 break;
@@ -167,7 +170,6 @@ function main() {
     adapter.getEnums('', function (err, list) {
         enums = list;
         devicesControl.init(enums, adapter);
-        require('fs').writeFileSync('testData.json', JSON.stringify(enums, null, 2));
     });
 }
 

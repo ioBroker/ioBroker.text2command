@@ -177,6 +177,9 @@ Answer is customizable. Default: ```Thank you``` or ```You are welcome```
 Answer is customizable. Default: ```No problem``` or ```You are welcome```
 
 ## Changelog
+### 0.0.3 (2016-02-14)
+* (bluefox) remove unused files
+
 ### 0.0.2 (2016-02-10)
 * (bluefox) extend readme
 

@@ -12,7 +12,7 @@ var commands = {
         unique:    true,
         words: {
             'en': "time is it",
-            'de': "zeit/spät",
+            'de': "zeit/spät/spaet",
             'ru': "сколько время"
         }
     },
@@ -27,7 +27,7 @@ var commands = {
         unique:    true,
         words: {
             'en': "your name",
-            'de': "heißt du",
+            'de': "heißt/heisst du",
             'ru': "тебя зовут"
         },
         ack: {
@@ -343,7 +343,7 @@ var commands = {
 function findMatched(cmd, _rules) {
     var matchedRules = [];
 
-    cmd = cmd.toLowerCase();
+    cmd = cmd.toLowerCase().replace(/[!?.,;:]+/g, ' ').replace(/\s\s/g, ' ');
 
     var ix = cmd.indexOf(';');
     if (ix != -1) cmd = cmd.substring(ix + 1);

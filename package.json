@@ -1,6 +1,6 @@
 {
   "name": "iobroker.text2command",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Convert texts to ioBroker commands.",
   "author": {
     "name": "bluefox",
@@ -22,7 +22,7 @@
     "grunt-replace": "^0.9.3",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-jscs": "^2.0.0",
-    "grunt-http": "^1.6.0",
+    "grunt-http": "^2.0.0",
     "mocha": "^2.3.4",
     "chai": "^3.4.1"
   },
