@@ -24,11 +24,12 @@ function Text2Commands(main, instance) {
     }
 
     function showArgument(index, argIndex, arg, value) {
+
         value = (value === undefined || value === null ? '' : value);
         // set default value
         if (arg.default && !value && value !== 0) value = arg.default;
 
-        var text = (arg && arg.type) ? '<input class="edit-field-args" style="width:100%" data-type="' + arg.type + '" data-index="' + index + '" data-field="args" data-args-index="' + argIndex + '" value="' + (value === undefined || value === null ? '' : value) + '" />' : '';
+        var text = (arg && arg.type) ? '<input class="edit-field-args" style="width:100%" data-type="' + arg.type + '" data-index="' + index + '" data-field="args" data-args-index="' + argIndex + '" />' : '';
 
         if (typeof arg.name === 'object') {
             text = '<span style="font-size: x-small">' + (arg.name[systemLang] || arg.name.en) + '</span><br>' + text;
@@ -177,6 +178,27 @@ function Text2Commands(main, instance) {
             text += showOneRule(r, that.rules[r]);
         }
         $('#tab-rules-body').html(text);
+
+        // Write arguments into it
+        $('.edit-field-args').each(function () {
+            var $this = $(this);
+            var index    = $this.data('index');
+            var argIndex = $this.data('args-index');
+            var field    = $this.data('field');
+
+            that.rules[index].args = that.rules[index].args || [];
+            if ($this.attr('type') === 'checkbox') {
+                $this.prop('checked', that.rules[index].args[argIndex]);
+            } else {
+                $this.val(that.rules[index].args[argIndex]);
+            }
+            /*if ($this.data('type') == 'id') {
+                var id = that.rules[index].args[argIndex];
+                $('.id-name[data-index=' + index + '][data-args-index=' + argIndex +  ']').html(
+                    (that.main.objects[id] && that.main.objects[id].common) ? that.main.objects[id].common.name || '' : ''
+                );
+            }*/
+        });
 
         // init buttons and fields
         // init template selector
