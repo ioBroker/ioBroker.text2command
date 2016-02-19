@@ -89,6 +89,15 @@ function sayIt(text) {
 
 function processText(cmd, cb) {
     adapter.log.info('processText: "' + cmd + '"');
+    if (cmd === null || cmd === undefined) {
+        adapter.log.error('processText: invalid command!');
+        simpleAnswers.sayError(lang, 'processText: invalid command!', null, null, function (result) {
+            cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+        });
+        return;
+    }
+    cmd = cmd.toString();
+
     var withLang = false;
     var ix       = cmd.indexOf(';');
     var lang;

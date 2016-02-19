@@ -177,6 +177,9 @@ Answer is customizable. Default: ```Thank you``` or ```You are welcome```
 Answer is customizable. Default: ```No problem``` or ```You are welcome```
 
 ## Changelog
+### 0.1.1 (2016-02-19)
+* (bluefox) check invalid commands
+
 ### 0.1.0 (2016-02-19)
 * (bluefox) fix problem with controlling of channels
 * (bluefox) enable write JSON as argument 
