@@ -176,6 +176,9 @@ Answer is customizable. Default: ```Thank you``` or ```You are welcome```
 ### Thank you (Just for fun)
 Answer is customizable. Default: ```No problem``` or ```You are welcome```
 
+# ToDo
+- in Russian male and female answers.
+
 ## Changelog
 ### 0.1.1 (2016-02-19)
 * (bluefox) check invalid commands
