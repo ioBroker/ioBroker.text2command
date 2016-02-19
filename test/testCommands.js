@@ -50,6 +50,16 @@ var adapter = {
                 },
                 type: 'state'
             });
+        } else if (id == 'someLevel') {
+            cb(null, {
+                _id: 'someLevel',
+                common: {
+                    name: 'some Level',
+                    units: '%',
+                    type: 'number'
+                },
+                type: 'state'
+            });
         } else {
             cb('not found');
         }
@@ -218,11 +228,11 @@ describe('Commands: Test device control', function () {
     });
 
     it('must control device with variable value', function (done) {
-        simpleControl.userDeviceControl('en', 'control 60.5% value', ['someSwitch'], '%n %s%u written', function (text) {
+        simpleControl.userDeviceControl('en', 'control 60.5% value', ['someLevel'], '%n %s%u written', function (text) {
             if (debug) console.log('userDeviceControl(someSwitch, 60.5%) returned: ' + text);
             expect(writtenValue).to.be.equal(60.5);
             expect(text).to.be.ok;
-            expect(text.indexOf('some switch 60.5% written')).to.be.at.least(0);
+            expect(text.indexOf('some Level 60.5% written')).to.be.at.least(0);
             done();
         });
     });
