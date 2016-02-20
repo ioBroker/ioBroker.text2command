@@ -180,6 +180,9 @@ Answer is customizable. Default: ```No problem``` or ```You are welcome```
 - in Russian male and female answers.
 
 ## Changelog
+### 0.1.3 (2016-02-21)
+* (bluefox) round temperature in answers
+
 ### 0.1.2 (2016-02-21)
 * (bluefox) implement russian time
 
