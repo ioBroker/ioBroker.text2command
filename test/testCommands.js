@@ -24,14 +24,16 @@ var adapter = {
             cb(null, {
                 _id: 'temperatureC',
                 common: {
-                    units: '°C'
+                    role: 'value.temperature',
+                    unit: '°C'
                 }
             });
         } else if (id == 'temperatureF') {
             cb(null, {
                 _id: 'temperatureF',
                 common: {
-                    units: '°F'
+                    role: 'value.temperature',
+                    unit: '°F'
                 }
             });
         } else if (id == 'temperatureNone') {
@@ -45,7 +47,7 @@ var adapter = {
                 _id: 'someSwitch',
                 common: {
                     name: 'some switch',
-                    units: '%',
+                    unit: '%',
                     type: 'boolean'
                 },
                 type: 'state'
@@ -55,7 +57,7 @@ var adapter = {
                 _id: 'someLevel',
                 common: {
                     name: 'some Level',
-                    units: '%',
+                    unit: '%',
                     type: 'number'
                 },
                 type: 'state'
@@ -134,49 +136,49 @@ describe('Commands: Test temperature', function () {
     it('must say temperature in english and celsius', function (done) {
         simpleControl.sayTemperature('en', null, ['temperatureC'], '%s %u/a %s %u/b %s %u', function (text) {
             if (debug) console.log('sayTemperature(en, C) returned: ' + text);
-            expect(text.indexOf('15 degrees celsius')).to.be.least(0);
+            expect(text.indexOf('15 degrees')).to.be.least(0);
             done();
         });
     });
     it('must say temperature in german and celsius', function (done) {
         simpleControl.sayTemperature('de', null, ['temperatureC'], '%s %u/a %s %u/b %s %u', function (text) {
             if (debug) console.log('sayTemperature(de, C) returned: ' + text);
-            expect(text.indexOf('15 grad Celsius')).to.be.least(0);
+            expect(text.indexOf('15 Grad')).to.be.least(0);
             done();
         });
     });
     it('must say temperature in russian and celsius', function (done) {
         simpleControl.sayTemperature('ru', null, ['temperatureC'], '%s %u/a %s %u/b %s %u', function (text) {
             if (debug) console.log('sayTemperature(ru, C) returned: ' + text);
-            expect(text.indexOf('15 градусов целсия')).to.be.least(0);
+            expect(text.indexOf('15 градусов')).to.be.least(0);
             done();
         });
     });
     it('must say temperature in english and fahrenheit', function (done) {
         simpleControl.sayTemperature('en', null, ['temperatureF'], '%s %u/a %s %u/b %s %u', function (text) {
             if (debug) console.log('sayTemperature(en, F) returned: ' + text);
-            expect(text.indexOf('15 degrees fahrenheit')).to.be.least(0);
+            expect(text.indexOf('15 degrees')).to.be.least(0);
             done();
         });
     });
     it('must say temperature in german and fahrenheit', function (done) {
         simpleControl.sayTemperature('de', null, ['temperatureF'], '%s %u/a %s %u/b %s %u', function (text) {
             if (debug) console.log('sayTemperature(de, F) returned: ' + text);
-            expect(text.indexOf('15 grad Fahrenheit')).to.be.least(0);
+            expect(text.indexOf('15 Grad')).to.be.least(0);
             done();
         });
     });
     it('must say temperature in russian and fahrenheit', function (done) {
         simpleControl.sayTemperature('ru', null, ['temperatureF'], '%s %u/a %s %u/b %s %u', function (text) {
             if (debug) console.log('sayTemperature(ru, F) returned: ' + text);
-            expect(text.indexOf('15 градусов по фаренгейту')).to.be.least(0);
+            expect(text.indexOf('15 градусов')).to.be.least(0);
             done();
         });
     });
     it('must say temperature in english with default units', function (done) {
         simpleControl.sayTemperature('en', null, ['temperatureNone'], '%s %u/a %s %u/b %s %u', function (text) {
             if (debug) console.log('sayTemperature(en, Default) returned: ' + text);
-            expect(text.indexOf('15 degrees fahrenheit')).to.be.least(0);
+            expect(text.indexOf('15 degrees')).to.be.least(0);
             done();
         });
     });
@@ -202,7 +204,7 @@ describe('Commands: Test userQuery', function () {
     it('must return temperature on query', function (done) {
         simpleControl.userQuery('en', null, ['temperatureC'], '%s %u/a %s %u /b %s %u', function (text) {
             if (debug) console.log('userQuery(temperatureC, %u) returned: ' + text);
-            expect(text.indexOf('15 °C')).to.be.at.least(0);
+            expect(text.indexOf('15 degrees')).to.be.at.least(0);
             done();
         });
     });

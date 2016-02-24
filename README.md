@@ -180,6 +180,9 @@ Answer is customizable. Default: ```No problem``` or ```You are welcome```
 - in Russian male and female answers.
 
 ## Changelog
+### 0.1.6 (2016-02-24)
+* (bluefox) fix temperature
+
 ### 0.1.5 (2016-02-23)
 * (bluefox) fix russian outputs
 
