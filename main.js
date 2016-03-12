@@ -118,8 +118,8 @@ function processText(cmd, cb) {
     var count = matchedRules.length;
     for (var m = 0; m < matchedRules.length; m++) {
 
-        if (model[rules[matchedRules[m]].template] && model[rules[matchedRules[m]].template].extractText) {
-            cmd = simpleControl.extractText(cmd, model[rules[matchedRules[m]].template].words);
+        if (model.commands[rules[matchedRules[m]].template] && model.commands[rules[matchedRules[m]].template].extractText) {
+            cmd = simpleControl.extractText(cmd, model.commands[rules[matchedRules[m]].template].words);
         }
 
         if (commandsCallbacks[rules[matchedRules[m]].template]) {
@@ -136,8 +136,6 @@ function processText(cmd, cb) {
             count--;
             if (rules[matchedRules[m]].ack) {
                 result += (result ? ', ' : '') + simpleAnswers.getRandomPhrase(rules[matchedRules[m]].ack);
-            } else {
-                adapter.log.warn('No callback for ' + rule.name);
             }
         }
     }
@@ -161,7 +159,7 @@ function main() {
         functionOnOff:      devicesControl.controlByFunction,
         blindsUpDown:       devicesControl.controlBlinds,
         userDeviceControl:  simpleControl.userDeviceControl,
-        userText:           simpleControl.userText,
+        sendText:           simpleControl.sendText,
 /*        openLock:           openLock,*/
         userQuery:          simpleControl.userQuery
     };

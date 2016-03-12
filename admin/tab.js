@@ -23,11 +23,19 @@ function Text2Commands(main, instance) {
         }
     }
 
-    function showArgument(index, argIndex, arg, value) {
+    function showArgument(index, argIndex, arg, value, rule) {
 
         value = (value === undefined || value === null ? '' : value);
         // set default value
-        if (arg.default && !value && value !== 0) value = arg.default;
+        if (arg.default && !value && value !== 0) {
+            rule.args = rule.args || [];
+            if (typeof arg.default === 'object') {
+                value = arg.default[systemLang] || arg.default.en;rule.args
+            } else {
+                value = arg.default;
+            }
+            rule.args[argIndex] = value;
+        }
 
         var text = (arg && arg.type) ? '<input class="edit-field-args" style="width:100%" data-type="' + arg.type + '" data-index="' + index + '" data-field="args" data-args-index="' + argIndex + '" />' : '';
 
@@ -110,10 +118,10 @@ function Text2Commands(main, instance) {
             text += '<td style="text-align: center"><input class="edit-field" data-index="' + index + '" data-field="_break" type="checkbox" ' + (rule._break ? 'checked' : '') + '/></td>';
 
             // Arg1
-            text += '<td>' + showArgument(index, 0, (commands[rule.template] && commands[rule.template].args && commands[rule.template].args[0]) ? commands[rule.template].args[0] : '', rule.args ? rule.args[0] : null) + '</td>';
+            text += '<td>' + showArgument(index, 0, (commands[rule.template] && commands[rule.template].args && commands[rule.template].args[0]) ? commands[rule.template].args[0] : '', rule.args ? rule.args[0] : null, rule) + '</td>';
 
             // Arg2
-            text += '<td>' + showArgument(index, 1, (commands[rule.template] && commands[rule.template].args && commands[rule.template].args[1]) ? commands[rule.template].args[1] : '', rule.args ? rule.args[1] : null) + '</td>';
+            text += '<td>' + showArgument(index, 1, (commands[rule.template] && commands[rule.template].args && commands[rule.template].args[1]) ? commands[rule.template].args[1] : '', rule.args ? rule.args[1] : null, rule) + '</td>';
 
             // ack
             if (template.ack) {

@@ -171,12 +171,28 @@ var commands = {
         },
         unique:   false,
         editable: true,
-        removeKeys: true,
+        extractText: true,
         words: {
             'en': "send text",
             'de': "sende text",
             'ru': "послать текст"
         },
+        args: [{
+            name: {
+                'en': "Device or variable ID",
+                'de': "Gerät- oder Variablen- ID",
+                'ru': "ID сенсора или переменной"
+            },
+            type: 'id'
+        }, {
+            name: {
+                'en': "Value to write down",
+                'de': "Wert zum Schreiben",
+                'ru': "Записываемое значение"
+            },
+            type: 'value',
+            default: "%s"
+        }],
         ack: {
             type: 'text',
             name: {
