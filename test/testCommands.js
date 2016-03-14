@@ -250,14 +250,14 @@ describe('Commands: Test device control', function () {
 
 describe('Commands: Test extract text', function () {
     it('Must return text except key words', function (done) {
-        simpleControl.userText('en', simpleControl.extractText('say to computer I will be back', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
+        simpleControl.sendText('en', simpleControl.extractText('say to computer I will be back', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
             if (debug) console.log('userText(say to computer I will be late, someSwitch) returned: ' + text);
             expect(text).to.be.equal('Text: I will be back');
             done();
         });
     });
     it('Must return value except key words', function (done) {
-        simpleControl.userText('en', simpleControl.extractText('say to computer active', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
+        simpleControl.sendText('en', simpleControl.extractText('say to computer active', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
             if (debug) console.log('userText(say to computer I will be late, someSwitch) returned: ' + text);
             expect(text).to.be.equal('Text: active');
             done();
