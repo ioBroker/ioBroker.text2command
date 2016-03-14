@@ -180,6 +180,9 @@ Answer is customizable. Default: ```No problem``` or ```You are welcome```
 - in Russian male and female answers.
 
 ## Changelog
+### 0.1.8 (2016-03-15)
+* (bluefox) fix error with enums
+
 ### 0.1.7 (2016-03-12)
 * (bluefox) implement "say something"
 
