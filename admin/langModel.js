@@ -359,7 +359,7 @@ var commands = {
 function findMatched(cmd, _rules) {
     var matchedRules = [];
 
-    cmd = cmd.toLowerCase().replace(/[!?.,;:]+/g, ' ').replace(/\s\s/g, ' ');
+    cmd = cmd.toLowerCase().replace(/[!?.,;:]+/g, ' ').replace(/\s+/g, ' ').trim();
 
     var ix = cmd.indexOf(';');
     if (ix != -1) cmd = cmd.substring(ix + 1);
@@ -381,7 +381,7 @@ function findMatched(cmd, _rules) {
             if (rule.words[0] === '/') {
                 rule.words = new RegExp(rule.words, 'i');
             } else {
-                rule.words = rule.words.toLowerCase().split(' ');
+                rule.words = rule.words.toLowerCase().trim().split(/\s+/g);
             }
         }
 
@@ -391,6 +391,7 @@ function findMatched(cmd, _rules) {
         } else {
             // compare every word
             for (var j = 0; j < rule.words.length; j++) {
+                if (!rule.words[j]) continue;
 
                 if (rule.words[j].indexOf ('/') != -1) rule.words[j] = rule.words[j].split('/');
 

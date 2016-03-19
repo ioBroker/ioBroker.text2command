@@ -18,6 +18,8 @@ If you define **Answer to ID**, the answer will be written in this ID too. This 
 
 You can send a message via messagebox from javascript. The answer will come in the message back:
 
+Regular expressions can be used. Like: ```/^light|^lamp/```
+
 ```
 sendTo('text2command', 'Switch light in kitchen on', function (err, response) {
     console.log('Response is: ' + response);
@@ -180,6 +182,9 @@ Answer is customizable. Default: ```No problem``` or ```You are welcome```
 - in Russian male and female answers.
 
 ## Changelog
+### 0.1.9 (2016-03-20)
+* (bluefox) ignore spaces
+
 ### 0.1.8 (2016-03-15)
 * (bluefox) fix error with enums
 
