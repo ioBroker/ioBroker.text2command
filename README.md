@@ -18,15 +18,21 @@ If you define **Answer to ID**, the answer will be written in this ID too. This 
 
 You can send a message via messagebox from javascript. The answer will come in the message back:
 
-Regular expressions can be used. Like: ```/^light|^lamp/```
-
 ```
 sendTo('text2command', 'Switch light in kitchen on', function (err, response) {
     console.log('Response is: ' + response);
 });
 ```
 
+Regular expressions can be used, like: ```/^light\son|^lamp\son/```. Regular expressions are always case insensitive.
+
 To use "Switch on/off by function" you should care of functions. 
+
+Keywords work as following:
+- keywords are divided by space
+- all keywords must present in a sentence to trigger a rule: e.g. keyword: ```light on``` will trigger on ```switch light on```, ```make light on everywhere``` and do not trigger on ```switch on```, ```make light```.
+- one keyword can has many forms. Variations of keyword must be divided by "/". E.g. keywords: ```switch/make/do light on/true``` will trigger on: ```do light true```, ```make please light on```.
+- if keyword can come in many cases(nom, gen, accusative, plural, ...) they all must be listed as variations, like: ```switch light/lights on```. 
 
 Following functions will be interpreted as 
 
@@ -182,6 +188,9 @@ Answer is customizable. Default: ```No problem``` or ```You are welcome```
 - in Russian male and female answers.
 
 ## Changelog
+### 0.1.10 (2016-03-20)
+* (bluefox) fix double pronunciation of some answers
+
 ### 0.1.9 (2016-03-20)
 * (bluefox) ignore spaces
 

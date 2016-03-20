@@ -214,6 +214,10 @@ function Text2Commands(main, instance) {
             $(this).change(function () {
                 var index = $(this).data('index');
                 that.rules[index].template = $(this).val();
+
+                if (!commands[that.rules[index].template].editable) {
+                    that.rules[index].words = undefined;
+                }
                 showRules();
                 saveSettings();
             });

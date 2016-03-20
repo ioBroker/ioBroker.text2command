@@ -125,11 +125,12 @@ function processText(cmd, cb) {
         if (commandsCallbacks[rules[matchedRules[m]].template]) {
             commandsCallbacks[rules[matchedRules[m]].template](lang, cmd, rules[matchedRules[m]].args, rules[matchedRules[m]].ack, function (response) {
                 // somehow combine answers
-                if (response) {
-                    result += (result ? ', ' : '') + response;
-                }
+                if (response) result += (result ? ', ' : '') + response;
 
-                if (!--count) cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+                if (!--count) {
+                    if (cb) cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+                    cb = null;
+                }
             });
         }
         else {
@@ -142,10 +143,12 @@ function processText(cmd, cb) {
 
     if (!matchedRules.length) {
         simpleAnswers.sayIDontUnderstand(lang, cmd, null, null, function (result) {
-            cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+            if (cb) cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+            cb = null;
         });
     } else if (!count) {
-        cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+        if (cb) cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+        cb = null;
     }
 }
 
