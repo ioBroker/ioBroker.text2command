@@ -359,7 +359,7 @@ var commands = {
 function findMatched(cmd, _rules) {
     var matchedRules = [];
 
-    cmd = cmd.toLowerCase().replace(/[!?.,;:]+/g, ' ').replace(/\s+/g, ' ').trim();
+    cmd = cmd.toLowerCase().replace(/[#'"$&\/\\!?.,;:(){}\^]+/g, ' ').replace(/\s+/g, ' ').trim();
 
     var ix = cmd.indexOf(';');
     if (ix != -1) cmd = cmd.substring(ix + 1);
@@ -393,7 +393,7 @@ function findMatched(cmd, _rules) {
             for (var j = 0; j < rule.words.length; j++) {
                 if (!rule.words[j]) continue;
 
-                if (rule.words[j].indexOf ('/') != -1) rule.words[j] = rule.words[j].split('/');
+                if (rule.words[j].indexOf('/') != -1) rule.words[j] = rule.words[j].split('/');
 
                 // if one of
                 if (typeof rule.words[j] === 'object') {

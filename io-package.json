@@ -1,7 +1,7 @@
 {
     "common": {
         "name":                     "text2command",
-        "version": "0.1.10",
+        "version": "1.0.0",
         "title":                    "Text to command",
         "desc":                     {
 			"en": "This adapter allows convert texts to commands.",
