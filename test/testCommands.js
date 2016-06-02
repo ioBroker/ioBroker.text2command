@@ -250,16 +250,37 @@ describe('Commands: Test device control', function () {
 
 describe('Commands: Test extract text', function () {
     it('Must return text except key words', function (done) {
-        simpleControl.sendText('en', simpleControl.extractText('say to computer I will be back', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
+        simpleControl.sendText('en', simpleControl.extractText('say to computer i will be back', 'say to computer I will be back', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
             if (debug) console.log('userText(say to computer I will be late, someSwitch) returned: ' + text);
             expect(text).to.be.equal('Text: I will be back');
             done();
         });
     });
     it('Must return value except key words', function (done) {
-        simpleControl.sendText('en', simpleControl.extractText('say to computer active', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
-            if (debug) console.log('userText(say to computer I will be late, someSwitch) returned: ' + text);
-            expect(text).to.be.equal('Text: active');
+        simpleControl.sendText('en', simpleControl.extractText('say to computer active?', 'say to computer Active!', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
+            if (debug) console.log('userText(say to computer Active!, someSwitch) returned: ' + text);
+            expect(text).to.be.equal('Text: active'); // someSwitch is boolean and active will be replaced with true
+            done();
+        });
+    });
+    it('Must return text except key words', function (done) {
+        simpleControl.sendText('en', simpleControl.extractText('позвать гаража aндрей ужин готов!', 'позвать гаража Андрей ужин готов!', 'позвать [из] гаража'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
+            if (debug) console.log('userText(позвать гаража Андрей ужин готов!, someSwitch) returned: ' + text);
+            expect(text).to.be.equal('Text: Андрей ужин готов!');
+            done();
+        });
+    });
+    it('Must return text except key words', function (done) {
+        simpleControl.sendText('en', simpleControl.extractText('позвать из гаража aндрей ужин готов!', 'позвать из гаража Андрей ужин готов!', 'позвать [из] гаража'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
+            if (debug) console.log('userText(позвать из гаража Андрей ужин готов!, someSwitch) returned: ' + text);
+            expect(text).to.be.equal('Text: Андрей ужин готов!');
+            done();
+        });
+    });
+    it('Must return text except key words', function (done) {
+        simpleControl.sendText('en', simpleControl.extractText('позвать из гаража aндрей ужин готов_', 'позвать из гаража Андрей ужин готов!', 'позвать из гаража'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
+            if (debug) console.log('userText(позвать из гаража Андрей ужин готов!, someSwitch) returned: ' + text);
+            expect(text).to.be.equal('Text: Андрей ужин готов!');
             done();
         });
     });

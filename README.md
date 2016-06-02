@@ -188,6 +188,9 @@ Answer is customizable. Default: ```No problem``` or ```You are welcome```
 - in Russian male and female answers.
 
 ## Changelog
+### 1.0.1 (2016-06-01)
+* (bluefox) fix: send text command
+
 ### 1.0.0 (2016-05-05)
 * (bluefox) replace special chars in input text: #'"$&/\!?.,;:(){}^
 

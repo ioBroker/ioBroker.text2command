@@ -1,7 +1,14 @@
 {
     "common": {
         "name":                     "text2command",
-        "version": "1.0.0",
+        "version": "1.0.1",
+        "news": {
+            "1.0.1": {
+                "en": "fix: send text command",
+                "de": "fix: send text command",
+                "ru": "fix: send text command"
+            }
+        },
         "title":                    "Text to command",
         "desc":                     {
 			"en": "This adapter allows convert texts to commands.",

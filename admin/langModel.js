@@ -144,7 +144,7 @@ var commands = {
         name: {
             'en': "Open/close blinds",
             'de': "Rollladen auf/zu machen",
-            'ru': "Поднять опустить ставни"
+            'ru': "Поднять/опустить ставни"
         },
         unique:   true,
         editable: false,
@@ -394,6 +394,8 @@ function findMatched(cmd, _rules) {
                 if (!rule.words[j]) continue;
 
                 if (rule.words[j].indexOf('/') != -1) rule.words[j] = rule.words[j].split('/');
+
+                if (typeof rule.words[j] === 'string' && rule.words[j][0] === '[') continue;
 
                 // if one of
                 if (typeof rule.words[j] === 'object') {

@@ -21,8 +21,6 @@ var simpleAnswers   = require(__dirname + '/lib/simpleAnswers');
 var functions       = require(__dirname + '/lib/functions');
 var rooms           = require(__dirname + '/lib/rooms');
 
-
-
 var rules;
 var commandsCallbacks;
 var systemConfig = {};
@@ -97,6 +95,7 @@ function processText(cmd, cb) {
         return;
     }
     cmd = cmd.toString();
+    var originalCmd = cmd;
 
     var withLang = false;
     var ix       = cmd.indexOf(';');
@@ -106,9 +105,10 @@ function processText(cmd, cb) {
 
     // extract language
     if (ix != -1) {
-        withLang = true;
-        lang     = cmd.substring(0, ix);
-        cmd      = cmd.substring(ix + 1);
+        withLang    = true;
+        lang        = cmd.substring(0, ix);
+        cmd         = cmd.substring(ix + 1);
+        originalCmd = originalCmd.substring(ix + 1);
     }
     lang = lang || adapter.config.language || systemConfig.language || 'en';
 
@@ -119,7 +119,7 @@ function processText(cmd, cb) {
     for (var m = 0; m < matchedRules.length; m++) {
 
         if (model.commands[rules[matchedRules[m]].template] && model.commands[rules[matchedRules[m]].template].extractText) {
-            cmd = simpleControl.extractText(cmd, model.commands[rules[matchedRules[m]].template].words);
+            cmd = simpleControl.extractText(cmd, originalCmd, rules[matchedRules[m]].words);
         }
 
         if (commandsCallbacks[rules[matchedRules[m]].template]) {
