@@ -1,8 +1,13 @@
 {
     "common": {
         "name":                     "text2command",
-        "version": "1.0.1",
+        "version": "1.0.2",
         "news": {
+            "1.0.2": {
+                "en": "fix error with detection of numeric values",
+                "de": "fix error with detection of numeric values",
+                "ru": "fix error with detection of numeric values"
+            },
             "1.0.1": {
                 "en": "fix: send text command",
                 "de": "fix: send text command",

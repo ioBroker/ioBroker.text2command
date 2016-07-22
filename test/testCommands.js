@@ -229,12 +229,32 @@ describe('Commands: Test device control', function () {
         });
     });
 
-    it('must control device with variable value', function (done) {
+    it('must control device with variable value 60.5', function (done) {
         simpleControl.userDeviceControl('en', 'control 60.5% value', ['someLevel'], '%n %s%u written', function (text) {
             if (debug) console.log('userDeviceControl(someSwitch, 60.5%) returned: ' + text);
             expect(writtenValue).to.be.equal(60.5);
             expect(text).to.be.ok;
             expect(text.indexOf('some Level 60.5% written')).to.be.at.least(0);
+            done();
+        });
+    });
+
+    it('must control device with variable value -60', function (done) {
+        simpleControl.userDeviceControl('en', 'control -60% value', ['someLevel'], '%n %s%u written', function (text) {
+            if (debug) console.log('userDeviceControl(someSwitch, -60%) returned: ' + text);
+            expect(writtenValue).to.be.equal(-60);
+            expect(text).to.be.ok;
+            expect(text.indexOf('some Level -60% written')).to.be.at.least(0);
+            done();
+        });
+    });
+
+    it('must control device with variable value +60,6', function (done) {
+        simpleControl.userDeviceControl('en', 'control +60,6% value', ['someLevel'], '%n %s%u written', function (text) {
+            if (debug) console.log('userDeviceControl(someSwitch, +60,6%) returned: ' + text);
+            expect(writtenValue).to.be.equal(60.6);
+            expect(text).to.be.ok;
+            expect(text.indexOf('some Level 60.6% written')).to.be.at.least(0);
             done();
         });
     });

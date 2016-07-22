@@ -51,7 +51,7 @@ function Text2Commands(main, instance) {
             
             case 'id':
                 text = text.replace('100%', 'calc(100% - 25px)');
-                text += '<button data-role="' + (arg.role || '') + '" data-index="' + index + '" data-args-index="' + argIndex + '" class="select-id" title="' + _('select id') + '">...</button>';
+                text += '<button data-role="' + (arg.role || '') + '" data-index="' + index + '" data-args-index="' + argIndex + '" class="select-id" title="' + _('select id') + '"></button>';
                 text += '<br><span style="font-size: x-small" data-index="' + index + '" data-args-index="' + argIndex + '" class="id-name">' + ((value && that.main.objects[value] &&  that.main.objects[value].common) ? that.main.objects[value].common.name : '') + '</span>';
                 break;
             

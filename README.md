@@ -159,7 +159,17 @@ E.g.:
 - ```Deactivate alarm```, Object ID: ```hm-rpc.0.alarm```, Value: ```false```, Answer: ```Alarm is deactivated/Deactivated```. In this case the answer will be randomized between *Alarm is deactivated* and *Deactivated*.
 - ```Activate alarm```, Object ID: ```hm-rpc.0.alarm```, Value: ```true```, Answer: ```Alarm is activated/Activated/Done``` . In this case the answer will be randomized between *Alarm is activated*, *Activated* and *Done*.
 
-*Deactivate* must be first in the list, because it is longer. 
+*Deactivate* must be first in the list, because it is longer.
+
+You can use float values in the control commands. If some numeric value will be in the text it will be used as control value and the predefined value will be ignored.
+
+E.G. for rule for rule:
+
+- ```Set light level```, Object ID: ```hm-rpc.0.light.STATE```, Value: ```10```, Answer: ```Level set to %s%```.
+
+If command is like ```Set light level to 50%```, so into the ```hm-rpc.0.light.STATE``` will be written 50 and answer will be ```Level set to 50%```.
+
+If command is like ```Set light level```, so into the ```hm-rpc.0.light.STATE``` will be written 10 and answer will be ```Level set to 10%```.
 
 #### Ask about something
 User must specify state ID of device, which value will be read. 
@@ -188,6 +198,9 @@ Answer is customizable. Default: ```No problem``` or ```You are welcome```
 - in Russian male and female answers.
 
 ## Changelog
+### 1.0.2 (2016-07-22)
+* (bluefox) fix error with detection of numeric values
+
 ### 1.0.1 (2016-06-01)
 * (bluefox) fix: send text command
 
