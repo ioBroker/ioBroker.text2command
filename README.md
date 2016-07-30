@@ -36,37 +36,38 @@ Keywords work as following:
 
 Following functions will be interpreted as 
 
-**light** (Licht | Свет):
-- level.dimmer
-- switch.light
-- enum.functions: 
+enum.functions:
 
-**backlight** (Beleuchtung | Подсветка):
-- level.backlight
-- switch.backlight
+**enum.functions.light** (Licht | Свет):
+- roles - level.dimmer
+- roles - switch.light
 
-**blinds/shutter** (Rolladen | Жалюзи/окна)
-- level.blind
-- switch.blind
+**enum.functions.backlight** (Beleuchtung | Подсветка):
+- roles - level.backlight
+- roles - switch.backlight
 
-**curtain** (Vorhänge | Шторы)
-- level.curtain
-- switch.curtain
+**enum.functions.blinds/shutter** (Rolladen | Жалюзи/окна)
+- roles - level.blind
+- roles - switch.blind
 
-**heating** (Heizung | Отопление/Подогрев)
-- level.temperature
-- switch.temperature
+**enum.functions.curtain** (Vorhänge | Шторы)
+- roles - level.curtain
+- roles - switch.curtain
 
-**music** (Musik | Музыка)
-- button.play
-- button.stop / button.pause
+**enum.functions.heating** (Heizung | Отопление/Подогрев)
+- roles - level.temperature
+- roles - switch.temperature
 
-**Alarm/Security** (Alarmanlage / Alarm | Охрана)
-- switch.security
+**enum.functions.music** (Musik | Музыка)
+- roles - button.play
+- roles - button.stop / button.pause
 
-**lock** (Schloß / Schloss | Замок)
-- switch.open
-- switch.lock
+**enum.functions.alarm/security** (Alarmanlage / Alarm | Охрана)
+- roles - switch.security
+
+**enum.functions.lock** (Schloß / Schloss | Замок)
+- roles - switch.open
+- roles - switch.lock
 
 Following rooms are supported:
 
