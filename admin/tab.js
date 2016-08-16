@@ -337,9 +337,12 @@ function Text2Commands(main, instance) {
                 if (err) {
                     that.main.showError(err);
                 } else if (obj) {
-                    obj.native.rules         = that.rules;
-                    obj.native.sayitInstance = $('#rules-sayitInstance').val();
-                    obj.native.language      = $('#rules-language').val();
+                    obj.native.rules            = that.rules;
+                    obj.native.sayitInstance    = $('#rules-sayitInstance').val();
+                    obj.native.language         = $('#rules-language').val();
+                    obj.native.processorId      = $('#rules-processor').val();
+                    obj.native.processorTimeout = parseInt($('#rules-processor-timeout').val(), 10) || 1000;
+
                     that.main.socket.emit('setObject', obj._id, obj, function (err) {
                         if (err) {
                             that.main.showError(err);
@@ -438,6 +441,34 @@ function Text2Commands(main, instance) {
             ]
         });
 
+        $('#dialog-settings').dialog({
+            autoOpen: false,
+            modal:    true,
+            width:    510,
+            height:   255,
+            buttons: [
+                {
+                    text: _('Ok'),
+                    click: function () {
+                        $(this).dialog('close');
+                        saveSettings(true);
+                    }
+                },
+                {
+                    text: _('Cancel'),
+                    click: function () {
+                        // restore settings
+                        var native = that.main.objects['system.adapter.text2command.' + instance].native;
+                        $('#rules-sayitInstance').val(native.sayitInstance);
+                        $('#rules-language').val(native.language);
+                        $('#rules-processor').val(native.processorId || '');
+                        $('#rules-timeout').val(native.processorTimeout || 1000);
+                        $(this).dialog('close');
+                    }
+                }
+            ]
+        });
+
         $('#btn_replace_ids').button({icons: {primary: 'ui-icon-transferthick-e-w'}, text: false}).css({width: 16, height: 16}).click(function () {
             that.$dialogReplace.dialog('open');
         });
@@ -461,19 +492,32 @@ function Text2Commands(main, instance) {
             $(this).trigger('change');
         });
 
-        $('#rules-select-sayitInstance').button({icons: {primary: 'ui-icon-folder-open'}, text: false}).css({width: 21, height: 21}).click(function () {
+        $('.rules-select-sayitInstance').button({icons: {primary: 'ui-icon-folder-open'}, text: false}).css({width: 21, height: 21}).click(function () {
             var sid = that.main.initSelectId();
             sid.selectId('option', 'filterPresets',  {role: ''});
-            sid.selectId('show', $('#rules-sayitInstance').val() || '', function (newId) {
-                $('#rules-sayitInstance').val(newId).trigger('change');
+            var id = $(this).data('input');
+
+            sid.selectId('show', $('#' + id).val() || '', function (newId) {
+                $('#' + id).val(newId).trigger('change');
             });
+        });
+        /*$('#rules-sayitInstance').change(function () {
+            saveSettings();
         });
         $('#rules-sayitInstance').change(function () {
             saveSettings();
         });
-        $('#rules-language').change(function () {
-            saveSettings();
+        */
+        $('#rules-open-settings').button({icons: {primary: 'ui-icon-gear'}, text: false}).css({width: 21, height: 21}).click(function () {
+            var native = that.main.objects['system.adapter.text2command.' + instance].native;
+            $('#rules-language').val(native.language);
+            $('#rules-sayitInstance').val(native.sayitInstance);
+            $('#rules-processor').val(native.processorId || '');
+            $('#rules-processor-timeout').val(native.processorTimeout || 1000);
+
+            $('#dialog-settings').dialog('open');
         });
+
         $('#rules-test-real').button({icons: {primary: 'ui-icon-play'}, text: false}).css({width: 21, height: 21}).click(function () {
             that.main.socket.emit('setState', 'text2command.' + instance + '.text', $('#rules-test').val(), function (err) {
                 if (err) console.error(err);
@@ -527,9 +571,6 @@ function Text2Commands(main, instance) {
                 }
                 if (obj) {
                     that.main.objects['system.adapter.text2command.' + instance] = obj;
-                    $('#rules-sayitInstance').val(obj.native.sayitInstance);
-                    $('#rules-language').val(obj.native.language);
-
                     if (obj.native) {
                         that.rules = obj.native.rules || [];
                     } else {
@@ -541,8 +582,6 @@ function Text2Commands(main, instance) {
         } else {
             if (this.main.objects['system.adapter.text2command.' + instance] && this.main.objects['system.adapter.text2command.' + instance].native) {
                 this.rules = this.main.objects['system.adapter.text2command.' + instance].native.rules || [];
-                $('#rules-sayitInstance').val(this.main.objects['system.adapter.text2command.' + instance].native.sayitInstance);
-                $('#rules-language').val(this.main.objects['system.adapter.text2command.' + instance].native.language);
             } else {
                 this.rules = [];
             }

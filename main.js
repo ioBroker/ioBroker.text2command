@@ -23,13 +23,28 @@ var rooms           = require(__dirname + '/lib/rooms');
 
 var rules;
 var commandsCallbacks;
-var systemConfig = {};
-var enums        = {};
+var systemConfig    = {};
+var enums           = {};
+var processTimeout  = null;
+var processQueue    = [];
 
 adapter.on('stateChange', function (id, state) {
     if (state && !state.ack && state.val) {
-        if (id == adapter.namespace + '.text') {
+        if (id === adapter.namespace + '.text') {
             processText(state.val.toString(), sayIt);
+        }
+    } else if (state && id === adapter.config.processorId && state.ack) {
+        // answer received
+        if (processTimeout) {
+            clearTimeout(processTimeout);
+            processTimeout = null;
+            var task = processQueue.shift();
+            if (state.val) {
+                if (task.callback) task.callback((task.withLanguage ? task.language + ';' : '') + state.val);
+            } else {
+                processText((task.withLanguage ? task.language + ';' : '') + task.command, task.callback, true);
+            }
+            setTimeout(useExternalProcessor, 0);
         }
     }
 });
@@ -85,7 +100,30 @@ function sayIt(text) {
     });
 }
 
-function processText(cmd, cb) {
+function useExternalProcessor() {
+    if (!processTimeout && processQueue.length) {
+        var task = processQueue[0];
+
+        // send task to external processor
+        adapter.setForeignState(adapter.config.processorId, JSON.stringify({command: task.command, language: task.language, withLanguage: task.withLanguage}));
+
+        // wait x seconds for answer
+        processTimeout = setTimeout(function () {
+            processTimeout = null;
+
+            // no answer in given period
+            var _task = processQueue.shift();
+
+            // process with rules
+            processText((_task.withLanguage ? _task.language + ';' : '') + _task.command, _task.callback, true);
+
+            // process next
+            useExternalProcessor();
+        }, adapter.config.processorTimeout || 1000);
+    }
+}
+
+function processText(cmd, cb, afterProcessor) {
     adapter.log.info('processText: "' + cmd + '"');
     if (cmd === null || cmd === undefined) {
         adapter.log.error('processText: invalid command!');
@@ -111,6 +149,23 @@ function processText(cmd, cb) {
         originalCmd = originalCmd.substring(ix + 1);
     }
     lang = lang || adapter.config.language || systemConfig.language || 'en';
+
+    // if desired processing by javascript
+    if (!afterProcessor && adapter.config.processorId) {
+        var task = {
+            language:       lang,
+            command:        originalCmd,
+            withLanguage:   withLang,
+            callback:       cb
+        };
+        if (processQueue.length < 100) {
+            processQueue.push(task);
+            useExternalProcessor();
+            return;
+        } else {
+            adapter.log.error('External process queue is full. Try to use rules.');
+        }
+    }
 
     var matchedRules = model.findMatched(cmd, rules);
 
@@ -168,6 +223,7 @@ function main() {
     };
 
     adapter.subscribeForeignObjects('enum.*');
+    if (adapter.config.processorId) adapter.subscribeForeignStates(adapter.config.processorId);
 
     // read system configuration
     adapter.getForeignObject('system.config', function (err, obj) {

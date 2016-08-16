@@ -194,10 +194,44 @@ Answer is customizable. Default: ```Thank you``` or ```You are welcome```
 ### Thank you (Just for fun)
 Answer is customizable. Default: ```No problem``` or ```You are welcome```
 
+## External rules with javascript
+There is a possibility to use javascript engine to process commands in text2command.
+To do that you must specify some state in "Processor state ID" (Advanced settings) and to listen on this state in some JS or Blockly script.
+You can create some state manually in admin or in script. Processing script can looks like this one:
+
+```
+createState("textProcessor", '', function () {
+    // text2command writes the value with ack=false. Change "any" is important too, to process repeated commands.
+    on({id: "javascript.0.textProcessor", ack: false, change: 'any'}, function (obj) {
+         var task = JSON.parse(obj.state.val);
+         // value looks like
+         // {
+         //     "command":      "text to process", // command that was received by text2command
+         //     "language":     "en",              // language in command or system language
+         //     "withLanguage": false              // indicator if language was defined in command (true) or used default language (false)
+         // }
+         // response to text2command with ack=true
+         if (task.command === 'switch light on') {
+            setState("hm-rpc.0.light", true);
+            setState("javascript.0.textProcessor", 'light is on', true);
+         } else {
+            // let it process with predefined rules
+            setState("javascript.0.textProcessor", '', true);
+         }
+    });
+});
+```
+Set in settings of text2command **Processor state ID** as *javascript.0.textProcessor* to let this example work.
+
+First the command will be processed with your javascript and if javascript will answer with '' or not answer in predefined time (1 second by default) the command will be processed by rules.
+
 # ToDo
 - in Russian male and female answers.
 
 ## Changelog
+### 1.1.0 (2016-08-16)
+* (bluefox) add text processor state ID
+
 ### 1.0.2 (2016-07-22)
 * (bluefox) fix error with detection of numeric values
 

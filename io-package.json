@@ -1,8 +1,13 @@
 {
     "common": {
         "name":                     "text2command",
-        "version": "1.0.2",
+        "version": "1.1.0",
         "news": {
+            "1.1.0": {
+                "en": "add text processor state ID",
+                "de": "add text processor state ID",
+                "ru": "add text processor state ID"
+            },
             "1.0.2": {
                 "en": "fix error with detection of numeric values",
                 "de": "fix error with detection of numeric values",
@@ -46,7 +51,9 @@
 
         ],
         "sayitInstance": "sayit.0.tts.text",
-        "language": ""
+        "language": "",
+        "processorId": "",
+        "processorTimeout": 500
     },
     "instanceObjects": [
         {

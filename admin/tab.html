@@ -74,15 +74,8 @@
             <td><label class="translate" for="rules-filter">Filter:</label></td><td><input id="rules-filter" style="width:100px;margin-right:3px"/></td><td><button id="rules-filter-clear"></button></td>
             <td style="width: 10px"></td>
             <td><label class="translate" for="rules-filter">Test:</label></td><td><input id="rules-test"       style="width: 250px; margin-right: 3px"/></td><td><button id="rules-test-clear"/></td><td><button id="rules-test-real" class="translateT" title="write really"/></td>
-            <td style="width: 10px"></td>
-            <td><label class="translate" for="rules-filter">Language:</label></td><td><select id="rules-language"  style="width: 250px; margin-right: 3px">
-                <option value="" class="translate" >system</option>
-                <option value="en">english</option>
-                <option value="de">deutsch</option>
-                <option value="ru">русский</option>
-            </select></td>
-            <td style="width: 10px"></td>
-            <td><label class="translate" for="rules-filter">SayIt ID:</label></td><td><input id="rules-sayitInstance" style="width: 250px; margin-right: 3px"/></td><td><button id="rules-select-sayitInstance"/></td>
+            <td style="width: 100%"></td>
+            <td><button id="rules-open-settings" title="Show advanced settings" class="translateT"/></td>
         </tr></table>
         <div id="process_running_rules" class="translate" style="position:absolute; top:50%; left:50%; width: 150px; height: 25px; padding: 12px; background: rgba(30, 30, 30, 0.5); display: none; text-align:center; font-size: 1.2em; color: white; font-weight: bold; border-radius: 5px">Processing...</div>
         <div style="width:100%; height:400px; overflow-y: auto" id="grid-rules-div">
@@ -140,6 +133,32 @@
                     <td><button data-input="dialog-replace-new-id" class="dialog-rules-id-selector">...</button></td></tr>
             </table>
         </p>
+    </div>
+
+    <div id="dialog-settings" title="Settings" class="translateT" style="display: none">
+        <table>
+            <tr>
+                <td><label class="translate" for="rules-language">Language:</label></td>
+                <td><select id="rules-language"  style="width: 250px; margin-right: 3px">
+                    <option value="" class="translate" >system</option>
+                    <option value="en">english</option>
+                    <option value="de">deutsch</option>
+                    <option value="ru">русский</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label class="translate" for="rules-sayitInstance">SayIt ID:</label></td>
+                <td><input id="rules-sayitInstance" style="width: 250px; margin-right: 3px"/><button class="rules-select-sayitInstance" data-input="rules-sayitInstance"/></td>
+            </tr>
+            <tr>
+                <td><label class="translate" for="rules-processor">Processor state ID:</label></td>
+                <td><input id="rules-processor" style="width: 250px; margin-right: 3px"/><button class="rules-select-sayitInstance" data-input="rules-processor"/></td>
+            </tr>
+            <tr>
+                <td><label class="translate" for="rules-processor-timeout">Processor timeout (ms):</label></td>
+                <td><input id="rules-processor-timeout" style="width: 250px; margin-right: 3px" type="number"/></td>
+            </tr>
+        </table>
     </div>
 
     <!--div id="dialog-select-members" style="display: none"></div-->
