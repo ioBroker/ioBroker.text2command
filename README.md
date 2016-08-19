@@ -230,6 +230,9 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
+### 1.1.1 (2016-08-19)
+* (bluefox) add additional info for external text processor
+
 ### 1.1.0 (2016-08-16)
 * (bluefox) add text processor state ID
 

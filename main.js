@@ -42,7 +42,7 @@ adapter.on('stateChange', function (id, state) {
             if (state.val) {
                 if (task.callback) task.callback((task.withLanguage ? task.language + ';' : '') + state.val);
             } else {
-                processText((task.withLanguage ? task.language + ';' : '') + task.command, task.callback, true);
+                processText((task.withLanguage ? task.language + ';' : '') + task.command, task.callback, null, null, true);
             }
             setTimeout(useExternalProcessor, 0);
         }
@@ -75,7 +75,7 @@ adapter.on('message', function (obj) {
                         if (typeof responseObj !== 'object') responseObj = {text: responseObj};
                         responseObj.response = res;
                         if (obj.callback) adapter.sendTo(obj.from, obj.command, responseObj, obj.callback);
-                    });
+                    }, JSON.parse(JSON.stringify(obj.message)), obj.from);
                 }
                 break;
 
@@ -105,7 +105,7 @@ function useExternalProcessor() {
         var task = processQueue[0];
 
         // send task to external processor
-        adapter.setForeignState(adapter.config.processorId, JSON.stringify({command: task.command, language: task.language, withLanguage: task.withLanguage}));
+        adapter.setForeignState(adapter.config.processorId, JSON.stringify(task));
 
         // wait x seconds for answer
         processTimeout = setTimeout(function () {
@@ -115,7 +115,7 @@ function useExternalProcessor() {
             var _task = processQueue.shift();
 
             // process with rules
-            processText((_task.withLanguage ? _task.language + ';' : '') + _task.command, _task.callback, true);
+            processText((_task.withLanguage ? _task.language + ';' : '') + _task.command, _task.callback, null, null, true);
 
             // process next
             useExternalProcessor();
@@ -123,7 +123,7 @@ function useExternalProcessor() {
     }
 }
 
-function processText(cmd, cb, afterProcessor) {
+function processText(cmd, cb, messageObj, from, afterProcessor) {
     adapter.log.info('processText: "' + cmd + '"');
     if (cmd === null || cmd === undefined) {
         adapter.log.error('processText: invalid command!');
@@ -152,12 +152,14 @@ function processText(cmd, cb, afterProcessor) {
 
     // if desired processing by javascript
     if (!afterProcessor && adapter.config.processorId) {
-        var task = {
-            language:       lang,
-            command:        originalCmd,
-            withLanguage:   withLang,
-            callback:       cb
-        };
+        var task = messageObj || {};
+
+        task.language =       lang;
+        task.command =        originalCmd;
+        task.withLanguage =   withLang;
+        task.from =           from;
+        task.callback =       cb;
+
         if (processQueue.length < 100) {
             processQueue.push(task);
             useExternalProcessor();
