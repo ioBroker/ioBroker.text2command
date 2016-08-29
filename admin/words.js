@@ -49,6 +49,22 @@ systemDictionary = {
     "Language:":        {"en": "Language:",             "de": "Sprache:",               "ru": "Язык:"},
     "system":           {"en": "system",                "de": "system",                 "ru": "системный"},
     "SayIt ID:":        {"en": "Answer to ID:",         "de": "Antwort ins ID:",        "ru": "Ответ в ID:"},
+    "Processor state ID:": {
+        "en": "Processor state ID:",
+        "de": "ID für Bearbeiter:",
+        "ru": "ID обработчика:"
+    },
+    "Processor timeout (ms):": {
+        "en": "Processor timeout (ms):",
+        "de": "Bearbeiter-Timeout (ms):",
+        "ru": "Таймаут для обработчика (мс):"
+    },
+    "Show advanced settings": {
+        "en": "Show advanced settings",
+        "de": "Zeige erweiterte Einstellungen",
+        "ru": "Показать настройки"
+    },
+    "Settings":         {"en": "Settings",              "de": "Einstellungen",               "ru": "Настройки"},
     "write really":     {
         "en": "Send test phrase to adapter",
         "de": "Schicke Testsatz zu Adapter",

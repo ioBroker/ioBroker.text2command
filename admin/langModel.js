@@ -1,3 +1,7 @@
+/* jshint -W097 */// jshint strict:false
+/*jslint node: true */
+'use strict';
+
 // TODO alarm on/off
 // alarm clock set/off
 var commands = {
@@ -130,6 +134,15 @@ var commands = {
             'de': "einschalten/ausschalten/ein/aus/an",
             'ru': "ключи/включи/включить/выключи/выключить/потушить/потуши/зажги/зажечь"
         },
+        args: [{
+            name: {
+                'en': "Use 0/1, not false/true",
+                'de': "Benutze 0/1, nicht false/true",
+                'ru': "Писать 0/1, а не false/true"
+            },
+            default: false,
+            type: 'checkbox'
+        }],
         ack: {
             type: 'checkbox',
             name: {

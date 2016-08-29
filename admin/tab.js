@@ -1,3 +1,7 @@
+/* jshint -W097 */// jshint strict:false
+/*jslint node: true */
+'use strict';
+
 function Text2Commands(main, instance) {
     var that            = this;
     this.list           = [];
@@ -30,14 +34,14 @@ function Text2Commands(main, instance) {
         if (arg.default && !value && value !== 0) {
             rule.args = rule.args || [];
             if (typeof arg.default === 'object') {
-                value = arg.default[systemLang] || arg.default.en;rule.args
+                value = arg.default[systemLang] || arg.default.en;
             } else {
                 value = arg.default;
             }
             rule.args[argIndex] = value;
         }
 
-        var text = (arg && arg.type) ? '<input class="edit-field-args" style="width:100%" data-type="' + arg.type + '" data-index="' + index + '" data-field="args" data-args-index="' + argIndex + '" />' : '';
+        var text = (arg && arg.type) ? '<input class="edit-field-args" ' + (arg.type === 'checkbox' ? 'type="checkbox" data-type="value"': 'style="width: 100%" data-type="' + arg.type + '"') + ' data-index="' + index + '" data-field="args" data-args-index="' + argIndex + '" />' : '';
 
         if (typeof arg.name === 'object') {
             text = '<span style="font-size: x-small">' + (arg.name[systemLang] || arg.name.en) + '</span><br>' + text;
@@ -47,6 +51,7 @@ function Text2Commands(main, instance) {
 
         switch (arg.type) {
             case 'value':
+            case 'checkbox':
                 break;
             
             case 'id':
@@ -200,7 +205,7 @@ function Text2Commands(main, instance) {
             } else {
                 $this.val(that.rules[index].args[argIndex]);
             }
-            /*if ($this.data('type') == 'id') {
+            /*if ($this.data('type') === 'id') {
                 var id = that.rules[index].args[argIndex];
                 $('.id-name[data-index=' + index + '][data-args-index=' + argIndex +  ']').html(
                     (that.main.objects[id] && that.main.objects[id].common) ? that.main.objects[id].common.name || '' : ''

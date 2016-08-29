@@ -230,6 +230,11 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
+### 1.1.2 (2016-08-29)
+* (bluefox) fix the russian temperature text
+* (bluefox) extend rule "control device" with option 0/1
+* (bluefox) use by control of devices min/max values if set
+
 ### 1.1.1 (2016-08-19)
 * (bluefox) add additional info for external text processor
 

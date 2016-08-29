@@ -1,8 +1,13 @@
 {
     "common": {
         "name":                     "text2command",
-        "version": "1.1.1",
+        "version": "1.1.2",
         "news": {
+            "1.1.2": {
+                "en": "fix russian temperature text\nextend rule control device with option 0/1\nuse by control of devices min/max values if set",
+                "de": "Ändere russichen Text für Temerature\nErweitert Relgel Schalte an mit Option 0/1\nBenutze bei Steuerung von Geräten min/max falls existiert",
+                "ru": "Изменить русский текст для температуры\nРасширено правило Включить приборы опцией 0/1\nИспользовать для управления приборами значения min/max"
+            },
             "1.1.1": {
                 "en": "add additional info for external text processor",
                 "de": "add additional info for external text processor",
