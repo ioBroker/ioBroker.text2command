@@ -80,7 +80,7 @@ var commands = {
             default: {
                 'en': "Outside temperature is %s %u",
                 'de': "Temperature draußen ist %s %u",
-                'ru': "Темература на улице %s %u"
+                'ru': "Температура на улице %s %u"
             }
         }
     },
@@ -116,7 +116,7 @@ var commands = {
             default: {
                 'en': "Inside temperature is %s %u",
                 'de': "Temperature drin ist %s %u",
-                'ru': "Темература дома %s %u"
+                'ru': "Температура дома %s %u"
             }
         }
     },
