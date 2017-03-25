@@ -58,7 +58,8 @@
         "adminTab": {
             "name":                 {"en": "Text-&gt;Commands", "de": "Text-&gt;Kommandos", "ru": "Текст-&gt;Команды"},
             "singleton":            false,
-            "ignoreConfigUpdate":   true
+            "ignoreConfigUpdate":   true,
+            "fa-icon":              "fa-commenting-o"
         }
     },
     "native": {
