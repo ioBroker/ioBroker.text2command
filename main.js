@@ -216,6 +216,8 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
         if (commandsCallbacks[rules[matchedRules[m]].template]) {
             //noinspection JSUnresolvedVariable
             commandsCallbacks[rules[matchedRules[m]].template](lang, cmd, rules[matchedRules[m]].args, rules[matchedRules[m]].ack, function (response) {
+                adapter.log.info('Response: ' + response);
+
                 // somehow combine answers
                 if (response) {
                     //noinspection JSReferencingMutableVariableFromClosure

@@ -230,7 +230,10 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
-### 1.1.2 (2016-08-30)
+### 1.1.4 (2017-03-27)
+* (bluefox) translations
+
+### 1.1.3 (2016-08-30)
 * (bluefox) russian translations
 
 ### 1.1.2 (2016-08-29)
@@ -304,7 +307,7 @@ First the command will be processed with your javascript and if javascript will 
 
 The MIT License (MIT)
 
-Copyright (c) 2014-2016, bluefox<dogafox@gmail.com>
+Copyright (c) 2014-2017, bluefox<dogafox@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
