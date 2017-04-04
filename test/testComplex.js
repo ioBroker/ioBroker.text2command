@@ -107,7 +107,7 @@ function testOne(lang, func, room, value) {
 }
 
 describe('Commands: Control by function', function () {
-    it('Must return: Raum ist nicht gefunden', function (done) {
+    it('Must return: Raum wurde nicht gefunden', function (done) {
         devicesControl.controlByFunction('de', 'schalte licht in wc an', [], true, function (response) {
             if (debug) console.log('controlByFunction(schalte licht in wc an) returned: ' + response);
             expect(response == 'Raum wurde nicht gefunden' || response == 'Es gibt kein Zimmer mit dem Namen'|| response == 'Man muss sagen im welchen Raum oder überall').to.be.true;
@@ -129,10 +129,10 @@ describe('Commands: Control by function', function () {
         });
     });
 
-    it('Must return: Die Funktion ist nicht gefunden', function (done) {
+    it('Must return: Die Funktion wurde nicht gefunden', function (done) {
         devicesControl.controlByFunction('de', 'schalte liht in bad an', [], true, function (response) {
             if (debug) console.log('controlByFunction(schalte liht in wc an) returned: ' + response);
-            expect(response == 'Die Funktion ist nicht gefunden' ||
+            expect(response == 'Die Funktion wurde nicht gefunden' ||
                    response == 'Es gibt keine Funktion mit dem Namen'||
                    response == 'Man muss sagen womit man was machen will').to.be.true;
             done();
