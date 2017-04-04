@@ -110,7 +110,7 @@ describe('Commands: Control by function', function () {
     it('Must return: Raum ist nicht gefunden', function (done) {
         devicesControl.controlByFunction('de', 'schalte licht in wc an', [], true, function (response) {
             if (debug) console.log('controlByFunction(schalte licht in wc an) returned: ' + response);
-            expect(response == 'Raum ist nicht gefunden' || response == 'Es gibt kein Zimmer mit dem Namen'|| response == 'Man muss sagen im welchen Raum oder überall').to.be.true;
+            expect(response == 'Raum wurde nicht gefunden' || response == 'Es gibt kein Zimmer mit dem Namen'|| response == 'Man muss sagen im welchen Raum oder überall').to.be.true;
             done();
         });
     });
