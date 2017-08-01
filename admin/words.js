@@ -21,7 +21,7 @@ systemDictionary = {
     },
     "Words (see tooltip)": {
         "en": "Trigger words (see tooltip for help)",
-        "de": "Trigger-Worte (sehe Tooltip für Hilfe)",
+        "de": "Trigger-Worte (siehe Tooltip für Hilfe)",
         "ru": "Ключевые слова (см. подсказку)"
     },
     "words help":       {
@@ -48,7 +48,7 @@ systemDictionary = {
     "select id":        {"en": "Select object id",      "de": "Object ID auswählen",    "ru": "Выбрать ID объекта"},
     "Language:":        {"en": "Language:",             "de": "Sprache:",               "ru": "Язык:"},
     "system":           {"en": "system",                "de": "system",                 "ru": "системный"},
-    "SayIt ID:":        {"en": "Answer to ID:",         "de": "Antwort ins ID:",        "ru": "Ответ в ID:"},
+    "SayIt ID:":        {"en": "Answer to ID:",         "de": "Antwort in ID:",         "ru": "Ответ в ID:"},
     "Processor state ID:": {
         "en": "Processor state ID:",
         "de": "ID für Bearbeiter:",
