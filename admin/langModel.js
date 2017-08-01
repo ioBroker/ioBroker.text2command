@@ -9,7 +9,7 @@ var commands = {
         icon: '',
         name: {
             'en': "What time is it?",
-            'de': "Wie spät ist das?",
+            'de': "Wie spät ist es?",
             'ru': "Сколько время?"
         },
         invisible: true,
@@ -52,7 +52,7 @@ var commands = {
         icon: '',
         name: {
             'en': "What is the outside temperature?",
-            'de': "Wie kalt/warm ist draußen?",
+            'de': "Wie kalt/warm ist es draußen?",
             'ru': "Какая температура на улице?"
         },
         unique:   true,
@@ -79,7 +79,7 @@ var commands = {
             },
             default: {
                 'en': "Outside temperature is %s %u",
-                'de': "Temperature draußen ist %s %u",
+                'de': "Die Außentemperatur beträgt %s %u",
                 'ru': "Температура на улице %s %u"
             }
         }
@@ -88,7 +88,7 @@ var commands = {
         icon: '',
         name: {
             'en': "What is the inside temperature?",
-            'de': "Wie kalt/warm ist drin?",
+            'de': "Wie kalt/warm ist es drin?",
             'ru': "Какая температура дома?"
         },
         unique:   true,
@@ -100,7 +100,7 @@ var commands = {
         args: [{
             name: {
                 'en': "Inside temperature ID",
-                'de': "Innentemperature ID",
+                'de': "Innentemperatur ID",
                 'ru': "ID сенсора дома '.TEMPERATURE'"
             },
             type: 'id',
@@ -115,7 +115,7 @@ var commands = {
             },
             default: {
                 'en': "Inside temperature is %s %u",
-                'de': "Temperature drin ist %s %u",
+                'de': "Die Innentemperatur beträgt %s %u",
                 'ru': "Температура дома %s %u"
             }
         }
@@ -163,7 +163,7 @@ var commands = {
         editable: false,
         words: {
             'en': "blinds up/down",
-            'de': "rollladen/rolllade/fenster/laden auf/zu/hoch/runter/machen",
+            'de': "rollladen/rolllade/fenster/laden/rollo/rolladen auf/zu/hoch/runter/machen",
             'ru': "ставни/окно/окна/жалюзи поднять/подними/опустить/опусти/открой/открою/открыть/закрыть/закрою/закрой"
         },
         ack: {
@@ -362,7 +362,7 @@ var commands = {
             },
             default: {
                 'en': "No problem/You are welcome",
-                'de': "Kein problem/Bitte/Bitte sehr",
+                'de': "Kein Problem/Bitte/Bitte sehr",
                 'ru': "Пожалуйста/Всегда пожалуйста/Не за что/С радостью"
             }
         }
