@@ -8,12 +8,12 @@
     <script type="text/javascript" src="../../lib/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
     <script type="text/javascript" src="../../lib/js/loStorage.js"></script>
-    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/translate.js"></script>
     <script type="text/javascript" src="words.js"></script>
     <script type="text/javascript" src="../../lib/js/colResizable-1.5.min.js"></script>
 
     <script type="text/javascript" src="../../lib/js/jquery.fancytree-all.min.js"></script>
-    <script type="text/javascript" src="../../js/selectID.js"></script>
+    <script type="text/javascript" src="../../lib/js/selectID.js"></script>
     <script type="text/javascript" src="langModel.js"></script>
 
     <style scoped>
@@ -25,11 +25,11 @@
             font-family: tahoma, arial, helvetica;
         }
         .no-space {
-            border: 0px !important;
-            margin: 0px;
-            padding: 0px;
-            border-spacing: 0px;
-            border-image-width: 0px;
+            border: 0 !important;
+            margin: 0;
+            padding: 0;
+            border-spacing: 0;
+            border-image-width: 0;
         }
         .scene-line-true, .scene-line-false {
             background: lightgrey;
@@ -73,9 +73,9 @@
             <td style="width: 10px"></td>
             <td><label class="translate" for="rules-filter">Filter:</label></td><td><input id="rules-filter" style="width:100px;margin-right:3px"/></td><td><button id="rules-filter-clear"></button></td>
             <td style="width: 10px"></td>
-            <td><label class="translate" for="rules-filter">Test:</label></td><td><input id="rules-test"       style="width: 250px; margin-right: 3px"/></td><td><button id="rules-test-clear"/></td><td><button id="rules-test-real" class="translateT" title="write really"/></td>
+            <td><label class="translate" for="rules-filter">Test:</label></td><td><input id="rules-test"       style="width: 250px; margin-right: 3px"/></td><td><button id="rules-test-clear"></button></td><td><button id="rules-test-real" class="translateT" title="write really"></button></td>
             <td style="width: 100%"></td>
-            <td><button id="rules-open-settings" title="Show advanced settings" class="translateT"/></td>
+            <td><button id="rules-open-settings" title="Show advanced settings" class="translateT"></button></td>
         </tr></table>
         <div id="process_running_rules" class="translate" style="position:absolute; top:50%; left:50%; width: 150px; height: 25px; padding: 12px; background: rgba(30, 30, 30, 0.5); display: none; text-align:center; font-size: 1.2em; color: white; font-weight: bold; border-radius: 5px">Processing...</div>
         <div style="width:100%; height:400px; overflow-y: auto" id="grid-rules-div">
@@ -127,9 +127,9 @@
             <br/>
             <br/>
             <table style="width: 100%">
-                <tr><td><label class="translate">Old ID:</label></td><td><input type="text"      id="dialog-replace-old-id" style="width:100%"/></td>
+                <tr><td><label class="translate" for="dialog-replace-old-id">Old ID:</label></td><td><input type="text"      id="dialog-replace-old-id" style="width:100%"/></td>
                     <td><button data-input="dialog-replace-old-id" class="dialog-rules-id-selector">...</button></td></tr>
-                <tr><td><label class="translate">New ID:</label></td><td><input type="text"      id="dialog-replace-new-id" style="width:100%"/></td>
+                <tr><td><label class="translate"  for="dialog-replace-new-id">New ID:</label></td><td><input type="text"     id="dialog-replace-new-id" style="width:100%"/></td>
                     <td><button data-input="dialog-replace-new-id" class="dialog-rules-id-selector">...</button></td></tr>
             </table>
         </p>
@@ -148,11 +148,11 @@
             </tr>
             <tr>
                 <td><label class="translate" for="rules-sayitInstance">SayIt ID:</label></td>
-                <td><input id="rules-sayitInstance" style="width: 250px; margin-right: 3px"/><button class="rules-select-sayitInstance" data-input="rules-sayitInstance"/></td>
+                <td><input id="rules-sayitInstance" style="width: 250px; margin-right: 3px"/><button class="rules-select-sayitInstance" data-input="rules-sayitInstance"></button></td>
             </tr>
             <tr>
                 <td><label class="translate" for="rules-processor">Processor state ID:</label></td>
-                <td><input id="rules-processor" style="width: 250px; margin-right: 3px"/><button class="rules-select-sayitInstance" data-input="rules-processor"/></td>
+                <td><input id="rules-processor" style="width: 250px; margin-right: 3px"/><button class="rules-select-sayitInstance" data-input="rules-processor"></button></td>
             </tr>
             <tr>
                 <td><label class="translate" for="rules-processor-timeout">Processor timeout (ms):</label></td>

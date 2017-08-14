@@ -230,6 +230,9 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
+### 1.1.5 (2017-08-14)
+* (bluefox) Support of iobroker.pro
+
 ### 1.1.4 (2017-03-27)
 * (bluefox) translations
 
