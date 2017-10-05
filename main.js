@@ -19,8 +19,6 @@ var model           = require(__dirname + '/admin/langModel');
 var devicesControl  = require(__dirname + '/lib/devicesControl');
 var simpleControl   = require(__dirname + '/lib/simpleControl');
 var simpleAnswers   = require(__dirname + '/lib/simpleAnswers');
-var functions       = require(__dirname + '/lib/functions');
-var rooms           = require(__dirname + '/lib/rooms');
 
 var rules;
 var commandsCallbacks;
@@ -168,7 +166,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
     cmd = cmd.toLowerCase();
 
     // extract language
-    if (ix != -1) {
+    if (ix !== -1) {
         withLang    = true;
         lang        = cmd.substring(0, ix);
         cmd         = cmd.substring(ix + 1);
