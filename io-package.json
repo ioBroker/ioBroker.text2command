@@ -1,6 +1,6 @@
 {
     "common": {
-        "name":                     "text2command",
+        "name": "text2command",
         "version": "1.1.6",
         "news": {
             "1.1.6": {
@@ -49,38 +49,43 @@
                 "ru": "fix: send text command"
             }
         },
-        "title":                    "Text to command",
-        "desc":                     {
-			"en": "This adapter allows convert texts to commands.",
-			"de": "Adapter konvertiert Text in die Kommandos.",
-			"ru": "Позволяет преобразовывать словесные выражения в команды."
-		},
+        "title": "Text to command",
+        "desc": {
+            "en": "This adapter allows convert texts to commands.",
+            "de": "Adapter konvertiert Text in die Kommandos.",
+            "ru": "Позволяет преобразовывать словесные выражения в команды."
+        },
         "authors": [
             "bluefox <dogafox@gmail.com>"
         ],
-        "license":                  "MIT",
-        "platform":                 "Javascript/Node.js",
-        "mode":                     "daemon",
-        "readme":                   "https://github.com/ioBroker/ioBroker.text2command/blob/master/README.md",
-        "loglevel":                 "info",
-        "icon":                     "text2command.png",
-        "keywords":                 ["text", "commands"],
-        "messagebox":               true,
-        "extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
-        "localLink":                "/adapter/text2command/tab.html",
-		"type":                     "script",
-        "noConfig":                 true,
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "mode": "daemon",
+        "readme": "https://github.com/ioBroker/ioBroker.text2command/blob/master/README.md",
+        "loglevel": "info",
+        "icon": "text2command.png",
+        "keywords": [
+            "text",
+            "commands"
+        ],
+        "messagebox": true,
+        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
+        "localLink": "/adapter/text2command/tab.html",
+        "type": "logic",
+        "noConfig": true,
         "adminTab": {
-            "name":                 {"en": "Text-&gt;Commands", "de": "Text-&gt;Kommandos", "ru": "Текст-&gt;Команды"},
-            "singleton":            false,
-            "ignoreConfigUpdate":   true,
-            "fa-icon":              "fa-commenting-o"
+            "name": {
+                "en": "Text-&gt;Commands",
+                "de": "Text-&gt;Kommandos",
+                "ru": "Текст-&gt;Команды"
+            },
+            "singleton": false,
+            "ignoreConfigUpdate": true,
+            "fa-icon": "fa-commenting-o"
         }
     },
     "native": {
-        "rules": [
-
-        ],
+        "rules": [],
         "sayitInstance": "sayit.0.tts.text",
         "language": "",
         "processorId": "",
@@ -91,12 +96,12 @@
             "_id": "text",
             "type": "state",
             "common": {
-                "name":  "Text to process",
-                "type":  "string",
-                "role":  "text",
-                "read":  true,
+                "name": "Text to process",
+                "type": "string",
+                "role": "text",
+                "read": true,
                 "write": true,
-                "desc":  "Write your text here with ack=false, and you will get answer with ack=true"
+                "desc": "Write your text here with ack=false, and you will get answer with ack=true"
             },
             "native": {}
         },
@@ -104,12 +109,12 @@
             "_id": "response",
             "type": "state",
             "common": {
-                "name":  "Answer on requested question",
-                "type":  "string",
-                "role":  "text",
-                "read":  true,
+                "name": "Answer on requested question",
+                "type": "string",
+                "role": "text",
+                "read": true,
                 "write": false,
-                "desc":  "Answer for written into text2command.0.text text"
+                "desc": "Answer for written into text2command.0.text text"
             },
             "native": {}
         }
