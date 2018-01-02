@@ -14,7 +14,7 @@
 
 var utils           = require(__dirname + '/lib/utils'); // Get common adapter utils
 //noinspection JSUnresolvedFunction
-var adapter         = utils.adapter('text2command');
+var adapter         = utils.Adapter('text2command');
 var model           = require(__dirname + '/admin/langModel');
 var devicesControl  = require(__dirname + '/lib/devicesControl');
 var simpleControl   = require(__dirname + '/lib/simpleControl');
