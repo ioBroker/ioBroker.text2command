@@ -12,20 +12,20 @@
 /*jslint node: true */
 'use strict';
 
-var utils           = require(__dirname + '/lib/utils'); // Get common adapter utils
+const utils           = require(__dirname + '/lib/utils'); // Get common adapter utils
 //noinspection JSUnresolvedFunction
-var adapter         = utils.Adapter('text2command');
-var model           = require(__dirname + '/admin/langModel');
-var devicesControl  = require(__dirname + '/lib/devicesControl');
-var simpleControl   = require(__dirname + '/lib/simpleControl');
-var simpleAnswers   = require(__dirname + '/lib/simpleAnswers');
+const adapter         = utils.Adapter('text2command');
+const model           = require(__dirname + '/admin/langModel');
+const devicesControl  = require(__dirname + '/lib/devicesControl');
+const simpleControl   = require(__dirname + '/lib/simpleControl');
+const simpleAnswers   = require(__dirname + '/lib/simpleAnswers');
 
-var rules;
-var commandsCallbacks;
-var systemConfig    = {};
-var enums           = {};
-var processTimeout  = null;
-var processQueue    = [];
+let rules;
+let commandsCallbacks;
+let systemConfig    = {};
+let enums           = {};
+let processTimeout  = null;
+let processQueue    = [];
 
 adapter.on('stateChange', function (id, state) {
     //noinspection JSUnresolvedVariable
@@ -41,7 +41,7 @@ adapter.on('stateChange', function (id, state) {
         if (processTimeout) {
             clearTimeout(processTimeout);
             processTimeout = null;
-            var task = processQueue.shift();
+            let task = processQueue.shift();
             //noinspection JSUnresolvedVariable
             if (state.val) {
                 if (task.callback) {
@@ -83,7 +83,7 @@ adapter.on('message', function (obj) {
                 if (obj.message) {
                     //noinspection JSUnresolvedVariable
                     processText(typeof obj.message === 'object' ? obj.message.text : obj.message, function (res) {
-                        var responseObj = JSON.parse(JSON.stringify(obj.message));
+                        let responseObj = JSON.parse(JSON.stringify(obj.message));
                         if (typeof responseObj !== 'object') responseObj = {text: responseObj};
                         responseObj.response = res;
 
@@ -122,7 +122,7 @@ function sayIt(text) {
 
 function useExternalProcessor() {
     if (!processTimeout && processQueue.length) {
-        var task = processQueue[0];
+        let task = processQueue[0];
 
         // send task to external processor
         //noinspection JSUnresolvedVariable,JSUnresolvedFunction
@@ -134,7 +134,7 @@ function useExternalProcessor() {
             processTimeout = null;
 
             // no answer in given period
-            var _task = processQueue.shift();
+            let _task = processQueue.shift();
 
             // process with rules
             //noinspection JSUnresolvedVariable
@@ -157,11 +157,11 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
         return;
     }
     cmd = cmd.toString();
-    var originalCmd = cmd;
+    let originalCmd = cmd;
 
-    var withLang = false;
-    var ix       = cmd.indexOf(';');
-    var lang;
+    let withLang = false;
+    let ix       = cmd.indexOf(';');
+    let lang;
 
     cmd = cmd.toLowerCase();
 
@@ -177,7 +177,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
     // if desired processing by javascript
     //noinspection JSUnresolvedVariable
     if (!afterProcessor && adapter.config.processorId) {
-        var task = messageObj || {};
+        let task = messageObj || {};
 
         task.language =       lang;
         task.command =        originalCmd;
@@ -198,11 +198,11 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
     }
 
     //noinspection JSUnresolvedFunction
-    var matchedRules = model.findMatched(cmd, rules);
+    let matchedRules = model.findMatched(cmd, rules);
 
-    var result = '';
-    var count = matchedRules.length;
-    for (var m = 0; m < matchedRules.length; m++) {
+    let result = '';
+    let count = matchedRules.length;
+    for (let m = 0; m < matchedRules.length; m++) {
 
         //noinspection JSUnresolvedVariable
         if (model.commands[rules[matchedRules[m]].template] && model.commands[rules[matchedRules[m]].template].extractText) {

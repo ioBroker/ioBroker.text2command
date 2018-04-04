@@ -1,5 +1,5 @@
 ![Logo](admin/text2command.png)
-ioBroker text2command adapter
+# text2command
 =================
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.text2command.svg)](https://www.npmjs.com/package/iobroker.text2command)
@@ -8,10 +8,12 @@ ioBroker text2command adapter
 
 [![NPM](https://nodei.co/npm/iobroker.text2command.png?downloads=true)](https://nodei.co/npm/iobroker.text2command/)
 
+## Description
 This adapter can convert normal sentences, like *'Switch light in kitchen on'* to specific command and sets the state *'adapter.0.device.kitchenLight'* to **true**.
 
 This adapter make no sense to be activated standalone. It should be used with other adapters like telegram or Android app **iobroker.vis**.
 
+## Usage
 To execute command, write state **text2command.<INSTANCE>.text** with sentence. You will always get the answer in **text2command.<INSTANCE>.response**.
 
 If you define **Answer to ID**, the answer will be written in this ID too. This required for e.g. to realise the voice acknowledges. 
@@ -230,6 +232,9 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
+### 1.1.7 (2018-04-04)
+* (bluefox) The parsing error was fixed
+
 ### 1.1.6 (2017-10-05)
 * (bluefox) Check if units are undefined
 
@@ -313,7 +318,7 @@ First the command will be processed with your javascript and if javascript will 
 
 The MIT License (MIT)
 
-Copyright (c) 2014-2017, bluefox<dogafox@gmail.com>
+Copyright (c) 2014-2018, bluefox<dogafox@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

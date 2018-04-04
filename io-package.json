@@ -1,8 +1,19 @@
 {
     "common": {
         "name": "text2command",
-        "version": "1.1.6",
+        "version": "1.1.7",
         "news": {
+            "1.1.7": {
+                "en": "The parsing error was fixed",
+                "de": "Der Parsing-Fehler wurde behoben",
+                "ru": "Исправлена ​​ошибка синтаксического анализа",
+                "pt": "O erro de análise foi corrigido",
+                "nl": "De parseerfout is opgelost",
+                "fr": "L'erreur d'analyse a été corrigée",
+                "it": "L'errore di analisi è stato risolto",
+                "es": "El error de análisis fue corregido",
+                "pl": "Naprawiono błąd parsowania"
+            },
             "1.1.6": {
                 "en": "Check if units are undefined",
                 "de": "Prüfung ob Einheiten gesetzt sind",
@@ -50,10 +61,27 @@
             }
         },
         "title": "Text to command",
+        "titleLang": {
+            "en": "Text to command",
+            "de": "Text ins Befehl",
+            "ru": "Текст в команды",
+            "pt": "Texto para comando",
+            "nl": "Te besturen tekst",
+            "fr": "Texte à commander",
+            "it": "Testo da comandare",
+            "es": "Texto para mandar",
+            "pl": "Tekst do polecenia"
+        },
         "desc": {
-            "en": "This adapter allows convert texts to commands.",
-            "de": "Adapter konvertiert Text in die Kommandos.",
-            "ru": "Позволяет преобразовывать словесные выражения в команды."
+            "en": "This adapter allows to convert text to commands",
+            "de": "Dieser Adapter ermöglicht es, Text in Befehle zu konvertieren",
+            "ru": "Этот адаптер позволяет преобразовывать текст в команды",
+            "pt": "Este adaptador permite converter texto em comandos",
+            "nl": "Met deze adapter kunt u tekst converteren naar opdrachten",
+            "fr": "Cet adaptateur permet de convertir du texte en commandes",
+            "it": "Questo adattatore consente di convertire il testo in comandi",
+            "es": "Este adaptador permite convertir texto a comandos",
+            "pl": "Ten adapter umożliwia konwertowanie tekstu na polecenia"
         },
         "authors": [
             "bluefox <dogafox@gmail.com>"
