@@ -104,6 +104,7 @@ You can use patterns in acknowledges:
 - %s : value
 - %u : unit
 - %n : name (planned!)
+- {objectId} : the state of this objectID will be placed here
 
 Following commands are supported:
 
@@ -232,6 +233,9 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
+### 1.2.1 (2018-04-25)
+* (bluefox) Support of templates in answer {objId}
+
 ### 1.2.0 (2018-04-23)
 * (bluefox) Support of Admin3 (but not materialize style)
 

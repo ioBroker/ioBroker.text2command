@@ -1,8 +1,19 @@
 {
     "common": {
         "name": "text2command",
-        "version": "1.2.0",
+        "version": "1.2.1",
         "news": {
+            "1.2.1": {
+              "en": "Support of templates in answer {objId}",
+              "de": "Unterstützung von Vorlagen in Antwort {objId}",
+              "ru": "Поддержка шаблонов в ответе {objId}",
+              "pt": "Suporte de templates em resposta {objId}",
+              "nl": "Ondersteuning van sjablonen in antwoord {objId}",
+              "fr": "Prise en charge des modèles dans la réponse {objId}",
+              "it": "Supporto di modelli in risposta {objId}",
+              "es": "Soporte de plantillas en respuesta {objId}",
+              "pl": "Obsługa szablonów w odpowiedzi {objId}"
+            },
             "1.2.0": {
                 "en": "Support of Admin3 (but not materialize style)",
                 "de": "Unterstützung von Admin3 (aber nicht materialize)",

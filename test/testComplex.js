@@ -1,13 +1,13 @@
-var expect = require('chai').expect;
+const expect = require('chai').expect;
 //var setup  = require(__dirname + '/lib/setup');
-var devicesControl = require(__dirname + '/../lib/devicesControl');
-var enums = require(__dirname + '/lib/testData.json');
-var functions = require(__dirname + '/../lib/functions');
-var rooms = require(__dirname + '/../lib/rooms');
-var debug = true;
-var writtenValue;
+const devicesControl = require(__dirname + '/../lib/devicesControl');
+const enums = require(__dirname + '/lib/testData.json');
+const functions = require(__dirname + '/../lib/functions');
+const rooms = require(__dirname + '/../lib/rooms');
+let debug = true;
+let writtenValue;
 
-var adapter = {
+let adapter = {
     log: {
         warn: function (txt) {
             console.warn(txt);

@@ -20,7 +20,7 @@ var adapter = {
         }
     },
     getForeignObject: function (id, cb) {
-        if (id == 'temperatureC') {
+        if (id === 'temperatureC') {
             cb(null, {
                 _id: 'temperatureC',
                 common: {
@@ -28,7 +28,7 @@ var adapter = {
                     unit: '°C'
                 }
             });
-        } else if (id == 'temperatureF') {
+        } else if (id === 'temperatureF') {
             cb(null, {
                 _id: 'temperatureF',
                 common: {
@@ -36,13 +36,13 @@ var adapter = {
                     unit: '°F'
                 }
             });
-        } else if (id == 'temperatureNone') {
+        } else if (id === 'temperatureNone') {
             cb(null, {
                 _id: 'temperatureNone',
                 common: {
                 }
             });
-        } else if (id == 'someSwitch') {
+        } else if (id === 'someSwitch') {
             cb(null, {
                 _id: 'someSwitch',
                 common: {
@@ -52,7 +52,7 @@ var adapter = {
                 },
                 type: 'state'
             });
-        } else if (id == 'someLevel') {
+        } else if (id === 'someLevel') {
             cb(null, {
                 _id: 'someLevel',
                 common: {
@@ -74,7 +74,7 @@ var adapter = {
         cb(null, {val: 15});
     }
 };
-var systemConfig = {
+let systemConfig = {
     tempUnit: '°F'
 };
 
@@ -187,6 +187,13 @@ describe('Commands: Test temperature', function () {
             if (debug) console.log('sayTemperature(en, unknownId) returned: ' + text);
             expect(text.indexOf('degrees')).to.be.below(0);
             expect(text).to.be.ok;
+            done();
+        });
+    });
+    it('must replace template with the value', function (done) {
+        simpleControl.sayTemperature('en', null, ['temperatureC'], '{system.adapter.text2command.alive} a {system.adapter.text2command.0.connected}', function (text) {
+            if (debug) console.log('sayTemperature(en, C) returned: ' + text);
+            expect(text).to.be.equal('true a true');
             done();
         });
     });
