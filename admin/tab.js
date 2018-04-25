@@ -16,8 +16,9 @@ function Text2Commands(main, instance) {
     function installColResize() {
         if (!$.fn.colResizable) return;
 
-        if ($('#grid-rules').is(':visible')) {
-            $('#grid-rules').colResizable({
+        var $grid = $('#grid-rules');
+        if ($grid.is(':visible')) {
+            $grid.colResizable({
                 liveDrag: true
             });
         } else {
@@ -146,7 +147,7 @@ function Text2Commands(main, instance) {
                             rule.ack = template.ack.default || '';
                         }
                     }
-                    text += '<input class="edit-field" data-index="' + index + '" data-field="ack" value="' + rule.ack + '" style="width: 100%"/></td>';
+                    text += '<input class="edit-field" data-index="' + index + '" data-field="ack" value="' + rule.ack + '" style="width: calc(100% - 27px); margin-right: 2px"/><button class="rule-select-id" data-index="' + index + '" /></td>';
                 }
             } else {
                 text += '<td></td>';
@@ -248,7 +249,7 @@ function Text2Commands(main, instance) {
             });
         });
 
-        $('.rule-up').button({icons: {primary: 'ui-icon ui-icon-arrowthick-1-n'}, text: false}).css({width: 21, height: 21}).click(function () {
+        $('.rule-up').button({icons: {primary: 'ui-icon-arrowthick-1-n'}, text: false}).css({width: 21, height: 21}).click(function () {
             var index = $(this).data('index');
             var rule = that.rules[index - 1];
             that.rules[index - 1] = that.rules[index];
@@ -259,7 +260,7 @@ function Text2Commands(main, instance) {
             }, 100);
         });
 
-        $('.rule-down').button({icons: {primary: 'ui-icon ui-icon-arrowthick-1-s'}, text: false}).css({width: 21, height: 21}).click(function () {
+        $('.rule-down').button({icons: {primary: 'ui-icon-arrowthick-1-s'}, text: false}).css({width: 21, height: 21}).click(function () {
             var index = $(this).data('index');
             var rule = that.rules[index + 1];
             that.rules[index + 1] = that.rules[index];
@@ -279,6 +280,16 @@ function Text2Commands(main, instance) {
                     showRules();
                 }
             });
+        });
+
+        $('.rule-select-id').button({icons: {primary: 'ui-icon-pencil'}, text: false}).css({width: 21, height: 21}).click(function () {
+            var $dlg = $('#dialog-ack-editor');
+            var index = $(this).data('index');
+            var text = $('.edit-field[data-field="ack"][data-index="' + index + '"]').val();
+            $dlg.find('.dialog-ack-editor-textarea')
+                .val(text)
+                .data('index', index);
+            $dlg.dialog('open');
         });
 
         $editArgs.on('change', function () {
@@ -310,7 +321,7 @@ function Text2Commands(main, instance) {
             $(this).trigger('change');
         });
 
-        $('.select-id').button({icons: {primary: 'ui-icon ui-icon-folder-open'}, text: false}).css({width: 21, height: 21}).click(function () {
+        $('.select-id').button({icons: {primary: 'ui-icon-folder-open'}, text: false}).css({width: 21, height: 21}).click(function () {
             var index = $(this).data('index');
             var argIndex = $(this).data('args-index');
             var sid = that.main.initSelectId();
@@ -477,7 +488,29 @@ function Text2Commands(main, instance) {
                 }
             ]
         });
-
+        $('#dialog-ack-editor').dialog({
+            autoOpen: false,
+            modal:    true,
+            width:    510,
+            height:   255,
+            buttons: [
+                {
+                    text: _('Ok'),
+                    click: function () {
+                        $(this).dialog('close');
+                        var index = $(this).find('.dialog-ack-editor-textarea').data('index');
+                        var text = $(this).find('.dialog-ack-editor-textarea').val();
+                        $('.edit-field[data-index="' + index + '"]').val(text).trigger('change');
+                    }
+                },
+                {
+                    text: _('Cancel'),
+                    click: function () {
+                        $(this).dialog('close');
+                    }
+                }
+            ]
+        });
         $('#btn_replace_ids').button({icons: {primary: 'ui-icon-transferthick-e-w'}, text: false}).css({width: 16, height: 16}).click(function () {
             that.$dialogReplace.dialog('open');
         });
@@ -490,6 +523,24 @@ function Text2Commands(main, instance) {
                 $('#' + id).val(newId || '');
             });
         });
+
+        $('.dialog-ack-editor-selectid').button({icons: {primary: 'ui-icon-folder-open'}, text: false}).css({width: 21, height: 21, position: 'absolute', top: 6, right: 6}).click(function () {
+            var $textarea = $('.dialog-ack-editor-textarea');
+            var cursorPosition = $textarea.prop('selectionStart');
+            var sid = that.main.initSelectId();
+            sid.selectId('show', '', function (newId) {
+                if (newId) {
+                    var text = $textarea.val();
+                    text = text.substring(0, cursorPosition) + '{' + newId + '}' + text.substring(cursorPosition);
+                    cursorPosition += newId.length + 2;
+                    $textarea.val(text);
+                    setTimeout(function () {
+                        $textarea.focus().prop('selectionStart', cursorPosition).prop('selectionEnd', cursorPosition);
+                    }, 200);
+                }
+            });
+        });
+
 
         $('#btn_save_settings').button({icons: {primary: 'ui-icon-disk'}, text: false}).css({width: 21, height: 21}).click(function() {
             saveSettings(true);

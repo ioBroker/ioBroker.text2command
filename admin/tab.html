@@ -60,6 +60,16 @@
             display: none;
             opacity: 0.9;
         }
+        .dialog-ack-editor-textarea {
+            width: calc(100% - 27px);
+            margin-right: 2px;
+            height: calc(100% - 10px);
+            resize: none;
+            display: inline-block;
+        }
+        .dialog-ack-editor-selectid {
+
+        }
     </style>
 
 </header>
@@ -160,6 +170,11 @@
                 <td><input id="rules-processor-timeout" style="width: 250px; margin-right: 3px" type="number"/></td>
             </tr>
         </table>
+    </div>
+
+    <div id="dialog-ack-editor" title="Settings" class="translateT" style="display: none">
+        <textarea class="dialog-ack-editor-textarea"></textarea>
+        <button class="dialog-ack-editor-selectid"/>
     </div>
 
     <!--div id="dialog-select-members" style="display: none"></div-->
