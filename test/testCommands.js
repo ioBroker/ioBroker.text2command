@@ -193,7 +193,7 @@ describe('Commands: Test temperature', function () {
     it('must replace template with the value', function (done) {
         simpleControl.sayTemperature('en', null, ['temperatureC'], '{system.adapter.text2command.alive} a {system.adapter.text2command.0.connected}', function (text) {
             if (debug) console.log('sayTemperature(en, C) returned: ' + text);
-            expect(text).to.be.equal('true a true');
+            expect(text).to.be.equal('15 a 15');
             done();
         });
     });
