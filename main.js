@@ -150,6 +150,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
     adapter.log.info('processText: "' + cmd + '"');
     if (cmd === null || cmd === undefined) {
         adapter.log.error('processText: invalid command!');
+        adapter.setState('error', 'invalid command', true);
         //noinspection JSUnresolvedFunction
         simpleAnswers.sayError(systemConfig.language, 'processText: invalid command!', null, null, function (result) {
             cb(result ? ((withLang ? lang + ';' : '') + result) : '');

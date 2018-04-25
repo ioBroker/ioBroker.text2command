@@ -75,11 +75,13 @@ function Text2Commands(main, instance) {
             '<option value="">' + _('Select template') + '</option>';
 
         for (var r in commands) {
+            if (!commands.hasOwnProperty(r)) continue;
+
             if (commands[r].unique) {
                 var found = false;
                 // check if such a template exists
                 for (var i = 0; i < index; i++) {
-                    if (that.rules[i].template == r) {
+                    if (that.rules[i].template === r) {
                         found = true;
                         break;
                     }
@@ -153,12 +155,12 @@ function Text2Commands(main, instance) {
 
         // buttons
         text += '';
-        if (index == 0) {
+        if (!index) {
             text += '<td></td>';
         } else {
             text += '<td style="text-align: center"><button class="rule-up" data-index="' + index + '" /></td>';
         }
-        if (that.rules.length - 1 == index) {
+        if (that.rules.length - 1 === index) {
             text += '<td></td>';
         } else {
             text += '<td style="text-align: center"><button class="rule-down" data-index="' + index + '" /></td>';
@@ -192,8 +194,9 @@ function Text2Commands(main, instance) {
         }
         $('#tab-rules-body').html(text);
 
+        var $editArgs = $('.edit-field-args');
         // Write arguments into it
-        $('.edit-field-args').each(function () {
+        $editArgs.each(function () {
             var $this = $(this);
             var index    = $this.data('index');
             var argIndex = $this.data('args-index');
@@ -216,7 +219,7 @@ function Text2Commands(main, instance) {
         // init buttons and fields
         // init template selector
         $('.select-field').each(function () {
-            $(this).change(function () {
+            $(this).on('change', function () {
                 var index = $(this).data('index');
                 that.rules[index].template = $(this).val();
 
@@ -233,7 +236,7 @@ function Text2Commands(main, instance) {
                 $(this).css('color', 'darkgray');
             }
 
-            $(this).change(function () {
+            $(this).on('change', function () {
                 var index = $(this).data('index');
                 var field = $(this).data('field');
                 if ($(this).attr('type') === 'checkbox') {
@@ -278,7 +281,7 @@ function Text2Commands(main, instance) {
             });
         });
 
-        $('.edit-field-args').change(function () {
+        $editArgs.on('change', function () {
             var $this = $(this);
             if ($this.data('timer')) clearTimeout($this.data('timer'));
             $this.data('timer', setTimeout(function () {
@@ -293,7 +296,7 @@ function Text2Commands(main, instance) {
                 } else {
                     that.rules[index].args[argIndex] = $this.val();
                 }
-                if ($this.data('type') == 'id') {
+                if ($this.data('type') === 'id') {
                     var id = that.rules[index].args[argIndex];
                     $('.id-name[data-index=' + index + '][data-args-index=' + argIndex +  ']').html(
                         (that.main.objects[id] && that.main.objects[id].common) ? that.main.objects[id].common.name || '' : ''
@@ -368,26 +371,27 @@ function Text2Commands(main, instance) {
 
         // Load settings
         that.currentFilter = that.main.config.rulesCurrentFilter || '';
-        $('#rules-filter').val(that.currentFilter);
 
         $('#btn_refresh_text2command').button({icons: {primary: 'ui-icon-refresh'}, text: false}).css({width: 18, height: 18}).click(function () {
             that.init(true, true);
         });
 
         // add filter processing
-        $('#rules-filter').keyup(function () {
-            $(this).trigger('change');
-        }).on('change', function () {
-            if (that.filterTimer) {
-                clearTimeout(that.filterTimer);
-            }
-            that.filterTimer = setTimeout(function () {
-                that.filterTimer = null;
-                that.currentFilter = $('#rules-filter').val();
-                that.main.saveConfig('rulesCurrentFilter', that.currentFilter);
-                showRules();
-            }, 400);
-        });
+        $('#rules-filter')
+            .val(that.currentFilter)
+            .keyup(function () {
+                $(this).trigger('change');
+            }).on('change', function () {
+                if (that.filterTimer) {
+                    clearTimeout(that.filterTimer);
+                }
+                that.filterTimer = setTimeout(function () {
+                    that.filterTimer = null;
+                    that.currentFilter = $('#rules-filter').val();
+                    that.main.saveConfig('rulesCurrentFilter', that.currentFilter);
+                    showRules();
+                }, 400);
+            });
 
         $('#rules-filter-clear').button({icons: {primary: 'ui-icon-close'}, text: false}).css({width: 16, height: 16}).click(function () {
             $('#rules-filter').val('').trigger('change');
@@ -425,7 +429,7 @@ function Text2Commands(main, instance) {
                         $(this).dialog('close');
                         var oldId = $('#dialog-replace-old-id').val();
                         var newId = $('#dialog-replace-new-id').val();
-                        if (oldId == newId) {
+                        if (oldId === newId) {
                             console.warn('IDs re equal');
                             return;
                         }
@@ -491,7 +495,7 @@ function Text2Commands(main, instance) {
             saveSettings(true);
         }).button('disable');
 
-        $('#rules-test').attr('placeholder', _('enter test phrase')).change(function () {
+        $('#rules-test').attr('placeholder', _('enter test phrase')).on('change', function () {
             test();
         }).keydown(function () {
             $(this).trigger('change');
@@ -506,10 +510,10 @@ function Text2Commands(main, instance) {
                 $('#' + id).val(newId).trigger('change');
             });
         });
-        /*$('#rules-sayitInstance').change(function () {
+        /*$('#rules-sayitInstance').on('change', function () {
             saveSettings();
         });
-        $('#rules-sayitInstance').change(function () {
+        $('#rules-sayitInstance').on('change', function () {
             saveSettings();
         });
         */
@@ -540,7 +544,7 @@ function Text2Commands(main, instance) {
             var txt = $('#rules-test').val();
             var matched = txt ? findMatched(txt, JSON.parse(JSON.stringify(that.rules))) : [];
             for (var r = 0; r < that.rules.length; r++) {
-                if (matched.indexOf(r) != -1) {
+                if (matched.indexOf(r) !== -1) {
                     $('.line-rule[data-index=' + r + ']').css('background-color', 'lightblue');
                 } else {
                     $('.line-rule[data-index=' + r + ']').css('background-color', '');
@@ -600,11 +604,11 @@ function Text2Commands(main, instance) {
         var isChanged = false;
 
         // Check triggerId
-        if (obj.native.onTrue && obj.native.onTrue.trigger && obj.native.onTrue.trigger.id == oldId) {
+        if (obj.native.onTrue && obj.native.onTrue.trigger && obj.native.onTrue.trigger.id === oldId) {
             obj.native.onTrue.trigger.id = newId;
             isChanged = true;
         }
-        if (obj.native.onFalse && obj.native.onFalse.trigger && obj.native.onFalse.trigger.id == oldId) {
+        if (obj.native.onFalse && obj.native.onFalse.trigger && obj.native.onFalse.trigger.id === oldId) {
             obj.native.onFalse.trigger.id = newId;
             isChanged = true;
         }
@@ -612,7 +616,7 @@ function Text2Commands(main, instance) {
         var members = obj.native.members;
         if (members && members.length) {
             for (var m = 0; m < members.length; m++) {
-                if (members[m].id == oldId) {
+                if (members[m].id === oldId) {
                     members[m].id = newId;
                     isChanged = true;
                 }
@@ -645,14 +649,25 @@ function Text2Commands(main, instance) {
     };
 
     this.stateChange = function (id, state) {
-        if (id == 'text2command.' + instance + '.response') {
+        if (id === 'text2command.' + instance + '.response') {
             var pos = $('#rules-test').position();
-            $('#response')
-                .html(state.val || '')
-                .stop()
-                .show()
-                .css({top: pos.top + 30, left: pos.left + 5, opacity: 1})
-                .animate({'opacity': 0}, 5000);
+            if (state.val && state.val.match(/^Error\.|^Fehler\.|^Ошибка\./)) {
+                that.main.socket.emit('getState', 'text2command.' + instance + '.error', function (err, eState) {
+                    $('#response')
+                        .html(eState && eState.val ? eState.val : (state.val || ''))
+                        .stop()
+                        .show()
+                        .css({top: pos.top + 30, left: pos.left + 5, opacity: 1})
+                        .animate({'opacity': 0}, 5000);
+                });
+            } else {
+                $('#response')
+                    .html(state.val || '')
+                    .stop()
+                    .show()
+                    .css({top: pos.top + 30, left: pos.left + 5, opacity: 1})
+                    .animate({'opacity': 0}, 5000);
+            }
         }
     };
 }
@@ -663,7 +678,7 @@ var main = {
         if (!main.config) return;
         if (attr) main.config[attr] = value;
 
-        if (typeof storage != 'undefined') {
+        if (typeof storage !== 'undefined') {
             storage.set('adminConfig', JSON.stringify(main.config));
         }
     },
@@ -674,9 +689,10 @@ var main = {
         $dialogMessage.dialog('option', 'title', title || _('Message'));
         $('#dialog-message-text').html(message);
         if (icon) {
-            $('#dialog-message-icon').show();
-            $('#dialog-message-icon').attr('class', '');
-            $('#dialog-message-icon').addClass('ui-icon ui-icon-' + icon);
+            $('#dialog-message-icon')
+                .show()
+                .attr('class', '')
+                .addClass('ui-icon ui-icon-' + icon);
         } else {
             $('#dialog-message-icon').hide();
         }
@@ -686,9 +702,10 @@ var main = {
         $dialogConfirm.dialog('option', 'title', title || _('Message'));
         $('#dialog-confirm-text').html(message);
         if (icon) {
-            $('#dialog-confirm-icon').show();
-            $('#dialog-confirm-icon').attr('class', '');
-            $('#dialog-confirm-icon').addClass('ui-icon ui-icon-' + icon);
+            $('#dialog-confirm-icon')
+                .show()
+                .attr('class', '')
+                .addClass('ui-icon ui-icon-' + icon);
         } else {
             $('#dialog-confirm-icon').hide();
         }
@@ -775,7 +792,7 @@ var $dialogConfirm =        $('#dialog-confirm');
 // Selected view, selected menu page,
 // Selected widget or view page
 // Selected filter
-if (typeof storage != 'undefined') {
+if (typeof storage !== 'undefined') {
     try {
         main.config = storage.get('adminConfig');
         if (main.config) {
@@ -852,7 +869,7 @@ function objectChange(id, obj) {
         if (!main.objects[id]) {
             isNew = true;
         }
-        if (isNew || JSON.stringify(main.objects[id]) != JSON.stringify(obj)) {
+        if (isNew || JSON.stringify(main.objects[id]) !== JSON.stringify(obj)) {
             main.objects[id] = obj;
         }
     } else if (main.objects[id]) {
@@ -952,8 +969,13 @@ main.socket.on('connect', function () {
                 });
 
                 getStates(getObjects);
+                main.socket.emit('subscribeObjects', '*');
+                main.socket.emit('subscribe', 'text2command.' + instance + '.*');
             });
         });
+    } else {
+        main.socket.emit('subscribeObjects', '*');
+        main.socket.emit('subscribe', 'text2command.' + instance + '.*');
     }
     if (main.waitForRestart) {
         location.reload();

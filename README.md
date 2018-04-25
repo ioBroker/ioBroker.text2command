@@ -232,6 +232,9 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
+### 1.2.0 (2018-04-23)
+* (bluefox) Support of Admin3 (but not materialize style)
+
 ### 1.1.7 (2018-04-04)
 * (bluefox) The parsing error was fixed
 
