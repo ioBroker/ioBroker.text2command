@@ -266,7 +266,8 @@ function main() {
         userDeviceControl:  simpleControl.userDeviceControl,
         sendText:           simpleControl.sendText,
 /*        openLock:           openLock,*/
-        userQuery:          simpleControl.userQuery
+        userQuery:          simpleControl.userQuery,
+        buildAnswer:        simpleControl.buildAnswer
     };
 
     //noinspection JSUnresolvedFunction

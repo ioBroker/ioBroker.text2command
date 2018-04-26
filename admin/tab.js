@@ -500,7 +500,7 @@ function Text2Commands(main, instance) {
                         $(this).dialog('close');
                         var index = $(this).find('.dialog-ack-editor-textarea').data('index');
                         var text = $(this).find('.dialog-ack-editor-textarea').val();
-                        $('.edit-field[data-index="' + index + '"]').val(text).trigger('change');
+                        $('.edit-field[data-field="ack"][data-index="' + index + '"]').val(text).trigger('change');
                     }
                 },
                 {

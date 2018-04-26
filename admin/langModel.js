@@ -311,6 +311,28 @@ var commands = {
             }
         }
     },
+    'buildAnswer' : {
+        icon: '',
+        name: {
+            'en': "Create answer",
+            'de': "Antwort erzeugen",
+            'ru': "Создать ответ"
+        },
+        unique:   false,
+        ack: {
+            type: 'text',
+            name: {
+                'en': "Answer (use {objectID} for value)",
+                'de': "Antwort ({objectID} wird mit Wert ersetzt)",
+                'ru': "Ответ ({objectID} заменится значением)"
+            },
+            default: {
+                'en': "{objectID}",
+                'de': "{objectID}",
+                'ru': "{objectID}"
+            }
+        }
+    },
     'goodBoy' : {
         icon: '',
         name: {
@@ -372,13 +394,13 @@ var commands = {
 function findMatched(cmd, _rules) {
     var matchedRules = [];
 
-    cmd = cmd.toLowerCase().replace(/[#'"$&\/\\!?.,;:(){}\^]+/g, ' ').replace(/\s+/g, ' ').trim();
+    cmd = cmd.toLowerCase().replace(/[#'"$&\/\\!?.,;:(){}^]+/g, ' ').replace(/\s+/g, ' ').trim();
 
     var ix = cmd.indexOf(';');
-    if (ix != -1) cmd = cmd.substring(ix + 1);
+    if (ix !== -1) cmd = cmd.substring(ix + 1);
 
     ix = cmd.indexOf('[');
-    if (ix != -1) cmd = cmd.substring(0, ix);
+    if (ix !== -1) cmd = cmd.substring(0, ix);
 
     var cmdWords = cmd.split(' ');
 
@@ -406,7 +428,7 @@ function findMatched(cmd, _rules) {
             for (var j = 0; j < rule.words.length; j++) {
                 if (!rule.words[j]) continue;
 
-                if (rule.words[j].indexOf('/') != -1) rule.words[j] = rule.words[j].split('/');
+                if (rule.words[j].indexOf('/') !== -1) rule.words[j] = rule.words[j].split('/');
 
                 if (typeof rule.words[j] === 'string' && rule.words[j][0] === '[') continue;
 
@@ -415,7 +437,7 @@ function findMatched(cmd, _rules) {
                     var _isFound = false;
 
                     for (var u = 0; u < rule.words[j].length; u++) {
-                        if (cmdWords.indexOf(rule.words[j][u]) != -1) {
+                        if (cmdWords.indexOf(rule.words[j][u]) !== -1) {
                             _isFound = true;
                             break;
                         }

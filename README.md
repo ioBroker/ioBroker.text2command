@@ -108,23 +108,23 @@ You can use patterns in acknowledges:
 
 Following commands are supported:
 
-#### What time is it?
+### What time is it?
 Answer: 14:56 (current time)
 
-#### What is your name?
+### What is your name?
 Answer is customizable. Default: ```My name is Alpha```
 
-#### What is the outside temperature?
+### What is the outside temperature?
 User must specify the state ID, where to read outside temperature.
 Answer is customizable. Default: ```Outside temperature is %s %u```
 **%s** will be replaced by temperature, rounded to integer. **%u** will be replaced by units of this state or by system temperature units. 
 
-#### What is the inside temperature?
+### What is the inside temperature?
 User must specify the state ID, where to read inside temperature.
 Answer is customizable. Default: ```Inside temperature is %s %u```
 **%s** will be replaced by temperature, rounded to integer. **%u** will be replaced by units of this state or by system temperature units. 
 
-#### Switch on/off by function
+### Switch on/off by function
 This command reads information from enums. It uses **enum.functions** to find type of device (e.g light, alarm, music) and **enum.rooms** to detect room name.
 
 Example in german:
@@ -140,7 +140,7 @@ Command accept the numeric value too. It has priority, e.g. in command ```switch
 
 You can define default room in []. E.g ```switch the light on[sleepingroom]```
 
-#### Open/close blinds
+### Open/close blinds
 This command reads information from enums. It uses **enum.functions.blind** to find type blinds or shutter and **enum.rooms** to detect room name.
 
 Key words to move blinds up are: *blinds up*, e.g. ```set blinds up in sleeping room``` 
@@ -151,7 +151,7 @@ You can specify the exactly position of blind in percent, e.g. ```move blinds to
 
 Answer will be generated automatically if desired: ``` in %room%```, where %room% will be replaced by found device type and location. 
 
-#### Switch something on/off
+### Switch something on/off
 User must specify state ID of device, which must be controlled and value, which must be written. 
 
 You should create rule for every position (e.g. for *on* and for *off*).
@@ -175,7 +175,7 @@ If command is like ```Set light level to 50%```, so into the ```hm-rpc.0.light.S
 
 If command is like ```Set light level```, so into the ```hm-rpc.0.light.STATE``` will be written 10 and answer will be ```Level set to 10%```.
 
-#### Ask about something
+### Ask about something
 User must specify state ID of device, which value will be read. 
 This template will answer with information from some state.
 
@@ -184,7 +184,7 @@ E.g.:
 - ```windows opened```, Object ID: ```javascript.0.countOpenedWindows```, Acknowledge: ```Actual %s windows opened```
 - ```temperature sleeping room```, Object ID: ```hm-rpc.0.sleepingRoomSensor.TEMPERATURE```, Acknowledge: ```Actual temperature in sleeping room is %s %u/%s %u```. In this case the answer will be randomized between *Actual temperature in sleeping room is %s %u* and *%s %u*.
 
-#### Send text to state
+### Send text to state
 You can write some text into state. User must specify state ID to write text into it. 
 
 E.g. rule: ```email [to] wife```, Object ID: ```javascript.0.emailToWife```, Acknowledge: ```Email sent```
@@ -197,6 +197,16 @@ Answer is customizable. Default: ```Thank you``` or ```You are welcome```
 
 ### Thank you (Just for fun)
 Answer is customizable. Default: ```No problem``` or ```You are welcome```
+
+### Create answer
+You can generate answer with patterns {objectId} in acknowledge. Used for alexa.
+
+E.g.:
+
+- ```windows opened```, Acknowledge: ```Actual {javascript.0.countOpenedWindows} windows opened```
+- ```temperature sleeping room```, Acknowledge: ```Actual temperature in sleeping room is {hm-rpc.0.sleepingRoomSensor.TEMPERATURE}/{hm-rpc.0.sleepingRoomSensor.TEMPERATURE}```. In this case the answer will be randomized between *Actual temperature in sleeping room is <VALUE>* and *<VALUE>*.
+
+You can read more about bindings/templates here: (Bindings of objects)[https://github.com/ioBroker/ioBroker.vis#bindings-of-objects]
 
 ## External rules with javascript
 There is a possibility to use javascript engine to process commands in text2command.
