@@ -1,3 +1,5 @@
+'use strict';
+
 const expect = require('chai').expect;
 //var setup  = require(__dirname + '/lib/setup');
 const devicesControl = require(__dirname + '/../lib/devicesControl');
