@@ -2,6 +2,8 @@
 /* jshint strict:false */
 /* jslint node: true */
 /* jshint expr: true */
+'use strict';
+
 var expect = require('chai').expect;
 var fs        = require('fs');
 
