@@ -199,14 +199,14 @@ Answer is customizable. Default: ```Thank you``` or ```You are welcome```
 Answer is customizable. Default: ```No problem``` or ```You are welcome```
 
 ### Create answer
-You can generate answer with patterns {objectId} in acknowledge. Used for alexa.
+You can generate answer with bindings {objectId} in acknowledge. Used for alexa.
 
 E.g.:
 
 - ```windows opened```, Acknowledge: ```Actual {javascript.0.countOpenedWindows} windows opened```
-- ```temperature sleeping room```, Acknowledge: ```Actual temperature in sleeping room is {hm-rpc.0.sleepingRoomSensor.TEMPERATURE}/{hm-rpc.0.sleepingRoomSensor.TEMPERATURE}```. In this case the answer will be randomized between *Actual temperature in sleeping room is <VALUE>* and *<VALUE>*.
+- ```temperature sleeping room```, Acknowledge: ```Actual temperature in sleeping room is {t: hm-rpc.0.sleepingRoomSensor.TEMPERATURE; Math.round(t)}/{hm-rpc.0.sleepingRoomSensor.TEMPERATURE; round(1)} degree```. In this case the answer will be randomized between *Actual temperature in sleeping room is <VALUE>* and *<VALUE>*.
 
-You can read more about bindings/templates here: (Bindings of objects)[https://github.com/ioBroker/ioBroker.vis#bindings-of-objects]
+You can read more about bindings here: (Bindings of objects)[https://github.com/ioBroker/ioBroker.vis#bindings-of-objects]
 
 ## External rules with javascript
 There is a possibility to use javascript engine to process commands in text2command.
@@ -243,8 +243,8 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
-### 1.2.1 (2018-04-25)
-* (bluefox) Support of templates in answer {objId}
+### 1.2.2 (2018-04-27)
+* (bluefox) Support of bindings in answer {objId}
 
 ### 1.2.0 (2018-04-23)
 * (bluefox) Support of Admin3 (but not materialize style)

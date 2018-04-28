@@ -1,10 +1,10 @@
 {
     "common": {
         "name": "text2command",
-        "version": "1.2.1",
+        "version": "1.2.2",
         "news": {
-            "1.2.1": {
-              "en": "Support of templates in answer {objId}",
+            "1.2.2": {
+              "en": "Support of bindings in answer {objId}",
               "de": "Unterstützung von Vorlagen in Antwort {objId}",
               "ru": "Поддержка шаблонов в ответе {objId}",
               "pt": "Suporte de templates em resposta {objId}",

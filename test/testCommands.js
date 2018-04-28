@@ -200,6 +200,15 @@ describe('Commands: Test temperature', function () {
         });
     });
 });
+describe('Commands: Build answer', function () {
+    it('must replace bindings with the value', function (done) {
+        simpleControl.buildAnswer('en', null, null, '{a: system.adapter.text2command.alive; a * 2} a {system.adapter.text2command.0.connected;*(3)}', function (text) {
+            if (debug) console.log('Build answer(en) returned: ' + text);
+            expect(text).to.be.equal('30 a 45');
+            done();
+        });
+    });
+});
 
 describe('Commands: Test userQuery', function () {
     it('must return temperature on query', function (done) {
