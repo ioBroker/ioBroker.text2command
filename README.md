@@ -243,7 +243,7 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
-### 1.2.2 (2018-04-27)
+### 1.2.3 (2018-05-01)
 * (bluefox) Support of bindings in answer {objId}
 
 ### 1.2.0 (2018-04-23)

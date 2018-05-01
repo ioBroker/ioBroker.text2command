@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "text2command",
-        "version": "1.2.2",
+        "version": "1.2.3",
         "news": {
-            "1.2.2": {
+            "1.2.3": {
               "en": "Support of bindings in answer {objId}",
               "de": "Unterstützung von Vorlagen in Antwort {objId}",
               "ru": "Поддержка шаблонов в ответе {objId}",
