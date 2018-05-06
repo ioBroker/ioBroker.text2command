@@ -91,7 +91,7 @@ adapter.on('message', function (obj) {
                             //noinspection JSUnresolvedFunction, JSUnresolvedVariable
                             adapter.sendTo(obj.from, obj.command, responseObj, obj.callback);
                         }
-                    }, typeof obj.message === 'object' ? JSON.parse(JSON.stringify(obj.message)):null, obj.from);
+                    }, typeof obj.message === 'object' ? JSON.parse(JSON.stringify(obj.message)) : null, obj.from);
                 }
                 break;
 
