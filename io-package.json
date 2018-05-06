@@ -1,8 +1,19 @@
 {
     "common": {
         "name": "text2command",
-        "version": "1.2.3",
+        "version": "1.2.4",
         "news": {
+            "1.2.4": {
+                "en": "fix",
+                "de": "Fix",
+                "ru": "фиксировать",
+                "pt": "consertar",
+                "nl": "repareren",
+                "fr": "réparer",
+                "it": "fissare",
+                "es": "fijar",
+                "pl": "naprawić"
+            },
             "1.2.3": {
               "en": "Support of bindings in answer {objId}",
               "de": "Unterstützung von Vorlagen in Antwort {objId}",
