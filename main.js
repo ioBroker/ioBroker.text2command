@@ -280,16 +280,15 @@ function main() {
 
     // read system configuration
     //noinspection JSUnresolvedFunction
-    adapter.getForeignObject('system.config', function (err, obj) {
+    adapter.getForeignObject('system.config', (err, obj) => {
         //noinspection JSUnresolvedVariable
         systemConfig = (obj ? obj.common : {}) || {};
         simpleControl.init(systemConfig, adapter);
     });
 
-
     // read all enums
     //noinspection JSUnresolvedFunction
-    adapter.getEnums('', function (err, list) {
+    adapter.getEnums('', (err, list) => {
         enums = list;
         devicesControl.init(enums, adapter);
     });
