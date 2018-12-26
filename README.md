@@ -208,6 +208,8 @@ E.g.:
 
 You can read more about bindings here: (Bindings of objects)[https://github.com/ioBroker/ioBroker.vis#bindings-of-objects]
 
+Additional you can get time until now by {hm-rpc.0.light.STATE.lc;dateinterval} (2 minutes an 12 seconds) or {hm-rpc.0.light.STATE.lc;dateinterval(true)} (2 minutes and 12 seconds **ago**) 
+
 ## External rules with javascript
 There is a possibility to use javascript engine to process commands in text2command.
 To do that you must specify some state in "Processor state ID" (Advanced settings) and to listen on this state in some JS or Blockly script.
