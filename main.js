@@ -293,6 +293,3 @@ function main() {
         devicesControl.init(enums, adapter);
     });
 }
-
-
-
