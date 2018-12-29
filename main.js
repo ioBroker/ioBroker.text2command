@@ -12,13 +12,13 @@
 /*jslint node: true */
 'use strict';
 
-const utils           = require(__dirname + '/lib/utils'); // Get common adapter utils
+const utils           = require('./lib/utils'); // Get common adapter utils
+const adapterName     = require('./package.json').name.split('.').pop();
 //noinspection JSUnresolvedFunction
-const adapter         = utils.Adapter('text2command');
-const model           = require(__dirname + '/admin/langModel');
-const devicesControl  = require(__dirname + '/lib/devicesControl');
-const simpleControl   = require(__dirname + '/lib/simpleControl');
-const simpleAnswers   = require(__dirname + '/lib/simpleAnswers');
+const model           = require('./admin/langModel');
+const devicesControl  = require('./lib/devicesControl');
+const simpleControl   = require('./lib/simpleControl');
+const simpleAnswers   = require('./lib/simpleAnswers');
 
 let rules;
 let commandsCallbacks;
@@ -27,97 +27,106 @@ let enums           = {};
 let processTimeout  = null;
 let processQueue    = [];
 
-adapter.on('stateChange', function (id, state) {
-    //noinspection JSUnresolvedVariable
-    if (state && !state.ack && state.val) {
-        if (id === adapter.namespace + '.text') {
-            //noinspection JSUnresolvedVariable
-            processText(state.val.toString(), sayIt);
-        }
-    } else
-    //noinspection JSUnresolvedVariable
-    if (state && id === adapter.config.processorId && state.ack) {
-        // answer received
-        if (processTimeout) {
-            clearTimeout(processTimeout);
-            processTimeout = null;
-            let task = processQueue.shift();
-            //noinspection JSUnresolvedVariable
-            if (state.val) {
-                if (task.callback) {
-                    //noinspection JSUnresolvedVariable
-                    task.callback((task.withLanguage ? task.language + ';' : '') + state.val);
-                }
-            } else {
-                //noinspection JSUnresolvedVariable
-                processText((task.withLanguage ? task.language + ';' : '') + task.command, task.callback, null, null, true);
-            }
-            setTimeout(useExternalProcessor, 0);
-        }
-    }
-});
+let adapter;
 
-adapter.on('objectChange', function (id/*, obj*/) {
-    if (id.substring(0, 5) === 'enum.') {
-        // read all enums
-        //noinspection JSUnresolvedFunction
-        adapter.getEnums('', function (err, list) {
-            enums = list;
-            devicesControl.init(enums);
-        });
-    }
-});
+function startAdapter(options) {
+    options = options || {};
+    Object.assign(options, {
+        name: adapterName
+    });
 
-adapter.on('ready', function () {
-    main();
-    //noinspection JSUnresolvedFunction
-    adapter.subscribeStates(adapter.namespace + '.text');
-});
+    adapter = new utils.Adapter(options);
 
-// New message arrived. obj is array with current messages
-adapter.on('message', function (obj) {
-    if (obj) {
+    adapter.on('stateChange', (id, state) => {
         //noinspection JSUnresolvedVariable
-        switch (obj.command) {
-            case 'send':
-                if (obj.message) {
-                    //noinspection JSUnresolvedVariable
-                    processText(typeof obj.message === 'object' ? obj.message.text : obj.message, function (res) {
-                        let responseObj = JSON.parse(JSON.stringify(obj.message));
-                        if (typeof responseObj !== 'object') responseObj = {text: responseObj};
-                        responseObj.response = res;
-
-                        if (obj.callback) {
-                            //noinspection JSUnresolvedFunction, JSUnresolvedVariable
-                            adapter.sendTo(obj.from, obj.command, responseObj, obj.callback);
-                        }
-                    }, typeof obj.message === 'object' ? JSON.parse(JSON.stringify(obj.message)) : null, obj.from);
-                }
-                break;
-
-            default:
+        if (state && !state.ack && state.val) {
+            if (id === adapter.namespace + '.text') {
                 //noinspection JSUnresolvedVariable
-                adapter.log.warn('Unknown command: ' + obj.command);
-                break;
+                processText(state.val.toString(), sayIt);
+            }
+        } else
+        //noinspection JSUnresolvedVariable
+        if (state && id === adapter.config.processorId && state.ack) {
+            // answer received
+            if (processTimeout) {
+                clearTimeout(processTimeout);
+                processTimeout = null;
+                let task = processQueue.shift();
+                //noinspection JSUnresolvedVariable
+                if (state.val) {
+                    if (task.callback) {
+                        //noinspection JSUnresolvedVariable
+                        task.callback((task.withLanguage ? task.language + ';' : '') + state.val);
+                    }
+                } else {
+                    //noinspection JSUnresolvedVariable
+                    processText((task.withLanguage ? task.language + ';' : '') + task.command, task.callback, null, null, true);
+                }
+                setTimeout(useExternalProcessor, 0);
+            }
         }
-    }
+    });
 
-    return true;
-});
+    adapter.on('objectChange', (id/*, obj*/) => {
+        if (id.substring(0, 5) === 'enum.') {
+            // read all enums
+            //noinspection JSUnresolvedFunction
+            adapter.getEnums('', function (err, list) {
+                enums = list;
+                devicesControl.init(enums);
+            });
+        }
+    });
+
+    adapter.on('ready', () => {
+        main();
+        //noinspection JSUnresolvedFunction
+        adapter.subscribeStates(adapter.namespace + '.text');
+    });
+
+    // New message arrived. obj is array with current messages
+    adapter.on('message', obj => {
+        if (obj) {
+            //noinspection JSUnresolvedVariable
+            switch (obj.command) {
+                case 'send':
+                    if (obj.message) {
+                        //noinspection JSUnresolvedVariable
+                        processText(typeof obj.message === 'object' ? obj.message.text : obj.message, function (res) {
+                            let responseObj = JSON.parse(JSON.stringify(obj.message));
+                            if (typeof responseObj !== 'object') responseObj = {text: responseObj};
+                            responseObj.response = res;
+
+                            if (obj.callback) {
+                                //noinspection JSUnresolvedFunction, JSUnresolvedVariable
+                                adapter.sendTo(obj.from, obj.command, responseObj, obj.callback);
+                            }
+                        }, typeof obj.message === 'object' ? JSON.parse(JSON.stringify(obj.message)) : null, obj.from);
+                    }
+                    break;
+
+                default:
+                    //noinspection JSUnresolvedVariable
+                    adapter.log.warn('Unknown command: ' + obj.command);
+                    break;
+            }
+        }
+
+        return true;
+    });
+
+    return adapter;
+}
 
 function sayIt(text) {
     //noinspection JSUnresolvedFunction
-    adapter.setState('response', text || '', function (err) {
-        if (err) adapter.log.error(err);
-    });
+    adapter.setState('response', text || '', err => err && adapter.log.error(err));
 
     //noinspection JSUnresolvedVariable
     if (!text || !adapter.config.sayitInstance) return;
 
     //noinspection JSUnresolvedVariable,JSUnresolvedFunction
-    adapter.setForeignState(adapter.config.sayitInstance, text, function (err) {
-        if (err) adapter.log.error(err);
-    });
+    adapter.setForeignState(adapter.config.sayitInstance, text, err => err && adapter.log.error(err));
 }
 
 function useExternalProcessor() {
@@ -130,7 +139,7 @@ function useExternalProcessor() {
 
         // wait x seconds for answer
         //noinspection JSUnresolvedVariable
-        processTimeout = setTimeout(function () {
+        processTimeout = setTimeout(() => {
             processTimeout = null;
 
             // no answer in given period
@@ -152,9 +161,8 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
         adapter.log.error('processText: invalid command!');
         adapter.setState('error', 'invalid command', true);
         //noinspection JSUnresolvedFunction
-        simpleAnswers.sayError(systemConfig.language, 'processText: invalid command!', null, null, function (result) {
-            cb(result ? ((withLang ? lang + ';' : '') + result) : '');
-        });
+        simpleAnswers.sayError(systemConfig.language, 'processText: invalid command!', null, null, result =>
+            cb(result ? ((withLang ? lang + ';' : '') + result) : ''));
         return;
     }
     cmd = cmd.toString();
@@ -214,7 +222,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
         //noinspection JSUnresolvedVariable
         if (commandsCallbacks[rules[matchedRules[m]].template]) {
             //noinspection JSUnresolvedVariable
-            commandsCallbacks[rules[matchedRules[m]].template](lang, cmd, rules[matchedRules[m]].args, rules[matchedRules[m]].ack, function (response) {
+            commandsCallbacks[rules[matchedRules[m]].template](lang, cmd, rules[matchedRules[m]].args, rules[matchedRules[m]].ack, response => {
                 adapter.log.info('Response: ' + response);
 
                 // somehow combine answers
@@ -243,7 +251,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
 
     if (!matchedRules.length) {
         //noinspection JSUnresolvedFunction
-        simpleAnswers.sayIDontUnderstand(lang, cmd, null, null, function (result) {
+        simpleAnswers.sayIDontUnderstand(lang, cmd, null, null, result => {
             if (cb) cb(result ? ((withLang ? lang + ';' : '') + result) : '');
             cb = null;
         });
@@ -292,4 +300,12 @@ function main() {
         enums = list;
         devicesControl.init(enums, adapter);
     });
+}
+
+// If started as allInOne mode => return function to create instance
+if (typeof module !== undefined && module.parent) {
+    module.exports = startAdapter;
+} else {
+    // or start the instance directly
+    startAdapter();
 }

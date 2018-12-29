@@ -135,6 +135,7 @@
         "localLink": "/adapter/text2command/tab.html",
         "type": "logic",
         "noConfig": true,
+        "compact": true,
         "adminTab": {
             "name": {
                 "en": "Text-&gt;Commands",
