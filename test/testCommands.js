@@ -1,12 +1,12 @@
 'use strict';
 
-var expect = require('chai').expect;
-//var setup  = require(__dirname + '/lib/setup');
-var simpleControl = require(__dirname + '/../lib/simpleControl');
-var debug = true;
-var writtenValue;
+const expect = require('chai').expect;
+//const setup  = require('..'/lib/setup');
+const simpleControl = require('../lib/simpleControl');
+const debug = true;
+let writtenValue;
 
-var adapter = {
+const adapter = {
     log: {
         warn: function (txt) {
             console.warn(txt);
