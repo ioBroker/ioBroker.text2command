@@ -94,7 +94,7 @@ var commands = {
         unique:   true,
         words: {
             'en': "inside temperature",
-            'de': "innen//drinnen/intern/drin/innentemperatur kalt/warm/temperatur/innentemperatur",
+            'de': "innen/drinnen/intern/drin/innentemperatur kalt/warm/temperatur/innentemperatur",
             'ru': "температура дома/внутри/квартире"
         },
         args: [{
