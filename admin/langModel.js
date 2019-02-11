@@ -58,7 +58,7 @@ var commands = {
         unique:   true,
         words: {
             'en': "outside temperature",
-            'de': "aussen/draußen kalt/warm/temperatur",
+            'de': "aussen/draußen/außentemperatur kalt/warm/temperatur/außentemperatur",
             'ru': "температура снаружи/улице"
         },
         args: [{
@@ -94,7 +94,7 @@ var commands = {
         unique:   true,
         words: {
             'en': "inside temperature",
-            'de': "intern/drin kalt/warm/temperatur",
+            'de': "innen/drinnen/intern/drin/innentemperatur kalt/warm/temperatur/innentemperatur",
             'ru': "температура дома/внутри/квартире"
         },
         args: [{
@@ -130,9 +130,9 @@ var commands = {
         unique:   true,
         editable: false,
         words: {
-            'en': "switch on/off",
-            'de': "einschalten/ausschalten/ein/aus/an",
-            'ru': "ключи/включи/включить/выключи/выключить/потушить/потуши/зажги/зажечь"
+            'en': "switch on/off/percent",
+            'de': "einschalten/ausschalten/ein/aus/an/prozent",
+            'ru': "ключи/включи/включить/выключи/выключить/потушить/потуши/зажги/зажечь/процентов/процент/процента"
         },
         args: [{
             name: {
@@ -162,9 +162,9 @@ var commands = {
         unique:   true,
         editable: false,
         words: {
-            'en': "blinds up/down",
-            'de': "rollladen/rolllade/fenster/laden/rollo/rolladen auf/zu/hoch/runter/machen",
-            'ru': "ставни/окно/окна/жалюзи поднять/подними/опустить/опусти/открой/открою/открыть/закрыть/закрою/закрой"
+            'en': "blinds up/down/percent",
+            'de': "rollladen/fenster/laden/rollo auf/zu/hoch/runter/prozent",
+            'ru': "ставни/окно/окна/жалюзи поднять/подними/опустить/опусти/открой/открою/открыть/закрыть/закрою/закрой/процентов/процент/процента"
         },
         ack: {
             type: 'checkbox',
