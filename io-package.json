@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "1.2.4",
+        "version": "1.2.5",
         "news": {
+            "1.2.5": {
+                "en": "Description in german corrected\nAdded percent to true/false rules",
+                "de": "Beschreibung in deutsch korrigiert\nProzent zu dentrue/false-Regeln hinzugefügt",
+                "ru": "Описание на немецком языке исправлено\nДобавлен процент к true/false правилам",
+                "pt": "Descrição em alemão corrigido\nPorcentagem adicionada a regras de true/false",
+                "nl": "Beschrijving in Duits gecorrigeerd\nPercentage toegevoegd aan true/false regels",
+                "fr": "Description en allemand corrigée\nAjout du pourcentage aux règles true/false",
+                "it": "Descrizione in tedesco corretta\nAggiunta percentuale alle regole true/false",
+                "es": "Descripción en alemán corregida\nPorcentaje agregado a reglas true/false",
+                "pl": "Opis w języku niemieckim poprawiony\nDodano procent do reguł true/false",
+                "zh-cn": "德语描述已更正\n为真/假规则添加百分比"
+            },
             "1.2.4": {
                 "en": "fix",
                 "de": "Fix",

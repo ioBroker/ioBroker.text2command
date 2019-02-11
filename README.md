@@ -245,6 +245,10 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
+### 1.2.5 (2019-02-12)
+* (unltdnetworx) description in german corrected
+* (unltdnetworx) added percent to true/false rules
+
 ### 1.2.4 (2018-05-05)
 * (Apollon77) Fix
 
