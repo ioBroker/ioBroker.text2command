@@ -2,7 +2,7 @@
 # text2command
 =================
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.text2command.svg)](https://www.npmjs.com/package/iobroker.text2command)
+![Number of Installations](http://iobroker.live/badges/text2command-installed.svg) ![Number of Installations](http://iobroker.live/badges/text2command-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.text2command.svg)](https://www.npmjs.com/package/iobroker.text2command)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.text2command.svg)](https://www.npmjs.com/package/iobroker.text2command)
 [![Tests](https://travis-ci.org/ioBroker/ioBroker.text2command.svg?branch=master)](https://travis-ci.org/ioBroker/ioBroker.text2command)
 
