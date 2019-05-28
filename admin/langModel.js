@@ -162,8 +162,8 @@ var commands = {
         unique:   true,
         editable: false,
         words: {
-            'en': "blinds up/down/percent",
-            'de': "rollladen/fenster/laden/rollo auf/zu/hoch/runter/prozent",
+            'en': "blinds/shutter up/down/percent",
+            'de': "rollladen/rolladen/beschattung/fenster/laden/rollo auf/zu/hoch/runter/prozent",
             'ru': "ставни/окно/окна/жалюзи поднять/подними/опустить/опусти/открой/открою/открыть/закрыть/закрою/закрой/процентов/процент/процента"
         },
         ack: {
