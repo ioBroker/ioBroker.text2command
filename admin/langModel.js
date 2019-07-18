@@ -125,14 +125,14 @@ var commands = {
     'functionOnOff': {
         icon: '',
         name: {
-            'en': "Switch on/off by function",
+            'en': "switch on/off by function",
             'de': "Schalte an oder aus mit Funktion",
             'ru': "Включить/выключить приборы"
         },
         unique:   true,
         editable: false,
         words: {
-            'en': "switch on/off/percent",
+            'en': "switch/turn/set on/off/percent",
             'de': "einschalten/ausschalten/ein/aus/an/prozent",
             'ru': "ключи/включи/включить/выключи/выключить/потушить/потуши/зажги/зажечь/процентов/процент/процента"
         },
@@ -157,15 +157,15 @@ var commands = {
     'blindsUpDown': {
         icon: '',
         name: {
-            'en': "Open/close blinds",
+            'en': "open/close blinds",
             'de': "Rollladen auf/zu machen",
             'ru': "Поднять/опустить ставни"
         },
         unique:   true,
         editable: false,
         words: {
-            'en': "blinds/shutter up/down/percent",
-            'de': "rollladen/rolladen/beschattung/fenster/laden/rollo auf/zu/hoch/runter/prozent",
+            'en': "blind/blinds/shutter/shutters up/down/percent",
+            'de': "rollladen/rollläden/rolladen/rolläden/beschattung/fenster/laden/rollo auf/zu/hoch/runter/prozent",
             'ru': "ставни/окно/окна/жалюзи поднять/подними/опустить/опусти/открой/открою/открыть/закрыть/закрою/закрой/процентов/процент/процента"
         },
         ack: {
