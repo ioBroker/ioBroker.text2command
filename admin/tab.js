@@ -968,60 +968,62 @@ main.socket.on('connect', function () {
             main.acl = acl;
             // Read system configuration
             main.socket.emit('getObject', 'system.config', function (err, data) {
-                main.systemConfig = data;
-                if (!err && main.systemConfig && main.systemConfig.common) {
-                    systemLang = main.systemConfig.common.language;
-                } else {
-                    systemLang = window.navigator.userLanguage || window.navigator.language;
+                main.socket.emit('getObject', 'system.adapter.text2command.' + instance, function (instanceErr, instanceObj) {
+                    main.systemConfig = data;
+                    if (!err && main.systemConfig && main.systemConfig.common) {
+                        systemLang = instanceObj.native.language || main.systemConfig.common.language;
+                    } else {
+                        systemLang = window.navigator.userLanguage || window.navigator.language;
 
-                    if (systemLang !== 'en' && systemLang !== 'de' && systemLang !== 'ru') {
-                        main.systemConfig.common.language = 'en';
-                        systemLang = 'en';
+                        if (systemLang !== 'en' && systemLang !== 'de' && systemLang !== 'ru') {
+                            main.systemConfig.common.language = 'en';
+                            systemLang = 'en';
+                        }
                     }
-                }
 
-                translateAll();
+                    translateAll();
 
-                $dialogMessage.dialog({
-                    autoOpen: false,
-                    modal:    true,
-                    buttons: [
-                        {
-                            text: _('Ok'),
-                            click: function () {
-                                $(this).dialog("close");
+                    $dialogMessage.dialog({
+                        autoOpen: false,
+                        modal:    true,
+                        buttons: [
+                            {
+                                text: _('Ok'),
+                                click: function () {
+                                    $(this).dialog("close");
+                                }
                             }
-                        }
-                    ]
-                });
+                        ]
+                    });
 
-                $dialogConfirm.dialog({
-                    autoOpen: false,
-                    modal:    true,
-                    buttons: [
-                        {
-                            text: _('Ok'),
-                            click: function () {
-                                var cb = $(this).data('callback');
-                                $(this).dialog('close');
-                                if (cb) cb(true);
+                    $dialogConfirm.dialog({
+                        autoOpen: false,
+                        modal:    true,
+                        buttons: [
+                            {
+                                text: _('Ok'),
+                                click: function () {
+                                    var cb = $(this).data('callback');
+                                    $(this).dialog('close');
+                                    if (cb) cb(true);
+                                }
+                            },
+                            {
+                                text: _('Cancel'),
+                                click: function () {
+                                    var cb = $(this).data('callback');
+                                    $(this).dialog('close');
+                                    if (cb) cb(false);
+                                }
                             }
-                        },
-                        {
-                            text: _('Cancel'),
-                            click: function () {
-                                var cb = $(this).data('callback');
-                                $(this).dialog('close');
-                                if (cb) cb(false);
-                            }
-                        }
 
-                    ]
-                });
+                        ]
+                    });
 
-                getStates(getObjects);
-                main.socket.emit('subscribeObjects', '*');
-                main.socket.emit('subscribe', 'text2command.' + instance + '.*');
+                    getStates(getObjects);
+                    main.socket.emit('subscribeObjects', '*');
+                    main.socket.emit('subscribe', 'text2command.' + instance + '.*');
+                })
             });
         });
     } else {

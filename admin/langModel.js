@@ -155,15 +155,15 @@ var commands = {
     'blindsUpDown': {
         icon: '',
         name: {
-            'en': "Open/close blinds",
+            'en': "Open/close blinds/shutters",
             'de': "Rollladen auf/zu machen",
             'ru': "Поднять/опустить ставни"
         },
         unique:   true,
         editable: false,
         words: {
-            'en': "blinds/shutter up/down/percent",
-            'de': "rollladen/rolladen/beschattung/fenster/laden/rollo auf/zu/hoch/runter/prozent",
+            'en': "blind/blinds/shutter/shutters up/down/open/close/percent",
+            'de': "rollladen/rollläden/rolladen/rolläden/beschattung/fenster/laden/rollo auf/zu/hoch/runter/prozent",
             'ru': "ставни/окно/окна/жалюзи поднять/подними/опустить/опусти/открой/открою/открыть/закрыть/закрою/закрой/процентов/процент/процента"
         },
         ack: {
