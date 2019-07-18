@@ -123,14 +123,14 @@ var commands = {
     'functionOnOff': {
         icon: '',
         name: {
-            'en': "Switch on/off by function",
+            'en': "switch/turn/set on/off by function",
             'de': "Schalte an oder aus mit Funktion",
             'ru': "Включить/выключить приборы"
         },
         unique:   true,
         editable: false,
         words: {
-            'en': "switch on/off/percent",
+            'en': "switch/turn/set on/off/percent",
             'de': "einschalten/ausschalten/ein/aus/an/prozent",
             'ru': "ключи/включи/включить/выключи/выключить/потушить/потуши/зажги/зажечь/процентов/процент/процента"
         },
