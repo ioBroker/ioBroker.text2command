@@ -10,6 +10,7 @@ function Text2Commands(main, instance) {
     this.$dialogReplace = $('#dialog-replace');
     this.timer          = null;
     this.rules          = [];
+    this.instanceLang   = '';
 
     instance            = instance || 0;
 
@@ -108,7 +109,7 @@ function Text2Commands(main, instance) {
             text += '<td></td><td></td><td></td><td></td><td></td>';
         } else {
             if (rule.words === undefined) {
-                rule.words = template.words ? (template.words[systemLang] || template.words.en) : '';
+                rule.words = template.words ? (template.words[that.instanceLang] || template.words[systemLang] || template.words.en) : '';
                 saveSettings();
             }
 
@@ -142,7 +143,7 @@ function Text2Commands(main, instance) {
                 } else {
                     if (rule.ack === undefined || rule.ack === null) {
                         if (typeof template.ack.default === 'object') {
-                            rule.ack = template.ack.default[systemLang] || template.ack.default.en;
+                            rule.ack = template.ack.default[that.instanceLang] || template.ack.default[systemLang] || template.ack.default.en;
                         } else {
                             rule.ack = template.ack.default || '';
                         }
@@ -633,6 +634,7 @@ function Text2Commands(main, instance) {
                     that.main.objects['system.adapter.text2command.' + instance] = obj;
                     if (obj.native) {
                         that.rules = obj.native.rules || [];
+                        that.instanceLang = obj.native.language || '';
                     } else {
                         that.rules = [];
                     }
@@ -642,9 +644,10 @@ function Text2Commands(main, instance) {
         } else {
             if (this.main.objects['system.adapter.text2command.' + instance] && this.main.objects['system.adapter.text2command.' + instance].native) {
                 this.rules = this.main.objects['system.adapter.text2command.' + instance].native.rules || [];
+                this.instanceLang = this.main.objects['system.adapter.text2command.' + instance].native.language || '';
             } else {
                 this.rules = [];
-            }
+            } 
             showRules();
         }
     };
@@ -959,7 +962,7 @@ main.socket.on('objectChange', function (id, obj) {
 main.socket.on('stateChange', function (id, obj) {
     setTimeout(stateChange, 0, id, obj);
 });
-main.socket.on('connect', function () {
+main.socket.on('connect', function () {  
     $('#connecting').hide();
     if (firstConnect) {
         firstConnect = false;
@@ -968,62 +971,60 @@ main.socket.on('connect', function () {
             main.acl = acl;
             // Read system configuration
             main.socket.emit('getObject', 'system.config', function (err, data) {
-                main.socket.emit('getObject', 'system.adapter.text2command.' + instance, function (instanceErr, instanceObj) {
-                    main.systemConfig = data;
-                    if (!err && main.systemConfig && main.systemConfig.common) {
-                        systemLang = instanceObj.native.language || main.systemConfig.common.language;
-                    } else {
-                        systemLang = window.navigator.userLanguage || window.navigator.language;
+                main.systemConfig = data;
+                if (!err && main.systemConfig && main.systemConfig.common) {
+                    systemLang = main.systemConfig.common.language;
+                } else {
+                    systemLang = window.navigator.userLanguage || window.navigator.language;
 
-                        if (systemLang !== 'en' && systemLang !== 'de' && systemLang !== 'ru') {
-                            main.systemConfig.common.language = 'en';
-                            systemLang = 'en';
-                        }
+                    if (systemLang !== 'en' && systemLang !== 'de' && systemLang !== 'ru') {
+                        main.systemConfig.common.language = 'en';
+                        systemLang = 'en';
                     }
+                }
 
-                    translateAll();
+                translateAll();
 
-                    $dialogMessage.dialog({
-                        autoOpen: false,
-                        modal:    true,
-                        buttons: [
-                            {
-                                text: _('Ok'),
-                                click: function () {
-                                    $(this).dialog("close");
-                                }
+                $dialogMessage.dialog({
+                    autoOpen: false,
+                    modal:    true,
+                    buttons: [
+                        {
+                            text: _('Ok'),
+                            click: function () {
+                                $(this).dialog("close");
                             }
-                        ]
-                    });
+                        }
+                    ]
+                });
 
-                    $dialogConfirm.dialog({
-                        autoOpen: false,
-                        modal:    true,
-                        buttons: [
-                            {
-                                text: _('Ok'),
-                                click: function () {
-                                    var cb = $(this).data('callback');
-                                    $(this).dialog('close');
-                                    if (cb) cb(true);
-                                }
-                            },
-                            {
-                                text: _('Cancel'),
-                                click: function () {
-                                    var cb = $(this).data('callback');
-                                    $(this).dialog('close');
-                                    if (cb) cb(false);
-                                }
+                $dialogConfirm.dialog({
+                    autoOpen: false,
+                    modal:    true,
+                    buttons: [
+                        {
+                            text: _('Ok'),
+                            click: function () {
+                                var cb = $(this).data('callback');
+                                $(this).dialog('close');
+                                if (cb) cb(true);
                             }
+                        },
+                        {
+                            text: _('Cancel'),
+                            click: function () {
+                                var cb = $(this).data('callback');
+                                $(this).dialog('close');
+                                if (cb) cb(false);
+                            }
+                        }
 
-                        ]
-                    });
+                    ]
+                });
 
-                    getStates(getObjects);
-                    main.socket.emit('subscribeObjects', '*');
-                    main.socket.emit('subscribe', 'text2command.' + instance + '.*');
-                })
+                getStates(getObjects);
+                main.socket.emit('subscribeObjects', '*');
+                main.socket.emit('subscribe', 'text2command.' + instance + '.*');
             });
         });
     } else {
