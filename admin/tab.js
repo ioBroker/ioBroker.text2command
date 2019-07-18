@@ -10,6 +10,7 @@ function Text2Commands(main, instance) {
     this.$dialogReplace = $('#dialog-replace');
     this.timer          = null;
     this.rules          = [];
+    this.nativeLanguage = '';
 
     instance            = instance || 0;
 
@@ -35,7 +36,7 @@ function Text2Commands(main, instance) {
         if (arg.default && !value && value !== 0) {
             rule.args = rule.args || [];
             if (typeof arg.default === 'object') {
-                value = arg.default[systemLang] || arg.default.en;
+                value = arg.default[that.nativeLanguage || systemLang] || arg.default.en;
             } else {
                 value = arg.default;
             }
@@ -108,7 +109,7 @@ function Text2Commands(main, instance) {
             text += '<td></td><td></td><td></td><td></td><td></td>';
         } else {
             if (rule.words === undefined) {
-                rule.words = template.words ? (template.words[systemLang] || template.words.en) : '';
+                rule.words = template.words ? (template.words[that.nativeLanguage || systemLang] || template.words.en) : '';
                 saveSettings();
             }
 
@@ -117,7 +118,7 @@ function Text2Commands(main, instance) {
             if (!words) words = template.words || '';
 
             if (typeof words === 'object') {
-                words = words[systemLang] || words.en;
+                words = words[that.nativeLanguage || systemLang] || words.en;
             }
 
             text += '<td><input style="width: 100%" class="edit-field" data-index="' + index + '" data-field="words" value="' + words + '" ' + ' ' + (commands[rule.template].editable === false ? 'readonly' : '') + '/></td>';
@@ -142,7 +143,7 @@ function Text2Commands(main, instance) {
                 } else {
                     if (rule.ack === undefined || rule.ack === null) {
                         if (typeof template.ack.default === 'object') {
-                            rule.ack = template.ack.default[systemLang] || template.ack.default.en;
+                            rule.ack = template.ack.default[that.nativeLanguage || systemLang] || template.ack.default.en;
                         } else {
                             rule.ack = template.ack.default || '';
                         }
@@ -224,7 +225,7 @@ function Text2Commands(main, instance) {
                 var index = $(this).data('index');
                 that.rules[index].template = $(this).val();
 
-                if (!commands[that.rules[index].template].editable) {
+                if (!that.rules[index].template || !commands[that.rules[index].template].editable) {
                     that.rules[index].words = undefined;
                 }
                 showRules();
@@ -359,6 +360,7 @@ function Text2Commands(main, instance) {
                     obj.native.rules            = that.rules;
                     obj.native.sayitInstance    = $('#rules-sayitInstance').val();
                     obj.native.language         = $('#rules-language').val();
+                    that.nativeLanguage         = obj.native.language || '';
                     obj.native.processorId      = $('#rules-processor').val();
                     obj.native.processorTimeout = parseInt($('#rules-processor-timeout').val(), 10) || 1000;
 
@@ -633,6 +635,7 @@ function Text2Commands(main, instance) {
                     that.main.objects['system.adapter.text2command.' + instance] = obj;
                     if (obj.native) {
                         that.rules = obj.native.rules || [];
+                        that.nativeLanguage = obj.native.language || '';
                     } else {
                         that.rules = [];
                     }
@@ -640,11 +643,14 @@ function Text2Commands(main, instance) {
                 }
             });
         } else {
-            if (this.main.objects['system.adapter.text2command.' + instance] && this.main.objects['system.adapter.text2command.' + instance].native) {
-                this.rules = this.main.objects['system.adapter.text2command.' + instance].native.rules || [];
+            var obj = this.main.objects['system.adapter.text2command.' + instance];
+            if (obj && obj.native) {
+                this.rules = obj.native.rules || [];
+                this.nativeLanguage = obj.native.language || '';
             } else {
                 this.rules = [];
             }
+
             showRules();
         }
     };

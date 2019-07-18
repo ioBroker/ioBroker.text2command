@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "1.2.5",
+        "version": "1.3.0",
         "news": {
+            "1.3.0": {
+                "en": "Using the defined language by words",
+                "de": "Die definierte Sprache in Worten verwenden",
+                "ru": "Использование определенного языка по словам",
+                "pt": "Usando a linguagem definida por palavras",
+                "nl": "De gedefinieerde taal gebruiken met woorden",
+                "fr": "Utiliser le langage défini par des mots",
+                "it": "Usando la lingua definita per parole",
+                "es": "Uso del lenguaje definido por palabras.",
+                "pl": "Używanie zdefiniowanego języka słowami",
+                "zh-cn": "通过单词使用定义的语言"
+            },
             "1.2.5": {
                 "en": "Description in german corrected\nAdded percent to true/false rules",
                 "de": "Beschreibung in deutsch korrigiert\nProzent zu dentrue/false-Regeln hinzugefügt",
@@ -58,51 +70,6 @@
                 "it": "L'errore di analisi è stato risolto",
                 "es": "El error de análisis fue corregido",
                 "pl": "Naprawiono błąd parsowania"
-            },
-            "1.1.6": {
-                "en": "Check if units are undefined",
-                "de": "Prüfung ob Einheiten gesetzt sind",
-                "ru": "Проверка единиц измерения"
-            },
-            "1.1.5": {
-                "en": "Support of iobroker.pro",
-                "de": "unterstützung von iobroker.pro",
-                "ru": "Поддержка iobroker.pro"
-            },
-            "1.1.4": {
-                "en": "translations",
-                "de": "Übersetzungen",
-                "ru": "перевод"
-            },
-            "1.1.3": {
-                "en": "russian translations",
-                "de": "russiche Übersetzungen",
-                "ru": "русский перевод"
-            },
-            "1.1.2": {
-                "en": "fix russian temperature text\nextend rule control device with option 0/1\nuse by control of devices min/max values if set",
-                "de": "Ändere russichen Text für Temerature\nErweitert Relgel Schalte an mit Option 0/1\nBenutze bei Steuerung von Geräten min/max falls existiert",
-                "ru": "Изменить русский текст для температуры\nРасширено правило Включить приборы опцией 0/1\nИспользовать для управления приборами значения min/max"
-            },
-            "1.1.1": {
-                "en": "add additional info for external text processor",
-                "de": "add additional info for external text processor",
-                "ru": "add additional info for external text processor"
-            },
-            "1.1.0": {
-                "en": "add text processor state ID",
-                "de": "add text processor state ID",
-                "ru": "add text processor state ID"
-            },
-            "1.0.2": {
-                "en": "fix error with detection of numeric values",
-                "de": "fix error with detection of numeric values",
-                "ru": "fix error with detection of numeric values"
-            },
-            "1.0.1": {
-                "en": "fix: send text command",
-                "de": "fix: send text command",
-                "ru": "fix: send text command"
             }
         },
         "title": "Text to command",

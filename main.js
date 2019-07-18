@@ -8,8 +8,9 @@
 //
 //
 
-/* jshint -W097 */// jshint strict:false
-/*jslint node: true */
+/* jshint -W097 */
+/* jshint strict: false */
+/* jslint node: true */
 'use strict';
 
 const utils = require('@iobroker/adapter-core'); // Get common adapter utils
@@ -157,11 +158,12 @@ function useExternalProcessor() {
 
 function processText(cmd, cb, messageObj, from, afterProcessor) {
     adapter.log.info('processText: "' + cmd + '"');
+    let lang = adapter.config.language || systemConfig.language || 'en';
     if (cmd === null || cmd === undefined) {
         adapter.log.error('processText: invalid command!');
         adapter.setState('error', 'invalid command', true);
         //noinspection JSUnresolvedFunction
-        simpleAnswers.sayError(systemConfig.language, 'processText: invalid command!', null, null, result =>
+        simpleAnswers.sayError(lang, 'processText: invalid command!', null, null, result =>
             cb(result ? ((withLang ? lang + ';' : '') + result) : ''));
         return;
     }
@@ -170,18 +172,16 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
 
     let withLang = false;
     let ix       = cmd.indexOf(';');
-    let lang;
 
     cmd = cmd.toLowerCase();
 
     // extract language
     if (ix !== -1) {
         withLang    = true;
-        lang        = cmd.substring(0, ix);
+        lang        = cmd.substring(0, ix) || lang;
         cmd         = cmd.substring(ix + 1);
         originalCmd = originalCmd.substring(ix + 1);
     }
-    lang = lang || adapter.config.language || systemConfig.language || 'en';
 
     // if desired processing by javascript
     //noinspection JSUnresolvedVariable
@@ -252,11 +252,11 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
     if (!matchedRules.length) {
         //noinspection JSUnresolvedFunction
         simpleAnswers.sayIDontUnderstand(lang, cmd, null, null, result => {
-            if (cb) cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+            cb && cb(result ? ((withLang ? lang + ';' : '') + result) : '');
             cb = null;
         });
     } else if (!count) {
-        if (cb) cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+        cb && cb(result ? ((withLang ? lang + ';' : '') + result) : '');
         cb = null;
     }
 }

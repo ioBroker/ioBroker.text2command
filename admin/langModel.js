@@ -1,7 +1,9 @@
-/* jshint -W097 */// jshint strict:false
+/* jshint -W097 */
+/* jshint strict: false */
 /*jslint node: true */
 'use strict';
 
+// TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
 // TODO alarm on/off
 // alarm clock set/off
 var commands = {
