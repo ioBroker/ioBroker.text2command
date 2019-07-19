@@ -274,6 +274,12 @@ First the command will be processed with your javascript and if javascript will 
 
 ## Changelog
 
+### 1.3.1 (2019-07-18)
+
+* (unltdnetworx) changed copyright year to 2019, according to issue #41
+* (unltdnetworx) additional words for blinds and functions in english and german
+* (unltdnetworx) fixed typo
+
 ### 1.3.0 (2019-07-18)
 
 * (bluefox) Using the defined language by words
