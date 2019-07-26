@@ -443,7 +443,7 @@ function Text2Commands(main, instance) {
                         var oldId = $('#dialog-replace-old-id').val();
                         var newId = $('#dialog-replace-new-id').val();
                         if (oldId === newId) {
-                            console.warn('IDs re equal');
+                            console.warn('IDs are equal');
                             return;
                         }
 

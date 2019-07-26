@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "1.3.0",
+        "version": "1.3.1",
         "news": {
+            "1.3.1": {
+                "en": "changes due to git conventions, command additions and typo",
+                "de": "Änderungen aufgrund von Git-Konventionen, Befehlsergänzungen und Tippfehler",
+                "ru": "изменения из-за соглашений git, дополнений команд и опечаток",
+                "pt": "mudanças devido a convenções de git, adições de comando e erro de digitação",
+                "nl": "veranderingen als gevolg van git conventies, opdracht toevoegingen en typfouten",
+                "fr": "modifications dues aux conventions git, aux ajouts de commandes et aux fautes de frappe",
+                "it": "modifiche dovute a convenzioni git, aggiunte di comandi e errori di battitura",
+                "es": "Cambios debidos a convenciones de git, adiciones de comandos y errores tipográficos.",
+                "pl": "zmiany spowodowane konwencjami git, dodatkami do poleceń i literówką",
+                "zh-cn": "由git约定，命令添加和拼写错误引起的更改"
+            },
             "1.3.0": {
                 "en": "Using the defined language by words",
                 "de": "Die definierte Sprache in Worten verwenden",
