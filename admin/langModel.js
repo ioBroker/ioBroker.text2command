@@ -1,6 +1,6 @@
 /* jshint -W097 */
 /* jshint strict: false */
-/*jslint node: true */
+/* jslint node: true */
 'use strict';
 
 // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
