@@ -1,32 +1,171 @@
 html {
-  height: 100%;
+	height: 100%;
 }
 body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+	margin: 0;
+	padding: 0;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
 }
 /* scrollbar */
 *::-webkit-scrollbar-track {
-  background-color: #ccc;
+	background-color: #ccc;
 }
 *::-webkit-scrollbar {
-  width: 6px;
-  background-color: #ccc;
+	width: 6px;
+	background-color: #ccc;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #575757;
+	background-color: #575757;
 }
-
+/* * {
+	box-sizing: border-box;
+} */
 
 #root {
-  height: 100%;
+	height: 100%;
 }
 .App {
-  height: 100%;
+	height: 100%;
 }
+
+/* Modal window */
+
+.MuiDialog-paperWidthSm {
+	width: 100%;
+}
+.MuiDialogContent-root {
+	display: flex;
+	flex-direction: column;
+}
+.select {
+	width: 100%;
+	margin-top: 25px;
+}
+
+.select .MuiInputBase-root {
+	width: 40%;
+}
+
+/*  /Modal window */
+
+/* Left-side */
+
+.left-bar__content {
+	padding: 20px;
+}
+
+.custom-item {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	align-items: center;
+	padding-left: 12px;
+}
+
+.sub-text {
+	color: #575757;
+	font-size: 12px;
+	text-align: center;
+	margin-top: 2px;
+}
+.left-bar .MuiListItemIcon-root {
+	justify-content: flex-end;
+}
+
+.MuiListItem-root {
+	cursor: pointer;
+	transition: background-color 0.3s linear;
+}
+
+/* Left-side */
+
+/* Right side */
+
+.right-bar__container {
+	width: 45%;
+	/* background-color: #f8f8f8; */
+	text-align: center;
+	margin: 0 auto;
+	padding: 20px 20px 30px 20px;
+	box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+		0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.custom-card {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.right-bar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin-top: 30px;
+}
+
+.right-bar .MuiFormControl-root {
+	width: fit-content;
+	flex-basis: 45%;
+	align-self: flex-end;
+}
+.right-bar .MuiTypography-gutterBottom {
+	margin-bottom: 30px;
+}
+
+.right-bar .MuiSwitch-input {
+	align-self: flex-start;
+	display: flex;
+	flex-basis: 45%;
+}
+
+.right-bar .MuiSwitch-switchBase {
+	color: #fff;
+}
+/* Right side */
+
+/* Media */
+
+@media screen and (max-width: 1550px) {
+	.right-bar__container {
+		width: 50%;
+	}
+}
+
+@media screen and (max-width: 1200px) {
+	.right-bar__container {
+		width: 60%;
+	}
+}
+
+@media screen and (max-width: 900px) {
+	.right-bar__container {
+		width: 80%;
+	}
+	.right-bar {
+		padding: 0 10px;
+	}
+}
+
+@media screen and (max-width: 530px) {
+	.custom-card {
+		flex-direction: column;
+	}
+	.right-bar .MuiFormControl-root {
+		align-self: flex-start;
+		margin-top: 10px;
+	}
+}
+
+@media screen and (max-width: 400px) {
+}
+
+/* Media */
