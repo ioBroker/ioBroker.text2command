@@ -75,7 +75,9 @@ export default class RightBar extends Component {
                     value={value}
                     label={label}
                     labelPlacement={'start'}
-                    control={<Switch onClick={onSwitchChange} />}
+                    control={
+                        <Switch onClick={onSwitchChange} color={'primary'} disabled={disabled} />
+                    }
                     key={key}
                 />
             </FormControl>
@@ -87,9 +89,9 @@ export default class RightBar extends Component {
             localRule: { words, interupt, args, ack, editable },
         } = state;
 
-        console.log(this.state);
-
         const { t } = I18n;
+
+        const handlers = this.createTextInputHandlers();
         const createInput = this.createInput;
 
         const isKeyWordsDisabled = () => {
@@ -97,21 +99,12 @@ export default class RightBar extends Component {
             else if (editable === false) return true;
         };
 
-        const handleTextInputChange = (event, name) => {
-            this.setState({
-                localRule: {
-                    ...this.state.localRule,
-                    [name]: event.target.value,
-                },
-            });
-        };
-
         return [
             {
                 title: `${t('Keywords')}:`,
                 item: createInput({
                     value: this.state.localRule?.words || '',
-                    onChange: event => handleTextInputChange(event, 'words'),
+                    onChange: handlers.keywordsText,
                     keywords: true,
                     disabled: isKeyWordsDisabled(),
                     key: 'keywords',
@@ -120,14 +113,7 @@ export default class RightBar extends Component {
             },
             {
                 title: `${t('Interupt')}:`,
-                item: (
-                    <Switch
-                        size="medium"
-                        color={'primary'}
-                        checked={interupt}
-                        onClick={this.handleSwitchChange}
-                    />
-                ),
+                item: createInput({ label: 'Прервать обработку', type: 'checkbox' }),
                 id: 2,
             },
             {
@@ -138,7 +124,6 @@ export default class RightBar extends Component {
                     type: args && args[0]?.type,
                     onClick: this.handleSetDialogClick.bind(this, args && args[0]),
                     key: 'Param1',
-                    onSwitchChange: () => console.log('ok'),
                 }),
                 id: 3,
             },
@@ -147,20 +132,8 @@ export default class RightBar extends Component {
                 item: createInput({
                     value: args && this.state.localRule.args[1]?.default,
                     label: args && args[1]?.name,
-                    onChange: event =>
-                        this.setState({
-                            localRule: {
-                                ...this.state.localRule,
-                                args: this.state.localRule.args.map((arg, index) =>
-                                    index > 0
-                                        ? {
-                                              ...arg,
-                                              default: event.target.value,
-                                          }
-                                        : arg
-                                ),
-                            },
-                        }),
+                    onChange: handlers.param2Text,
+                    onSwitchChange: handlers.param1OnSwitch,
                     key: 'Param2',
                 }),
                 id: 4,
@@ -172,19 +145,74 @@ export default class RightBar extends Component {
                     label: ack && ack.name,
                     type: ack && ack.type,
                     key: 'Confirmation text',
+                    onChange: handlers.confirmText,
+                    onSwitchChange: handlers.confirmOnSwitch,
                 }),
                 id: 5,
             },
         ];
     };
 
-    handleSwitchChange = () => {
-        this.setState({
-            localRule: {
-                ...this.state.localRule,
-                interupt: !this.state.localRule.interupt,
+    createTextInputHandlers = () => {
+        const _this = this;
+
+        return {
+            keywordsText(event) {
+                _this.setState({
+                    localRule: {
+                        ..._this.state.localRule,
+                        words: event.target.value,
+                    },
+                });
             },
-        });
+            param2Text(event) {
+                _this.setState({
+                    localRule: {
+                        ..._this.state.localRule,
+                        args: _this.state.localRule.args.map((arg, index) =>
+                            index > 0
+                                ? {
+                                      ...arg,
+                                      default: event.target.value,
+                                  }
+                                : arg
+                        ),
+                    },
+                });
+            },
+            confirmText(event) {
+                _this.setState({
+                    localRule: {
+                        ..._this.state.localRule,
+                        ack: {
+                            ..._this.state.localRule.ack,
+                            default: event.target.value,
+                        },
+                    },
+                });
+            },
+            param1OnSwitch() {
+                _this.setState({
+                    localRule: {
+                        ..._this.state.localRule,
+                        args: _this.state.localRule.args.map((arg, index) =>
+                            !index ? { ...arg, default: !arg.default } : arg
+                        ),
+                    },
+                });
+            },
+            confirmOnSwitch() {
+                _this.setState({
+                    localRule: {
+                        ..._this.state.localRule,
+                        ack: {
+                            ..._this.state.localRule.ack,
+                            default: !_this.state.localRule.ack.default,
+                        },
+                    },
+                });
+            },
+        };
     };
 
     handleSetDialogClick = arg => {
@@ -216,7 +244,7 @@ export default class RightBar extends Component {
             localRule: { name },
             newOptionsData,
         } = this.state;
-
+        console.log(this.state);
         const handleSubmit = this.handleDialogSelectIdSubmit;
 
         return (
