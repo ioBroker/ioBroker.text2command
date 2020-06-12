@@ -46,11 +46,11 @@ body {
 }
 .select {
 	width: 100%;
-	margin-top: 25px;
+	margin-bottom: 20px;
 }
 
 .select .MuiInputBase-root {
-	width: 40%;
+	width: 50%;
 }
 
 /*  /Modal window */
@@ -89,11 +89,11 @@ body {
 /* Right side */
 
 .right-bar__container {
-	width: 45%;
+	width: 70%;
 	/* background-color: #f8f8f8; */
 	text-align: center;
 	margin: 0 auto;
-	padding: 20px 20px 30px 20px;
+	padding: 20px 30px 30px 30px;
 	box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
 		0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
@@ -114,7 +114,7 @@ body {
 
 .right-bar .MuiFormControl-root {
 	width: fit-content;
-	flex-basis: 45%;
+	flex-basis: 60%;
 	align-self: flex-end;
 }
 .right-bar .MuiTypography-gutterBottom {
@@ -133,18 +133,6 @@ body {
 /* Right side */
 
 /* Media */
-
-@media screen and (max-width: 1550px) {
-	.right-bar__container {
-		width: 50%;
-	}
-}
-
-@media screen and (max-width: 1200px) {
-	.right-bar__container {
-		width: 60%;
-	}
-}
 
 @media screen and (max-width: 900px) {
 	.right-bar__container {

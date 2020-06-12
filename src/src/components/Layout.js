@@ -7,6 +7,7 @@ import LeftBar from "./LeftBar";
 import RightBar from "./RightBar";
 import { commands } from "@admin/langModel";
 import Modal from "./Modal";
+import PropTypes from "prop-types";
 
 export default class Layout extends Component {
 	state = {
@@ -14,11 +15,11 @@ export default class Layout extends Component {
 		currentRules: [],
 		isOpen: false,
 		isEdit: false,
-		selectedRule: "",
+		selectedRule: ""
 	};
 	componentDidMount() {
 		this.setState({
-			commands: this.getSelectedLanguageCommands(),
+			commands: this.getSelectedLanguageCommands()
 		});
 	}
 
@@ -28,13 +29,14 @@ export default class Layout extends Component {
 		const setAckIfDefined = (obj, command) => {
 			if (command.ack?.name) {
 				obj.ack = {
-					name: command.ack.name[lang],
+					...obj.ack,
+					name: command.ack.name[lang]
 				};
 			}
-			if (command.ack?.defaultValue) {
+			if (command.ack?.default) {
 				obj.ack = {
 					...obj.ack,
-					defaultValue: command.ack.default[lang],
+					default: command.ack.default[lang]
 				};
 			}
 		};
@@ -44,8 +46,8 @@ export default class Layout extends Component {
 				obj.args = [
 					{
 						...command.args[0],
-						name: command.args[0].name[lang],
-					},
+						name: command.args[0].name[lang]
+					}
 				];
 			}
 			if (command.args && command.args[1]?.name) {
@@ -53,8 +55,8 @@ export default class Layout extends Component {
 					...obj.args,
 					{
 						...command.args[1],
-						name: command.args[1].name[lang],
-					},
+						name: command.args[1].name[lang]
+					}
 				];
 			}
 		};
@@ -67,12 +69,12 @@ export default class Layout extends Component {
 					...rest,
 					rule: command?.name[lang],
 					unique: command.unique,
-					words: command.words && command.words[lang],
+					words: command.words && command.words[lang]
 				};
 				setArgsIfDefined(obj, command);
 				setAckIfDefined(obj, command);
 				return obj;
-			}),
+			})
 		];
 	};
 
@@ -86,7 +88,7 @@ export default class Layout extends Component {
 
 	handleOpen = () => {
 		this.setState({
-			isOpen: true,
+			isOpen: true
 		});
 	};
 	handleClose = () => {
@@ -102,15 +104,15 @@ export default class Layout extends Component {
 					...this.state.currentRules,
 					{
 						...selectedRule,
-						id,
-					},
-				],
+						id
+					}
+				]
 			});
 		const editSelectedRule = () =>
 			this.setState({
 				currentRules: this.state.currentRules.map(item =>
 					item.id === selectedRule.id ? selectedRule : item
-				),
+				)
 			});
 
 		this.state.isEdit ? editSelectedRule() : addNewRule();
@@ -125,22 +127,22 @@ export default class Layout extends Component {
 			? commands.find(command => command.rule === shortDataRule.rule)
 			: {};
 		this.setState({
-			selectedRule: { ...rule, ...shortDataRule },
+			selectedRule: { ...rule, ...shortDataRule }
 		});
 	};
 
 	handleEdit = id => {
 		this.setState({
-			isEdit: true,
+			isEdit: true
 		});
 		this.selectRule(id);
 		this.handleOpen();
 	};
 
-	finishEdit = () => {
+	finishEdit = rule => {
 		this.setState({
 			isEdit: false,
-			selectRule: "",
+			selectedRule: rule
 		});
 	};
 
@@ -152,7 +154,7 @@ export default class Layout extends Component {
 				<SplitterLayout
 					percentage
 					// primaryMinSize={15}
-					secondaryInitialSize={85}
+					secondaryInitialSize={75}
 					secondaryMinSize={65}
 				>
 					<LeftBar
@@ -163,7 +165,7 @@ export default class Layout extends Component {
 						selectRule={this.selectRule}
 						selectedRule={selectedRule}
 					/>
-					<RightBar selectedRule={selectedRule} />
+					<RightBar selectedRule={selectedRule} socket={this.props.socket} />
 				</SplitterLayout>
 				<Modal
 					commands={commands}
@@ -179,3 +181,7 @@ export default class Layout extends Component {
 		);
 	}
 }
+
+Layout.propTypes = {
+	socket: PropTypes.object.isRequired
+};

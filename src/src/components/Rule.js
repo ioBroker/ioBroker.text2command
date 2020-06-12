@@ -1,13 +1,7 @@
-import React, {
-	useRef,
-	useImperativeHandle,
-	useCallback,
-	useMemo,
-} from "react";
+import React, { useRef, useImperativeHandle, useCallback } from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { ListItemIcon, Paper, IconButton } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { ListItemIcon, IconButton } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import { DropTarget, DragSource } from "react-dnd";
 
@@ -21,7 +15,7 @@ const Rule = React.forwardRef((props, ref) => {
 		connectDropTarget,
 		id,
 		selectRule,
-		selectedRule,
+		selectedRule
 	} = props;
 
 	const elementRef = useRef(null);
@@ -29,23 +23,23 @@ const Rule = React.forwardRef((props, ref) => {
 	connectDropTarget(elementRef);
 	const opacity = isDragging ? 0 : 1;
 	useImperativeHandle(ref, () => ({
-		getNode: () => elementRef.current,
+		getNode: () => elementRef.current
 	}));
 
-	const handleEditMemo = useCallback(() => handleEdit(id), [id]);
-	const selectRuleMemo = useCallback(() => selectRule(id), [id]);
+	const handleEditMemo = useCallback(() => handleEdit(id), [id, handleEdit]);
+	const selectRuleMemo = useCallback(() => selectRule(id), [id, selectRule]);
 
 	return (
 		<div
 			ref={elementRef}
 			style={{
-				opacity,
+				opacity
 			}}
 		>
 			<ListItem
 				onClick={selectRuleMemo}
 				style={{
-					backgroundColor: selectedRule.id === id ? "rgba(0, 0, 0, 0.06)" : "",
+					backgroundColor: selectedRule.id === id ? "rgba(0, 0, 0, 0.06)" : ""
 				}}
 			>
 				<ListItemText primary={name} secondary={rule} />
@@ -60,7 +54,7 @@ const Rule = React.forwardRef((props, ref) => {
 });
 
 const ItemTypes = {
-	RULE: "rule",
+	RULE: "rule"
 };
 
 export default DropTarget(
@@ -91,7 +85,7 @@ export default DropTarget(
 			props.moveRule(dragIndex, hoverIndex);
 
 			monitor.getItem().index = hoverIndex;
-		},
+		}
 	},
 	connect => ({ connectDropTarget: connect.dropTarget() })
 )(
@@ -100,12 +94,12 @@ export default DropTarget(
 		{
 			beginDrag: props => ({
 				id: props.id,
-				index: props.index,
-			}),
+				index: props.index
+			})
 		},
 		(connect, monitor) => ({
 			connectDragSource: connect.dragSource(),
-			isDragging: monitor.isDragging(),
+			isDragging: monitor.isDragging()
 		})
 	)(Rule)
 );

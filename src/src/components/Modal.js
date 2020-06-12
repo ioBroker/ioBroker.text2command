@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import I18n from "@iobroker/adapter-react/i18n";
 import InputLabel from "@material-ui/core/InputLabel";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormGroup from "@material-ui/core/FormGroup";
+import { v4 as uuid } from "uuid";
 
 import {
 	DialogActions,
@@ -36,7 +36,7 @@ export default class Modal extends Component {
 
 	cleanState = () => {
 		if (this.props.isEdit) {
-			this.props.finishEdit();
+			this.props.finishEdit(this.state.localRule);
 		}
 		this.setState({
 			localRule: this.defaultRule,
@@ -72,19 +72,13 @@ export default class Modal extends Component {
 		const handleInputChange = event =>
 			this.setState({
 				localRule: {
-					...this.state.localRule,
+					...localRule,
 					name: event.target.value,
 				},
 			});
 
 		return (
 			<FormGroup>
-				<TextField
-					id="standard-basic"
-					label={I18n.t("Name")}
-					value={localRule.name}
-					onChange={handleInputChange}
-				></TextField>
 				<div className="select">
 					<InputLabel shrink id="rule">
 						{I18n.t("Rule")}
@@ -92,15 +86,19 @@ export default class Modal extends Component {
 					<Select
 						onChange={handleSelectChange}
 						value={localRule.rule}
-						labelId={"rule"}
-					>
-						{commands?.map((option, index) => (
-							<MenuItem key={index} value={option.rule}>
+						labelId={"rule"}>
+						{commands?.map(option => (
+							<MenuItem key={uuid()} value={option.rule}>
 								{option.rule}
 							</MenuItem>
 						))}
 					</Select>
 				</div>
+				<TextField
+					id="standard-basic"
+					label={I18n.t("Name")}
+					value={localRule.name}
+					onChange={handleInputChange}></TextField>
 			</FormGroup>
 		);
 	};
@@ -113,8 +111,7 @@ export default class Modal extends Component {
 				{this.createForm()}
 				<DialogActions>
 					<Button
-						onClick={this.props.handleSubmit.bind(this, this.state.localRule)}
-					>
+						onClick={this.props.handleSubmit.bind(this, this.state.localRule)}>
 						Ok
 					</Button>
 					<Button onClick={handleClose}>Cancel</Button>
@@ -123,14 +120,12 @@ export default class Modal extends Component {
 		);
 	};
 	render() {
-		console.log(this.state);
 		return (
 			<Dialog
 				open={this.props.isOpen}
 				onClose={this.props.handleClose}
 				onExited={this.cleanState}
-				onEnter={this.setLRuleOnMount}
-			>
+				onEnter={this.setLRuleOnMount}>
 				<DialogTitle>
 					{I18n.t(!this.props.isEdit ? "Create new rule" : "Edit rule")}
 				</DialogTitle>
@@ -146,6 +141,6 @@ Modal.propTypes = {
 	isEdit: PropTypes.bool.isRequired,
 	commands: PropTypes.arrayOf(PropTypes.object.isRequired),
 	isOpen: PropTypes.bool.isRequired,
-	currentRules: PropTypes.object.isRequired,
+	currentRules: PropTypes.array.isRequired,
 	finishEdit: PropTypes.func.isRequired,
 };

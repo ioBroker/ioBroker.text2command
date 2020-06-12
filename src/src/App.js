@@ -1,17 +1,13 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import GenericApp from "@iobroker/adapter-react/GenericApp";
 import Connection from "./components/Connection";
 import Loader from "@iobroker/adapter-react/Components/Loader";
 import { PROGRESS } from "./components/Connection";
-import clsx from "clsx";
 import I18n from "@iobroker/adapter-react/i18n";
 import Layout from "./components/Layout";
 
 // Icons
-import LogoPng from "./assets/text2command.png";
 
 const styles = theme => ({
 	root: {},
@@ -19,8 +15,8 @@ const styles = theme => ({
 		width: 32,
 		height: 32,
 		padding: theme.spacing(1),
-		display: "inline-block",
-	},
+		display: "inline-block"
+	}
 });
 
 class App extends GenericApp {
@@ -36,7 +32,7 @@ class App extends GenericApp {
 			it: require("./i18n/it"),
 			es: require("./i18n/es"),
 			pl: require("./i18n/pl"),
-			"zh-cn": require("./i18n/zh-cn"),
+			"zh-cn": require("./i18n/zh-cn")
 		};
 
 		// init translations
@@ -85,17 +81,17 @@ class App extends GenericApp {
 			onProgress: progress => {
 				if (progress === PROGRESS.CONNECTING) {
 					this.setState({
-						connected: false,
+						connected: false
 					});
 				} else if (progress === PROGRESS.READY) {
 					this.setState({
 						connected: true,
-						progress: 100,
+						progress: 100
 					});
 				} else {
 					this.setState({
 						connected: true,
-						progress: Math.round((PROGRESS.READY / progress) * 100),
+						progress: Math.round((PROGRESS.READY / progress) * 100)
 					});
 				}
 			},
@@ -107,7 +103,7 @@ class App extends GenericApp {
 				console.log(scripts);
 				const newState = {
 					lang: this.socket.systemLang,
-					ready: true,
+					ready: true
 				};
 
 				try {
@@ -124,7 +120,7 @@ class App extends GenericApp {
 			onError: error => {
 				console.error(error);
 				this.showError(error);
-			},
+			}
 		});
 	}
 
@@ -135,18 +131,12 @@ class App extends GenericApp {
 
 		return (
 			<div className="App">
-				<AppBar position="static">
-					<Toolbar>
-						<img className={this.props.classes.logo} src={LogoPng} alt="logo" />
-						<h4>{I18n.t("Text to command configurator")}</h4>
-					</Toolbar>
-				</AppBar>
 				{/* { // just an example
                     this.state.config.rules.map(rule => <div className={ this.props.classes.rule}>
                         { JSON.stringify(rule) }
                     </div>)
                 } */}
-				<Layout />
+				<Layout socket={this.socket} />
 				{this.renderError()}
 			</div>
 		);

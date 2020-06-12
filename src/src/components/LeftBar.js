@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import SaveIcon from "@material-ui/icons/Save";
 import CachedIcon from "@material-ui/icons/Cached";
+import { v4 as uuid } from "uuid";
 import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
 import PropTypes from "prop-types";
@@ -17,28 +18,28 @@ export default class LeftBar extends Component {
 			moveRule,
 			handleEdit,
 			rules,
-			selectRule,
+			selectRule
 		} = this.props;
 		const mainIcons = [
 			{
 				icon: <AddIcon />,
-				handler: () => this.props.handleOpen(),
+				handler: () => this.props.handleOpen()
 			},
 			{
 				icon: <SaveIcon />,
-				handler: () => console.log("save"),
+				handler: () => console.log("save")
 			},
 			{
 				icon: <CachedIcon />,
-				handler: () => console.log("refresh"),
-			},
+				handler: () => console.log("refresh")
+			}
 		];
 		return (
 			<div className="left-bar">
 				<div className="left-bar__header">
 					<div>
-						{mainIcons.map(({ icon, handler }, index) => (
-							<IconButton onClick={handler} key={index}>
+						{mainIcons.map(({ icon, handler }) => (
+							<IconButton onClick={handler} key={uuid()}>
 								{icon}
 							</IconButton>
 						))}
@@ -73,5 +74,5 @@ LeftBar.propTypes = {
 	handleOpen: PropTypes.func.isRequired,
 	rules: PropTypes.array.isRequired,
 	moveRule: PropTypes.func.isRequired,
-	selectedRule: PropTypes.object.isRequired,
+	selectedRule: PropTypes.object.isRequired
 };
