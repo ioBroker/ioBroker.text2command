@@ -1,13 +1,15 @@
 import React, { Component } from "react";
-import SplitterLayout from "react-splitter-layout";
 import { v4 as uuid } from "uuid";
-import I18n from "@iobroker/adapter-react/i18n";
-import "react-splitter-layout/lib/index.css";
+import SplitterLayout from "react-splitter-layout";
+import PropTypes from "prop-types";
+
 import LeftBar from "./LeftBar";
 import RightBar from "./RightBar";
 import { commands } from "@admin/langModel";
 import Modal from "./Modal";
-import PropTypes from "prop-types";
+import I18n from "@iobroker/adapter-react/i18n";
+
+import "react-splitter-layout/lib/index.css";
 
 export default class Layout extends Component {
 	state = {

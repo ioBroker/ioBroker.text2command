@@ -200,10 +200,13 @@ export default class RightBar extends Component {
 
 				{this.state.showDialog && (
 					<DialogSelectID
-						connection={this.props.socket}
+						socket={this.props.socket}
 						title={"Select ID"}
 						onClose={() => this.setState({ showDialog: false })}
-						onOk={() => this.setState({ showDialog: false })}
+						onOk={ids => {
+							console.log(ids);
+							this.setState({ showDialog: false })
+						}}
 					/>
 				)}
 			</div>

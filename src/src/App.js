@@ -1,10 +1,13 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import GenericApp from "@iobroker/adapter-react/GenericApp";
-import Connection from "./components/Connection";
+import { MuiThemeProvider } from '@material-ui/core/styles';
+
+import Connection from "@iobroker/adapter-react/Connection";
 import Loader from "@iobroker/adapter-react/Components/Loader";
-import { PROGRESS } from "./components/Connection";
+import { PROGRESS } from "@iobroker/adapter-react/Connection";
 import I18n from "@iobroker/adapter-react/i18n";
+import GenericApp from "@iobroker/adapter-react/GenericApp";
+
 import Layout from "./components/Layout";
 
 // Icons
@@ -112,10 +115,11 @@ class App extends GenericApp {
 					console.log(error);
 				}
 
-				this.readConfig().then(config => {
-					console.log(config);
-					this.setState({ config });
-				});
+				this.readConfig()
+					.then(config => {
+						console.log(config);
+						this.setState({ config });
+					});
 			},
 			onError: error => {
 				console.error(error);
@@ -126,19 +130,23 @@ class App extends GenericApp {
 
 	render() {
 		if (!this.state.config) {
-			return <Loader theme={this.state.themeType} />;
+			return <MuiThemeProvider theme={ this.state.theme }>
+				<Loader theme={this.state.themeType} />
+			</MuiThemeProvider>;
 		}
 
 		return (
-			<div className="App">
-				{/* { // just an example
-                    this.state.config.rules.map(rule => <div className={ this.props.classes.rule}>
-                        { JSON.stringify(rule) }
-                    </div>)
-                } */}
-				<Layout socket={this.socket} />
-				{this.renderError()}
-			</div>
+			<MuiThemeProvider theme={ this.state.theme }>
+				<div className="App">
+					{/* { // just an example
+						this.state.config.rules.map(rule => <div className={ this.props.classes.rule}>
+							{ JSON.stringify(rule) }
+						</div>)
+					} */}
+					<Layout socket={this.socket} />
+					{this.renderError()}
+				</div>
+			</MuiThemeProvider>
 		);
 	}
 }
