@@ -79,6 +79,7 @@ export default class Layout extends Component {
                     {
                         ...selectedRule,
                         id,
+                        interupt: true,
                     },
                 ],
             });

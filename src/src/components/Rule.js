@@ -1,8 +1,10 @@
-import React, { useRef, useImperativeHandle, useCallback } from 'react';
+import React, { useRef, useImperativeHandle, useCallback, Children } from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { ListItemIcon, IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
+import DoneIcon from '@material-ui/icons/Done';
+import CloseIcon from '@material-ui/icons/Close';
 import { DropTarget, DragSource } from 'react-dnd';
 
 const Rule = React.forwardRef((props, ref) => {
@@ -16,6 +18,7 @@ const Rule = React.forwardRef((props, ref) => {
         id,
         selectRule,
         selectedRule,
+        interupt,
     } = props;
 
     const elementRef = useRef(null);
@@ -28,6 +31,13 @@ const Rule = React.forwardRef((props, ref) => {
 
     const handleEditMemo = useCallback(() => handleEdit(id), [id, handleEdit]);
     const selectRuleMemo = useCallback(() => selectRule(id), [id, selectRule]);
+
+    const icons = [
+        {
+            icon: interupt ? <DoneIcon color="primary" /> : <CloseIcon color="primary" />,
+        },
+        { icon: <EditIcon />, handleClick: handleEditMemo },
+    ];
 
     return (
         <div
@@ -42,9 +52,13 @@ const Rule = React.forwardRef((props, ref) => {
                 }}>
                 <ListItemText primary={name} secondary={rule} />
                 <ListItemIcon>
-                    <IconButton onClick={handleEditMemo}>
-                        <EditIcon />
-                    </IconButton>
+                    {Children.toArray(
+                        icons.map(({ icon, handleClick }, index) => (
+                            <IconButton disabled={!index} onClick={handleClick}>
+                                {icon}
+                            </IconButton>
+                        ))
+                    )}
                 </ListItemIcon>
             </ListItem>
         </div>

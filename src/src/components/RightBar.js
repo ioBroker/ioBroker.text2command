@@ -39,10 +39,12 @@ export default class RightBar extends Component {
             this.setState({
                 localRule: {
                     ...this.props.selectedRule,
-                    interupt: true,
                 },
             });
-            if (this.props.selectedRule !== this.state.localRule) {
+            if (
+                this.props.selectedRule.name !== this.state.localRule.name &&
+                this.props.selectedRule.id !== this.state.localRule.id
+            ) {
                 this.props.updateRule(this.state.localRule);
             }
         }
@@ -95,7 +97,7 @@ export default class RightBar extends Component {
 
     createOptionsData = (state = this.state) => {
         const {
-            localRule: { words, interupt, args, ack, editable },
+            localRule: { words, args, ack, editable, interupt },
         } = state;
 
         const { t } = I18n;
@@ -122,7 +124,12 @@ export default class RightBar extends Component {
             },
             {
                 title: `${t('Interupt')}:`,
-                item: createInput({ label: 'Прервать обработку', type: 'checkbox' }),
+                item: createInput({
+                    label: 'Прервать обработку',
+                    type: 'checkbox',
+                    value: interupt,
+                    onSwitchChange: handlers.interuptOnSwitch,
+                }),
                 id: 2,
             },
             {
@@ -220,6 +227,15 @@ export default class RightBar extends Component {
                         },
                     },
                 });
+            },
+            async interuptOnSwitch() {
+                await _this.setState({
+                    localRule: {
+                        ..._this.state.localRule,
+                        interupt: !_this.state.localRule.interupt,
+                    },
+                });
+                await _this.props.updateRule(_this.state.localRule);
             },
         };
     };
