@@ -82,14 +82,8 @@ export default class Layout extends Component {
                     },
                 ],
             });
-        const editSelectedRule = () =>
-            this.setState({
-                currentRules: this.state.currentRules.map(item =>
-                    item.id === selectedRule.id ? selectedRule : item
-                ),
-            });
 
-        this.state.isEdit ? editSelectedRule() : addNewRule();
+        this.state.isEdit ? this.updateRule(selectedRule) : addNewRule();
         this.handleClose();
     };
 
@@ -102,6 +96,14 @@ export default class Layout extends Component {
             : {};
         this.setState({
             selectedRule: { ...rule, ...shortDataRule },
+        });
+    };
+
+    updateRule = selectedRule => {
+        this.setState({
+            currentRules: this.state.currentRules.map(item =>
+                item.id === selectedRule.id ? selectedRule : item
+            ),
         });
     };
 
@@ -155,7 +157,11 @@ export default class Layout extends Component {
                         selectRule={this.selectRule}
                         selectedRule={selectedRule}
                     />
-                    <RightBar selectedRule={selectedRule} socket={this.props.socket} />
+                    <RightBar
+                        selectedRule={selectedRule}
+                        socket={this.props.socket}
+                        updateRule={this.updateRule}
+                    />
                 </SplitterLayout>
                 <Modal
                     commands={commands}

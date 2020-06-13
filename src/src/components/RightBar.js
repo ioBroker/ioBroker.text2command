@@ -42,6 +42,9 @@ export default class RightBar extends Component {
                     interupt: true,
                 },
             });
+            if (this.props.selectedRule !== this.state.localRule) {
+                this.props.updateRule(this.state.localRule);
+            }
         }
     }
 
@@ -57,6 +60,7 @@ export default class RightBar extends Component {
         onSwitchChange,
     }) => {
         if (!value && !label && !keywords) return;
+
         return type !== 'checkbox' ? (
             <TextField
                 label={label}
@@ -76,7 +80,12 @@ export default class RightBar extends Component {
                     label={label}
                     labelPlacement={'start'}
                     control={
-                        <Switch onClick={onSwitchChange} color={'primary'} disabled={disabled} />
+                        <Switch
+                            onClick={onSwitchChange}
+                            color={'primary'}
+                            disabled={disabled}
+                            checked={!!value}
+                        />
                     }
                     key={key}
                 />
@@ -123,6 +132,7 @@ export default class RightBar extends Component {
                     label: args && args[0]?.name,
                     type: args && args[0]?.type,
                     onClick: this.handleSetDialogClick.bind(this, args && args[0]),
+                    onSwitchChange: handlers.param1OnSwitch,
                     key: 'Param1',
                 }),
                 id: 3,
@@ -133,7 +143,6 @@ export default class RightBar extends Component {
                     value: args && this.state.localRule.args[1]?.default,
                     label: args && args[1]?.name,
                     onChange: handlers.param2Text,
-                    onSwitchChange: handlers.param1OnSwitch,
                     key: 'Param2',
                 }),
                 id: 4,
@@ -196,7 +205,7 @@ export default class RightBar extends Component {
                     localRule: {
                         ..._this.state.localRule,
                         args: _this.state.localRule.args.map((arg, index) =>
-                            !index ? { ...arg, default: !arg.default } : arg
+                            !index ? { ...arg, default: !arg.default ? true : !arg.default } : arg
                         ),
                     },
                 });
@@ -282,4 +291,5 @@ export default class RightBar extends Component {
 RightBar.propTypes = {
     selectedRule: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     socket: PropTypes.object.isRequired,
+    updateRule: PropTypes.func.isRequired,
 };
