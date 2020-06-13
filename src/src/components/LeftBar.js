@@ -79,5 +79,5 @@ LeftBar.propTypes = {
     handleOpen: PropTypes.func.isRequired,
     rules: PropTypes.array.isRequired,
     moveRule: PropTypes.func.isRequired,
-    selectedRule: PropTypes.object.isRequired,
+    selectedRule: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
 };

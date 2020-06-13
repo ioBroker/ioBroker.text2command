@@ -69,7 +69,7 @@ export default class Layout extends Component {
         this.setState({ isOpen: false });
     };
 
-    handleSubmit = selectedRule => {
+    handleSubmit = (selectedRule, isError) => {
         const id = uuid();
 
         const addNewRule = () =>
@@ -85,6 +85,7 @@ export default class Layout extends Component {
             });
 
         this.state.isEdit ? this.updateRule(selectedRule) : addNewRule();
+        if (isError) return;
         this.handleClose();
     };
 
@@ -119,7 +120,7 @@ export default class Layout extends Component {
     finishEdit = editableRule => {
         let updatedRule;
 
-        const { rule, id, name } = editableRule;
+        const { rule, id, name, interupt } = editableRule;
         const initialSelectedRule = this.state.selectedRule;
 
         if (initialSelectedRule.rule !== rule) {
@@ -129,6 +130,7 @@ export default class Layout extends Component {
                 name,
                 rule,
                 id,
+                interupt,
             };
         } else {
             updatedRule = editableRule;

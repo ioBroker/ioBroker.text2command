@@ -15,9 +15,19 @@ export default class Modal extends Component {
         name: I18n.t('New rule'),
         id: '',
     };
+
     state = {
         localRule: this.defaultRule,
     };
+
+    existingNames = [];
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.currentRules !== this.props.currentRules) {
+            this.existingNames = this.props.currentRules.map(rule => rule.name);
+        }
+    }
+
     setRuleOnMount = () => {
         const { isEdit, selectedRule } = this.props;
         if (isEdit) {
@@ -39,11 +49,26 @@ export default class Modal extends Component {
     getAvaliableOptions = () => {
         const { commands, currentRules, selectedRule } = this.props;
 
-        return commands
-            ?.filter(
-                option => !(option.unique && currentRules.find(item => item?.rule === option.rule))
-            )
-            .concat(selectedRule);
+        const uniqueOptions = commands?.filter(
+            option => !(option.unique && currentRules.find(item => item?.rule === option.rule))
+        );
+
+        return selectedRule.unique ? uniqueOptions.concat(selectedRule) : uniqueOptions;
+    };
+
+    getUniqueName = ruleName => {
+        const matchingNames = this.existingNames.filter(
+            name => name.slice(0, name.length - 2) === ruleName
+        );
+
+        if (matchingNames.length) {
+            let name = matchingNames[matchingNames.length - 1];
+            let lastChar = name.slice(name.length - 1);
+
+            return name.slice(0, name.length - 1) + ++lastChar;
+        }
+
+        return `${ruleName} 1`;
     };
 
     createForm = () => {
@@ -55,17 +80,22 @@ export default class Modal extends Component {
                 localRule: {
                     ...localRule,
                     rule: event.target.value,
-                    name: event.target.value + ' 1',
+                    name: this.getUniqueName(event.target.value),
+                    isError: '',
                 },
             });
 
-        const handleInputChange = event =>
+        const handleInputChange = event => {
             this.setState({
                 localRule: {
                     ...localRule,
                     name: event.target.value,
+                    isError: this.existingNames.includes(event.target.value)
+                        ? `${I18n.t('Name already exist')}`
+                        : '',
                 },
             });
+        };
 
         return (
             <FormGroup>
@@ -83,9 +113,10 @@ export default class Modal extends Component {
                 </div>
                 <TextField
                     id="standard-basic"
-                    label={I18n.t('Name')}
+                    label={this.state.localRule.isError || I18n.t('Name')}
                     value={localRule.name}
-                    onChange={handleInputChange}></TextField>
+                    onChange={handleInputChange}
+                    error={!!this.state.localRule.isError}></TextField>
             </FormGroup>
         );
     };
@@ -97,7 +128,12 @@ export default class Modal extends Component {
             <DialogContent>
                 {this.createForm()}
                 <DialogActions>
-                    <Button onClick={this.props.handleSubmit.bind(this, this.state.localRule)}>
+                    <Button
+                        onClick={this.props.handleSubmit.bind(
+                            this,
+                            this.state.localRule,
+                            this.state.localRule.isError
+                        )}>
                         Ok
                     </Button>
                     <Button onClick={handleClose}>Cancel</Button>
