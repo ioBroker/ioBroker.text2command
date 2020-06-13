@@ -36,11 +36,17 @@ export default class RightBar extends Component {
             prevProps.selectedRule?.name !== this.props.selectedRule?.name ||
             prevState.localRule?.name !== this.state.localRule?.name
         ) {
-            this.setState({
-                localRule: {
-                    ...this.props.selectedRule,
-                },
-            });
+            if (!this.props.selectedRule.name) {
+                this.setState({
+                    localRule: this.defaultState,
+                });
+            } else {
+                this.setState({
+                    localRule: {
+                        ...this.props.selectedRule,
+                    },
+                });
+            }
             if (
                 this.props.selectedRule.name !== this.state.localRule.name &&
                 this.props.selectedRule.id !== this.state.localRule.id

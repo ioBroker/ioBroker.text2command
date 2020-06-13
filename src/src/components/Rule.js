@@ -6,6 +6,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import { DropTarget, DragSource } from 'react-dnd';
+import PropTypes from 'prop-types';
 
 const Rule = React.forwardRef((props, ref) => {
     const {
@@ -114,3 +115,8 @@ export default DropTarget(
         })
     )(Rule)
 );
+
+Rule.propTypes = {
+    removeRule: PropTypes.func.isRequired,
+    selectedRule: PropTypes.object.isRequired,
+};

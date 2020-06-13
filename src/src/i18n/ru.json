@@ -32,5 +32,6 @@
     "Param": "Параметр",
     "Interupt": "Прервать",
     "Confirmation text": "Текст подтверждения",
-    "Name already exist": "Данное имя уже существует"
+    "Name already exist": "Данное имя уже существует",
+    "Test phrase": "Тестовая фраза"
 }

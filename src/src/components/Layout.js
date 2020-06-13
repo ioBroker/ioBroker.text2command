@@ -15,7 +15,7 @@ export default class Layout extends Component {
         currentRules: [],
         isOpen: false,
         isEdit: false,
-        selectedRule: '',
+        selectedRule: {},
     };
     componentDidMount() {
         this.setState({
@@ -142,6 +142,13 @@ export default class Layout extends Component {
         });
     };
 
+    removeRule = id => {
+        this.setState({
+            currentRules: this.state.currentRules.filter(rule => rule.id !== id),
+            selectedRule: {},
+        });
+    };
+
     render() {
         console.log(this.state);
         const { commands, isEdit, isOpen, currentRules, selectedRule } = this.state;
@@ -159,6 +166,7 @@ export default class Layout extends Component {
                         handleEdit={this.handleEdit}
                         selectRule={this.selectRule}
                         selectedRule={selectedRule}
+                        removeRule={this.removeRule}
                     />
                     <RightBar
                         selectedRule={selectedRule}
