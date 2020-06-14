@@ -45,7 +45,21 @@ class App extends GenericApp {
 				.substring(0, 2)
 				.toLowerCase()
 		);
-		this.adapterName = "text2command";
+	}
+
+	onConnectionReady() {
+		const newState = {};
+
+		this.socket.getSystemConfig()
+			.then(systemConfig => {
+				newState.systemConfig = systemConfig;
+				return this.readConfig()
+			})
+			.then(config => {
+				console.log(config);
+				this.setState({ config, ready: true });
+			})
+			.catch(e => this.showError(e));
 	}
 
 	readConfig() {
@@ -74,58 +88,6 @@ class App extends GenericApp {
 					);
 				}
 			});
-	}
-
-	componentDidMount() {
-		this.port = window.location.port === "3000" ? 8081 : window.location.port;
-
-		this.socket = new Connection({
-			name: this.adapterName,
-			onProgress: progress => {
-				if (progress === PROGRESS.CONNECTING) {
-					this.setState({
-						connected: false
-					});
-				} else if (progress === PROGRESS.READY) {
-					this.setState({
-						connected: true,
-						progress: 100
-					});
-				} else {
-					this.setState({
-						connected: true,
-						progress: Math.round((PROGRESS.READY / progress) * 100)
-					});
-				}
-			},
-			port: this.port,
-			onReady: async (objects, scripts) => {
-				I18n.setLanguage(this.socket.systemLang);
-
-				console.log(objects);
-				console.log(scripts);
-				const newState = {
-					lang: this.socket.systemLang,
-					ready: true
-				};
-
-				try {
-					newState.systemConfig = await this.socket.getSystemConfig();
-				} catch (error) {
-					console.log(error);
-				}
-
-				this.readConfig()
-					.then(config => {
-						console.log(config);
-						this.setState({ config });
-					});
-			},
-			onError: error => {
-				console.error(error);
-				this.showError(error);
-			}
-		});
 	}
 
 	render() {
