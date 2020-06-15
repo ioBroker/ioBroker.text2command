@@ -301,11 +301,11 @@ export default class RightBar extends Component {
 
                 {this.state.showDialog && (
                     <DialogSelectID
-                        socket={this.props.socket}
+                        connection={this.props.socket}
                         title={'Select ID'}
                         onClose={id => {
                             console.log(id);
-                            this.setState({ showDialog: false })
+                            this.setState({ showDialog: false });
                         }}
                         onOk={handleSubmit}
                     />

@@ -36,7 +36,7 @@ body {
 
 /* Modal window */
 
-.MuiDialog-paperWidthSm {
+.App .MuiPaper-root-149 {
     width: 100%;
 }
 .MuiDialogContent-root {
