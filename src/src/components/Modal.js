@@ -138,13 +138,14 @@ class Modal extends Component {
     };
 
     setDialogContent = () => {
-        const { handleClose } = this.props;
+        const { handleClose, handleSubmit } = this.props;
+
         return (
             <DialogContent>
                 {this.createForm()}
                 <DialogActions>
                     <Button
-                        onClick={this.props.handleSubmit.bind(
+                        onClick={handleSubmit.bind(
                             this,
                             this.state.localRule,
                             this.state.localRule.isError
