@@ -8,8 +8,7 @@ import RightBar from './RightBar';
 import { commands } from '@admin/langModel';
 import Modal from './Modal';
 import PropTypes from 'prop-types';
-
-import "react-splitter-layout/lib/index.css";
+import 'react-splitter-layout/lib/index.css';
 
 export default class Layout extends Component {
     state = {

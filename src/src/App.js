@@ -2,9 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 
-import Connection from '@iobroker/adapter-react/Connection';
 import Loader from '@iobroker/adapter-react/Components/Loader';
-import { PROGRESS } from '@iobroker/adapter-react/Connection';
 import I18n from '@iobroker/adapter-react/i18n';
 import GenericApp from '@iobroker/adapter-react/GenericApp';
 import Layout from './components/Layout';

@@ -128,6 +128,15 @@ export default DropTarget(
 );
 
 Rule.propTypes = {
-    removeRule: PropTypes.func.isRequired,
-    selectedRule: PropTypes.object.isRequired,
+    removeRule: PropTypes.func,
+    name: PropTypes.string.isRequired,
+    isDragging: PropTypes.bool,
+    connectDropTarget: PropTypes.func,
+    connectDragTarget: PropTypes.func,
+    interupt: PropTypes.bool.isRequired,
+    selectRule: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    selectedRule: PropTypes.shape({
+        id: PropTypes.string,
+    }),
 };
