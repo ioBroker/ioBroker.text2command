@@ -127,25 +127,17 @@ export default withStyles(styles)(LeftBar);
 
 LeftBar.propTypes = {
     handleOpen: PropTypes.func.isRequired,
-    rules: PropTypes.array.isRequired,
+    rules: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string,
+        })
+    ),
     moveRule: PropTypes.func.isRequired,
+    selectRule: PropTypes.func.isRequired,
     selectedRule: PropTypes.shape({
-        name: PropTypes.string,
         id: PropTypes.string,
-        rule: PropTypes.string,
-        ack: PropTypes.shape({
-            default: PropTypes.string,
-            value: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-        }),
-        arg: PropTypes.arrayOf(
-            PropTypes.shape({
-                name: PropTypes.string,
-                type: PropTypes.string,
-                default: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-            })
-        ),
-        words: PropTypes.string,
-    }).isRequired,
+    }),
     removeRule: PropTypes.func,
+    handleEdit: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
 };

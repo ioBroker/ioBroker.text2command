@@ -123,7 +123,7 @@ class RightBar extends Component {
 
     createOptionsData = (state = this.state) => {
         const {
-            localRule: { words, args, ack, editable, interupt },
+            localRule: { args, ack, editable, interupt },
         } = state;
         const { t } = I18n;
 
@@ -260,7 +260,7 @@ class RightBar extends Component {
                         interupt: !_this.state.localRule.interupt,
                     },
                 });
-                await _this.props.updateRule(_this.state.localRule);
+                _this.props.updateRule(_this.state.localRule);
             },
         };
     };
@@ -292,12 +292,11 @@ class RightBar extends Component {
     render() {
         const {
             localRule: { name },
-            newOptionsData,
         } = this.state;
         const { classes } = this.props;
+        const handleSubmit = this.handleDialogSelectIdSubmit;
 
         console.log(this.state);
-        const handleSubmit = this.handleDialogSelectIdSubmit;
 
         return (
             <Box mt="30px">
@@ -324,7 +323,7 @@ class RightBar extends Component {
 
                 {this.state.showDialog && (
                     <DialogSelectID
-                        connection={this.props.socket}
+                        socket={this.props.socket}
                         title={'Select ID'}
                         onClose={id => {
                             console.log(id);
@@ -341,7 +340,23 @@ class RightBar extends Component {
 export default withStyles(styles)(RightBar);
 
 RightBar.propTypes = {
-    selectedRule: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+    selectedRule: PropTypes.shape({
+        name: PropTypes.string,
+        id: PropTypes.string,
+        rule: PropTypes.string,
+        ack: PropTypes.shape({
+            default: PropTypes.string,
+            value: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+        }),
+        arg: PropTypes.arrayOf(
+            PropTypes.shape({
+                name: PropTypes.string,
+                type: PropTypes.string,
+                default: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+            })
+        ),
+        words: PropTypes.string,
+    }).isRequired,
     socket: PropTypes.object.isRequired,
     updateRule: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,

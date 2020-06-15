@@ -7,7 +7,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
-import { v4 as uuid } from 'uuid';
 import { DialogActions, Button, Select, TextField, MenuItem, withStyles } from '@material-ui/core';
 
 const styles = theme => ({
@@ -121,7 +120,7 @@ class Modal extends Component {
                         labelId={'rule'}
                         className={classes.select}>
                         {commands?.map(option => (
-                            <MenuItem key={uuid()} value={option.rule}>
+                            <MenuItem key={option.rule} value={option.rule}>
                                 {option.rule}
                             </MenuItem>
                         ))}
@@ -139,7 +138,7 @@ class Modal extends Component {
     };
 
     setDialogContent = () => {
-        const { commands, handleClose, classes } = this.props;
+        const { handleClose } = this.props;
         return (
             <DialogContent>
                 {this.createForm()}
@@ -180,9 +179,21 @@ Modal.propTypes = {
     handleClose: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     isEdit: PropTypes.bool.isRequired,
-    commands: PropTypes.arrayOf(PropTypes.object.isRequired),
+    commands: PropTypes.arrayOf(
+        PropTypes.shape({
+            rule: PropTypes.string.isRequired,
+            unique: PropTypes.bool.isRequired,
+        }).isRequired
+    ),
     isOpen: PropTypes.bool.isRequired,
-    currentRules: PropTypes.array.isRequired,
+    currentRules: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            rule: PropTypes.string.isRequired,
+            unique: PropTypes.bool,
+        })
+    ).isRequired,
     finishEdit: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
 };
