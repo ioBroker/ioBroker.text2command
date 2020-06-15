@@ -1,26 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as Sentry from '@sentry/browser';
+import * as SentryIntegrations from '@sentry/integrations';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import './index.css';
+import App from './App';
 import { version } from '../package.json';
 import theme from '@iobroker/adapter-react/Theme';
 
-console.log('iobroker.text2command@' + version);
+window.adapterName = 'text2command';
 let themeName = (window.localStorage && window.localStorage.getItem('App.themeName')) || 'light';
 
-const mainTheme = createMuiTheme({
-    ...theme,
-    colors: theme.colors[themeName],
-});
-
-console.log(mainTheme);
+console.log('iobroker.' + window.adapterName + '@' + version);
 
 function build() {
     return ReactDOM.render(
-        <MuiThemeProvider theme={mainTheme}>
+        <MuiThemeProvider theme={theme(themeName)}>
             <App
                 onThemeChange={_theme => {
                     themeName = _theme;
@@ -30,6 +27,15 @@ function build() {
         </MuiThemeProvider>,
         document.getElementById('root')
     );
+}
+
+// if not local development
+if (window.location.host !== 'localhost:3000' && false) {
+    Sentry.init({
+        dsn: 'https://needToGetTheNumber@sentry.iobroker.net/86',
+        release: 'iobroker.' + window.adapterName + '@' + version,
+        integrations: [new SentryIntegrations.Dedupe()],
+    });
 }
 
 build();
