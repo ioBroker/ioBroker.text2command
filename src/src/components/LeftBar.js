@@ -8,18 +8,48 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
 import List from '@material-ui/core/List';
-import { TextField } from '@material-ui/core';
+import { TextField, Box, withStyles } from '@material-ui/core';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import I18n from '@iobroker/adapter-react/i18n';
 import Rule from './Rule';
 
-export default class LeftBar extends Component {
+const styles = theme => ({
+    test: {
+        position: 'absolute',
+        bottom: '100px',
+        width: '100%',
+    },
+    root: {
+        width: '92%',
+        '& .MuiOutlinedInput-notchedOutline-55': {
+            border: `2px solid ${theme.palette.grey[700]}`,
+        },
+        '& #outlined-basic': {
+            padding: '12px 10px',
+        },
+    },
+    header: {
+        height: 44,
+        padding: theme.spacing(1.3),
+        border: `1px solid ${theme.palette.divider}`,
+    },
+});
+
+class LeftBar extends Component {
     handleTextCommand = () => {};
 
     render() {
-        const { selectedRule, moveRule, handleEdit, rules, selectRule, removeRule } = this.props;
+        const {
+            selectedRule,
+            moveRule,
+            handleEdit,
+            rules,
+            selectRule,
+            removeRule,
+            classes,
+        } = this.props;
 
         const mainIcons = [
             {
@@ -55,11 +85,11 @@ export default class LeftBar extends Component {
             ));
 
         return (
-            <div className="left-bar">
-                <div className="left-bar__header">
+            <Box>
+                <Box display="flex" justifyContent="space-between" className={classes.header}>
                     <div>{createIcons(mainIcons)}</div>
                     <div>{createIcons(additionalIcons)}</div>
-                </div>
+                </Box>
 
                 <DndProvider backend={HTML5Backend}>
                     <List>
@@ -77,7 +107,7 @@ export default class LeftBar extends Component {
                     </List>
                 </DndProvider>
 
-                <div className="test">
+                <Box className={classes.test} display="flex" justifyContent="center">
                     <TextField
                         onChange={this.handleTextCommand}
                         label={`${I18n.t('Test phrase')}`}
@@ -85,12 +115,15 @@ export default class LeftBar extends Component {
                         variant="outlined"
                         size="small"
                         color="primary"
+                        className={classes.root}
                     />
-                </div>
-            </div>
+                </Box>
+            </Box>
         );
     }
 }
+
+export default withStyles(styles)(LeftBar);
 
 LeftBar.propTypes = {
     handleOpen: PropTypes.func.isRequired,
@@ -114,4 +147,5 @@ LeftBar.propTypes = {
         words: PropTypes.string,
     }).isRequired,
     removeRule: PropTypes.func,
+    classes: PropTypes.object.isRequired,
 };

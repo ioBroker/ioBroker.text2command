@@ -6,10 +6,21 @@ import I18n from '@iobroker/adapter-react/i18n';
 import InputLabel from '@material-ui/core/InputLabel';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
 import { v4 as uuid } from 'uuid';
-import { DialogActions, Button, Select, TextField, MenuItem } from '@material-ui/core';
+import { DialogActions, Button, Select, TextField, MenuItem, withStyles } from '@material-ui/core';
 
-export default class Modal extends Component {
+const styles = theme => ({
+    select: {
+        width: '50%',
+        marginBottom: theme.spacing(2.5),
+    },
+    TextField: {
+        marginBottom: theme.spacing(1),
+    },
+});
+
+class Modal extends Component {
     defaultRule = {
         rule: I18n.t('Select rule'),
         name: I18n.t('New rule'),
@@ -73,6 +84,7 @@ export default class Modal extends Component {
 
     createForm = () => {
         const { localRule } = this.state;
+        const { classes } = this.props;
         const commands = this.getAvaliableOptions();
 
         const handleSelectChange = event =>
@@ -99,31 +111,35 @@ export default class Modal extends Component {
 
         return (
             <FormGroup>
-                <div className="select">
+                <FormControl>
                     <InputLabel shrink id="rule">
                         {I18n.t('Rule')}
                     </InputLabel>
-                    <Select onChange={handleSelectChange} value={localRule.rule} labelId={'rule'}>
+                    <Select
+                        onChange={handleSelectChange}
+                        value={localRule.rule}
+                        labelId={'rule'}
+                        className={classes.select}>
                         {commands?.map(option => (
                             <MenuItem key={uuid()} value={option.rule}>
                                 {option.rule}
                             </MenuItem>
                         ))}
                     </Select>
-                </div>
+                </FormControl>
                 <TextField
                     id="standard-basic"
                     label={this.state.localRule.isError || I18n.t('Name')}
                     value={localRule.name}
                     onChange={handleInputChange}
-                    error={!!this.state.localRule.isError}></TextField>
+                    error={!!this.state.localRule.isError}
+                    className={classes.TextField}></TextField>
             </FormGroup>
         );
     };
 
     setDialogContent = () => {
-        const { commands, handleClose } = this.props;
-
+        const { commands, handleClose, classes } = this.props;
         return (
             <DialogContent>
                 {this.createForm()}
@@ -147,7 +163,8 @@ export default class Modal extends Component {
                 open={this.props.isOpen}
                 onClose={this.props.handleClose}
                 onExited={this.cleanState}
-                onEnter={this.setRuleOnMount}>
+                onEnter={this.setRuleOnMount}
+                fullWidth>
                 <DialogTitle>
                     {I18n.t(!this.props.isEdit ? 'Create new rule' : 'Edit rule')}
                 </DialogTitle>
@@ -157,6 +174,8 @@ export default class Modal extends Component {
     }
 }
 
+export default withStyles(styles)(Modal);
+
 Modal.propTypes = {
     handleClose: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -165,4 +184,5 @@ Modal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     currentRules: PropTypes.array.isRequired,
     finishEdit: PropTypes.func.isRequired,
+    classes: PropTypes.object.isRequired,
 };

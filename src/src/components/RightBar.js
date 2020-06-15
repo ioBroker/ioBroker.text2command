@@ -1,14 +1,29 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { TextField, Switch, Typography } from '@material-ui/core';
+import { TextField, Switch, Typography, withStyles, Box } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 
 import I18n from '@iobroker/adapter-react/i18n';
 import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
 
-export default class RightBar extends Component {
+const styles = theme => ({
+    container: {
+        width: '70%',
+        padding: '20px 30px 30px 30px',
+        boxShadow: `0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 10px 0px rgba(0, 0, 0, 0.12)`,
+    },
+    textField: {
+        flexBasis: '60%',
+    },
+    title: {
+        marginBottom: theme.spacing(3.8),
+    },
+});
+
+class RightBar extends Component {
     defaultState = {
         words: 'Выберите правило',
         name: 'Выберите правило',
@@ -71,6 +86,8 @@ export default class RightBar extends Component {
     }) => {
         if (!value && !label && !keywords) return;
 
+        const { classes } = this.props;
+
         return type !== 'checkbox' ? (
             <TextField
                 label={label}
@@ -82,6 +99,7 @@ export default class RightBar extends Component {
                 onClick={onClick}
                 onChange={onChange}
                 key={key}
+                className={classes.textField}
             />
         ) : (
             <FormControl>
@@ -107,7 +125,6 @@ export default class RightBar extends Component {
         const {
             localRule: { words, args, ack, editable, interupt },
         } = state;
-
         const { t } = I18n;
 
         const handlers = this.createTextInputHandlers();
@@ -277,27 +294,33 @@ export default class RightBar extends Component {
             localRule: { name },
             newOptionsData,
         } = this.state;
+        const { classes } = this.props;
+
         console.log(this.state);
         const handleSubmit = this.handleDialogSelectIdSubmit;
 
         return (
-            <div className="right-bar">
-                <div className="right-bar__container">
-                    <Typography variant="h4" align="center" gutterBottom={true}>
+            <Box mt="30px">
+                <Box className={classes.container} mx="auto">
+                    <Typography
+                        variant="h4"
+                        align="center"
+                        gutterBottom={true}
+                        className={classes.title}>
                         {name || 'Выберите правило'}
                     </Typography>
                     {this.createOptionsData().map(({ title, item, id }) => {
                         if (!item) return null;
                         return (
-                            <div className="custom-card" key={id}>
+                            <Box display="flex" justifyContent="space-between" mb="10px" key={id}>
                                 <Typography variant="h5" component="h2" align="left">
                                     {title}
                                 </Typography>
                                 {item}
-                            </div>
+                            </Box>
                         );
                     })}
-                </div>
+                </Box>
 
                 {this.state.showDialog && (
                     <DialogSelectID
@@ -310,13 +333,16 @@ export default class RightBar extends Component {
                         onOk={handleSubmit}
                     />
                 )}
-            </div>
+            </Box>
         );
     }
 }
+
+export default withStyles(styles)(RightBar);
 
 RightBar.propTypes = {
     selectedRule: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     socket: PropTypes.object.isRequired,
     updateRule: PropTypes.func.isRequired,
+    classes: PropTypes.object.isRequired,
 };

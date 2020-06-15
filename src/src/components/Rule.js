@@ -2,11 +2,19 @@ import React, { useRef, useImperativeHandle, useCallback, Children } from 'react
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { ListItemIcon, IconButton } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
 import { DropTarget, DragSource } from 'react-dnd';
 import PropTypes from 'prop-types';
+
+const useStyles = makeStyles({
+    listItem: {
+        cursor: 'pointer',
+        transition: 'background-color 0.3s linear',
+    },
+});
 
 const Rule = React.forwardRef((props, ref) => {
     const {
@@ -21,6 +29,8 @@ const Rule = React.forwardRef((props, ref) => {
         selectedRule,
         interupt,
     } = props;
+
+    const classes = useStyles();
 
     const elementRef = useRef(null);
     connectDragSource(elementRef);
@@ -50,7 +60,8 @@ const Rule = React.forwardRef((props, ref) => {
                 onClick={selectRuleMemo}
                 style={{
                     backgroundColor: selectedRule?.id === id ? 'rgba(0, 0, 0, 0.06)' : '',
-                }}>
+                }}
+                className={classes.listItem}>
                 <ListItemText primary={name} secondary={rule} />
                 <ListItemIcon>
                     {Children.toArray(
