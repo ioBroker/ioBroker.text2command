@@ -27,11 +27,12 @@
     "Edit rule": "Редактировать правило",
     "New rule": "Новое правило",
     "Rule": "Правило",
-    "Select rule": "Выбрать правило",
+    "Select rule": "Выберите правило",
     "Keywords": "Ключевые слова",
-    "Param": "Параметр",
+    "Argument": "Параметр",
     "Interupt": "Прервать",
     "Confirmation text": "Текст подтверждения",
     "Name already exist": "Данное имя уже существует",
-    "Test phrase": "Тестовая фраза"
+    "Test phrase": "Тестовая фраза",
+    "Interupt processing": "Прервать обработку"
 }

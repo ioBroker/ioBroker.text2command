@@ -25,16 +25,16 @@ const styles = theme => ({
 
 class RightBar extends Component {
     defaultState = {
-        words: 'Выберите правило',
-        name: 'Выберите правило',
+        words: I18n.t('Select rule'),
+        name: I18n.t('Select rule'),
         interupt: false,
         editable: false,
         args: [
             {
-                default: 'Параметр 1',
+                default: I18n.t('Argument') + ' 1',
             },
             {
-                default: 'Параметр 2',
+                default: I18n.t('Argument') + ' 2',
             },
         ],
         ack: {
@@ -131,8 +131,9 @@ class RightBar extends Component {
         const createInput = this.createInput;
 
         const isKeyWordsDisabled = () => {
-            if (editable === 'undefined') return false;
+            if (editable === undefined) return false;
             else if (editable === false) return true;
+            return false;
         };
 
         return [
@@ -150,7 +151,7 @@ class RightBar extends Component {
             {
                 title: `${t('Interupt')}:`,
                 item: createInput({
-                    label: 'Прервать обработку',
+                    label: `${t('Interupt processing')}`,
                     type: 'checkbox',
                     value: interupt,
                     onSwitchChange: handlers.interuptOnSwitch,
@@ -158,7 +159,7 @@ class RightBar extends Component {
                 id: 2,
             },
             {
-                title: `${t('Param')}:`,
+                title: `${t('Argument')}:`,
                 item: createInput({
                     value: args && this.state.localRule.args[0]?.default,
                     label: args && args[0]?.name,
@@ -170,7 +171,7 @@ class RightBar extends Component {
                 id: 3,
             },
             {
-                title: `${t('Param')}:`,
+                title: `${t('Argument')}:`,
                 item: createInput({
                     value: args && this.state.localRule.args[1]?.default,
                     label: args && args[1]?.name,
@@ -306,7 +307,7 @@ class RightBar extends Component {
                         align="center"
                         gutterBottom={true}
                         className={classes.title}>
-                        {name || 'Выберите правило'}
+                        {name}
                     </Typography>
                     {this.createOptionsData().map(({ title, item, id }) => {
                         if (!item) return null;

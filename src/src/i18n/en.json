@@ -29,9 +29,10 @@
     "Rule": "Rule",
     "Select rule": "Select rule",
     "Keywords": "Keywords",
-    "Param": "Param",
+    "Argument": "Argument",
     "Interupt": "Interupt",
     "Confirmation text": "Confirmation text",
     "Name already exist": "Name already exist",
-    "Test phrase": "Test phrase"
+    "Test phrase": "Test phrase",
+    "Interupt processing": "Interupt processing"
 }
