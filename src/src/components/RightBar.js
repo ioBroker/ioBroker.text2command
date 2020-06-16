@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { TextField, Switch, Typography, withStyles, Box } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
 
 import I18n from '@iobroker/adapter-react/i18n';
 import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
+import isEqual from 'lodash.isequal';
 
 const styles = theme => ({
     container: {
@@ -23,7 +25,7 @@ const styles = theme => ({
     },
 });
 
-class RightBar extends Component {
+class RightBar extends PureComponent {
     defaultState = {
         words: I18n.t('Select rule'),
         name: I18n.t('Select rule'),
@@ -41,6 +43,7 @@ class RightBar extends Component {
             name: '',
             default: `${I18n.t('Confirmation text')}`,
         },
+        id: 0,
     };
 
     state = {
@@ -70,8 +73,24 @@ class RightBar extends Component {
             ) {
                 this.props.updateRule(this.state.localRule);
             }
+        } else if (this.state.isStateWasUpdated) {
+            if (isEqual(this.props.selectedRule, this.state.localRule)) {
+                this.setState({
+                    isStateWasUpdated: false,
+                });
+            }
         }
     }
+
+    createSaveSettingsForm = () => {
+        const { t } = I18n;
+        return (
+            <FormControl>
+                <Button>{t('Save')}</Button>
+                <Button>{t('Cancel')}</Button>
+            </FormControl>
+        );
+    };
 
     createInput = ({
         value,
@@ -206,6 +225,7 @@ class RightBar extends Component {
                         ..._this.state.localRule,
                         words: event.target.value,
                     },
+                    isStateWasUpdated: true,
                 });
             },
             param2Text(event) {
@@ -221,6 +241,7 @@ class RightBar extends Component {
                                 : arg
                         ),
                     },
+                    isStateWasUpdated: true,
                 });
             },
             confirmText(event) {
@@ -232,6 +253,7 @@ class RightBar extends Component {
                             default: event.target.value,
                         },
                     },
+                    isStateWasUpdated: true,
                 });
             },
             param1OnSwitch() {
@@ -242,6 +264,7 @@ class RightBar extends Component {
                             !index ? { ...arg, default: !arg.default ? true : !arg.default } : arg
                         ),
                     },
+                    isStateWasUpdated: true,
                 });
             },
             confirmOnSwitch() {
@@ -253,6 +276,7 @@ class RightBar extends Component {
                             default: !_this.state.localRule.ack.default,
                         },
                     },
+                    isStateWasUpdated: true,
                 });
             },
             async interuptOnSwitch() {
@@ -261,6 +285,7 @@ class RightBar extends Component {
                         ..._this.state.localRule,
                         interupt: !_this.state.localRule.interupt,
                     },
+                    isStateWasUpdated: true,
                 });
                 _this.props.updateRule(_this.state.localRule);
             },
@@ -296,22 +321,29 @@ class RightBar extends Component {
     render() {
         const {
             localRule: { name },
+            isStateWasUpdated,
         } = this.state;
         const { classes } = this.props;
+
         const handleSubmit = this.handleDialogSelectIdSubmit;
+        const SaveSettingsForm = this.createSaveSettingsForm();
 
         console.log(this.state);
 
         return (
             <Box mt="30px">
                 <Box className={classes.container} mx="auto">
-                    <Typography
-                        variant="h4"
-                        align="center"
-                        gutterBottom={true}
-                        className={classes.title}>
-                        {name}
-                    </Typography>
+                    {isStateWasUpdated ? (
+                        SaveSettingsForm
+                    ) : (
+                        <Typography
+                            variant="h4"
+                            align="center"
+                            gutterBottom={true}
+                            className={classes.title}>
+                            {name}
+                        </Typography>
+                    )}
                     {this.createOptionsData().map(({ title, item, id }) => {
                         if (!item) return null;
                         return (
@@ -349,14 +381,14 @@ RightBar.propTypes = {
         id: PropTypes.string,
         rule: PropTypes.string,
         ack: PropTypes.shape({
-            default: PropTypes.string,
+            default: PropTypes.oneOf([PropTypes.string, PropTypes.bool]),
             value: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
         }),
         arg: PropTypes.arrayOf(
             PropTypes.shape({
                 name: PropTypes.string,
                 type: PropTypes.string,
-                default: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+                default: PropTypes.oneOf([PropTypes.string, PropTypes.number, PropTypes.bool]),
             })
         ),
         words: PropTypes.string,
