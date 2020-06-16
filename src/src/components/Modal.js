@@ -70,6 +70,9 @@ class Modal extends Component {
         const matchingNames = this.existingNames.filter(
             name => name.slice(0, name.length - 2) === ruleName
         );
+        const isUnique = this.props.commands.find(
+            ({ rule, unique }) => rule === ruleName && unique
+        );
 
         if (matchingNames.length) {
             let name = matchingNames[matchingNames.length - 1];
@@ -78,7 +81,7 @@ class Modal extends Component {
             return name.slice(0, name.length - 1) + ++lastChar;
         }
 
-        return `${ruleName} 1`;
+        return isUnique ? ruleName : `${ruleName} 1`;
     };
 
     createForm = () => {

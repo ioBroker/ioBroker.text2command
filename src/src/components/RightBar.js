@@ -127,8 +127,8 @@ class RightBar extends Component {
         } = state;
         const { t } = I18n;
 
-        const handlers = this.createTextInputHandlers();
         const createInput = this.createInput;
+        const handlers = this.handlers;
 
         const isKeyWordsDisabled = () => {
             if (editable === undefined) return false;
@@ -155,6 +155,7 @@ class RightBar extends Component {
                     type: 'checkbox',
                     value: interupt,
                     onSwitchChange: handlers.interuptOnSwitch,
+                    key: 'interupt',
                 }),
                 id: 2,
             },
@@ -195,7 +196,7 @@ class RightBar extends Component {
         ];
     };
 
-    createTextInputHandlers = () => {
+    createInputHandlers = () => {
         const _this = this;
 
         return {
@@ -265,6 +266,8 @@ class RightBar extends Component {
             },
         };
     };
+
+    handlers = this.createInputHandlers();
 
     handleSetDialogClick = arg => {
         if (arg.type === 'id') {
