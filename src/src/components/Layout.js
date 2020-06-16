@@ -39,12 +39,16 @@ export default class Layout extends Component {
                     args: command.args?.map(arg => ({
                         ...arg,
                         name: arg.name[lang] || '',
-                        default: arg.default || '',
+                        default: arg.default || (arg.type === 'checkbox' ? false : ''),
                     })),
                     ack: command.ack && {
                         ...command.ack,
                         name: command.ack.name[lang],
-                        default: command.ack?.default && command.ack.default[lang],
+                        default: !command.ack?.default
+                            ? command.ack?.type === 'checkbox'
+                                ? false
+                                : ''
+                            : command.ack.default[lang],
                     },
                 };
 
