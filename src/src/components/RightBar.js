@@ -84,9 +84,14 @@ class RightBar extends PureComponent {
 
     createSaveSettingsForm = () => {
         const { t } = I18n;
+        const { updateConfig, updateRule } = this.props;
+        const handleSave = () => {
+            updateRule(this.state.localRule);
+            updateConfig();
+        };
         return (
             <FormControl>
-                <Button>{t('Save')}</Button>
+                <Button onClick={handleSave}>{t('Save')}</Button>
                 <Button>{t('Cancel')}</Button>
             </FormControl>
         );
@@ -327,9 +332,7 @@ class RightBar extends PureComponent {
 
         const handleSubmit = this.handleDialogSelectIdSubmit;
         const SaveSettingsForm = this.createSaveSettingsForm();
-
-        console.log(this.state);
-
+        console.log(this.props.socket);
         return (
             <Box mt="30px">
                 <Box className={classes.container} mx="auto">
@@ -381,19 +384,20 @@ RightBar.propTypes = {
         id: PropTypes.string,
         rule: PropTypes.string,
         ack: PropTypes.shape({
-            default: PropTypes.oneOf([PropTypes.string, PropTypes.bool]),
-            value: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+            default: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+            value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         }),
         arg: PropTypes.arrayOf(
             PropTypes.shape({
                 name: PropTypes.string,
                 type: PropTypes.string,
-                default: PropTypes.oneOf([PropTypes.string, PropTypes.number, PropTypes.bool]),
+                default: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
             })
         ),
         words: PropTypes.string,
     }).isRequired,
     socket: PropTypes.object.isRequired,
     updateRule: PropTypes.func.isRequired,
+    updateConfig: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
 };

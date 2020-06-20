@@ -19,8 +19,12 @@ export default class Layout extends Component {
         selectedRule: {},
     };
     componentDidMount() {
-        this.setState({
-            commands: this.getSelectedLanguageCommands(),
+        this.props.readConfig().then(config => {
+            const { rules, ...settings } = config;
+            this.setState({
+                currentRules: config.rules,
+                settings,
+            });
         });
     }
 
@@ -56,6 +60,7 @@ export default class Layout extends Component {
             }),
         ];
     };
+    commands = this.getSelectedLanguageCommands();
 
     moveRule = (dragIndex, hoverIndex) => {
         const { currentRules } = this.state;
@@ -95,11 +100,11 @@ export default class Layout extends Component {
     };
 
     selectRule = id => {
-        const { selectedRule, currentRules, commands } = this.state;
+        const { selectedRule, currentRules } = this.state;
         if (selectedRule.id === id) return;
         const shortDataRule = currentRules.find(item => item.id === id);
         const rule = !shortDataRule.words
-            ? commands.find(command => command.rule === shortDataRule.rule)
+            ? this.commands.find(command => command.rule === shortDataRule.rule)
             : {};
         this.setState({
             selectedRule: { ...rule, ...shortDataRule },
@@ -129,7 +134,7 @@ export default class Layout extends Component {
         const initialSelectedRule = this.state.selectedRule;
 
         if (initialSelectedRule.rule !== rule) {
-            const updatedRuleOptions = this.state.commands.find(command => command.rule === rule);
+            const updatedRuleOptions = this.commands.find(command => command.rule === rule);
             updatedRule = {
                 ...updatedRuleOptions,
                 name,
@@ -154,9 +159,17 @@ export default class Layout extends Component {
         });
     };
 
+    updateConfig = () => {
+        const config = {
+            ...this.state.settings,
+            rules: this.state.currentRules,
+        };
+        this.props.saveConfig(config);
+    };
+
     render() {
         console.log(this.state);
-        const { commands, isEdit, isOpen, currentRules, selectedRule } = this.state;
+        const { isEdit, isOpen, currentRules, selectedRule } = this.state;
         return (
             <>
                 <SplitterLayout
@@ -177,10 +190,11 @@ export default class Layout extends Component {
                         selectedRule={selectedRule}
                         socket={this.props.socket}
                         updateRule={this.updateRule}
+                        updateConfig={this.updateConfig}
                     />
                 </SplitterLayout>
                 <Modal
-                    commands={commands}
+                    commands={this.commands}
                     isEdit={isEdit}
                     handleSubmit={this.handleSubmit}
                     handleClose={this.handleClose}
@@ -196,4 +210,6 @@ export default class Layout extends Component {
 
 Layout.propTypes = {
     socket: PropTypes.object.isRequired,
+    readConfig: PropTypes.func.isRequired,
+    saveConfig: PropTypes.func.isRequired,
 };
