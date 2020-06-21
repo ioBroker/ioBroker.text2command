@@ -158,7 +158,7 @@ export default class Layout extends Component {
         );
     };
 
-    updateConfig = () => {
+    updateConfig = rule => {
         const config = {
             ...this.state.settings,
             rules: this.state.currentRules,
@@ -167,6 +167,7 @@ export default class Layout extends Component {
 
         this.setState({
             isStateWasUpdated: false,
+            selectedRule: rule || this.state.selectedRule || {},
         });
     };
 

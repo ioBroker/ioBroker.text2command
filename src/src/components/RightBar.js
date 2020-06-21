@@ -99,7 +99,7 @@ class RightBar extends PureComponent {
 
         const handleSave = async () => {
             await updateRule(this.state.localRule);
-            await updateConfig();
+            await updateConfig(this.state.localRule);
             this.setState({
                 isLocalStateWasUpdated: false,
             });
