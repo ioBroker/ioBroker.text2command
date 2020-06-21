@@ -18,6 +18,7 @@ export default class Layout extends Component {
         isEdit: false,
         selectedRule: {},
     };
+
     componentDidMount() {
         this.props.readConfig().then(config => {
             const { rules, ...settings } = config;
@@ -96,6 +97,9 @@ export default class Layout extends Component {
 
         this.state.isEdit ? this.updateRule(selectedRule) : addNewRule();
         if (isError) return;
+        this.setState({
+            isStateWasUpdated: true,
+        });
         this.handleClose();
     };
 
@@ -153,10 +157,13 @@ export default class Layout extends Component {
     };
 
     removeRule = id => {
-        this.setState({
-            currentRules: this.state.currentRules.filter(rule => rule.id !== id),
-            selectedRule: {},
-        });
+        this.setState(
+            {
+                currentRules: this.state.currentRules.filter(rule => rule.id !== id),
+                selectedRule: {},
+            },
+            this.updateConfig
+        );
     };
 
     updateConfig = () => {
@@ -165,11 +172,17 @@ export default class Layout extends Component {
             rules: this.state.currentRules,
         };
         this.props.saveConfig(config);
+
+        this.setState({
+            isStateWasUpdated: false,
+        });
     };
+
+    cancelChanges = () => {};
 
     render() {
         console.log(this.state);
-        const { isEdit, isOpen, currentRules, selectedRule } = this.state;
+        const { isEdit, isOpen, currentRules, selectedRule, isStateWasUpdated } = this.state;
         return (
             <>
                 <SplitterLayout
@@ -191,6 +204,7 @@ export default class Layout extends Component {
                         socket={this.props.socket}
                         updateRule={this.updateRule}
                         updateConfig={this.updateConfig}
+                        isGlobalStateWasUpdated={isStateWasUpdated}
                     />
                 </SplitterLayout>
                 <Modal
