@@ -78,12 +78,12 @@ class RightBar extends PureComponent {
                     },
                 });
             }
-            if (
-                this.props.selectedRule.name !== this.state.localRule.name &&
-                this.props.selectedRule.id !== this.state.localRule.id
-            ) {
-                this.props.updateRule(this.state.localRule);
-            }
+            // if (
+            //     this.props.selectedRule.name !== this.state.localRule.name &&
+            //     this.props.selectedRule.id !== this.state.localRule.id
+            // ) {
+            //     this.props.updateRule(this.state.localRule);
+            // }
         } else if (this.state.isLocalStateWasUpdated) {
             if (isEqual(this.props.selectedRule, this.state.localRule)) {
                 this.setState({
@@ -95,7 +95,8 @@ class RightBar extends PureComponent {
 
     createSaveSettingsForm = () => {
         const { t } = I18n;
-        const { updateConfig, updateRule, classes } = this.props;
+        const { updateConfig, updateRule, classes, setDataFromConfig } = this.props;
+
         const handleSave = async () => {
             await updateRule(this.state.localRule);
             await updateConfig();
@@ -103,12 +104,21 @@ class RightBar extends PureComponent {
                 isLocalStateWasUpdated: false,
             });
         };
+
+        const revertChanges = async () => {
+            await setDataFromConfig();
+            this.setState({
+                localRule: this.props.selectedRule,
+                isLocalStateWasUpdated: false,
+            });
+        };
+
         return (
             <FormControl className={classes.submitForm}>
                 <Button onClick={handleSave} variant="contained" color="secondary">
                     {t('Save')}
                 </Button>
-                <Button variant="contained" className={classes.btnDanger}>
+                <Button variant="contained" className={classes.btnDanger} onClick={revertChanges}>
                     {t('Cancel')}
                 </Button>
             </FormControl>
@@ -430,5 +440,6 @@ RightBar.propTypes = {
     socket: PropTypes.object.isRequired,
     updateRule: PropTypes.func.isRequired,
     updateConfig: PropTypes.func.isRequired,
+    setDataFromConfig: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
 };
