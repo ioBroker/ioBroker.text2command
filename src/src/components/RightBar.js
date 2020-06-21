@@ -368,20 +368,14 @@ class RightBar extends PureComponent {
         return (
             <Box mt="30px">
                 <Box className={classes.container} mx="auto">
-                    {isGlobalStateWasUpdated && isStateDefault ? (
-                        SaveSettingsForm
-                    ) : (
-                        <Typography
-                            variant="h4"
-                            align="center"
-                            className={
-                                !isLocalStateWasUpdated && !isGlobalStateWasUpdated
-                                    ? classes.title
-                                    : ''
-                            }>
-                            {name}
-                        </Typography>
-                    )}
+                    <Typography
+                        variant="h4"
+                        align="center"
+                        className={
+                            !isLocalStateWasUpdated && !isGlobalStateWasUpdated ? classes.title : ''
+                        }>
+                        {name}
+                    </Typography>
 
                     {(isLocalStateWasUpdated || isGlobalStateWasUpdated) &&
                         !isStateDefault &&
