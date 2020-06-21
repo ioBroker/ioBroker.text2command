@@ -20,8 +20,19 @@ const styles = theme => ({
     textField: {
         flexBasis: '60%',
     },
+    submitForm: {
+        flexDirection: 'row',
+        margin: '10px auto 20px',
+        display: 'flex',
+        justifyContent: 'center',
+        width: '30%',
+    },
     title: {
-        marginBottom: theme.spacing(3.8),
+        marginBottom: '30px',
+    },
+    btnDanger: {
+        marginLeft: 20,
+        backgroundColor: theme.palette.error?.dark,
     },
 });
 
@@ -73,10 +84,10 @@ class RightBar extends PureComponent {
             ) {
                 this.props.updateRule(this.state.localRule);
             }
-        } else if (this.state.isStateWasUpdated) {
+        } else if (this.state.isLocalStateWasUpdated) {
             if (isEqual(this.props.selectedRule, this.state.localRule)) {
                 this.setState({
-                    isStateWasUpdated: false,
+                    isLocalStateWasUpdated: false,
                 });
             }
         }
@@ -84,15 +95,22 @@ class RightBar extends PureComponent {
 
     createSaveSettingsForm = () => {
         const { t } = I18n;
-        const { updateConfig, updateRule } = this.props;
-        const handleSave = () => {
-            updateRule(this.state.localRule);
-            updateConfig();
+        const { updateConfig, updateRule, classes } = this.props;
+        const handleSave = async () => {
+            await updateRule(this.state.localRule);
+            await updateConfig();
+            this.setState({
+                isLocalStateWasUpdated: false,
+            });
         };
         return (
-            <FormControl>
-                <Button onClick={handleSave}>{t('Save')}</Button>
-                <Button>{t('Cancel')}</Button>
+            <FormControl className={classes.submitForm}>
+                <Button onClick={handleSave} variant="contained" color="secondary">
+                    {t('Save')}
+                </Button>
+                <Button variant="contained" className={classes.btnDanger}>
+                    {t('Cancel')}
+                </Button>
             </FormControl>
         );
     };
@@ -230,7 +248,7 @@ class RightBar extends PureComponent {
                         ..._this.state.localRule,
                         words: event.target.value,
                     },
-                    isStateWasUpdated: true,
+                    isLocalStateWasUpdated: true,
                 });
             },
             param2Text(event) {
@@ -246,7 +264,7 @@ class RightBar extends PureComponent {
                                 : arg
                         ),
                     },
-                    isStateWasUpdated: true,
+                    isLocalStateWasUpdated: true,
                 });
             },
             confirmText(event) {
@@ -258,7 +276,7 @@ class RightBar extends PureComponent {
                             default: event.target.value,
                         },
                     },
-                    isStateWasUpdated: true,
+                    isLocalStateWasUpdated: true,
                 });
             },
             param1OnSwitch() {
@@ -269,7 +287,7 @@ class RightBar extends PureComponent {
                             !index ? { ...arg, default: !arg.default ? true : !arg.default } : arg
                         ),
                     },
-                    isStateWasUpdated: true,
+                    isLocalStateWasUpdated: true,
                 });
             },
             confirmOnSwitch() {
@@ -281,7 +299,7 @@ class RightBar extends PureComponent {
                             default: !_this.state.localRule.ack.default,
                         },
                     },
-                    isStateWasUpdated: true,
+                    isLocalStateWasUpdated: true,
                 });
             },
             async interuptOnSwitch() {
@@ -290,7 +308,7 @@ class RightBar extends PureComponent {
                         ..._this.state.localRule,
                         interupt: !_this.state.localRule.interupt,
                     },
-                    isStateWasUpdated: true,
+                    isLocalStateWasUpdated: true,
                 });
                 _this.props.updateRule(_this.state.localRule);
             },
@@ -326,27 +344,39 @@ class RightBar extends PureComponent {
     render() {
         const {
             localRule: { name },
-            isStateWasUpdated,
+            isLocalStateWasUpdated,
+            localRule,
         } = this.state;
-        const { classes } = this.props;
+        const { classes, isGlobalStateWasUpdated } = this.props;
 
         const handleSubmit = this.handleDialogSelectIdSubmit;
         const SaveSettingsForm = this.createSaveSettingsForm();
-        console.log(this.props.socket);
+        const isStateDefault = localRule === this.defaultState;
+
+        console.log('rerender');
+
         return (
             <Box mt="30px">
                 <Box className={classes.container} mx="auto">
-                    {isStateWasUpdated ? (
+                    {isGlobalStateWasUpdated && isStateDefault ? (
                         SaveSettingsForm
                     ) : (
                         <Typography
                             variant="h4"
                             align="center"
-                            gutterBottom={true}
-                            className={classes.title}>
+                            className={
+                                !isLocalStateWasUpdated && !isGlobalStateWasUpdated
+                                    ? classes.title
+                                    : ''
+                            }>
                             {name}
                         </Typography>
                     )}
+
+                    {(isLocalStateWasUpdated || isGlobalStateWasUpdated) &&
+                        !isStateDefault &&
+                        SaveSettingsForm}
+
                     {this.createOptionsData().map(({ title, item, id }) => {
                         if (!item) return null;
                         return (
@@ -396,6 +426,7 @@ RightBar.propTypes = {
         ),
         words: PropTypes.string,
     }).isRequired,
+    isGlobalStateWasUpdated: PropTypes.bool,
     socket: PropTypes.object.isRequired,
     updateRule: PropTypes.func.isRequired,
     updateConfig: PropTypes.func.isRequired,
