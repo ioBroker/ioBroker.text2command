@@ -20,13 +20,7 @@ export default class Layout extends Component {
     };
 
     componentDidMount() {
-        this.props.readConfig().then(config => {
-            const { rules, ...settings } = config;
-            this.setState({
-                currentRules: config.rules,
-                settings,
-            });
-        });
+        this.setDataFromConfig();
     }
 
     getSelectedLanguageCommands = () => {
@@ -178,7 +172,21 @@ export default class Layout extends Component {
         });
     };
 
-    cancelChanges = () => {};
+    setDataFromConfig = async () => {
+        const { selectedRule, currentRules } = this.state;
+        const config = await this.props.readConfig();
+        const { rules, ...settings } = config;
+        await this.setState({
+            currentRules: rules,
+            settings,
+            isStateWasUpdated: false,
+        });
+        if (this.state.currentRules.length !== currentRules.length) {
+            this.setState({
+                selectedRule: this.state.currentRules[this.state.currentRules.length - 1],
+            });
+        }
+    };
 
     render() {
         console.log(this.state);
@@ -205,6 +213,7 @@ export default class Layout extends Component {
                         updateRule={this.updateRule}
                         updateConfig={this.updateConfig}
                         isGlobalStateWasUpdated={isStateWasUpdated}
+                        setDataFromConfig={this.setDataFromConfig}
                     />
                 </SplitterLayout>
                 <Modal
