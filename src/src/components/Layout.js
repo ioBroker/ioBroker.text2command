@@ -76,17 +76,15 @@ export default class Layout extends Component {
 
     handleSubmit = (selectedRule, isError) => {
         const id = uuid();
-
+        const newRule = {
+            ...selectedRule,
+            id,
+            interupt: true,
+        };
         const addNewRule = () =>
             this.setState({
-                currentRules: [
-                    ...this.state.currentRules,
-                    {
-                        ...selectedRule,
-                        id,
-                        interupt: true,
-                    },
-                ],
+                currentRules: [...this.state.currentRules, newRule],
+                selectedRule: newRule,
             });
 
         this.state.isEdit ? this.updateRule(selectedRule) : addNewRule();
@@ -173,7 +171,7 @@ export default class Layout extends Component {
     };
 
     setDataFromConfig = async () => {
-        const { selectedRule, currentRules } = this.state;
+        const { currentRules } = this.state;
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
         await this.setState({
@@ -183,7 +181,7 @@ export default class Layout extends Component {
         });
         if (this.state.currentRules.length !== currentRules.length) {
             this.setState({
-                selectedRule: this.state.currentRules[this.state.currentRules.length - 1],
+                selectedRule: this.state.currentRules[this.state.currentRules.length - 1] || {},
             });
         }
     };
