@@ -74,7 +74,9 @@ export default class Layout extends PureComponent {
         this.setState({ isOpen: false });
     };
 
-    handleSubmit = (selectedRule, isError) => {
+    handleSubmitOnCreate = (selectedRule, isError) => {
+        if (isError) return;
+
         const id = uuid();
         const shortDataRule = {
             ...selectedRule,
@@ -87,17 +89,20 @@ export default class Layout extends PureComponent {
             ...shortDataRule,
         };
 
-        const addNewRule = () =>
-            this.setState({
-                currentRules: [...this.state.currentRules, rule],
-            });
-
-        this.state.isEdit ? this.updateRule(selectedRule) : addNewRule();
-        if (isError) return;
         this.setState({
-            isStateWasUpdated: true,
+            currentRules: [...this.state.currentRules, rule],
+            ruleWasUpdatedId: id,
+            selectedRule: this.state.pendingChanges ? this.state.selectedRule : rule,
         });
 
+        this.handleClose();
+    };
+
+    handleSubmitOnEdit = (selectedRule, isError) => {
+        if (isError) return;
+
+        this.updateRule(selectedRule);
+        this.setState({});
         this.handleClose();
     };
 
@@ -124,6 +129,7 @@ export default class Layout extends PureComponent {
 
         this.setState({
             pendingChanges: bool,
+            ruleWasUpdatedId: bool ? this.state.ruleWasUpdatedId : false,
         });
     };
 
@@ -132,6 +138,8 @@ export default class Layout extends PureComponent {
             currentRules: this.state.currentRules.map(item =>
                 item.id === selectedRule.id ? selectedRule : item
             ),
+            pendingChanges: false,
+            ruleWasUpdatedId: false,
         });
     };
 
@@ -185,7 +193,6 @@ export default class Layout extends PureComponent {
         this.props.saveConfig(config);
 
         this.setState({
-            isStateWasUpdated: false,
             selectedRule: rule || this.state.selectedRule || {},
         });
     };
@@ -197,7 +204,9 @@ export default class Layout extends PureComponent {
         await this.setState({
             currentRules: rules,
             settings,
-            isStateWasUpdated: false,
+            pendingChanges: false,
+            ruleWasUpdatedId: false,
+            pendingSelectedRuleId: false,
         });
         if (this.state.currentRules.length !== currentRules.length) {
             this.setState({
@@ -210,13 +219,12 @@ export default class Layout extends PureComponent {
         this.setState({
             pendingChanges: false,
             pendingSelectedRuleId: false,
-            isStateWasUpdated: false,
         });
     };
 
     render() {
         console.log(this.state);
-        const { isEdit, isOpen, currentRules, selectedRule, isStateWasUpdated } = this.state;
+        const { isEdit, isOpen, currentRules, selectedRule, ruleWasUpdatedId } = this.state;
         return (
             <>
                 <SplitterLayout
@@ -238,19 +246,20 @@ export default class Layout extends PureComponent {
                         socket={this.props.socket}
                         updateRule={this.updateRule}
                         updateConfig={this.updateConfig}
-                        isGlobalStateWasUpdated={isStateWasUpdated}
                         setDataFromConfig={this.setDataFromConfig}
                         pendingSelectedRuleId={this.state.pendingSelectedRuleId}
                         selectRule={this.selectRule}
                         updatePendingState={this.updatePendingState}
                         clearStateOnComfirmModalUnmount={this.clearStateOnComfirmModalUnmount}
                         pendingChanges={this.state.pendingChanges}
+                        ruleWasUpdatedId={ruleWasUpdatedId}
                     />
                 </SplitterLayout>
                 <Modal
                     commands={this.commands}
                     isEdit={isEdit}
-                    handleSubmit={this.handleSubmit}
+                    handleSubmitOnCreate={this.handleSubmitOnCreate}
+                    handleSubmitOnEdit={this.handleSubmitOnEdit}
                     handleClose={this.handleClose}
                     isOpen={isOpen}
                     currentRules={currentRules}

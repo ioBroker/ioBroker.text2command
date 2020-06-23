@@ -141,14 +141,14 @@ class Modal extends Component {
     };
 
     setDialogContent = () => {
-        const { handleClose, handleSubmit } = this.props;
-
+        const { handleClose, handleSubmitOnCreate, handleSubmitOnEdit, isEdit } = this.props;
+        const onSubmitHandler = !isEdit ? handleSubmitOnCreate : handleSubmitOnEdit;
         return (
             <DialogContent>
                 {this.createForm()}
                 <DialogActions>
                     <Button
-                        onClick={handleSubmit.bind(
+                        onClick={onSubmitHandler.bind(
                             this,
                             this.state.localRule,
                             this.state.localRule.isError
@@ -181,7 +181,8 @@ export default withStyles(styles)(Modal);
 
 Modal.propTypes = {
     handleClose: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
+    handleSubmitOnCreate: PropTypes.func.isRequired,
+    handleSubmitOnEdit: PropTypes.func.isRequired,
     isEdit: PropTypes.bool.isRequired,
     commands: PropTypes.arrayOf(
         PropTypes.shape({
