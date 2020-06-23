@@ -34,7 +34,7 @@ class Modal extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.currentRules !== this.props.currentRules) {
-            this.existingNames = this.props.currentRules.map(rule => rule.name);
+            this.existingNames = this.props.currentRules?.map(rule => rule?.name);
         }
     }
 

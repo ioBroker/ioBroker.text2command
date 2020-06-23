@@ -99,13 +99,15 @@ class RightBar extends PureComponent {
             }
         } else if (
             this.props.ruleWasUpdatedId === this.props.selectedRule.id &&
-            !this.state.isLocalStateWasUpdated
+            !this.state.isLocalStateWasUpdated &&
+            this.props.ruleWasUpdatedId
         ) {
             this.setState({
                 isLocalStateWasUpdated: true,
             });
         }
         if (this.props.pendingSelectedRuleId && this.state.isLocalStateWasUpdated) {
+            if (this.props.pendingSelectedRuleId === this.state.localRule.id) return;
             this.setState({
                 confirmChanges: true,
             });
@@ -114,7 +116,7 @@ class RightBar extends PureComponent {
 
     createConfirmModalActions = () => {
         const { t } = I18n;
-        const { updateConfig, updateRule, classes, selectRule, pendingSelectedRuleId } = this.props;
+        const { updateConfig, classes, selectRule, pendingSelectedRuleId } = this.props;
 
         const cancelSavingChanges = async () => {
             await this.props.clearStateOnComfirmModalUnmount();
@@ -125,7 +127,7 @@ class RightBar extends PureComponent {
         };
         const dontSaveAndGo = async () => {
             if (this.props.ruleWasUpdatedId === this.state.localRule.id) {
-                await this.props.setDataFromConfig();
+                await this.props.revertChangesFromConfig(this.state.localRule);
                 await this.setState({
                     isLocalStateWasUpdated: false,
                     confirmChanges: false,
@@ -135,7 +137,7 @@ class RightBar extends PureComponent {
                     isLocalStateWasUpdated: false,
                     confirmChanges: false,
                 });
-                await this.props.updatePendingState(false);
+                await this.props.updatePendingState(false, this.state.localRule.id);
             }
 
             await selectRule(pendingSelectedRuleId);
@@ -143,7 +145,6 @@ class RightBar extends PureComponent {
             this.props.clearStateOnComfirmModalUnmount();
         };
         const hanleSaveAndGo = async () => {
-            await updateRule(this.state.localRule);
             await updateConfig(this.state.localRule);
             await selectRule(pendingSelectedRuleId);
             await this.props.clearStateOnComfirmModalUnmount();
@@ -177,24 +178,28 @@ class RightBar extends PureComponent {
 
     createSaveSettingsForm = () => {
         const { t } = I18n;
-        const { updateConfig, updateRule, classes, setDataFromConfig } = this.props;
+        const {
+            updateConfig,
+            classes,
+            revertChangesFromConfig,
+            clearStateOnComfirmModalUnmount,
+        } = this.props;
 
         const handleSave = async () => {
-            await updateRule(this.state.localRule);
-            await updateConfig(this.state.localRule);
             this.setState({
                 isLocalStateWasUpdated: false,
                 confirmChanges: false,
             });
+            await updateConfig(this.state.localRule);
         };
 
         const revertChanges = async () => {
-            await setDataFromConfig();
+            await revertChangesFromConfig(this.state.localRule);
             await this.setState({
                 localRule: this.props.selectedRule,
                 isLocalStateWasUpdated: false,
             });
-            this.props.clearStateOnComfirmModalUnmount();
+            clearStateOnComfirmModalUnmount();
         };
 
         return (
@@ -404,7 +409,7 @@ class RightBar extends PureComponent {
                     },
                     isLocalStateWasUpdated: true,
                 });
-                _this.props.updateRule(_this.state.localRule);
+                _this.props.updateCurrentRules(_this.state.localRule);
             },
         };
     };
@@ -522,9 +527,9 @@ RightBar.propTypes = {
         words: PropTypes.string,
     }).isRequired,
     socket: PropTypes.object.isRequired,
-    updateRule: PropTypes.func.isRequired,
+    updateCurrentRules: PropTypes.func.isRequired,
     updateConfig: PropTypes.func.isRequired,
-    setDataFromConfig: PropTypes.func.isRequired,
+    revertChangesFromConfig: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
     selectRule: PropTypes.func.isRequired,
     pendingSelectedRuleId: PropTypes.string,
