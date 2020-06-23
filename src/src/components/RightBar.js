@@ -148,8 +148,7 @@ class RightBar extends PureComponent {
             await updateConfig(this.state.localRule);
             await selectRule(pendingSelectedRuleId);
             await this.props.clearStateOnComfirmModalUnmount();
-
-            this.setState({
+            await this.setState({
                 isLocalStateWasUpdated: false,
                 confirmChanges: false,
             });

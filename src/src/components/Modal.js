@@ -63,7 +63,7 @@ class Modal extends Component {
             option => !(option.unique && currentRules.find(item => item?.rule === option.rule))
         );
 
-        return selectedRule.unique ? uniqueOptions.concat(selectedRule) : uniqueOptions;
+        return selectedRule?.unique ? uniqueOptions.concat(selectedRule) : uniqueOptions;
     };
 
     getUniqueName = ruleName => {
