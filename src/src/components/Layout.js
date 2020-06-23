@@ -101,8 +101,10 @@ export default class Layout extends PureComponent {
     handleSubmitOnEdit = (selectedRule, isError) => {
         if (isError) return;
 
-        this.updateRule(selectedRule);
-        this.setState({});
+        this.updateCurrentRules(selectedRule);
+        this.setState({
+            ruleWasUpdatedId: selectedRule.id,
+        });
         this.handleClose();
     };
 
@@ -124,23 +126,20 @@ export default class Layout extends PureComponent {
         }
     };
 
-    updatePendingState = bool => {
+    updatePendingState = (bool, id) => {
         if (this.state.pendingChanges === bool) return;
 
         this.setState({
             pendingChanges: bool,
-            ruleWasUpdatedId: bool ? this.state.ruleWasUpdatedId : false,
+            ruleWasUpdatedId:
+                id === this.state.ruleWasUpdatedId ? false : this.state.ruleWasUpdatedId,
         });
     };
 
-    updateRule = selectedRule => {
-        this.setState({
-            currentRules: this.state.currentRules.map(item =>
-                item.id === selectedRule.id ? selectedRule : item
-            ),
-            pendingChanges: false,
-            ruleWasUpdatedId: false,
-        });
+    updateCurrentRules = selectedRule => {
+        return this.state.currentRules.map(item =>
+            item.id === selectedRule.id ? selectedRule : item
+        );
     };
 
     handleEdit = () => {
@@ -176,38 +175,81 @@ export default class Layout extends PureComponent {
     };
 
     removeRule = id => {
+        const deleteRuleFromConfig = async () => {
+            const config = await this.props.readConfig();
+            const { rules, ...settings } = config;
+            const newConfig = { rules: rules.filter(rule => rule.id !== id), ...settings };
+            this.props.saveConfig(newConfig);
+        };
         this.setState(
             {
                 currentRules: this.state.currentRules.filter(rule => rule.id !== id),
                 selectedRule: {},
             },
-            this.updateConfig
+            deleteRuleFromConfig
         );
     };
 
-    updateConfig = rule => {
-        const config = {
-            ...this.state.settings,
-            rules: this.state.currentRules,
-        };
-        this.props.saveConfig(config);
+    updateConfig = async currentSelectedRule => {
+        const { currentRules, ruleWasUpdatedId, selectedRule } = this.state;
+        const config = await this.props.readConfig();
+        const { rules, ...settings } = config;
+
+        const isRuleAlreadyExist = rules.find(rule => rule.id === currentSelectedRule.id);
+
+        let updatedRules;
+        if (isRuleAlreadyExist) {
+            updatedRules = rules.map(rule =>
+                rule.id === currentSelectedRule.id ? currentSelectedRule : rule
+            );
+        } else {
+            updatedRules = [...rules, currentSelectedRule];
+        }
+
+        const newConfig = { rules: updatedRules, ...settings };
+        await this.props.saveConfig(newConfig);
 
         this.setState({
-            selectedRule: rule || this.state.selectedRule || {},
+            selectedRule: selectedRule || selectedRule || {},
+            currentRules: isRuleAlreadyExist
+                ? this.updateCurrentRules(currentSelectedRule)
+                : currentRules,
+            pendingChanges: false,
+            pendingSelectedRuleId: false,
+            ruleWasUpdatedId:
+                currentSelectedRule.id === ruleWasUpdatedId ? false : ruleWasUpdatedId,
         });
     };
 
     setDataFromConfig = async () => {
-        const { currentRules } = this.state;
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
         await this.setState({
             currentRules: rules,
             settings,
-            pendingChanges: false,
-            ruleWasUpdatedId: false,
-            pendingSelectedRuleId: false,
         });
+    };
+
+    revertChangesFromConfig = async selectedRule => {
+        const { currentRules } = this.state;
+        const config = await this.props.readConfig();
+        const { rules, ...settings } = config;
+
+        const matchingRule = rules.find(rule => rule.id === selectedRule.id);
+        let updatedRules;
+        if (matchingRule) {
+            updatedRules = currentRules.map(rule =>
+                rule.id === matchingRule.id ? matchingRule : rule
+            );
+        } else {
+            updatedRules = currentRules.filter(rule => rule.id !== selectedRule.id);
+        }
+
+        await this.setState({
+            currentRules: updatedRules,
+            settings,
+        });
+
         if (this.state.currentRules.length !== currentRules.length) {
             this.setState({
                 selectedRule: this.state.currentRules[this.state.currentRules.length - 1] || {},
@@ -244,9 +286,9 @@ export default class Layout extends PureComponent {
                     <RightBar
                         selectedRule={selectedRule}
                         socket={this.props.socket}
-                        updateRule={this.updateRule}
+                        updateCurrentRules={this.updateCurrentRules}
                         updateConfig={this.updateConfig}
-                        setDataFromConfig={this.setDataFromConfig}
+                        revertChangesFromConfig={this.revertChangesFromConfig}
                         pendingSelectedRuleId={this.state.pendingSelectedRuleId}
                         selectRule={this.selectRule}
                         updatePendingState={this.updatePendingState}
