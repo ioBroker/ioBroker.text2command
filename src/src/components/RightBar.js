@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 
 import { TextField, Switch, Typography, withStyles, Box } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 
@@ -25,7 +29,7 @@ const styles = theme => ({
         margin: '10px auto 20px',
         display: 'flex',
         justifyContent: 'center',
-        width: '30%',
+        width: '100%',
     },
     title: {
         marginBottom: '30px',
@@ -33,6 +37,9 @@ const styles = theme => ({
     btnDanger: {
         marginLeft: 20,
         backgroundColor: theme.palette.error?.dark,
+    },
+    saveAndGoBtn: {
+        marginRight: 20,
     },
 });
 
@@ -78,20 +85,77 @@ class RightBar extends PureComponent {
                     },
                 });
             }
-            // if (
-            //     this.props.selectedRule.name !== this.state.localRule.name &&
-            //     this.props.selectedRule.id !== this.state.localRule.id
-            // ) {
-            //     this.props.updateRule(this.state.localRule);
-            // }
         } else if (this.state.isLocalStateWasUpdated) {
             if (isEqual(this.props.selectedRule, this.state.localRule)) {
+                this.props.updatePendingState(false);
                 this.setState({
                     isLocalStateWasUpdated: false,
                 });
+            } else {
+                this.props.updatePendingState(true);
             }
         }
+        if (
+            this.props.pendingSelectedRuleId &&
+            (this.state.isLocalStateWasUpdated || this.props.isGlobalStateWasUpdated)
+        ) {
+            this.setState({
+                confirmChanges: true,
+            });
+        }
     }
+
+    createConfirmModalActions = () => {
+        const { t } = I18n;
+        const { updateConfig, updateRule, classes, selectRule, pendingSelectedRuleId } = this.props;
+
+        const cancelSavingChanges = async () => {
+            await this.props.clearStateOnComfirmModalUnmount();
+            await this.setState({
+                confirmChanges: false,
+            });
+        };
+        const dontSaveAndGo = async () => {
+            await this.setState({
+                isLocalStateWasUpdated: false,
+                confirmChanges: false,
+            });
+            await this.props.updatePendingState(false);
+            await selectRule(pendingSelectedRuleId);
+
+            this.props.clearStateOnComfirmModalUnmount();
+        };
+        const hanleSaveAndGo = async () => {
+            await updateRule(this.state.localRule);
+            await updateConfig(this.state.localRule);
+            await this.setState({
+                isLocalStateWasUpdated: false,
+                confirmChanges: false,
+            });
+            selectRule(pendingSelectedRuleId);
+            this.props.clearStateOnComfirmModalUnmount();
+        };
+        return (
+            <FormControl className={classes.submitForm}>
+                <Button
+                    variant="contained"
+                    onClick={hanleSaveAndGo}
+                    color="primary"
+                    className={classes.saveAndGoBtn}>
+                    {t('Save and go')}
+                </Button>
+                <Button onClick={dontSaveAndGo} variant="contained" color="secondary">
+                    {t(`Dont save and go`)}
+                </Button>
+                <Button
+                    variant="contained"
+                    className={classes.btnDanger}
+                    onClick={cancelSavingChanges}>
+                    {t('Cancel')}
+                </Button>
+            </FormControl>
+        );
+    };
 
     createSaveSettingsForm = () => {
         const { t } = I18n;
@@ -102,15 +166,17 @@ class RightBar extends PureComponent {
             await updateConfig(this.state.localRule);
             this.setState({
                 isLocalStateWasUpdated: false,
+                confirmChanges: false,
             });
         };
 
         const revertChanges = async () => {
             await setDataFromConfig();
-            this.setState({
+            await this.setState({
                 localRule: this.props.selectedRule,
                 isLocalStateWasUpdated: false,
             });
+            this.props.clearStateOnComfirmModalUnmount();
         };
 
         return (
@@ -360,10 +426,11 @@ class RightBar extends PureComponent {
         const { classes, isGlobalStateWasUpdated } = this.props;
 
         const handleSubmit = this.handleDialogSelectIdSubmit;
-        const SaveSettingsForm = this.createSaveSettingsForm();
+        const SaveSettingsForm = this.createSaveSettingsForm({});
+
         const isStateDefault = localRule === this.defaultState;
 
-        console.log('rerender');
+        console.log(this.state);
 
         return (
             <Box mt="30px">
@@ -405,6 +472,19 @@ class RightBar extends PureComponent {
                         onOk={handleSubmit}
                     />
                 )}
+                {this.state.confirmChanges && (
+                    <Dialog fullWidth open={this.state.confirmChanges}>
+                        <DialogTitle>
+                            {I18n.t('Please confirm or cancel changes before leaving')}
+                        </DialogTitle>
+                        <DialogContent>
+                            <Typography>
+                                {I18n.t('You have changed rule')} <strong>{name}</strong>
+                            </Typography>
+                            <DialogActions>{this.createConfirmModalActions()}</DialogActions>
+                        </DialogContent>
+                    </Dialog>
+                )}
             </Box>
         );
     }
@@ -436,4 +516,9 @@ RightBar.propTypes = {
     updateConfig: PropTypes.func.isRequired,
     setDataFromConfig: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
+    selectRule: PropTypes.func.isRequired,
+    pendingSelectedRuleId: PropTypes.string,
+    updatePendingState: PropTypes.func.isRequired,
+    clearStateOnComfirmModalUnmount: PropTypes.func.isRequired,
+    pendingChanges: PropTypes.bool.isRequired,
 };
