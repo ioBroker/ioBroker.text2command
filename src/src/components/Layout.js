@@ -76,15 +76,20 @@ export default class Layout extends PureComponent {
 
     handleSubmit = (selectedRule, isError) => {
         const id = uuid();
-        const newRule = {
+        const shortDataRule = {
             ...selectedRule,
             id,
             interupt: true,
         };
+
+        const rule = {
+            ...this.commands.find(command => command.rule === shortDataRule.rule),
+            ...shortDataRule,
+        };
+
         const addNewRule = () =>
             this.setState({
-                currentRules: [...this.state.currentRules, newRule],
-                selectedRule: newRule,
+                currentRules: [...this.state.currentRules, rule],
             });
 
         this.state.isEdit ? this.updateRule(selectedRule) : addNewRule();
@@ -92,6 +97,7 @@ export default class Layout extends PureComponent {
         this.setState({
             isStateWasUpdated: true,
         });
+
         this.handleClose();
     };
 
@@ -105,12 +111,10 @@ export default class Layout extends PureComponent {
             });
             return;
         } else {
-            const shortDataRule = currentRules.find(item => item.id === id);
-            const rule = !shortDataRule.words
-                ? this.commands.find(command => command.rule === shortDataRule.rule)
-                : {};
+            const rule = currentRules.find(item => item.id === id);
+
             this.setState({
-                selectedRule: { ...rule, ...shortDataRule },
+                selectedRule: rule,
             });
         }
     };
@@ -131,11 +135,10 @@ export default class Layout extends PureComponent {
         });
     };
 
-    handleEdit = id => {
+    handleEdit = () => {
         this.setState({
             isEdit: true,
         });
-        this.selectRule(id);
         this.handleOpen();
     };
 
@@ -207,6 +210,7 @@ export default class Layout extends PureComponent {
         this.setState({
             pendingChanges: false,
             pendingSelectedRuleId: false,
+            isStateWasUpdated: false,
         });
     };
 
