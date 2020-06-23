@@ -85,12 +85,14 @@ class RightBar extends PureComponent {
                     },
                 });
             }
-        } else if (this.state.isLocalStateWasUpdated) {
+        } else if (this.state.isLocalStateWasUpdated || this.props.isGlobalStateWasUpdated) {
             if (isEqual(this.props.selectedRule, this.state.localRule)) {
-                this.props.updatePendingState(false);
                 this.setState({
                     isLocalStateWasUpdated: false,
                 });
+                if (!this.props.isGlobalStateWasUpdated) {
+                    this.props.updatePendingState(false);
+                }
             } else {
                 this.props.updatePendingState(true);
             }

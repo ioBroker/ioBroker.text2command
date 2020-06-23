@@ -40,14 +40,13 @@ const Rule = React.forwardRef((props, ref) => {
         getNode: () => elementRef.current,
     }));
 
-    const handleEditMemo = useCallback(() => handleEdit(id), [id, handleEdit]);
     const selectRuleMemo = useCallback(() => selectRule(id), [id, selectRule]);
 
     const icons = [
         {
             icon: interupt ? <DoneIcon color="primary" /> : <CloseIcon color="primary" />,
         },
-        { icon: <EditIcon />, handleClick: handleEditMemo },
+        { icon: <EditIcon />, handleClick: handleEdit },
     ];
 
     return (
