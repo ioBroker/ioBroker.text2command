@@ -85,22 +85,27 @@ class RightBar extends PureComponent {
                     },
                 });
             }
-        } else if (this.state.isLocalStateWasUpdated || this.props.isGlobalStateWasUpdated) {
-            if (isEqual(this.props.selectedRule, this.state.localRule)) {
+        } else if (this.state.isLocalStateWasUpdated) {
+            if (
+                isEqual(this.props.selectedRule, this.state.localRule) &&
+                !this.props.ruleWasUpdatedId
+            ) {
                 this.setState({
                     isLocalStateWasUpdated: false,
                 });
-                if (!this.props.isGlobalStateWasUpdated) {
-                    this.props.updatePendingState(false);
-                }
+                this.props.updatePendingState(false);
             } else {
                 this.props.updatePendingState(true);
             }
-        }
-        if (
-            this.props.pendingSelectedRuleId &&
-            (this.state.isLocalStateWasUpdated || this.props.isGlobalStateWasUpdated)
+        } else if (
+            this.props.ruleWasUpdatedId === this.props.selectedRule.id &&
+            !this.state.isLocalStateWasUpdated
         ) {
+            this.setState({
+                isLocalStateWasUpdated: true,
+            });
+        }
+        if (this.props.pendingSelectedRuleId && this.state.isLocalStateWasUpdated) {
             this.setState({
                 confirmChanges: true,
             });
@@ -115,14 +120,24 @@ class RightBar extends PureComponent {
             await this.props.clearStateOnComfirmModalUnmount();
             await this.setState({
                 confirmChanges: false,
+                isLocalStateWasUpdated: true,
             });
         };
         const dontSaveAndGo = async () => {
-            await this.setState({
-                isLocalStateWasUpdated: false,
-                confirmChanges: false,
-            });
-            await this.props.updatePendingState(false);
+            if (this.props.ruleWasUpdatedId === this.state.localRule.id) {
+                await this.props.setDataFromConfig();
+                await this.setState({
+                    isLocalStateWasUpdated: false,
+                    confirmChanges: false,
+                });
+            } else {
+                await this.setState({
+                    isLocalStateWasUpdated: false,
+                    confirmChanges: false,
+                });
+                await this.props.updatePendingState(false);
+            }
+
             await selectRule(pendingSelectedRuleId);
 
             this.props.clearStateOnComfirmModalUnmount();
@@ -130,12 +145,13 @@ class RightBar extends PureComponent {
         const hanleSaveAndGo = async () => {
             await updateRule(this.state.localRule);
             await updateConfig(this.state.localRule);
-            await this.setState({
+            await selectRule(pendingSelectedRuleId);
+            await this.props.clearStateOnComfirmModalUnmount();
+
+            this.setState({
                 isLocalStateWasUpdated: false,
                 confirmChanges: false,
             });
-            selectRule(pendingSelectedRuleId);
-            this.props.clearStateOnComfirmModalUnmount();
         };
         return (
             <FormControl className={classes.submitForm}>
@@ -423,14 +439,11 @@ class RightBar extends PureComponent {
         const {
             localRule: { name },
             isLocalStateWasUpdated,
-            localRule,
         } = this.state;
-        const { classes, isGlobalStateWasUpdated } = this.props;
+        const { classes } = this.props;
 
         const handleSubmit = this.handleDialogSelectIdSubmit;
         const SaveSettingsForm = this.createSaveSettingsForm({});
-
-        const isStateDefault = localRule === this.defaultState;
 
         console.log(this.state);
 
@@ -440,15 +453,11 @@ class RightBar extends PureComponent {
                     <Typography
                         variant="h4"
                         align="center"
-                        className={
-                            !isLocalStateWasUpdated && !isGlobalStateWasUpdated ? classes.title : ''
-                        }>
+                        className={!isLocalStateWasUpdated ? classes.title : ''}>
                         {name}
                     </Typography>
 
-                    {(isLocalStateWasUpdated || isGlobalStateWasUpdated) &&
-                        !isStateDefault &&
-                        SaveSettingsForm}
+                    {isLocalStateWasUpdated && SaveSettingsForm}
 
                     {this.createOptionsData().map(({ title, item, id }) => {
                         if (!item) return null;
@@ -512,7 +521,6 @@ RightBar.propTypes = {
         ),
         words: PropTypes.string,
     }).isRequired,
-    isGlobalStateWasUpdated: PropTypes.bool,
     socket: PropTypes.object.isRequired,
     updateRule: PropTypes.func.isRequired,
     updateConfig: PropTypes.func.isRequired,
@@ -523,4 +531,5 @@ RightBar.propTypes = {
     updatePendingState: PropTypes.func.isRequired,
     clearStateOnComfirmModalUnmount: PropTypes.func.isRequired,
     pendingChanges: PropTypes.bool.isRequired,
+    ruleWasUpdatedId: PropTypes.string,
 };
