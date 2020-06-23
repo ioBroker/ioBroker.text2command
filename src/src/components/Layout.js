@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import SplitterLayout from 'react-splitter-layout';
 import { v4 as uuid } from 'uuid';
 import I18n from '@iobroker/adapter-react/i18n';
@@ -10,7 +10,7 @@ import Modal from './Modal';
 import PropTypes from 'prop-types';
 import 'react-splitter-layout/lib/index.css';
 
-export default class Layout extends Component {
+export default class Layout extends PureComponent {
     state = {
         lang: I18n.getLanguage(),
         currentRules: [],
@@ -97,13 +97,29 @@ export default class Layout extends Component {
 
     selectRule = id => {
         const { selectedRule, currentRules } = this.state;
+
         if (selectedRule.id === id) return;
-        const shortDataRule = currentRules.find(item => item.id === id);
-        const rule = !shortDataRule.words
-            ? this.commands.find(command => command.rule === shortDataRule.rule)
-            : {};
+        else if (this.state.pendingChanges) {
+            this.setState({
+                pendingSelectedRuleId: id,
+            });
+            return;
+        } else {
+            const shortDataRule = currentRules.find(item => item.id === id);
+            const rule = !shortDataRule.words
+                ? this.commands.find(command => command.rule === shortDataRule.rule)
+                : {};
+            this.setState({
+                selectedRule: { ...rule, ...shortDataRule },
+            });
+        }
+    };
+
+    updatePendingState = bool => {
+        if (this.state.pendingChanges === bool) return;
+
         this.setState({
-            selectedRule: { ...rule, ...shortDataRule },
+            pendingChanges: bool,
         });
     };
 
@@ -187,6 +203,13 @@ export default class Layout extends Component {
         }
     };
 
+    clearStateOnComfirmModalUnmount = () => {
+        this.setState({
+            pendingChanges: false,
+            pendingSelectedRuleId: false,
+        });
+    };
+
     render() {
         console.log(this.state);
         const { isEdit, isOpen, currentRules, selectedRule, isStateWasUpdated } = this.state;
@@ -213,6 +236,11 @@ export default class Layout extends Component {
                         updateConfig={this.updateConfig}
                         isGlobalStateWasUpdated={isStateWasUpdated}
                         setDataFromConfig={this.setDataFromConfig}
+                        pendingSelectedRuleId={this.state.pendingSelectedRuleId}
+                        selectRule={this.selectRule}
+                        updatePendingState={this.updatePendingState}
+                        clearStateOnComfirmModalUnmount={this.clearStateOnComfirmModalUnmount}
+                        pendingChanges={this.state.pendingChanges}
                     />
                 </SplitterLayout>
                 <Modal
