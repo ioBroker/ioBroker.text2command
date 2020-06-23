@@ -89,11 +89,18 @@ export default class Layout extends PureComponent {
             ...shortDataRule,
         };
 
-        this.setState({
-            currentRules: [...this.state.currentRules, rule],
-            ruleWasUpdatedId: id,
-            selectedRule: this.state.pendingChanges ? this.state.selectedRule : rule,
-        });
+        this.setState(
+            {
+                currentRules: [...this.state.currentRules, rule],
+                ruleWasUpdatedId: id,
+                selectedRule: !this.state.pendingChanges ? rule : this.state.selectedRule,
+            },
+            () => {
+                if (this.state.pendingChanges) {
+                    this.selectRule(rule.id);
+                }
+            }
+        );
 
         this.handleClose();
     };
@@ -210,14 +217,15 @@ export default class Layout extends PureComponent {
         await this.props.saveConfig(newConfig);
 
         this.setState({
-            selectedRule: selectedRule || selectedRule || {},
+            selectedRule: currentSelectedRule || this.state.selectedRule || {},
             currentRules: isRuleAlreadyExist
                 ? this.updateCurrentRules(currentSelectedRule)
                 : currentRules,
             pendingChanges: false,
-            pendingSelectedRuleId: false,
             ruleWasUpdatedId:
-                currentSelectedRule.id === ruleWasUpdatedId ? false : ruleWasUpdatedId,
+                currentSelectedRule.id === this.state.ruleWasUpdatedId
+                    ? false
+                    : this.state.ruleWasUpdatedId,
         });
     };
 
@@ -238,7 +246,7 @@ export default class Layout extends PureComponent {
         const matchingRule = rules.find(rule => rule.id === selectedRule.id);
         let updatedRules;
         if (matchingRule) {
-            updatedRules = currentRules.map(rule =>
+            updatedRules = this.state.currentRules.map(rule =>
                 rule.id === matchingRule.id ? matchingRule : rule
             );
         } else {
@@ -247,6 +255,7 @@ export default class Layout extends PureComponent {
 
         await this.setState({
             currentRules: updatedRules,
+            selectedRule: matchingRule || {},
             settings,
         });
 
