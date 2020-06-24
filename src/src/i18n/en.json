@@ -34,5 +34,9 @@
     "Confirmation text": "Confirmation text",
     "Name already exist": "Name already exist",
     "Test phrase": "Test phrase",
-    "Interupt processing": "Interupt processing"
+    "Interupt processing": "Interupt processing",
+    "Save and go": "Save and go",
+    "Dont save and go": "Dont save and go",
+    "Please confirm or cancel changes before leaving": "Please confirm or cancel changes before leaving",
+    "You have changed rule": "You have changed rule"
 }
