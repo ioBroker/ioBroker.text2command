@@ -6,6 +6,7 @@ import Loader from '@iobroker/adapter-react/Components/Loader';
 import I18n from '@iobroker/adapter-react/i18n';
 import GenericApp from '@iobroker/adapter-react/GenericApp';
 import Layout from './components/Layout';
+import isEqual from 'lodash.isequal';
 
 // Icons
 
@@ -76,7 +77,7 @@ class App extends GenericApp {
         return this.socket
             .getObject('system.adapter.' + this.adapterName + '.' + this.instance)
             .then(obj => {
-                if (JSON.stringify(obj.native) !== JSON.stringify(config)) {
+                if (!isEqual(obj.native, config)) {
                     obj.native = config;
                     return this.socket.setObject(
                         'system.adapter.' + this.adapterName + '.' + this.instance,

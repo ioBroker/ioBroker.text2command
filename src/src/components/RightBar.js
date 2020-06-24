@@ -145,13 +145,22 @@ class RightBar extends PureComponent {
             this.props.clearStateOnComfirmModalUnmount();
         };
         const hanleSaveAndGo = async () => {
-            await updateConfig(this.state.localRule);
+            if (this.props.ruleWasUpdatedId === this.state.localRule.id) {
+                await updateConfig(this.state.localRule);
+                await this.setState({
+                    isLocalStateWasUpdated: false,
+                    confirmChanges: false,
+                });
+            } else {
+                await this.setState({
+                    isLocalStateWasUpdated: false,
+                    confirmChanges: false,
+                });
+                await updateConfig(this.state.localRule);
+            }
+
             await selectRule(pendingSelectedRuleId);
             await this.props.clearStateOnComfirmModalUnmount();
-            await this.setState({
-                isLocalStateWasUpdated: false,
-                confirmChanges: false,
-            });
         };
         return (
             <FormControl className={classes.submitForm}>
