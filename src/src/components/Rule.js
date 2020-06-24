@@ -67,7 +67,7 @@ const Rule = React.forwardRef((props, ref) => {
                 setTimeout(() => setBg('lightblue'), matchingRule.timer);
                 setTimeout(
                     () => setBg(selectedRule.id === id ? 'rgba(0, 0, 0, 0.06)' : ''),
-                    500 * (matchingRule.indexOf + 1)
+                    500 * (matchingRule.index + 1)
                 );
             } // only when matching rules have been changed
         } // eslint-disable-next-line
