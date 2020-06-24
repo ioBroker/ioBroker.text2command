@@ -135,6 +135,7 @@ Rule.propTypes = {
     interupt: PropTypes.bool.isRequired,
     selectRule: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
+    matchingRules: PropTypes.array,
     selectedRule: PropTypes.shape({
         id: PropTypes.string,
     }),
