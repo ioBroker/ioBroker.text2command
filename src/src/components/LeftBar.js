@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import AddIcon from '@material-ui/icons/Add';
-import SaveIcon from '@material-ui/icons/Save';
+import SettingsIcon from '@material-ui/icons/Settings';
 import CachedIcon from '@material-ui/icons/Cached';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import { TextField, Box, withStyles } from '@material-ui/core';
 import { DndProvider } from 'react-dnd';
@@ -20,10 +21,13 @@ const styles = theme => ({
         position: 'absolute',
         bottom: '100px',
         width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        boxSizing: 'border-box',
     },
     root: {
         width: '92%',
-        '& .MuiOutlinedInput-notchedOutline-55': {
+        '& .MuiOutlinedInput-notchedOutline-58': {
             border: `2px solid ${theme.palette.grey[700]}`,
         },
         '& #outlined-basic': {
@@ -38,7 +42,22 @@ const styles = theme => ({
 });
 
 class LeftBar extends Component {
-    handleTextCommand = () => {};
+    state = {
+        textCommand: '',
+        matchingRules: [],
+    };
+    handleTextCommand = event => {
+        this.setState({
+            textCommand: event.target.value,
+        });
+    };
+    handleSubmit = event => {
+        if (event.key === 'Enter') {
+            this.setState({
+                textCommand: '',
+            });
+        }
+    };
 
     render() {
         const {
@@ -57,7 +76,7 @@ class LeftBar extends Component {
                 handler: () => this.props.handleOpen(),
             },
             {
-                icon: <SaveIcon />,
+                icon: <SettingsIcon />,
                 handler: () => console.log('save'),
             },
             {
@@ -102,12 +121,13 @@ class LeftBar extends Component {
                                 key={rule?.id}
                                 selectRule={selectRule}
                                 selectedRule={selectedRule}
+                                matchingRules={this.state.matchingRules}
                             />
                         ))}
                     </List>
                 </DndProvider>
 
-                <Box className={classes.test} display="flex" justifyContent="center">
+                <Toolbar className={classes.test}>
                     <TextField
                         onChange={this.handleTextCommand}
                         label={`${I18n.t('Test phrase')}`}
@@ -116,8 +136,10 @@ class LeftBar extends Component {
                         size="small"
                         color="primary"
                         className={classes.root}
+                        onKeyDown={this.handleSubmit}
+                        value={this.state.textCommand}
                     />
-                </Box>
+                </Toolbar>
             </Box>
         );
     }

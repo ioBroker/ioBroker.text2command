@@ -198,7 +198,7 @@ export default class Layout extends PureComponent {
     };
 
     updateConfig = async currentSelectedRule => {
-        const { currentRules, ruleWasUpdatedId, selectedRule } = this.state;
+        const { currentRules } = this.state;
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
 
