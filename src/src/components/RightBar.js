@@ -497,13 +497,13 @@ class RightBar extends PureComponent {
                     />
                 )}
                 {this.state.confirmChanges && (
-                    <Dialog fullWidth open={this.state.confirmChanges}>
+                    <Dialog fullWidth open={this.state.confirmChanges} maxWidth={'md'}>
                         <DialogTitle>
                             {I18n.t('Please confirm or cancel changes before leaving')}
                         </DialogTitle>
                         <DialogContent>
                             <Typography>
-                                {I18n.t('You have changed rule')} <strong>{name}</strong>
+                                {I18n.t('You have changed rule') + ': '} <strong>{name}</strong>
                             </Typography>
                             <DialogActions>{this.createConfirmModalActions()}</DialogActions>
                         </DialogContent>
@@ -540,9 +540,9 @@ RightBar.propTypes = {
     revertChangesFromConfig: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
     selectRule: PropTypes.func.isRequired,
-    pendingSelectedRuleId: PropTypes.string,
+    pendingSelectedRuleId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     updatePendingState: PropTypes.func.isRequired,
     clearStateOnComfirmModalUnmount: PropTypes.func.isRequired,
-    pendingChanges: PropTypes.bool.isRequired,
-    ruleWasUpdatedId: PropTypes.string,
+    pendingChanges: PropTypes.bool,
+    ruleWasUpdatedId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };
