@@ -267,6 +267,17 @@ export default class Layout extends PureComponent {
         }
     };
 
+    saveSettings = async (localeSettings, closeModal) => {
+        const config = await this.props.readConfig();
+        const { rules } = config;
+        this.setState({
+            settings: localeSettings,
+        });
+        const newConfig = { rules, ...localeSettings };
+        await this.props.saveConfig(newConfig);
+        closeModal();
+    };
+
     getRuleWasUpdatedId = id => {
         return id === this.state.ruleWasUpdatedId ? false : this.state.ruleWasUpdatedId;
     };
@@ -297,6 +308,8 @@ export default class Layout extends PureComponent {
                         selectedRule={selectedRule}
                         removeRule={this.removeRule}
                         settings={this.state.settings}
+                        socket={this.props.socket}
+                        saveSettings={this.saveSettings}
                     />
                     <RightBar
                         selectedRule={selectedRule}

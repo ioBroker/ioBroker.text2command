@@ -160,7 +160,7 @@ class RightBar extends PureComponent {
             }
 
             await selectRule(pendingSelectedRuleId);
-            await this.props.clearStateOnComfirmModalUnmount();
+            this.props.clearStateOnComfirmModalUnmount();
         };
         return (
             <FormControl className={classes.submitForm}>
