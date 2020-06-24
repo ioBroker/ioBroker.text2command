@@ -108,9 +108,9 @@ export default class Layout extends PureComponent {
     handleSubmitOnEdit = (selectedRule, isError) => {
         if (isError) return;
 
-        this.updateCurrentRules(selectedRule);
         this.setState({
             ruleWasUpdatedId: selectedRule.id,
+            currentRules: this.updateCurrentRules(selectedRule),
         });
         this.handleClose();
     };
@@ -257,6 +257,7 @@ export default class Layout extends PureComponent {
             currentRules: updatedRules,
             selectedRule: matchingRule || {},
             settings,
+            ruleWasUpdatedId: this.getRuleWasUpdatedId(selectedRule.id),
         });
 
         if (this.state.currentRules.length !== currentRules.length) {
@@ -264,6 +265,10 @@ export default class Layout extends PureComponent {
                 selectedRule: this.state.currentRules[this.state.currentRules.length - 1] || {},
             });
         }
+    };
+
+    getRuleWasUpdatedId = id => {
+        return id === this.state.ruleWasUpdatedId ? false : this.state.ruleWasUpdatedId;
     };
 
     clearStateOnComfirmModalUnmount = () => {
