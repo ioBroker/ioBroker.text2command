@@ -1,15 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
 import { findMatched } from '@admin/langModel';
+
 import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/Settings';
 import CachedIcon from '@material-ui/icons/Cached';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DialogActions from '@material-ui/core/DialogActions';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import { TextField, Box, withStyles } from '@material-ui/core';
+import {
+    TextField,
+    Typography,
+    Box,
+    withStyles,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Button,
+    Select,
+    MenuItem,
+} from '@material-ui/core';
+
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -39,13 +53,26 @@ const styles = theme => ({
         padding: theme.spacing(1.3),
         border: `1px solid ${theme.palette.divider}`,
     },
+    textInput: {
+        width: '100%',
+    },
 });
 
 class LeftBar extends Component {
     state = {
         textCommand: '',
         matchingRules: [],
+        isSettingsDialogOpen: false,
     };
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.settings !== prevProps.settings && this.props.settings) {
+            this.setState({
+                localeSettings: this.props.settings,
+            });
+        }
+    }
+
     handleTextCommand = event => {
         this.setState({
             textCommand: event.target.value,
@@ -70,6 +97,81 @@ class LeftBar extends Component {
         return text ? findMatched(text, JSON.parse(JSON.stringify(this.props.rules))) : [];
     }
 
+    handleOpenSettingsModal = () => {
+        this.setState({
+            isSettingsDialogOpen: true,
+        });
+    };
+
+    createSettingsModal = () => {
+        const { t } = I18n;
+        const options = [t('System'), 'english', 'deutsch', 'русский'];
+        const { classes } = this.props;
+
+        const handleClose = () => {
+            this.setState({
+                isSettingsDialogOpen: false,
+            });
+        };
+
+        const handleSelectChange = () => {};
+
+        const settingsItems = [
+            {
+                item: (
+                    <Select onChange={handleSelectChange} value={this.state.localeSettings?.lang}>
+                        {Children.toArray(
+                            options.map(option => <MenuItem value={option}>{option}</MenuItem>)
+                        )}
+                    </Select>
+                ),
+                title: t('Language'),
+                id: 1,
+            },
+            {
+                item: <TextField className={classes.textInput} />,
+                type: 'id',
+                title: t('Answer in id'),
+                id: 2,
+            },
+            {
+                item: <TextField className={classes.textInput} />,
+                type: 'id',
+                title: t(`Processor's id`),
+                id: 3,
+            },
+            {
+                item: <TextField className={classes.textInput} />,
+                type: 'text',
+                title: t('Timeout for processor') + '(ms)',
+                id: 4,
+            },
+        ];
+
+        return (
+            <Dialog open={this.state.isSettingsDialogOpen} onClose={handleClose} fullWidth>
+                <DialogTitle>
+                    <Typography variant="h5" component="h2" align="left">
+                        {t('Settings')}
+                    </Typography>
+                </DialogTitle>
+                <DialogContent>
+                    {settingsItems.map(({ item, title, id }) => (
+                        <Box display="flex" justifyContent="space-between" mb="10px" key={id}>
+                            <Typography variant="h5" component="h5" align="left">
+                                {title}
+                            </Typography>
+                            {item}
+                        </Box>
+                    ))}
+                    <DialogActions>
+                        <Button>Ok</Button>
+                        <Button onClick={handleClose}>{I18n.t('Cancel')}</Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
+        );
+    };
     render() {
         const {
             selectedRule,
@@ -88,7 +190,7 @@ class LeftBar extends Component {
             },
             {
                 icon: <SettingsIcon />,
-                handler: () => console.log('save'),
+                handler: () => this.handleOpenSettingsModal(),
             },
             {
                 icon: <CachedIcon />,
@@ -151,6 +253,7 @@ class LeftBar extends Component {
                         value={this.state.textCommand}
                     />
                 </Toolbar>
+                {this.createSettingsModal()}
             </Box>
         );
     }
@@ -173,4 +276,5 @@ LeftBar.propTypes = {
     removeRule: PropTypes.func,
     handleEdit: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
+    settings: PropTypes.object,
 };

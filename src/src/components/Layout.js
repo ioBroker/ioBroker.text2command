@@ -296,6 +296,7 @@ export default class Layout extends PureComponent {
                         selectRule={this.selectRule}
                         selectedRule={selectedRule}
                         removeRule={this.removeRule}
+                        settings={this.state.settings}
                     />
                     <RightBar
                         selectedRule={selectedRule}

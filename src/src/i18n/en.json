@@ -38,5 +38,10 @@
     "Save and go": "Save and go",
     "Dont save and go": "Dont save and go",
     "Please confirm or cancel changes before leaving": "Please confirm or cancel changes before leaving",
-    "You have changed rule": "You have changed rule"
+    "You have changed rule": "You have changed rule",
+    "Settings": "Settings",
+    "Timeout for processor": "Timeout for processor",
+    "Processor's id": "Processor's id",
+    "Language": "Language",
+    "System": "System"
 }

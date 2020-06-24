@@ -38,5 +38,11 @@
     "Save and go": "Сохранить и перейти",
     "Dont save and go": "Не сохранять и перейти",
     "Please confirm or cancel changes before leaving": "Пожалуйста, подтвердите или отмените изменения перед тем как уйти",
-    "You have changed rule": "Вы изменили правило"
+    "You have changed rule": "Вы изменили правило",
+    "Settings": "Настройки",
+    "Timeout for processor": "Таймаут для обработчика",
+    "Processor's id": "ID обработчика",
+    "Answer in id": "Ответ в айди",
+    "Language": "Язык",
+    "System": "Системный"
 }
