@@ -155,7 +155,7 @@ class Modal extends Component {
                         )}>
                         Ok
                     </Button>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>{I18n.t('Cancel')}</Button>
                 </DialogActions>
             </DialogContent>
         );
