@@ -58,6 +58,7 @@ class LeftBar extends Component {
                 matchingRules: matched.map((number, index) => ({
                     indexOf: number,
                     timer: index * 500,
+                    index,
                 })),
                 textCommand: '',
             });
