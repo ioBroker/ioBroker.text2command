@@ -1,4 +1,11 @@
-import React, { useRef, useImperativeHandle, useCallback, Children } from 'react';
+import React, {
+    useRef,
+    useImperativeHandle,
+    useCallback,
+    Children,
+    useState,
+    useEffect,
+} from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { ListItemIcon, IconButton } from '@material-ui/core';
@@ -28,6 +35,8 @@ const Rule = React.forwardRef((props, ref) => {
         selectRule,
         selectedRule,
         interupt,
+        matchingRules,
+        index,
     } = props;
 
     const classes = useStyles();
@@ -49,6 +58,25 @@ const Rule = React.forwardRef((props, ref) => {
         { icon: <EditIcon />, handleClick: handleEdit },
     ];
 
+    const [bg, setBg] = useState('');
+
+    useEffect(() => {
+        if (matchingRules.length) {
+            const matchingRule = matchingRules.find(item => item.indexOf === index);
+            if (matchingRule) {
+                setTimeout(() => setBg('lightblue'), matchingRule.timer);
+                setTimeout(
+                    () => setBg(selectedRule.id === id ? 'rgba(0, 0, 0, 0.06)' : ''),
+                    500 * (matchingRule.indexOf + 1)
+                );
+            } // only when matching rules have been changed
+        } // eslint-disable-next-line
+    }, [matchingRules]);
+
+    useEffect(() => {
+        selectedRule?.id === id ? setBg('rgba(0, 0, 0, 0.06)') : setBg('');
+    }, [selectedRule, id]);
+
     return (
         <div
             ref={elementRef}
@@ -58,7 +86,7 @@ const Rule = React.forwardRef((props, ref) => {
             <ListItem
                 onClick={selectRuleMemo}
                 style={{
-                    backgroundColor: selectedRule?.id === id ? 'rgba(0, 0, 0, 0.06)' : '',
+                    backgroundColor: bg,
                 }}
                 className={classes.listItem}>
                 <ListItemText primary={name} secondary={rule} />

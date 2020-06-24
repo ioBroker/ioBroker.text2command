@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { findMatched } from '@admin/langModel';
 import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/Settings';
 import CachedIcon from '@material-ui/icons/Cached';
@@ -53,11 +53,21 @@ class LeftBar extends Component {
     };
     handleSubmit = event => {
         if (event.key === 'Enter') {
+            const matched = this.findMatchingRules();
             this.setState({
+                matchingRules: matched.map((number, index) => ({
+                    indexOf: number,
+                    timer: index * 500,
+                })),
                 textCommand: '',
             });
         }
     };
+
+    findMatchingRules() {
+        const text = this.state.textCommand;
+        return text ? findMatched(text, JSON.parse(JSON.stringify(this.props.rules))) : [];
+    }
 
     render() {
         const {
