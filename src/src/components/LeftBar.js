@@ -8,6 +8,7 @@ import CachedIcon from '@material-ui/icons/Cached';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
 import DialogActions from '@material-ui/core/DialogActions';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
@@ -54,7 +55,13 @@ const styles = theme => ({
         border: `1px solid ${theme.palette.divider}`,
     },
     textInput: {
-        width: '100%',
+        width: '60%',
+    },
+    select: {
+        minWidth: '20%',
+    },
+    settingsTitle: {
+        fontSize: '20px',
     },
 });
 
@@ -63,6 +70,12 @@ class LeftBar extends Component {
         textCommand: '',
         matchingRules: [],
         isSettingsDialogOpen: false,
+        localeSettings: {
+            language: '',
+            processorId: '',
+            processorTimeout: 1000,
+            sayitInstance: '',
+        },
     };
 
     componentDidUpdate(prevProps, prevState) {
@@ -103,9 +116,17 @@ class LeftBar extends Component {
         });
     };
 
+    handleDialogSelectIdSubmit = (selected, selectedSettingsName) => {
+        this.setState({
+            localeSettings: {
+                ...this.state.localeSettings,
+                [selectedSettingsName]: selected,
+            },
+        });
+    };
     createSettingsModal = () => {
         const { t } = I18n;
-        const options = [t('System'), 'english', 'deutsch', 'русский'];
+        const options = [t('System'), 'en', 'de', 'ru'];
         const { classes } = this.props;
 
         const handleClose = () => {
@@ -114,12 +135,52 @@ class LeftBar extends Component {
             });
         };
 
-        const handleSelectChange = () => {};
+        const submitSettings = () => {
+            this.props.saveSettings(this.state.localeSettings, handleClose);
+        };
+
+        const handleChange = (event, name) => {
+            this.setState({
+                localeSettings: {
+                    ...this.state.localeSettings,
+                    [name]: event.target.value,
+                },
+            });
+        };
+
+        const createInput = ({ value, handler, type, selectedSettingsName }) => {
+            const onClickHandler = () => {
+                if (type !== 'id') return;
+                this.setState({
+                    showDialogSelectId: true,
+                    selectedSettingsName,
+                });
+            };
+            if (!handler) {
+                handler = () => {
+                    return;
+                };
+            }
+            return (
+                <TextField
+                    variant="outlined"
+                    className={this.props.classes.textInput}
+                    onClick={onClickHandler}
+                    value={value}
+                    onChange={handler}
+                    size="small"
+                />
+            );
+        };
 
         const settingsItems = [
             {
                 item: (
-                    <Select onChange={handleSelectChange} value={this.state.localeSettings?.lang}>
+                    <Select
+                        onChange={event => handleChange(event, 'language')}
+                        value={this.state.localeSettings.language || this.props.settings?.language}
+                        className={classes.select}
+                        autoWidth>
                         {Children.toArray(
                             options.map(option => <MenuItem value={option}>{option}</MenuItem>)
                         )}
@@ -129,20 +190,29 @@ class LeftBar extends Component {
                 id: 1,
             },
             {
-                item: <TextField className={classes.textInput} />,
-                type: 'id',
+                item: createInput({
+                    value: this.state.localeSettings.sayitInstance,
+                    type: 'id',
+                    selectedSettingsName: 'sayitInstance',
+                }),
                 title: t('Answer in id'),
                 id: 2,
             },
             {
-                item: <TextField className={classes.textInput} />,
-                type: 'id',
+                item: createInput({
+                    value: this.state.localeSettings.processorId,
+                    type: 'id',
+                    selectedSettingsName: 'processorId',
+                }),
                 title: t(`Processor's id`),
                 id: 3,
             },
             {
-                item: <TextField className={classes.textInput} />,
-                type: 'text',
+                item: createInput({
+                    value: this.state.localeSettings.processorTimeout,
+                    type: 'text',
+                    handler: event => handleChange(event, 'processorTimeout'),
+                }),
                 title: t('Timeout for processor') + '(ms)',
                 id: 4,
             },
@@ -151,21 +221,30 @@ class LeftBar extends Component {
         return (
             <Dialog open={this.state.isSettingsDialogOpen} onClose={handleClose} fullWidth>
                 <DialogTitle>
-                    <Typography variant="h5" component="h2" align="left">
+                    <Typography variant="h4" component="span" align="center">
                         {t('Settings')}
                     </Typography>
                 </DialogTitle>
                 <DialogContent>
                     {settingsItems.map(({ item, title, id }) => (
-                        <Box display="flex" justifyContent="space-between" mb="10px" key={id}>
-                            <Typography variant="h5" component="h5" align="left">
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            mb="10px"
+                            key={id}
+                            alignItems="center">
+                            <Typography
+                                variant="h5"
+                                component="h5"
+                                align="left"
+                                className={classes.settingsTitle}>
                                 {title}
                             </Typography>
                             {item}
                         </Box>
                     ))}
                     <DialogActions>
-                        <Button>Ok</Button>
+                        <Button onClick={submitSettings}>Ok</Button>
                         <Button onClick={handleClose}>{I18n.t('Cancel')}</Button>
                     </DialogActions>
                 </DialogContent>
@@ -254,6 +333,22 @@ class LeftBar extends Component {
                     />
                 </Toolbar>
                 {this.createSettingsModal()}
+
+                {this.state.showDialogSelectId && (
+                    <DialogSelectID
+                        socket={this.props.socket}
+                        title={'Select ID'}
+                        onClose={id => {
+                            this.setState({ showDialogSelectId: false });
+                        }}
+                        onOk={selected =>
+                            this.handleDialogSelectIdSubmit(
+                                selected,
+                                this.state.selectedSettingsName
+                            )
+                        }
+                    />
+                )}
             </Box>
         );
     }
@@ -277,4 +372,6 @@ LeftBar.propTypes = {
     handleEdit: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
     settings: PropTypes.object,
+    socket: PropTypes.object.isRequired,
+    saveSettings: PropTypes.func.isRequired,
 };
