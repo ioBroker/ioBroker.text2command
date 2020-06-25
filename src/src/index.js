@@ -13,7 +13,7 @@ import theme from '@iobroker/adapter-react/Theme';
 window.adapterName = 'text2command';
 let themeName = (window.localStorage && window.localStorage.getItem('App.themeName')) || 'light';
 
-console.log('iobroker.' + window.adapterName + '@' + version);
+console.log('iobroker.' + window.adapterName + '@' + version + ' using theme "' + themeName + '"');
 
 function build() {
     return ReactDOM.render(

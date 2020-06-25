@@ -1,15 +1,24 @@
 import React, { PureComponent } from 'react';
 import SplitterLayout from 'react-splitter-layout';
 import { v4 as uuid } from 'uuid';
-import I18n from '@iobroker/adapter-react/i18n';
+import PropTypes from 'prop-types';
+import {withStyles} from '@material-ui/core/styles'
+
 import 'react-splitter-layout/lib/index.css';
+
+import I18n from '@iobroker/adapter-react/i18n';
+
 import LeftBar from './LeftBar';
 import RightBar from './RightBar';
 import Modal from './Modal';
-import PropTypes from 'prop-types';
-import 'react-splitter-layout/lib/index.css';
 
-export default class Layout extends PureComponent {
+const styles = theme => ({
+    mainLayout: {
+        background: theme.palette.background.default,
+    },
+});
+
+class Layout extends PureComponent {
     state = {
         currentRules: [],
         isOpen: false,
@@ -18,8 +27,10 @@ export default class Layout extends PureComponent {
     };
 
     componentDidMount() {
-        this.setDataFromConfig();
+        this.setDataFromConfig()
+            .then(() => {});
     }
+
     componentDidUpdate(prevProps, prevState) {
         if (this.state.settings?.language !== this.state.lang && this.state.settings?.language) {
             const lang = this.state.settings?.language;
@@ -125,12 +136,12 @@ export default class Layout extends PureComponent {
     selectRule = id => {
         const { selectedRule, currentRules } = this.state;
 
-        if (selectedRule.id === id) return;
-        else if (this.state.pendingChanges) {
+        if (selectedRule.id === id) {
+            // ignore
+        } else if (this.state.pendingChanges) {
             this.setState({
                 pendingSelectedRuleId: id,
             });
-            return;
         } else {
             const rule = currentRules.find(item => item.id === id);
 
@@ -141,7 +152,9 @@ export default class Layout extends PureComponent {
     };
 
     updatePendingState = (bool, id) => {
-        if (this.state.pendingChanges === bool) return;
+        if (this.state.pendingChanges === bool) {
+            return;
+        }
 
         this.setState({
             pendingChanges: bool,
@@ -289,7 +302,7 @@ export default class Layout extends PureComponent {
         return id === this.state.ruleWasUpdatedId ? false : this.state.ruleWasUpdatedId;
     };
 
-    clearStateOnComfirmModalUnmount = () => {
+    clearStateOnConfirmModalUnmount = () => {
         this.setState({
             pendingChanges: false,
             pendingSelectedRuleId: false,
@@ -302,6 +315,7 @@ export default class Layout extends PureComponent {
         return (
             <>
                 <SplitterLayout
+                    customClassName={this.props.classes.mainLayout}
                     percentage
                     // primaryMinSize={15}
                     secondaryInitialSize={75}
@@ -328,7 +342,7 @@ export default class Layout extends PureComponent {
                             pendingSelectedRuleId={this.state.pendingSelectedRuleId}
                             selectRule={this.selectRule}
                             updatePendingState={this.updatePendingState}
-                            clearStateOnComfirmModalUnmount={this.clearStateOnComfirmModalUnmount}
+                            clearStateOnComfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
                             pendingChanges={this.state.pendingChanges}
                             ruleWasUpdatedId={ruleWasUpdatedId}
                             lang={this.state.settings.language}
@@ -358,3 +372,5 @@ Layout.propTypes = {
     readConfig: PropTypes.func.isRequired,
     saveConfig: PropTypes.func.isRequired,
 };
+
+export default withStyles(styles)(Layout);
