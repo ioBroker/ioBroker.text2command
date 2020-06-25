@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import SplitterLayout from 'react-splitter-layout';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles';
 
 import 'react-splitter-layout/lib/index.css';
 
@@ -27,8 +27,7 @@ class Layout extends PureComponent {
     };
 
     componentDidMount() {
-        this.setDataFromConfig()
-            .then(() => {});
+        this.setDataFromConfig().then(() => {});
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -45,11 +44,13 @@ class Layout extends PureComponent {
 
         return [
             { rule: I18n.t('Select rule'), unique: false },
-            ...Object.values(window.commands).map(command => {
+            ...Object.entries(window.commands).map(item => {
+                const [key, command] = item;
                 const { name, ...rest } = command;
                 const obj = {
                     ...rest,
                     rule: command?.name[lang],
+                    template: key,
                     unique: command.unique,
                     words: command.words && command.words[lang],
                     args: command.args?.map(arg => ({
@@ -99,7 +100,7 @@ class Layout extends PureComponent {
         const shortDataRule = {
             ...selectedRule,
             id,
-            interupt: true,
+            _break: true,
         };
 
         const rule = {
@@ -179,7 +180,7 @@ class Layout extends PureComponent {
     finishEdit = editableRule => {
         let updatedRule;
 
-        const { rule, id, name, interupt } = editableRule;
+        const { rule, id, name, _break } = editableRule;
         const initialSelectedRule = this.state.selectedRule;
 
         if (initialSelectedRule.rule !== rule) {
@@ -189,7 +190,7 @@ class Layout extends PureComponent {
                 name,
                 rule,
                 id,
-                interupt,
+                _break,
             };
         } else {
             updatedRule = editableRule;
@@ -310,61 +311,62 @@ class Layout extends PureComponent {
     };
 
     render() {
+        console.log(this.commands);
         console.log(this.state);
         const { isEdit, isOpen, currentRules, selectedRule, ruleWasUpdatedId } = this.state;
         return [
-                <SplitterLayout
-                    key="splitterLayout"
-                    customClassName={this.props.classes.mainLayout}
-                    percentage
-                    // primaryMinSize={15}
-                    secondaryInitialSize={75}
-                    secondaryMinSize={65}>
-                    <LeftBar
-                        handleOpen={this.handleOpen}
-                        rules={currentRules}
-                        moveRule={this.moveRule}
-                        handleEdit={this.handleEdit}
-                        selectRule={this.selectRule}
+            <SplitterLayout
+                key="splitterLayout"
+                customClassName={this.props.classes.mainLayout}
+                percentage
+                // primaryMinSize={15}
+                secondaryInitialSize={75}
+                secondaryMinSize={65}>
+                <LeftBar
+                    handleOpen={this.handleOpen}
+                    rules={currentRules}
+                    moveRule={this.moveRule}
+                    handleEdit={this.handleEdit}
+                    selectRule={this.selectRule}
+                    selectedRule={selectedRule}
+                    removeRule={this.removeRule}
+                    settings={this.state.settings}
+                    socket={this.props.socket}
+                    saveSettings={this.saveSettings}
+                    theme={this.props.theme}
+                />
+                {this.state.settings && (
+                    <RightBar
                         selectedRule={selectedRule}
-                        removeRule={this.removeRule}
-                        settings={this.state.settings}
                         socket={this.props.socket}
-                        saveSettings={this.saveSettings}
-                        theme={this.props.theme}
+                        updateCurrentRules={this.updateCurrentRules}
+                        updateConfig={this.updateConfig}
+                        revertChangesFromConfig={this.revertChangesFromConfig}
+                        pendingSelectedRuleId={this.state.pendingSelectedRuleId}
+                        selectRule={this.selectRule}
+                        updatePendingState={this.updatePendingState}
+                        clearStateOnConfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
+                        pendingChanges={this.state.pendingChanges}
+                        ruleWasUpdatedId={ruleWasUpdatedId}
+                        lang={this.state.settings.language}
                     />
-                    {this.state.settings && (
-                        <RightBar
-                            selectedRule={selectedRule}
-                            socket={this.props.socket}
-                            updateCurrentRules={this.updateCurrentRules}
-                            updateConfig={this.updateConfig}
-                            revertChangesFromConfig={this.revertChangesFromConfig}
-                            pendingSelectedRuleId={this.state.pendingSelectedRuleId}
-                            selectRule={this.selectRule}
-                            updatePendingState={this.updatePendingState}
-                            clearStateOnConfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
-                            pendingChanges={this.state.pendingChanges}
-                            ruleWasUpdatedId={ruleWasUpdatedId}
-                            lang={this.state.settings.language}
-                        />
-                    )}
-                </SplitterLayout>,
-                this.state.isOpen &&
-                    <Modal
-                        key="modal"
-                        commands={this.commands}
-                        isEdit={isEdit}
-                        handleSubmitOnCreate={this.handleSubmitOnCreate}
-                        handleSubmitOnEdit={this.handleSubmitOnEdit}
-                        handleClose={this.handleClose}
-                        isOpen={isOpen}
-                        currentRules={currentRules}
-                        selectedRule={selectedRule}
-                        finishEdit={this.finishEdit}
-                    />
-
-            ];
+                )}
+            </SplitterLayout>,
+            this.state.isOpen && (
+                <Modal
+                    key="modal"
+                    commands={this.commands}
+                    isEdit={isEdit}
+                    handleSubmitOnCreate={this.handleSubmitOnCreate}
+                    handleSubmitOnEdit={this.handleSubmitOnEdit}
+                    handleClose={this.handleClose}
+                    isOpen={isOpen}
+                    currentRules={currentRules}
+                    selectedRule={selectedRule}
+                    finishEdit={this.finishEdit}
+                />
+            ),
+        ];
     }
 }
 

@@ -20,7 +20,7 @@ const styles = theme => ({
         display: 'inline-flex',
         justifyContent: 'space-around',
         padding: theme.spacing(2),
-        width: 'calc(100% - ' + theme.spacing(4) + 'px)'
+        width: 'calc(100% - ' + theme.spacing(4) + 'px)',
     },
     container: {
         width: '70%',
@@ -53,7 +53,7 @@ class RightBar extends PureComponent {
     defaultState = {
         words: I18n.t('Select rule'),
         name: I18n.t('Select rule'),
-        interupt: false,
+        _break: false,
         editable: false,
         args: [
             {
@@ -281,7 +281,7 @@ class RightBar extends PureComponent {
 
     createOptionsData = (state = this.state) => {
         const {
-            localRule: { args, ack, editable, interupt },
+            localRule: { args, ack, editable, _break },
         } = state;
         const { t } = I18n;
 
@@ -307,13 +307,13 @@ class RightBar extends PureComponent {
                 id: 1,
             },
             {
-                title: `${t('Interrupt')}:`,
+                title: `${t('Break')}:`,
                 item: createInput({
                     label: `${t('Interrupt processing')}`,
                     type: 'checkbox',
-                    value: interupt,
-                    onSwitchChange: handlers.interuptOnSwitch,
-                    key: 'interupt',
+                    value: _break,
+                    onSwitchChange: handlers.breakOnSwitch,
+                    key: 'break',
                 }),
                 id: 2,
             },
@@ -418,15 +418,14 @@ class RightBar extends PureComponent {
                     isLocalStateWasUpdated: true,
                 });
             },
-            async interuptOnSwitch() {
+            async breakOnSwitch() {
                 await _this.setState({
                     localRule: {
                         ..._this.state.localRule,
-                        interupt: !_this.state.localRule.interupt,
+                        _break: !_this.state.localRule._break,
                     },
                     isLocalStateWasUpdated: true,
                 });
-                _this.props.updateCurrentRules(_this.state.localRule);
             },
         };
     };
