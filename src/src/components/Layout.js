@@ -5,7 +5,6 @@ import I18n from '@iobroker/adapter-react/i18n';
 import 'react-splitter-layout/lib/index.css';
 import LeftBar from './LeftBar';
 import RightBar from './RightBar';
-import { commands } from '@admin/langModel';
 import Modal from './Modal';
 import PropTypes from 'prop-types';
 import 'react-splitter-layout/lib/index.css';
@@ -28,7 +27,7 @@ export default class Layout extends PureComponent {
 
         return [
             { rule: I18n.t('Select rule'), unique: false },
-            ...Object.values(commands).map(command => {
+            ...Object.values(window.commands).map(command => {
                 const { name, ...rest } = command;
                 const obj = {
                     ...rest,
@@ -55,6 +54,7 @@ export default class Layout extends PureComponent {
             }),
         ];
     };
+
     commands = this.getSelectedLanguageCommands();
 
     moveRule = (dragIndex, hoverIndex) => {
