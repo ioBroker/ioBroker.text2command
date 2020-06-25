@@ -144,6 +144,9 @@ function build() {
             cwd:   __dirname + '/src/'
         };
 
+        // copy langModel.js from lib to src/public
+        fs.writeFileSync(__dirname + '/src/public/langModel.js', fs.readFileSync(__dirname + '/lib/langModel.js'));
+
         const version = JSON.parse(fs.readFileSync(__dirname + '/package.json').toString('utf8')).version;
         const data = JSON.parse(fs.readFileSync(__dirname + '/src/package.json').toString('utf8'));
         data.version = version;

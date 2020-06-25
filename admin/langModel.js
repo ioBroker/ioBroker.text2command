@@ -1,12 +1,13 @@
 /* jshint -W097 */
 /* jshint strict: false */
 /* jslint node: true */
+// eslint-disable-next-line
 'use strict';
 
 // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
 // TODO alarm on/off
 // alarm clock set/off
-export var commands = {
+const commands = {
     whatTimeIsIt: {
         icon: '',
         name: {
@@ -410,27 +411,33 @@ export var commands = {
     },
 };
 
-export function findMatched(cmd, _rules) {
-    var matchedRules = [];
+function findMatched(cmd, _rules) {
+    const matchedRules = [];
     cmd = cmd
         .toLowerCase()
-        .replace(/[#'"$&\/\\!?.,;:(){}^]+/g, ' ')
+        .replace(/[#'"$&/\\!?.,;:(){}^]+/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
 
-    var ix = cmd.indexOf(';');
-    if (ix !== -1) cmd = cmd.substring(ix + 1);
+    let ix = cmd.indexOf(';');
+    if (ix !== -1) {
+        cmd = cmd.substring(ix + 1);
+    }
 
     ix = cmd.indexOf('[');
-    if (ix !== -1) cmd = cmd.substring(0, ix);
+    if (ix !== -1) {
+        cmd = cmd.substring(0, ix);
+    }
 
-    var cmdWords = cmd.split(' ');
+    const cmdWords = cmd.split(' ');
 
-    for (var r = 0; r < _rules.length; r++) {
-        var rule = _rules[r];
-        if (!rule.words) continue;
+    for (let r = 0; r < _rules.length; r++) {
+        const rule = _rules[r];
+        if (!rule.words) {
+            continue;
+        }
 
-        var isFound = true;
+        let isFound = true;
 
         // split rule words one time
         if (typeof rule.words === 'string') {
@@ -447,18 +454,24 @@ export function findMatched(cmd, _rules) {
             isFound = rule.words.test(cmd);
         } else {
             // compare every word
-            for (var j = 0; j < rule.words.length; j++) {
-                if (!rule.words[j]) continue;
+            for (let j = 0; j < rule.words.length; j++) {
+                if (!rule.words[j]) {
+                    continue;
+                }
 
-                if (rule.words[j].indexOf('/') !== -1) rule.words[j] = rule.words[j].split('/');
+                if (rule.words[j].indexOf('/') !== -1) {
+                    rule.words[j] = rule.words[j].split('/');
+                }
 
-                if (typeof rule.words[j] === 'string' && rule.words[j][0] === '[') continue;
+                if (typeof rule.words[j] === 'string' && rule.words[j][0] === '[') {
+                    continue;
+                }
 
                 // if one of
                 if (typeof rule.words[j] === 'object') {
-                    var _isFound = false;
+                    let _isFound = false;
 
-                    for (var u = 0; u < rule.words[j].length; u++) {
+                    for (let u = 0; u < rule.words[j].length; u++) {
                         if (cmdWords.indexOf(rule.words[j][u]) !== -1) {
                             _isFound = true;
                             break;
@@ -478,7 +491,9 @@ export function findMatched(cmd, _rules) {
 
         if (isFound) {
             matchedRules.push(r);
-            if (rule._break) break;
+            if (rule._break) {
+                break;
+            }
         }
     }
     return matchedRules;
@@ -486,7 +501,10 @@ export function findMatched(cmd, _rules) {
 
 if (typeof module !== 'undefined' && module.parent) {
     module.exports = {
-        commands: commands,
-        findMatched: findMatched,
+        commands,
+        findMatched,
     };
+} else if (typeof window !== 'undefined') {
+    window.commands = commands;
+    window.findMatched = findMatched;
 }

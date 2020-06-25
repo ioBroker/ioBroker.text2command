@@ -1,6 +1,5 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
-import { findMatched } from '@admin/langModel';
 
 import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -107,7 +106,7 @@ class LeftBar extends Component {
 
     findMatchingRules() {
         const text = this.state.textCommand;
-        return text ? findMatched(text, JSON.parse(JSON.stringify(this.props.rules))) : [];
+        return text ? window.findMatched(text, JSON.parse(JSON.stringify(this.props.rules))) : [];
     }
 
     handleOpenSettingsModal = () => {
