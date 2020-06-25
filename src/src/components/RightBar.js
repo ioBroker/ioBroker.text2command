@@ -9,17 +9,26 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 
 import I18n from '@iobroker/adapter-react/i18n';
 import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
 import isEqual from 'lodash.isequal';
 
 const styles = theme => ({
+    box: {
+        display: 'inline-flex',
+        justifyContent: 'space-around',
+        padding: theme.spacing(2),
+        width: 'calc(100% - ' + theme.spacing(4) + 'px)'
+    },
     container: {
         width: '70%',
-        padding: '20px 30px 30px 30px',
-        boxShadow: `0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
-        0px 1px 10px 0px rgba(0, 0, 0, 0.12)`,
+        minWidth: 400,
+        padding: theme.spacing(2),
+        //boxShadow: `0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+        //0px 1px 10px 0px rgba(0, 0, 0, 0.12)`,
+        color1: console.log(JSON.stringify(theme, null, 2)),
     },
     textField: {
         flexBasis: '60%',
@@ -36,7 +45,7 @@ const styles = theme => ({
     },
     btnDanger: {
         marginLeft: 20,
-        backgroundColor: theme.palette.error?.dark,
+        //backgroundColor: theme.palette.error?.dark,
     },
     saveAndGoBtn: {
         marginRight: 20,
@@ -122,7 +131,7 @@ class RightBar extends PureComponent {
         const { updateConfig, classes, selectRule, pendingSelectedRuleId } = this.props;
 
         const cancelSavingChanges = async () => {
-            await this.props.clearStateOnComfirmModalUnmount();
+            await this.props.clearStateOnConfirmModalUnmount();
             await this.setState({
                 confirmChanges: false,
                 isLocalStateWasUpdated: true,
@@ -145,9 +154,9 @@ class RightBar extends PureComponent {
 
             await selectRule(pendingSelectedRuleId);
 
-            this.props.clearStateOnComfirmModalUnmount();
+            this.props.clearStateOnConfirmModalUnmount();
         };
-        const hanleSaveAndGo = async () => {
+        const handleSaveAndGo = async () => {
             if (this.props.ruleWasUpdatedId === this.state.localRule.id) {
                 await updateConfig(this.state.localRule);
                 await this.setState({
@@ -163,19 +172,19 @@ class RightBar extends PureComponent {
             }
 
             await selectRule(pendingSelectedRuleId);
-            this.props.clearStateOnComfirmModalUnmount();
+            this.props.clearStateOnConfirmModalUnmount();
         };
         return (
             <FormControl className={classes.submitForm}>
                 <Button
                     variant="contained"
-                    onClick={hanleSaveAndGo}
+                    onClick={handleSaveAndGo}
                     color="primary"
                     className={classes.saveAndGoBtn}>
                     {t('Save and go')}
                 </Button>
                 <Button onClick={dontSaveAndGo} variant="contained" color="secondary">
-                    {t(`Dont save and go`)}
+                    {t(`Don't save and go`)}
                 </Button>
                 <Button
                     variant="contained"
@@ -193,7 +202,7 @@ class RightBar extends PureComponent {
             updateConfig,
             classes,
             revertChangesFromConfig,
-            clearStateOnComfirmModalUnmount,
+            clearStateOnConfirmModalUnmount,
         } = this.props;
 
         const handleSave = async () => {
@@ -210,12 +219,12 @@ class RightBar extends PureComponent {
                 localRule: this.props.selectedRule,
                 isLocalStateWasUpdated: false,
             });
-            clearStateOnComfirmModalUnmount();
+            clearStateOnConfirmModalUnmount();
         };
 
         return (
             <FormControl className={classes.submitForm}>
-                <Button onClick={handleSave} variant="contained" color="secondary">
+                <Button onClick={handleSave} variant="contained" color="primary">
                     {t('Save')}
                 </Button>
                 <Button variant="contained" className={classes.btnDanger} onClick={revertChanges}>
@@ -301,9 +310,9 @@ class RightBar extends PureComponent {
                 id: 1,
             },
             {
-                title: `${t('Interupt')}:`,
+                title: `${t('Interrupt')}:`,
                 item: createInput({
-                    label: `${t('Interupt processing')}`,
+                    label: `${t('Interrupt processing')}`,
                     type: 'checkbox',
                     value: interupt,
                     onSwitchChange: handlers.interuptOnSwitch,
@@ -464,8 +473,8 @@ class RightBar extends PureComponent {
         console.log(this.state);
 
         return (
-            <Box mt="30px">
-                <Box className={classes.container} mx="auto">
+            <Box mt="30px" className={classes.box}>
+                <Paper className={classes.container} mx="auto">
                     <Typography
                         variant="h4"
                         align="center"
@@ -486,7 +495,7 @@ class RightBar extends PureComponent {
                             </Box>
                         );
                     })}
-                </Box>
+                </Paper>
 
                 {this.state.showDialog && (
                     <DialogSelectID
@@ -545,7 +554,7 @@ RightBar.propTypes = {
     selectRule: PropTypes.func.isRequired,
     pendingSelectedRuleId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     updatePendingState: PropTypes.func.isRequired,
-    clearStateOnComfirmModalUnmount: PropTypes.func.isRequired,
+    clearStateOnConfirmModalUnmount: PropTypes.func.isRequired,
     pendingChanges: PropTypes.bool,
     ruleWasUpdatedId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
 };
