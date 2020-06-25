@@ -6,7 +6,7 @@ import React, {
     useState,
     useEffect,
 } from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 import ListItem from '@material-ui/core/ListItem';
@@ -29,7 +29,7 @@ const Rule = React.forwardRef((props, ref) => {
         id,
         selectRule,
         selectedRule,
-        interupt,
+        _break,
         matchingRules,
         index,
         theme,
@@ -42,12 +42,12 @@ const Rule = React.forwardRef((props, ref) => {
         },
         listItemText: {
             '& span': {
-                color: theme.palette.text.primary
+                color: theme.palette.text.primary,
             },
             '& p': {
-                color: theme.palette.text.secondary
-            }
-        }
+                color: theme.palette.text.secondary,
+            },
+        },
     })();
 
     const elementRef = useRef(null);
@@ -62,7 +62,7 @@ const Rule = React.forwardRef((props, ref) => {
 
     const icons = [
         {
-            icon: interupt ? <DoneIcon color="primary" /> : <CloseIcon color="primary" />,
+            icon: _break ? <DoneIcon color="primary" /> : <CloseIcon color="primary" />,
         },
         { icon: <EditIcon />, handleClick: handleEdit },
     ];
@@ -92,7 +92,11 @@ const Rule = React.forwardRef((props, ref) => {
                 onClick={selectRuleMemo}
                 selected={selectedRule?.id === id}
                 className={classes.listItem}>
-                <ListItemText primary={name} secondary={rule !== name ? rule : ''} className={ classes.listItemText }/>
+                <ListItemText
+                    primary={name}
+                    secondary={rule !== name ? rule : ''}
+                    className={classes.listItemText}
+                />
                 <ListItemIcon>
                     {Children.toArray(
                         icons.map(({ icon, handleClick }, index) => (
@@ -164,7 +168,7 @@ Rule.propTypes = {
     isDragging: PropTypes.bool,
     connectDropTarget: PropTypes.func,
     connectDragTarget: PropTypes.func,
-    interupt: PropTypes.bool.isRequired,
+    _break: PropTypes.bool.isRequired,
     selectRule: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     matchingRules: PropTypes.array,
