@@ -55,6 +55,9 @@ class App extends GenericApp {
             .then(config => {
                 console.log(config);
                 this.setState({ config, ready: true });
+                if (config.language !== I18n.getLanguage() && config.language) {
+                    I18n.setLanguage(config.language);
+                }
             })
             .catch(e => this.showError(e));
     }

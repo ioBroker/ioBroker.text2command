@@ -112,6 +112,9 @@ class RightBar extends PureComponent {
                 confirmChanges: true,
             });
         }
+
+        if (this.props.lang !== prevProps.lang) {
+        }
     }
 
     createConfirmModalActions = () => {
