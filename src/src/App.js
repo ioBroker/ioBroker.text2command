@@ -109,6 +109,7 @@ class App extends GenericApp {
                         ))
                     } */}
                     <Layout
+                        theme={this.state.theme}
                         socket={this.socket}
                         readConfig={this.readConfig.bind(this)}
                         saveConfig={this.saveConfig.bind(this)}

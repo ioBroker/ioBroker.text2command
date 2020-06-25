@@ -305,6 +305,7 @@ class LeftBar extends Component {
                     <List>
                         {rules.map((rule, index) => (
                             <Rule
+                                theme={this.props.theme}
                                 handleEdit={handleEdit}
                                 {...rule}
                                 index={index}
@@ -364,6 +365,7 @@ LeftBar.propTypes = {
     ),
     moveRule: PropTypes.func.isRequired,
     selectRule: PropTypes.func.isRequired,
+    theme: PropTypes.object.isRequired,
     selectedRule: PropTypes.shape({
         id: PropTypes.string,
     }),

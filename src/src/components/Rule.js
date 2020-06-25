@@ -6,22 +6,17 @@ import React, {
     useState,
     useEffect,
 } from 'react';
+import {makeStyles} from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { ListItemIcon, IconButton } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
-import { DropTarget, DragSource } from 'react-dnd';
-import PropTypes from 'prop-types';
 
-const useStyles = makeStyles({
-    listItem: {
-        cursor: 'pointer',
-        transition: 'background-color 0.3s linear',
-    },
-});
+import { DropTarget, DragSource } from 'react-dnd';
 
 const Rule = React.forwardRef((props, ref) => {
     const {
@@ -37,9 +32,23 @@ const Rule = React.forwardRef((props, ref) => {
         interupt,
         matchingRules,
         index,
+        theme,
     } = props;
 
-    const classes = useStyles();
+    const classes = makeStyles({
+        listItem: {
+            cursor: 'pointer',
+            transition: 'background-color 0.3s linear',
+        },
+        listItemText: {
+            '& span': {
+                color: theme.palette.text.primary
+            },
+            '& p': {
+                color: theme.palette.text.secondary
+            }
+        }
+    })();
 
     const elementRef = useRef(null);
     connectDragSource(elementRef);
@@ -58,7 +67,7 @@ const Rule = React.forwardRef((props, ref) => {
         { icon: <EditIcon />, handleClick: handleEdit },
     ];
 
-    const [bg, setBg] = useState('');
+    const [setBg] = useState('');
 
     useEffect(() => {
         if (matchingRules.length) {
@@ -66,16 +75,12 @@ const Rule = React.forwardRef((props, ref) => {
             if (matchingRule) {
                 setTimeout(() => setBg('lightblue'), matchingRule.timer);
                 setTimeout(
-                    () => setBg(selectedRule.id === id ? 'rgba(0, 0, 0, 0.06)' : ''),
+                    () => setBg(selectedRule.id === id ? this.props.theme.palette.background : ''),
                     500 * (matchingRule.index + 1)
                 );
             } // only when matching rules have been changed
         } // eslint-disable-next-line
     }, [matchingRules]);
-
-    useEffect(() => {
-        selectedRule?.id === id ? setBg('rgba(0, 0, 0, 0.06)') : setBg('');
-    }, [selectedRule, id]);
 
     return (
         <div
@@ -85,11 +90,9 @@ const Rule = React.forwardRef((props, ref) => {
             }}>
             <ListItem
                 onClick={selectRuleMemo}
-                style={{
-                    backgroundColor: bg,
-                }}
+                selected={selectedRule?.id === id}
                 className={classes.listItem}>
-                <ListItemText primary={name} secondary={rule} />
+                <ListItemText primary={name} secondary={rule !== name ? rule : ''} className={ classes.listItemText }/>
                 <ListItemIcon>
                     {Children.toArray(
                         icons.map(({ icon, handleClick }, index) => (
@@ -157,6 +160,7 @@ export default DropTarget(
 Rule.propTypes = {
     removeRule: PropTypes.func,
     name: PropTypes.string.isRequired,
+    theme: PropTypes.object.isRequired,
     isDragging: PropTypes.bool,
     connectDropTarget: PropTypes.func,
     connectDragTarget: PropTypes.func,
