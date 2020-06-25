@@ -233,6 +233,13 @@ class Layout extends PureComponent {
         } else {
             updatedRules = [...rules, currentSelectedRule];
         }
+        const rulesShortData = updatedRules.map(({ _break, template, words, ack, args }) => ({
+            words: words || '',
+            ack: ack?.default || '',
+            args: args || [],
+            _break,
+            template,
+        }));
 
         const newConfig = { rules: updatedRules, ...settings };
         await this.props.saveConfig(newConfig);
