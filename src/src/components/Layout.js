@@ -312,9 +312,9 @@ class Layout extends PureComponent {
     render() {
         console.log(this.state);
         const { isEdit, isOpen, currentRules, selectedRule, ruleWasUpdatedId } = this.state;
-        return (
-            <>
+        return [
                 <SplitterLayout
+                    key="splitterLayout"
                     customClassName={this.props.classes.mainLayout}
                     percentage
                     // primaryMinSize={15}
@@ -331,6 +331,7 @@ class Layout extends PureComponent {
                         settings={this.state.settings}
                         socket={this.props.socket}
                         saveSettings={this.saveSettings}
+                        theme={this.props.theme}
                     />
                     {this.state.settings && (
                         <RightBar
@@ -342,15 +343,16 @@ class Layout extends PureComponent {
                             pendingSelectedRuleId={this.state.pendingSelectedRuleId}
                             selectRule={this.selectRule}
                             updatePendingState={this.updatePendingState}
-                            clearStateOnComfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
+                            clearStateOnConfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
                             pendingChanges={this.state.pendingChanges}
                             ruleWasUpdatedId={ruleWasUpdatedId}
                             lang={this.state.settings.language}
                         />
                     )}
-                </SplitterLayout>
-                {this.state.isOpen && (
+                </SplitterLayout>,
+                this.state.isOpen &&
                     <Modal
+                        key="modal"
                         commands={this.commands}
                         isEdit={isEdit}
                         handleSubmitOnCreate={this.handleSubmitOnCreate}
@@ -361,14 +363,14 @@ class Layout extends PureComponent {
                         selectedRule={selectedRule}
                         finishEdit={this.finishEdit}
                     />
-                )}
-            </>
-        );
+
+            ];
     }
 }
 
 Layout.propTypes = {
     socket: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
     readConfig: PropTypes.func.isRequired,
     saveConfig: PropTypes.func.isRequired,
 };
