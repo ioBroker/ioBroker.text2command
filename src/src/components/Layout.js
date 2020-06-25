@@ -12,7 +12,6 @@ import 'react-splitter-layout/lib/index.css';
 
 export default class Layout extends PureComponent {
     state = {
-        lang: I18n.getLanguage(),
         currentRules: [],
         isOpen: false,
         isEdit: false,
@@ -22,9 +21,17 @@ export default class Layout extends PureComponent {
     componentDidMount() {
         this.setDataFromConfig();
     }
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.settings?.language !== this.state.lang && this.state.settings?.language) {
+            const lang = this.state.settings?.language;
+            I18n.setLanguage(lang);
+
+            this.commands = this.getSelectedLanguageCommands();
+        }
+    }
 
     getSelectedLanguageCommands = () => {
-        const { lang } = this.state;
+        const lang = this.state.settings?.language || I18n.getLanguage();
 
         return [
             { rule: I18n.t('Select rule'), unique: false },
@@ -311,31 +318,36 @@ export default class Layout extends PureComponent {
                         socket={this.props.socket}
                         saveSettings={this.saveSettings}
                     />
-                    <RightBar
-                        selectedRule={selectedRule}
-                        socket={this.props.socket}
-                        updateCurrentRules={this.updateCurrentRules}
-                        updateConfig={this.updateConfig}
-                        revertChangesFromConfig={this.revertChangesFromConfig}
-                        pendingSelectedRuleId={this.state.pendingSelectedRuleId}
-                        selectRule={this.selectRule}
-                        updatePendingState={this.updatePendingState}
-                        clearStateOnComfirmModalUnmount={this.clearStateOnComfirmModalUnmount}
-                        pendingChanges={this.state.pendingChanges}
-                        ruleWasUpdatedId={ruleWasUpdatedId}
-                    />
+                    {this.state.settings && (
+                        <RightBar
+                            selectedRule={selectedRule}
+                            socket={this.props.socket}
+                            updateCurrentRules={this.updateCurrentRules}
+                            updateConfig={this.updateConfig}
+                            revertChangesFromConfig={this.revertChangesFromConfig}
+                            pendingSelectedRuleId={this.state.pendingSelectedRuleId}
+                            selectRule={this.selectRule}
+                            updatePendingState={this.updatePendingState}
+                            clearStateOnComfirmModalUnmount={this.clearStateOnComfirmModalUnmount}
+                            pendingChanges={this.state.pendingChanges}
+                            ruleWasUpdatedId={ruleWasUpdatedId}
+                            lang={this.state.settings.language}
+                        />
+                    )}
                 </SplitterLayout>
-                <Modal
-                    commands={this.commands}
-                    isEdit={isEdit}
-                    handleSubmitOnCreate={this.handleSubmitOnCreate}
-                    handleSubmitOnEdit={this.handleSubmitOnEdit}
-                    handleClose={this.handleClose}
-                    isOpen={isOpen}
-                    currentRules={currentRules}
-                    selectedRule={selectedRule}
-                    finishEdit={this.finishEdit}
-                />
+                {this.state.isOpen && (
+                    <Modal
+                        commands={this.commands}
+                        isEdit={isEdit}
+                        handleSubmitOnCreate={this.handleSubmitOnCreate}
+                        handleSubmitOnEdit={this.handleSubmitOnEdit}
+                        handleClose={this.handleClose}
+                        isOpen={isOpen}
+                        currentRules={currentRules}
+                        selectedRule={selectedRule}
+                        finishEdit={this.finishEdit}
+                    />
+                )}
             </>
         );
     }
