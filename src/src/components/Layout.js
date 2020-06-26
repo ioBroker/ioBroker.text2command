@@ -27,7 +27,7 @@ class Layout extends PureComponent {
     };
 
     componentDidMount() {
-        this.setDataFromConfig().then(() => {});
+        this.getDataFromConfig().then(() => {});
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -248,18 +248,32 @@ class Layout extends PureComponent {
         });
     };
 
-    setDataFromConfig = async () => {
+    getDataFromConfig = async () => {
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
-        const rulesFullData = rules.map(rule => ({
-            ...{
-                ...window.commands[rule.template],
-                rule: window.commands[rule.template]?.name[settings.language],
-            },
+        const lang = I18n.getLanguage();
+        const rulesFullData = rules.map(rule => {
+            const obj = window.commands[rule.template];
 
-            ...rule,
-            id: uuid(),
-        }));
+            return {
+                ...obj,
+                rule: obj.name[lang],
+                ack: {
+                    ...obj.ack,
+                    default: rule.ack || '',
+                    name: obj.ack?.name[lang],
+                },
+                args: obj.args?.map((arg, index) => ({
+                    ...arg,
+                    default: rule.args[index] || '',
+                    name: arg?.name[lang] || '',
+                })),
+                name: rule.name,
+                words: rule.words,
+                _break: rule._break,
+                id: uuid(),
+            };
+        });
         console.log(rulesFullData);
         await this.setState({
             currentRules: rulesFullData,
