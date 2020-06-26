@@ -223,23 +223,14 @@ class Layout extends PureComponent {
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
 
-        const isRuleAlreadyExist = rules.find(rule => rule.id === currentSelectedRule.id);
+        const isRuleAlreadyExist = currentRules.length === rules.length;
 
         let updatedRules;
         if (isRuleAlreadyExist) {
-            updatedRules = rules.map(rule =>
-                rule.id === currentSelectedRule.id ? currentSelectedRule : rule
-            );
+            updatedRules = currentRules.map(rule => this.getRuleShortData(rule));
         } else {
-            updatedRules = [...rules, currentSelectedRule];
+            updatedRules = [...rules, this.getRuleShortData(currentSelectedRule)];
         }
-        const rulesShortData = updatedRules.map(({ _break, template, words, ack, args }) => ({
-            words: words || '',
-            ack: ack?.default || '',
-            args: args || [],
-            _break,
-            template,
-        }));
 
         const newConfig = { rules: updatedRules, ...settings };
         await this.props.saveConfig(newConfig);
@@ -260,8 +251,18 @@ class Layout extends PureComponent {
     setDataFromConfig = async () => {
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
+        const rulesFullData = rules.map(rule => ({
+            ...{
+                ...window.commands[rule.template],
+                rule: window.commands[rule.template]?.name[settings.language],
+            },
+
+            ...rule,
+            id: uuid(),
+        }));
+        console.log(rulesFullData);
         await this.setState({
-            currentRules: rules,
+            currentRules: rulesFullData,
             settings,
         });
     };
@@ -309,6 +310,15 @@ class Layout extends PureComponent {
     getRuleWasUpdatedId = id => {
         return id === this.state.ruleWasUpdatedId ? false : this.state.ruleWasUpdatedId;
     };
+
+    getRuleShortData = ({ _break, template, words, ack, args, name }) => ({
+        words: words || '',
+        ack: ack?.default || '',
+        args: args?.map(arg => arg.default) || [],
+        _break,
+        template,
+        name,
+    });
 
     clearStateOnConfirmModalUnmount = () => {
         this.setState({
