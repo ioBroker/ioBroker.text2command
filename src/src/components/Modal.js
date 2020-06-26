@@ -37,6 +37,9 @@ class Modal extends Component {
             this.existingNames = this.props.currentRules?.map(rule => rule?.name);
         }
     }
+    componentWillUnmount() {
+        this.cleanState();
+    }
 
     setRuleOnMount = () => {
         const { isEdit, selectedRule } = this.props;

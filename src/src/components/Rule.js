@@ -59,12 +59,13 @@ const Rule = React.forwardRef((props, ref) => {
     }));
 
     const selectRuleMemo = useCallback(() => selectRule(id), [id, selectRule]);
+    const handleEditMemo = useCallback(() => handleEdit(id), [id, handleEdit]);
 
     const icons = [
         {
             icon: _break ? <DoneIcon color="primary" /> : <CloseIcon color="primary" />,
         },
-        { icon: <EditIcon />, handleClick: handleEdit },
+        { icon: <EditIcon />, handleClick: handleEditMemo },
     ];
 
     const [setBg] = useState('');

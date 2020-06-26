@@ -11,6 +11,7 @@ import I18n from '@iobroker/adapter-react/i18n';
 import LeftBar from './LeftBar';
 import RightBar from './RightBar';
 import Modal from './Modal';
+import isEqual from 'lodash.isequal';
 
 const styles = theme => ({
     mainLayout: {
@@ -27,7 +28,22 @@ class Layout extends PureComponent {
     };
 
     componentDidMount() {
-        this.getDataFromConfig().then(() => {});
+        this.getDataFromConfig().then(({ rules, ...settings }) => {
+            const rulesWithId = rules.map(rule =>
+                !rule.id || !rule.name
+                    ? {
+                          ...rule,
+                          id: !rule.id ? uuid() : rule.id,
+                          name: !rule.name
+                              ? window.commands[rule.template]?.name[I18n.getLanguage()]
+                              : rule.name,
+                      }
+                    : rule
+            );
+            if (!isEqual(rules, rulesWithId)) {
+                this.props.saveConfig({ rules: rulesWithId, ...settings });
+            }
+        });
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -180,7 +196,7 @@ class Layout extends PureComponent {
     finishEdit = editableRule => {
         let updatedRule;
 
-        const { rule, id, name, _break } = editableRule;
+        const { rule, id, name, _break, template } = editableRule;
         const initialSelectedRule = this.state.selectedRule;
 
         if (initialSelectedRule.rule !== rule) {
@@ -191,11 +207,12 @@ class Layout extends PureComponent {
                 rule,
                 id,
                 _break,
+                template,
             };
         } else {
             updatedRule = editableRule;
         }
-
+        console.log('EDIT', updatedRule);
         this.setState({
             isEdit: false,
             selectedRule: updatedRule,
@@ -223,14 +240,18 @@ class Layout extends PureComponent {
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
 
-        const isRuleAlreadyExist = currentRules.length === rules.length;
-        const updatedCurrentRules = isRuleAlreadyExist
+        const matchingRule = rules.find(rule => rule.id === currentSelectedRule.id);
+        const updatedCurrentRules = matchingRule
             ? this.updateCurrentRules(currentSelectedRule)
             : currentRules;
 
         let updatedRules;
-        if (isRuleAlreadyExist) {
-            updatedRules = updatedCurrentRules.map(rule => this.getRuleShortData(rule));
+        if (matchingRule) {
+            updatedRules = updatedCurrentRules.map(rule =>
+                rule.id === currentSelectedRule.id
+                    ? this.getRuleShortData(currentSelectedRule)
+                    : rule
+            );
         } else {
             updatedRules = [...rules, this.getRuleShortData(currentSelectedRule)];
         }
@@ -253,6 +274,7 @@ class Layout extends PureComponent {
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
         const lang = I18n.getLanguage();
+
         const rulesFullData = rules.map(rule => {
             const obj = window.commands[rule.template];
 
@@ -269,10 +291,10 @@ class Layout extends PureComponent {
                     default: rule.args[index] || '',
                     name: arg?.name[lang] || '',
                 })),
-                name: rule.name,
+                name: rule.name || obj?.name[lang],
                 words: rule.words,
                 _break: rule._break,
-                id: uuid(),
+                id: rule.id || uuid(),
                 template: rule.template,
             };
         });
@@ -280,6 +302,7 @@ class Layout extends PureComponent {
             currentRules: rulesFullData,
             settings,
         });
+        return config;
     };
 
     revertChangesFromConfig = async selectedRule => {
@@ -290,16 +313,32 @@ class Layout extends PureComponent {
         const matchingRule = rules.find(rule => rule.id === selectedRule.id);
         let updatedRules;
         if (matchingRule) {
-            updatedRules = this.state.currentRules.map(rule =>
-                rule.id === matchingRule.id ? matchingRule : rule
+            updatedRules = currentRules.map(rule =>
+                rule.id === matchingRule.id
+                    ? {
+                          ...rule,
+                          ack: {
+                              ...rule.ack,
+                              default: matchingRule.ack || '',
+                          },
+                          args: rule.args?.map(arg => ({
+                              ...arg,
+                              default: matchingRule.arg || '',
+                          })),
+                          rule: window.commands[matchingRule.template].name[I18n.getLanguage()],
+                          words: matchingRule.words || '',
+                          name: matchingRule.name || '',
+                          _break: matchingRule._break || true,
+                      }
+                    : rule
             );
         } else {
             updatedRules = currentRules.filter(rule => rule.id !== selectedRule.id);
         }
-
+        console.log(updatedRules);
         await this.setState({
             currentRules: updatedRules,
-            selectedRule: matchingRule || {},
+            selectedRule: updatedRules.find(rule => rule.id === selectedRule.id) || {},
             settings,
             ruleWasUpdatedId: this.getRuleWasUpdatedId(selectedRule.id),
         });
@@ -326,13 +365,14 @@ class Layout extends PureComponent {
         return id === this.state.ruleWasUpdatedId ? false : this.state.ruleWasUpdatedId;
     };
 
-    getRuleShortData = ({ _break, template, words, ack, args, name }) => ({
+    getRuleShortData = ({ _break, template, words, ack, args, name, id }) => ({
         words: words || '',
         ack: ack?.default || '',
         args: args?.map(arg => arg.default) || [],
         _break,
         template,
         name,
+        id,
     });
 
     clearStateOnConfirmModalUnmount = () => {
