@@ -224,10 +224,13 @@ class Layout extends PureComponent {
         const { rules, ...settings } = config;
 
         const isRuleAlreadyExist = currentRules.length === rules.length;
+        const updatedCurrentRules = isRuleAlreadyExist
+            ? this.updateCurrentRules(currentSelectedRule)
+            : currentRules;
 
         let updatedRules;
         if (isRuleAlreadyExist) {
-            updatedRules = currentRules.map(rule => this.getRuleShortData(rule));
+            updatedRules = updatedCurrentRules.map(rule => this.getRuleShortData(rule));
         } else {
             updatedRules = [...rules, this.getRuleShortData(currentSelectedRule)];
         }
@@ -237,9 +240,7 @@ class Layout extends PureComponent {
 
         this.setState({
             selectedRule: currentSelectedRule || this.state.selectedRule || {},
-            currentRules: isRuleAlreadyExist
-                ? this.updateCurrentRules(currentSelectedRule)
-                : currentRules,
+            currentRules: updatedCurrentRules,
             pendingChanges: false,
             ruleWasUpdatedId:
                 currentSelectedRule.id === this.state.ruleWasUpdatedId
@@ -257,7 +258,7 @@ class Layout extends PureComponent {
 
             return {
                 ...obj,
-                rule: obj.name[lang],
+                rule: obj?.name[lang],
                 ack: {
                     ...obj.ack,
                     default: rule.ack || '',
@@ -272,9 +273,9 @@ class Layout extends PureComponent {
                 words: rule.words,
                 _break: rule._break,
                 id: uuid(),
+                template: rule.template,
             };
         });
-        console.log(rulesFullData);
         await this.setState({
             currentRules: rulesFullData,
             settings,
@@ -342,7 +343,6 @@ class Layout extends PureComponent {
     };
 
     render() {
-        console.log(this.commands);
         console.log(this.state);
         const { isEdit, isOpen, currentRules, selectedRule, ruleWasUpdatedId } = this.state;
         return [
