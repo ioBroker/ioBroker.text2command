@@ -314,6 +314,7 @@ class LeftBar extends Component {
                                 selectRule={selectRule}
                                 selectedRule={selectedRule}
                                 matchingRules={this.state.matchingRules}
+                                unsavedRules={this.props.unsavedRules}
                             />
                         ))}
                     </List>
@@ -375,4 +376,5 @@ LeftBar.propTypes = {
     settings: PropTypes.object,
     socket: PropTypes.object.isRequired,
     saveSettings: PropTypes.func.isRequired,
+    unsavedRules: PropTypes.object,
 };
