@@ -34,6 +34,7 @@ const Rule = React.forwardRef((props, ref) => {
         unsavedRules,
         index,
         theme,
+        removeMatched,
     } = props;
 
     const classes = makeStyles({
@@ -79,17 +80,17 @@ const Rule = React.forwardRef((props, ref) => {
         { icon: <EditIcon />, handleClick: handleEditMemo },
     ];
 
-    const [setBg] = useState('');
+    const [bg, setBg] = useState('');
 
     useEffect(() => {
         if (matchingRules.length) {
             const matchingRule = matchingRules.find(item => item.indexOf === index);
             if (matchingRule) {
                 setTimeout(() => setBg('lightblue'), matchingRule.timer);
-                setTimeout(
-                    () => setBg(selectedRule.id === id ? this.props.theme.palette.background : ''),
-                    500 * (matchingRule.index + 1)
-                );
+                setTimeout(() => {
+                    setBg(selectedRule.id === id ? theme?.palette?.background?.default : '');
+                    if (_break) removeMatched();
+                }, 500 * (matchingRule.index + 1));
             } // only when matching rules have been changed
         } // eslint-disable-next-line
     }, [matchingRules]);
@@ -99,6 +100,7 @@ const Rule = React.forwardRef((props, ref) => {
             ref={elementRef}
             style={{
                 opacity,
+                backgroundColor: bg,
             }}>
             <ListItem
                 onClick={selectRuleMemo}
