@@ -61,6 +61,7 @@ const styles = theme => ({
     },
     settingsTitle: {
         fontSize: '20px',
+        maxWidth: 145,
     },
 });
 
@@ -80,7 +81,10 @@ class LeftBar extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.props.settings !== prevProps.settings && this.props.settings) {
             this.setState({
-                localeSettings: this.props.settings,
+                localeSettings: {
+                    ...this.props.settings,
+                    language: this.props.settings.language || I18n.t('System'),
+                },
             });
         }
     }
@@ -177,7 +181,7 @@ class LeftBar extends Component {
                 item: (
                     <Select
                         onChange={event => handleChange(event, 'language')}
-                        value={this.state.localeSettings.language || this.props.settings?.language}
+                        value={this.state.localeSettings.language}
                         className={classes.select}
                         autoWidth>
                         {Children.toArray(
@@ -226,12 +230,7 @@ class LeftBar extends Component {
                 </DialogTitle>
                 <DialogContent>
                     {settingsItems.map(({ item, title, id }) => (
-                        <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            mb="10px"
-                            key={id}
-                            alignItems="center">
+                        <Box display="flex" justifyContent="space-between" mb="10px" key={id}>
                             <Typography
                                 variant="h5"
                                 component="h5"
