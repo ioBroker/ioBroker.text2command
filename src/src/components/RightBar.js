@@ -124,6 +124,7 @@ class RightBar extends PureComponent {
         }
 
         if (this.props.lang !== prevProps.lang) {
+            this.forceUpdate();
         }
     }
 
