@@ -30,6 +30,12 @@ class Layout extends PureComponent {
 
     componentDidMount() {
         this.getDataFromConfig().then(({ rules, ...settings }) => {
+            this.setState({
+                selectedRule: this.state.currentRules.find(
+                    rule => rule.id === localStorage.getItem('selectedRule')
+                ),
+            });
+
             const rulesWithId = rules.map(rule =>
                 !rule.id || !rule.name
                     ? {
@@ -53,9 +59,9 @@ class Layout extends PureComponent {
             I18n.setLanguage(lang);
 
             this.commands = this.getSelectedLanguageCommands();
-        } /* else if(prevState.selectedRule !== this.state.selectedRule) {
-            localStorage.setItem("selectedRule", this.state.selectedRule.id)
-        } */
+        } else if (prevState.selectedRule !== this.state.selectedRule) {
+            localStorage.setItem('selectedRule', this.state.selectedRule.id);
+        }
     }
 
     getSelectedLanguageCommands = () => {

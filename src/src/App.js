@@ -104,9 +104,9 @@ class App extends GenericApp {
                 <div className="App">
                     {
                         // just an example
-                        this.state.config.rules.map(rule => (
+                        /*  this.state.config.rules.map(rule => (
                             <div className={this.props.classes.rule}>{JSON.stringify(rule)}</div>
-                        ))
+                        )) */
                     }
                     <Layout
                         theme={this.state.theme}
