@@ -10,6 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
 import DialogActions from '@material-ui/core/DialogActions';
 import Toolbar from '@material-ui/core/Toolbar';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import List from '@material-ui/core/List';
 import {
     TextField,
@@ -33,7 +34,7 @@ import Rule from './Rule';
 const styles = theme => ({
     test: {
         position: 'absolute',
-        bottom: '100px',
+        bottom: '20px',
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
@@ -41,7 +42,7 @@ const styles = theme => ({
     },
     root: {
         width: '92%',
-        '& .MuiOutlinedInput-notchedOutline-58': {
+        '& .MuiOutlinedInput-notchedOutline-63': {
             border: `2px solid ${theme.palette.grey[700]}`,
         },
         '& #outlined-basic': {
@@ -62,6 +63,13 @@ const styles = theme => ({
     settingsTitle: {
         fontSize: '20px',
         maxWidth: 145,
+    },
+    play: {
+        padding: 8,
+        border: `2px solid ${theme.palette.grey[700]}`,
+        marginLeft: 5,
+        cursor: 'pointer',
+        borderRadius: 5,
     },
 });
 
@@ -94,8 +102,8 @@ class LeftBar extends Component {
             textCommand: event.target.value,
         });
     };
-    handleSubmit = event => {
-        if (event.key === 'Enter') {
+    handleSubmit = (event, iconPlay) => {
+        if (event.key === 'Enter' || iconPlay) {
             const matched = this.findMatchingRules();
             this.setState({
                 matchingRules: matched.map((number, index) => ({
@@ -106,6 +114,11 @@ class LeftBar extends Component {
                 textCommand: '',
             });
         }
+    };
+    removeMatched = () => {
+        this.setState({
+            matchingRules: [],
+        });
     };
 
     findMatchingRules() {
@@ -309,11 +322,12 @@ class LeftBar extends Component {
                                 {...rule}
                                 index={index}
                                 moveRule={moveRule}
-                                key={rule?.id}
+                                key={rule.id}
                                 selectRule={selectRule}
                                 selectedRule={selectedRule}
                                 matchingRules={this.state.matchingRules}
                                 unsavedRules={this.props.unsavedRules}
+                                removeMatched={this.removeMatched}
                             />
                         ))}
                     </List>
@@ -330,6 +344,10 @@ class LeftBar extends Component {
                         className={classes.root}
                         onKeyDown={this.handleSubmit}
                         value={this.state.textCommand}
+                    />
+                    <PlayArrowIcon
+                        className={classes.play}
+                        onClick={event => this.handleSubmit(event, true)}
                     />
                 </Toolbar>
                 {this.createSettingsModal()}
