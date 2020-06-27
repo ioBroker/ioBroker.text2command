@@ -25,6 +25,7 @@ class Layout extends PureComponent {
         isOpen: false,
         isEdit: false,
         selectedRule: {},
+        unsavedRules: {},
     };
 
     componentDidMount() {
@@ -52,7 +53,9 @@ class Layout extends PureComponent {
             I18n.setLanguage(lang);
 
             this.commands = this.getSelectedLanguageCommands();
-        }
+        } /* else if(prevState.selectedRule !== this.state.selectedRule) {
+            localStorage.setItem("selectedRule", this.state.selectedRule.id)
+        } */
     }
 
     getSelectedLanguageCommands = () => {
@@ -123,15 +126,22 @@ class Layout extends PureComponent {
             ...this.commands.find(command => command.rule === shortDataRule.rule),
             ...shortDataRule,
         };
+        const isUnsavedChanges = Object.values(this.state.unsavedRules).length;
 
         this.setState(
             {
                 currentRules: [...this.state.currentRules, rule],
-                ruleWasUpdatedId: id,
-                selectedRule: !this.state.pendingChanges ? rule : this.state.selectedRule,
+                unsavedRules: {
+                    ...this.state.unsavedRules,
+                    [id]: {
+                        id,
+                        wasChangedGlobally: true,
+                    },
+                },
+                selectedRule: !isUnsavedChanges ? rule : this.state.selectedRule,
             },
             () => {
-                if (this.state.pendingChanges) {
+                if (isUnsavedChanges) {
                     this.selectRule(rule.id);
                 }
             }
@@ -144,7 +154,13 @@ class Layout extends PureComponent {
         if (isError) return;
 
         this.setState({
-            ruleWasUpdatedId: selectedRule.id,
+            unsavedRules: {
+                ...this.state.unsavedRules,
+                [selectedRule.id]: {
+                    id: selectedRule.id,
+                    wasChangedGlobally: true,
+                },
+            },
             currentRules: this.updateCurrentRules(selectedRule),
         });
         this.handleClose();
@@ -155,7 +171,7 @@ class Layout extends PureComponent {
 
         if (selectedRule.id === id) {
             // ignore
-        } else if (this.state.pendingChanges) {
+        } else if (this.state.unsavedRules[selectedRule.id]) {
             this.setState({
                 pendingSelectedRuleId: id,
             });
@@ -166,18 +182,6 @@ class Layout extends PureComponent {
                 selectedRule: rule,
             });
         }
-    };
-
-    updatePendingState = (bool, id) => {
-        if (this.state.pendingChanges === bool) {
-            return;
-        }
-
-        this.setState({
-            pendingChanges: bool,
-            ruleWasUpdatedId:
-                id === this.state.ruleWasUpdatedId ? false : this.state.ruleWasUpdatedId,
-        });
     };
 
     updateCurrentRules = selectedRule => {
@@ -212,7 +216,6 @@ class Layout extends PureComponent {
         } else {
             updatedRule = editableRule;
         }
-        console.log('EDIT', updatedRule);
         this.setState({
             isEdit: false,
             selectedRule: updatedRule,
@@ -237,6 +240,7 @@ class Layout extends PureComponent {
 
     updateConfig = async currentSelectedRule => {
         const { currentRules } = this.state;
+        const { [currentSelectedRule.id]: removedId, ...ids } = this.state.unsavedRules;
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
 
@@ -247,7 +251,7 @@ class Layout extends PureComponent {
 
         let updatedRules;
         if (matchingRule) {
-            updatedRules = updatedCurrentRules.map(rule =>
+            updatedRules = rules.map(rule =>
                 rule.id === currentSelectedRule.id
                     ? this.getRuleShortData(currentSelectedRule)
                     : rule
@@ -262,11 +266,7 @@ class Layout extends PureComponent {
         this.setState({
             selectedRule: currentSelectedRule || this.state.selectedRule || {},
             currentRules: updatedCurrentRules,
-            pendingChanges: false,
-            ruleWasUpdatedId:
-                currentSelectedRule.id === this.state.ruleWasUpdatedId
-                    ? false
-                    : this.state.ruleWasUpdatedId,
+            unsavedRules: ids,
         });
     };
 
@@ -307,6 +307,7 @@ class Layout extends PureComponent {
 
     revertChangesFromConfig = async selectedRule => {
         const { currentRules } = this.state;
+        const { [selectedRule.id]: removedId, ...ids } = this.state.unsavedRules;
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
 
@@ -335,12 +336,11 @@ class Layout extends PureComponent {
         } else {
             updatedRules = currentRules.filter(rule => rule.id !== selectedRule.id);
         }
-        console.log(updatedRules);
         await this.setState({
             currentRules: updatedRules,
             selectedRule: updatedRules.find(rule => rule.id === selectedRule.id) || {},
             settings,
-            ruleWasUpdatedId: this.getRuleWasUpdatedId(selectedRule.id),
+            unsavedRules: ids,
         });
 
         if (this.state.currentRules.length !== currentRules.length) {
@@ -361,8 +361,23 @@ class Layout extends PureComponent {
         closeModal();
     };
 
-    getRuleWasUpdatedId = id => {
-        return id === this.state.ruleWasUpdatedId ? false : this.state.ruleWasUpdatedId;
+    setUnsavedRule = id => {
+        this.setState({
+            unsavedRules: {
+                ...this.state.unsavedRules,
+                [id]: {
+                    id,
+                    wasChangedGlobally: false,
+                },
+            },
+        });
+    };
+
+    removeUnsavedRule = id => {
+        const { [id]: removedId, ...ids } = this.state.unsavedRules;
+        this.setState({
+            unsavedRules: ids,
+        });
     };
 
     getRuleShortData = ({ _break, template, words, ack, args, name, id }) => ({
@@ -375,16 +390,18 @@ class Layout extends PureComponent {
         id,
     });
 
-    clearStateOnConfirmModalUnmount = () => {
+    clearStateOnConfirmModalUnmount = id => {
+        const { [id]: removedId, ...ids } = this.state.unsavedRules;
+
         this.setState({
-            pendingChanges: false,
             pendingSelectedRuleId: false,
+            unsavedRules: ids,
         });
     };
 
     render() {
         console.log(this.state);
-        const { isEdit, isOpen, currentRules, selectedRule, ruleWasUpdatedId } = this.state;
+        const { isEdit, isOpen, currentRules, selectedRule } = this.state;
         return [
             <SplitterLayout
                 key="splitterLayout"
@@ -414,12 +431,12 @@ class Layout extends PureComponent {
                         updateConfig={this.updateConfig}
                         revertChangesFromConfig={this.revertChangesFromConfig}
                         pendingSelectedRuleId={this.state.pendingSelectedRuleId}
+                        unsavedRules={this.state.unsavedRules}
                         selectRule={this.selectRule}
-                        updatePendingState={this.updatePendingState}
                         clearStateOnConfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
-                        pendingChanges={this.state.pendingChanges}
-                        ruleWasUpdatedId={ruleWasUpdatedId}
                         lang={this.state.settings.language}
+                        setUnsavedRule={this.setUnsavedRule}
+                        removeUnsavedRule={this.removeUnsavedRule}
                     />
                 )}
             </SplitterLayout>,
