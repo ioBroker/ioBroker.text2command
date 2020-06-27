@@ -92,21 +92,25 @@ class RightBar extends PureComponent {
                 });
             }
         } else if (this.state.isLocalStateWasUpdated) {
+            const unsavedRule = this.props.unsavedRules[this.state.localRule.id];
+
             if (
                 isEqual(this.props.selectedRule, this.state.localRule) &&
-                !this.props.ruleWasUpdatedId
+                !unsavedRule?.wasChangedGlobally
             ) {
                 this.setState({
                     isLocalStateWasUpdated: false,
                 });
-                this.props.updatePendingState(false);
-            } else {
-                this.props.updatePendingState(true);
+
+                if (!unsavedRule?.wasChangedGlobally) {
+                    this.props.removeUnsavedRule(this.state.localRule.id);
+                }
+            } else if (!unsavedRule && !this.props.pendingSelectedRuleId) {
+                this.props.setUnsavedRule(this.state.localRule.id);
             }
         } else if (
-            this.props.ruleWasUpdatedId === this.props.selectedRule.id &&
             !this.state.isLocalStateWasUpdated &&
-            this.props.ruleWasUpdatedId
+            this.props.unsavedRules[this.state.localRule.id]
         ) {
             this.setState({
                 isLocalStateWasUpdated: true,
@@ -125,51 +129,34 @@ class RightBar extends PureComponent {
 
     createConfirmModalActions = () => {
         const { t } = I18n;
-        const { updateConfig, classes, selectRule, pendingSelectedRuleId } = this.props;
+        const {
+            updateConfig,
+            classes,
+            selectRule,
+            pendingSelectedRuleId,
+            clearStateOnConfirmModalUnmount,
+            revertChangesFromConfig,
+        } = this.props;
+        const { localRule } = this.state;
 
         const cancelSavingChanges = async () => {
-            await this.props.clearStateOnConfirmModalUnmount();
-            await this.setState({
-                confirmChanges: false,
-                isLocalStateWasUpdated: true,
-            });
+            await clearStateOnConfirmModalUnmount();
+            this.closeConfirmDialog();
         };
+
         const dontSaveAndGo = async () => {
-            if (this.props.ruleWasUpdatedId === this.state.localRule.id) {
-                await this.props.revertChangesFromConfig(this.state.localRule);
-                await this.setState({
-                    isLocalStateWasUpdated: false,
-                    confirmChanges: false,
-                });
-            } else {
-                await this.setState({
-                    isLocalStateWasUpdated: false,
-                    confirmChanges: false,
-                });
-                await this.props.updatePendingState(false, this.state.localRule.id);
-            }
-
+            await revertChangesFromConfig(localRule);
             await selectRule(pendingSelectedRuleId);
+            await clearStateOnConfirmModalUnmount(localRule.id);
 
-            this.props.clearStateOnConfirmModalUnmount();
+            this.closeConfirmDialog();
         };
         const handleSaveAndGo = async () => {
-            if (this.props.ruleWasUpdatedId === this.state.localRule.id) {
-                await updateConfig(this.state.localRule);
-                await this.setState({
-                    isLocalStateWasUpdated: false,
-                    confirmChanges: false,
-                });
-            } else {
-                await this.setState({
-                    isLocalStateWasUpdated: false,
-                    confirmChanges: false,
-                });
-                await updateConfig(this.state.localRule);
-            }
-
+            await updateConfig(localRule);
             await selectRule(pendingSelectedRuleId);
-            this.props.clearStateOnConfirmModalUnmount();
+            await clearStateOnConfirmModalUnmount();
+
+            this.closeConfirmDialog();
         };
         return (
             <FormControl className={classes.submitForm}>
@@ -195,28 +182,23 @@ class RightBar extends PureComponent {
 
     createSaveSettingsForm = () => {
         const { t } = I18n;
-        const {
-            updateConfig,
-            classes,
-            revertChangesFromConfig,
-            clearStateOnConfirmModalUnmount,
-        } = this.props;
+        const { updateConfig, classes, revertChangesFromConfig, selectedRule } = this.props;
+        const { localRule } = this.state;
 
         const handleSave = async () => {
+            await updateConfig(localRule);
             this.setState({
                 isLocalStateWasUpdated: false,
-                confirmChanges: false,
             });
-            await updateConfig(this.state.localRule);
         };
 
         const revertChanges = async () => {
-            await revertChangesFromConfig(this.state.localRule);
+            await revertChangesFromConfig(localRule);
+
             await this.setState({
-                localRule: this.props.selectedRule,
+                localRule: selectedRule,
                 isLocalStateWasUpdated: false,
             });
-            clearStateOnConfirmModalUnmount();
         };
 
         return (
@@ -229,6 +211,13 @@ class RightBar extends PureComponent {
                 </Button>
             </FormControl>
         );
+    };
+
+    closeConfirmDialog = () => {
+        this.setState({
+            isLocalStateWasUpdated: false,
+            confirmChanges: false,
+        });
     };
 
     createInput = ({
@@ -549,8 +538,8 @@ RightBar.propTypes = {
     classes: PropTypes.object.isRequired,
     selectRule: PropTypes.func.isRequired,
     pendingSelectedRuleId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-    updatePendingState: PropTypes.func.isRequired,
     clearStateOnConfirmModalUnmount: PropTypes.func.isRequired,
-    pendingChanges: PropTypes.bool,
-    ruleWasUpdatedId: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+    unsavedRules: PropTypes.object.isRequired,
+    setUnsavedRule: PropTypes.func.isRequired,
+    removeUnsavedRule: PropTypes.func.isRequired,
 };
