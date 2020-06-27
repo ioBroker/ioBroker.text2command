@@ -128,6 +128,14 @@ class RightBar extends PureComponent {
         }
     }
 
+    componentDidMount() {
+        if (this.state.localRule === this.defaultState && this.props.selectedRule) {
+            this.setState({
+                localRule: this.props.selectedRule,
+            });
+        }
+    }
+
     createConfirmModalActions = () => {
         const { t } = I18n;
         const {
