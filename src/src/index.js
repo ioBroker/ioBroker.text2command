@@ -9,9 +9,10 @@ import './index.css';
 import App from './App';
 import { version } from '../package.json';
 import theme from '@iobroker/adapter-react/Theme';
+import Utils from '@iobroker/adapter-react/Components/Utils';
 
 window.adapterName = 'text2command';
-let themeName = (window.localStorage && window.localStorage.getItem('App.themeName')) || 'light';
+let themeName = Utils.getThemeName();
 
 console.log('iobroker.' + window.adapterName + '@' + version + ' using theme "' + themeName + '"');
 
