@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { ListItemIcon, IconButton } from '@material-ui/core';
+import { ListItemIcon, IconButton, Box } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 import CloseIcon from '@material-ui/icons/Close';
@@ -31,6 +31,7 @@ const Rule = React.forwardRef((props, ref) => {
         selectedRule,
         _break,
         matchingRules,
+        unsavedRules,
         index,
         theme,
     } = props;
@@ -39,6 +40,7 @@ const Rule = React.forwardRef((props, ref) => {
         listItem: {
             cursor: 'pointer',
             transition: 'background-color 0.3s linear',
+            position: 'relative',
         },
         listItemText: {
             '& span': {
@@ -47,6 +49,15 @@ const Rule = React.forwardRef((props, ref) => {
             '& p': {
                 color: theme.palette.text.secondary,
             },
+        },
+        dot: {
+            position: 'absolute',
+            backgroundColor: 'red',
+            top: 5,
+            right: 15,
+            width: 10,
+            height: 10,
+            borderRadius: '50%',
         },
     })();
 
@@ -107,6 +118,7 @@ const Rule = React.forwardRef((props, ref) => {
                         ))
                     )}
                 </ListItemIcon>
+                {unsavedRules[id] && <Box className={classes.dot} />}
             </ListItem>
         </div>
     );
@@ -176,4 +188,5 @@ Rule.propTypes = {
     selectedRule: PropTypes.shape({
         id: PropTypes.string,
     }),
+    unsavedRules: PropTypes.object,
 };

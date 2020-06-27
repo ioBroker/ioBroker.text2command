@@ -422,6 +422,7 @@ class Layout extends PureComponent {
                     socket={this.props.socket}
                     saveSettings={this.saveSettings}
                     theme={this.props.theme}
+                    unsavedRules={this.state.unsavedRules}
                 />
                 {this.state.settings && (
                     <RightBar
