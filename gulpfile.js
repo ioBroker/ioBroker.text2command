@@ -197,6 +197,7 @@ function copyFiles() {
             ])
                 .pipe(rename('tab.html'))
                 .pipe(gulp.dest('admin/')),
+
             gulp.src([
                 'src/build/static/js/main.*.chunk.js',
             ])
