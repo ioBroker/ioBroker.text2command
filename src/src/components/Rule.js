@@ -35,6 +35,7 @@ const Rule = React.forwardRef((props, ref) => {
         index,
         theme,
         removeMatched,
+        words,
     } = props;
 
     const classes = makeStyles({
@@ -49,6 +50,8 @@ const Rule = React.forwardRef((props, ref) => {
             },
             '& p': {
                 color: theme.palette.text.secondary,
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
             },
         },
         dot: {
@@ -102,6 +105,8 @@ const Rule = React.forwardRef((props, ref) => {
         } // eslint-disable-next-line
     }, [matchingRules]);
 
+    let secondary = rule !== name ? rule : '';
+    secondary += `${secondary ? ' ' : ''}[${words}]`;
     return (
         <div
             ref={elementRef}
@@ -115,7 +120,7 @@ const Rule = React.forwardRef((props, ref) => {
                 className={classes.listItem}>
                 <ListItemText
                     primary={name}
-                    secondary={rule !== name ? rule : ''}
+                    secondary={secondary}
                     className={classes.listItemText}
                 />
                 <ListItemIcon>

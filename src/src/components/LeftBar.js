@@ -1,5 +1,6 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
 import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -34,25 +35,31 @@ import Rule from './Rule';
 
 const styles = theme => ({
     test: {
-        position: 'absolute',
-        bottom: '20px',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        boxSizing: 'border-box',
+        //position: 'absolute',
+        //bottom: '20px',
+        //width: '100%',
+        //display: 'flex',
+        //justifyContent: 'center',
+        //boxSizing: 'border-box',
     },
     main: {
         minWidth: 330,
-        overflow: 'auto',
-        height: '90%',
+        overflow: 'hidden',
+        height: '100%',
+    },
+    toolbar: {
+        background: theme.palette.secondary.main,
+    },
+    list: {
+        height: 'calc(100% - 64px - 64px)',
+        overflowX: 'hidden',
+        overflowY: 'auto'
     },
     root: {
         width: '92%',
-        '& .MuiOutlinedInput-notchedOutline-66': {
-            border: `2px solid ${theme.palette.grey[700]}`,
-        },
-        '& #outlined-basic': {
+        '& .outlined-basic': {
             padding: '12px 10px',
+            border: `2px solid ${theme.palette.grey[700]}`,
         },
     },
     header: {
@@ -71,13 +78,13 @@ const styles = theme => ({
         fontSize: '20px',
         maxWidth: 145,
     },
-    play: {
+    /*play: {
         padding: 8,
         border: `2px solid ${theme.palette.grey[700]}`,
         marginLeft: 5,
         cursor: 'pointer',
         borderRadius: 5,
-    },
+    },*/
     search: {
         flexBasis: '80%',
         [theme.breakpoints.down('sm')]: {
@@ -330,10 +337,46 @@ class LeftBar extends Component {
             </IconButton>
         ));
 
+    renderSelectIdDialog() {
+        return this.state.showDialogSelectId ?
+            <DialogSelectID
+                socket={this.props.socket}
+                title={'Select ID'}
+                onClose={() => this.setState({ showDialogSelectId: false })}
+                onOk={selected =>
+                    this.handleDialogSelectIdSubmit(
+                        selected,
+                        this.state.selectedSettingsName
+                    )
+                }
+            /> : null;
+    }
+
+    renderConfirmDialog() {
+        return this.state.isConfirmRemoveDialogOpen ? <Dialog
+            open={this.state.isConfirmRemoveDialogOpen}
+            onClose={this.handleCloseConfirmRemoveDialog}
+            fullWidth>
+            <DialogTitle>{I18n.t('Are you sure?')}</DialogTitle>
+            <DialogContent>
+                <Typography variant="h5" component="h5">
+                    {I18n.t('You want to delete') + ': '}
+                    <strong>{this.props.selectedRule.name}</strong>
+                </Typography>
+                <DialogActions>
+                    <Button onClick={this.handleDelete}>{I18n.t('Ok')}</Button>
+                    <Button onClick={this.handleCloseConfirmRemoveDialog}>
+                        {I18n.t('Cancel')}
+                    </Button>
+                </DialogActions>
+            </DialogContent>
+        </Dialog> : null;
+    }
+
     render() {
         const { selectedRule, moveRule, handleEdit, rules, selectRule, classes } = this.props;
         const { filteredRules, isSearchActive } = this.state;
-        const SettingsDialog = this.createSettingsModal();
+        const settingsDialog = this.createSettingsModal();
         const additionalIcons = [
             {
                 icon: !isSearchActive && <DeleteIcon />,
@@ -351,17 +394,17 @@ class LeftBar extends Component {
 
         return (
             <Box className={classes.main}>
-                <Box display="flex" justifyContent="space-between" className={classes.header}>
-                    {isSearchActive ? (
+                <Toolbar position="static" classes={{root: classes.toolbar}} >
+                    {isSearchActive ?
                         <TextField className={classes.search} onChange={this.handleSearch} />
-                    ) : (
+                     :
                         <div>{this.createIcons(this.mainIcons)}</div>
-                    )}
+                    }
                     <div>{this.createIcons(additionalIcons)}</div>
-                </Box>
+                </Toolbar>
 
                 <DndProvider backend={HTML5Backend}>
-                    <List>
+                    <List className={classes.list}>
                         {renderedRules.map((rule, index) => (
                             <Rule
                                 theme={this.props.theme}
@@ -380,60 +423,27 @@ class LeftBar extends Component {
                     </List>
                 </DndProvider>
 
-                <Toolbar className={classes.test}>
+                <Toolbar className={classes.test} variant="dense">
                     <TextField
                         onChange={this.handleTextCommand}
-                        label={`${I18n.t('Test phrase')}`}
-                        id="outlined-basic"
+                        label={I18n.t('Test phrase')}
                         variant="outlined"
                         size="small"
                         color="primary"
-                        className={classes.root}
+                        className={clsx('outlined-basic', classes.root)}
                         onKeyDown={this.handleSubmit}
                         value={this.state.textCommand}
                     />
-                    <PlayArrowIcon
-                        className={classes.play}
-                        onClick={event => this.handleSubmit(event, true)}
-                    />
+                    <IconButton variant="outlined" onClick={event => this.handleSubmit(event, true)}>
+                        <PlayArrowIcon className={classes.play}/>
+                    </IconButton>
                 </Toolbar>
 
-                {SettingsDialog}
+                {settingsDialog}
 
-                <Dialog
-                    open={this.state.isConfirmRemoveDialogOpen}
-                    onClose={this.handleCloseConfirmRemoveDialog}
-                    fullWidth>
-                    <DialogTitle>{I18n.t('Are you sure') + ' ?'}</DialogTitle>
-                    <DialogContent>
-                        <Typography variant="h5" component="h5">
-                            {I18n.t('You want to delete') + ': '}
-                            <strong>{selectedRule.name}</strong>
-                        </Typography>
-                        <DialogActions>
-                            <Button onClick={this.handleDelete}>Ok</Button>
-                            <Button onClick={this.handleCloseConfirmRemoveDialog}>
-                                {I18n.t('Cancel')}
-                            </Button>
-                        </DialogActions>
-                    </DialogContent>
-                </Dialog>
+                {this.renderConfirmDialog()}
 
-                {this.state.showDialogSelectId && (
-                    <DialogSelectID
-                        socket={this.props.socket}
-                        title={'Select ID'}
-                        onClose={id => {
-                            this.setState({ showDialogSelectId: false });
-                        }}
-                        onOk={selected =>
-                            this.handleDialogSelectIdSubmit(
-                                selected,
-                                this.state.selectedSettingsName
-                            )
-                        }
-                    />
-                )}
+                {this.renderSelectIdDialog()}
             </Box>
         );
     }

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import SplitterLayout from 'react-splitter-layout';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import 'react-splitter-layout/lib/index.css';
@@ -14,6 +15,11 @@ import Modal from './Modal';
 import isEqual from 'lodash.isequal';
 
 const styles = theme => ({
+    layout: {
+        '& .layout-pane:first': {
+            overflow: 'hidden',
+        }
+    },
     hidden: {
         '& .layout-pane:first-child': {
             width: '0 !important',
@@ -24,19 +30,26 @@ const styles = theme => ({
         '& .layout-pane-primary': {
             width: '',
         },
+        overflow: 'hidden',
         background: theme.palette.background.default,
     },
 });
 
 class Layout extends PureComponent {
-    state = {
-        currentRules: [],
-        isOpen: false,
-        isEdit: false,
-        selectedRule: {},
-        unsavedRules: {},
-        isLeftBarHidden: false,
-    };
+    constructor(props) {
+        super(props);
+
+        this.menuSize = parseFloat(window.localStorage.getItem('App.menuSize')) || 350;
+        this.state = {
+            currentRules: [],
+            isOpen: false,
+            isEdit: false,
+            selectedRule: {},
+            unsavedRules: {},
+            isLeftBarHidden: window.localStorage.getItem('App.menuHidden') === 'true',
+        };
+        this.commands = this.getSelectedLanguageCommands();
+    }
 
     componentDidMount() {
         this.getDataFromConfig().then(({ rules, ...settings }) => {
@@ -55,6 +68,7 @@ class Layout extends PureComponent {
                 this.props.saveConfig({ rules: rulesWithId, ...settings });
             }
         });
+
         if (!this.isMdScreen) {
             this.setState({
                 isLeftBarHidden: true,
@@ -111,8 +125,6 @@ class Layout extends PureComponent {
             }),
         ];
     };
-
-    commands = this.getSelectedLanguageCommands();
 
     moveRule = (dragIndex, hoverIndex) => {
         const { currentRules } = this.state;
@@ -435,7 +447,7 @@ class Layout extends PureComponent {
     isSmScreen = isWidthUp('sm', this.props.width);
     isMobileScreen = isWidthUp('xs', this.props.width);
 
-    getLeftBarSizes = () => {
+    /*getLeftBarSizes = () => {
         let leftBarSize;
         if (this.isLargeScreen) {
             leftBarSize = 27;
@@ -448,9 +460,10 @@ class Layout extends PureComponent {
         }
 
         return leftBarSize;
-    };
+    };*/
 
     toggleLeftBar = () => {
+        window.localStorage.setItem('App.menuHidden', !this.state.isLeftBarHidden);
         this.setState({
             isLeftBarHidden: !this.state.isLeftBarHidden,
         });
@@ -463,10 +476,16 @@ class Layout extends PureComponent {
         return [
             <SplitterLayout
                 key="splitterLayout"
-                customClassName={isLeftBarHidden ? classes.hidden : classes.opened}
+                customClassName={clsx(isLeftBarHidden ? classes.hidden : classes.opened, classes.layout)}
+                primaryMinSize={350}
                 primaryIndex={1}
-                percentage
-                secondaryInitialSize={this.getLeftBarSizes()}>
+                secondaryMinSize={this.props.width === 'xs' || this.props.width === 'sm' ? undefined : 350}
+                onSecondaryPaneSizeChange={size => this.menuSize = parseFloat(size)}
+                onDragEnd={() => {
+                    console.log(this.menuSize)
+                    window.localStorage.setItem('App.menuSize', this.menuSize.toString())
+                }}
+                secondaryInitialSize={this.menuSize}>
                 <LeftBar
                     handleOpen={this.handleOpen}
                     rules={currentRules}
