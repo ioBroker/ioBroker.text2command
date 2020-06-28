@@ -27,7 +27,7 @@ const styles = theme => ({
     },
     container: {
         width: '70%',
-        minWidth: 340,
+        // minWidth: 340,
         padding: theme.spacing(2),
         [theme.breakpoints.down('md')]: {
             width: '90%',
