@@ -7,6 +7,7 @@ import CachedIcon from '@material-ui/icons/Cached';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
+import FormatClearIcon from '@material-ui/icons/FormatClear';
 import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
 import DialogActions from '@material-ui/core/DialogActions';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -75,6 +76,12 @@ const styles = theme => ({
         cursor: 'pointer',
         borderRadius: 5,
     },
+    search: {
+        flexBasis: '80%',
+        [theme.breakpoints.down('sm')]: {
+            flexBasis: '70%',
+        },
+    },
 });
 
 class LeftBar extends Component {
@@ -83,6 +90,8 @@ class LeftBar extends Component {
         matchingRules: [],
         isSettingsDialogOpen: false,
         isConfirmRemoveDialogOpen: false,
+        isSearchActive: false,
+        filteredRules: [],
         localeSettings: {
             language: '',
             processorId: '',
@@ -121,6 +130,7 @@ class LeftBar extends Component {
             });
         }
     };
+
     removeMatched = () => {
         this.setState({
             matchingRules: [],
@@ -155,6 +165,21 @@ class LeftBar extends Component {
     handleCloseConfirmRemoveDialog = () => {
         this.setState({
             isConfirmRemoveDialogOpen: false,
+        });
+    };
+
+    handleSearch = event => {
+        const matchedRules = this.props.rules.filter(rule =>
+            rule.name.toLowerCase().includes(event.target.value.toLowerCase())
+        );
+        this.setState({
+            filteredRules: matchedRules || [],
+        });
+    };
+
+    toggleSearch = () => {
+        this.setState({
+            isSearchActive: !this.state.isSearchActive,
         });
     };
 
@@ -296,20 +321,6 @@ class LeftBar extends Component {
         },
     ];
 
-    additionalIcons = [
-        {
-            icon: <DeleteIcon />,
-            handler: () =>
-                this.setState({
-                    isConfirmRemoveDialogOpen: true,
-                }),
-        },
-        {
-            icon: <SearchIcon />,
-            handler: () => console.log('finding'),
-        },
-    ];
-
     createIcons = iconsData =>
         iconsData.map(({ icon, handler }, index) => (
             <IconButton onClick={handler} key={index}>
@@ -319,18 +330,37 @@ class LeftBar extends Component {
 
     render() {
         const { selectedRule, moveRule, handleEdit, rules, selectRule, classes } = this.props;
+        const { filteredRules, isSearchActive } = this.state;
         const SettingsDialog = this.createSettingsModal();
+        const additionalIcons = [
+            {
+                icon: !isSearchActive && <DeleteIcon />,
+                handler: () =>
+                    this.setState({
+                        isConfirmRemoveDialogOpen: true,
+                    }),
+            },
+            {
+                icon: isSearchActive ? <FormatClearIcon /> : <SearchIcon />,
+                handler: () => this.toggleSearch(),
+            },
+        ];
+        const renderedRules = filteredRules.length ? filteredRules : rules;
 
         return (
             <Box className={classes.main}>
                 <Box display="flex" justifyContent="space-between" className={classes.header}>
-                    <div>{this.createIcons(this.mainIcons)}</div>
-                    <div>{this.createIcons(this.additionalIcons)}</div>
+                    {isSearchActive ? (
+                        <TextField className={classes.search} onChange={this.handleSearch} />
+                    ) : (
+                        <div>{this.createIcons(this.mainIcons)}</div>
+                    )}
+                    <div>{this.createIcons(additionalIcons)}</div>
                 </Box>
 
                 <DndProvider backend={HTML5Backend}>
                     <List>
-                        {rules.map((rule, index) => (
+                        {renderedRules.map((rule, index) => (
                             <Rule
                                 theme={this.props.theme}
                                 handleEdit={handleEdit}
