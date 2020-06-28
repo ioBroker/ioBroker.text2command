@@ -53,6 +53,9 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
+        [theme.breakpoints.down('xs')]: {
+            flexDirection: 'column',
+        },
     },
     mainTitle: {
         marginBottom: '30px',
@@ -78,10 +81,18 @@ const styles = theme => ({
     },
     btnDanger: {
         marginLeft: 20,
+        [theme.breakpoints.down('xs')]: {
+            marginLeft: 0,
+            marginTop: theme.spacing(0.5),
+        },
         //backgroundColor: theme.palette.error?.dark,
     },
     saveAndGoBtn: {
         marginRight: 20,
+        [theme.breakpoints.down('xs')]: {
+            marginRight: 0,
+            marginBottom: theme.spacing(0.5),
+        },
     },
     toggleIcon: {
         position: 'absolute',
@@ -105,8 +116,8 @@ const styles = theme => ({
 
 class RightBar extends PureComponent {
     defaultState = {
-        words: I18n.t('Select rule'),
-        name: I18n.t('Select rule'),
+        words: I18n.t('Create Rule'),
+        name: I18n.t('Create Rule'),
         _break: false,
         editable: false,
         args: [
