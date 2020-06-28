@@ -288,12 +288,12 @@ class Layout extends PureComponent {
                 rule: obj?.name[lang],
                 ack: {
                     ...obj.ack,
-                    default: rule.ack || '',
+                    default: rule.ack || (obj.ack?.type === 'checkbox' ? false : ''),
                     name: obj.ack?.name[lang],
                 },
                 args: obj.args?.map((arg, index) => ({
                     ...arg,
-                    default: rule.args[index] || '',
+                    default: rule.args[index] || (arg?.type === 'checkbox' ? false : ''),
                     name: arg?.name[lang] || '',
                 })),
                 name: rule.name || obj?.name[lang],
