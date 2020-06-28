@@ -78,6 +78,7 @@ class LeftBar extends Component {
         textCommand: '',
         matchingRules: [],
         isSettingsDialogOpen: false,
+        isConfirmRemoveDialogOpen: false,
         localeSettings: {
             language: '',
             processorId: '',
@@ -102,6 +103,7 @@ class LeftBar extends Component {
             textCommand: event.target.value,
         });
     };
+
     handleSubmit = (event, iconPlay) => {
         if (event.key === 'Enter' || iconPlay) {
             const matched = this.findMatchingRules();
@@ -140,6 +142,18 @@ class LeftBar extends Component {
             },
         });
     };
+
+    handleDelete = () => {
+        this.props.removeRule(this.props.selectedRule.id);
+        this.handleCloseConfirmRemoveDialog();
+    };
+
+    handleCloseConfirmRemoveDialog = () => {
+        this.setState({
+            isConfirmRemoveDialogOpen: false,
+        });
+    };
+
     createSettingsModal = () => {
         const { t } = I18n;
         const options = [t('System'), 'en', 'de', 'ru'];
@@ -262,55 +276,52 @@ class LeftBar extends Component {
             </Dialog>
         );
     };
+
+    mainIcons = [
+        {
+            icon: <AddIcon />,
+            handler: () => this.props.handleOpen(),
+        },
+        {
+            icon: <SettingsIcon />,
+            handler: () => this.handleOpenSettingsModal(),
+        },
+        {
+            icon: <CachedIcon />,
+            handler: () => console.log('refresh'),
+        },
+    ];
+
+    additionalIcons = [
+        {
+            icon: <DeleteIcon />,
+            handler: () =>
+                this.setState({
+                    isConfirmRemoveDialogOpen: true,
+                }),
+        },
+        {
+            icon: <SearchIcon />,
+            handler: () => console.log('finding'),
+        },
+    ];
+
+    createIcons = iconsData =>
+        iconsData.map(({ icon, handler }, index) => (
+            <IconButton onClick={handler} key={index}>
+                {icon}
+            </IconButton>
+        ));
+
     render() {
-        const {
-            selectedRule,
-            moveRule,
-            handleEdit,
-            rules,
-            selectRule,
-            removeRule,
-            classes,
-        } = this.props;
-
-        const mainIcons = [
-            {
-                icon: <AddIcon />,
-                handler: () => this.props.handleOpen(),
-            },
-            {
-                icon: <SettingsIcon />,
-                handler: () => this.handleOpenSettingsModal(),
-            },
-            {
-                icon: <CachedIcon />,
-                handler: () => console.log('refresh'),
-            },
-        ];
-
-        const additionalIcons = [
-            {
-                icon: <DeleteIcon />,
-                handler: () => removeRule(selectedRule.id),
-            },
-            {
-                icon: <SearchIcon />,
-                handler: () => console.log('finding'),
-            },
-        ];
-
-        const createIcons = iconsData =>
-            iconsData.map(({ icon, handler }, index) => (
-                <IconButton onClick={handler} key={index}>
-                    {icon}
-                </IconButton>
-            ));
+        const { selectedRule, moveRule, handleEdit, rules, selectRule, classes } = this.props;
+        const SettingsDialog = this.createSettingsModal();
 
         return (
             <Box>
                 <Box display="flex" justifyContent="space-between" className={classes.header}>
-                    <div>{createIcons(mainIcons)}</div>
-                    <div>{createIcons(additionalIcons)}</div>
+                    <div>{this.createIcons(this.mainIcons)}</div>
+                    <div>{this.createIcons(this.additionalIcons)}</div>
                 </Box>
 
                 <DndProvider backend={HTML5Backend}>
@@ -350,7 +361,27 @@ class LeftBar extends Component {
                         onClick={event => this.handleSubmit(event, true)}
                     />
                 </Toolbar>
-                {this.createSettingsModal()}
+
+                {SettingsDialog}
+
+                <Dialog
+                    open={this.state.isConfirmRemoveDialogOpen}
+                    onClose={this.handleCloseConfirmRemoveDialog}
+                    fullWidth>
+                    <DialogTitle>{I18n.t('Are you sure') + ' ?'}</DialogTitle>
+                    <DialogContent>
+                        <Typography variant="h5" component="h5">
+                            {I18n.t('You want to delete') + ': '}
+                            <strong>{selectedRule.name}</strong>
+                        </Typography>
+                        <DialogActions>
+                            <Button onClick={this.handleDelete}>Ok</Button>
+                            <Button onClick={this.handleCloseConfirmRemoveDialog}>
+                                {I18n.t('Cancel')}
+                            </Button>
+                        </DialogActions>
+                    </DialogContent>
+                </Dialog>
 
                 {this.state.showDialogSelectId && (
                     <DialogSelectID

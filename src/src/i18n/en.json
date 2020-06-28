@@ -43,5 +43,7 @@
     "Timeout for processor": "Timeout for processor",
     "Processor's id": "Processor's id",
     "Language": "Language",
-    "System": "System"
+    "System": "System",
+    "Are you sure": "Are you sure",
+    "You want to delete": "You want to delete"
 }
