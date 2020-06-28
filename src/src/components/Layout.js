@@ -319,8 +319,11 @@ class Layout extends PureComponent {
         const { rules, ...settings } = config;
 
         const matchingRule = rules.find(rule => rule.id === selectedRule.id);
+        const isRuleWasUpdatedGlobally = this.state.unsavedRules[selectedRule.id]
+            ?.wasChangedGlobally;
+
         let updatedRules;
-        if (matchingRule) {
+        if (matchingRule && isRuleWasUpdatedGlobally) {
             updatedRules = currentRules.map(rule =>
                 rule.id === matchingRule.id
                     ? {
@@ -340,12 +343,16 @@ class Layout extends PureComponent {
                       }
                     : rule
             );
-        } else {
+        } else if (!matchingRule) {
             updatedRules = currentRules.filter(rule => rule.id !== selectedRule.id);
         }
+
         await this.setState({
-            currentRules: updatedRules,
-            selectedRule: updatedRules.find(rule => rule.id === selectedRule.id) || {},
+            currentRules: updatedRules || currentRules,
+            selectedRule:
+                (isRuleWasUpdatedGlobally
+                    ? updatedRules.find(rule => rule.id === selectedRule.id)
+                    : this.state.selectedRule) || {},
             settings,
             unsavedRules: ids,
         });

@@ -116,6 +116,7 @@ class RightBar extends PureComponent {
                 isLocalStateWasUpdated: true,
             });
         }
+
         if (this.props.pendingSelectedRuleId && this.state.isLocalStateWasUpdated) {
             if (this.props.pendingSelectedRuleId === this.state.localRule.id) return;
             this.setState({

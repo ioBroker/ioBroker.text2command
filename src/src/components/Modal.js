@@ -60,13 +60,13 @@ class Modal extends Component {
     };
 
     getAvaliableOptions = () => {
-        const { commands, currentRules, selectedRule } = this.props;
+        const { commands, currentRules, selectedRule, isEdit } = this.props;
 
         const uniqueOptions = commands?.filter(
             option => !(option.unique && currentRules.find(item => item?.rule === option.rule))
         );
 
-        return selectedRule?.unique ? uniqueOptions.concat(selectedRule) : uniqueOptions;
+        return selectedRule?.unique && isEdit ? uniqueOptions.concat(selectedRule) : uniqueOptions;
     };
 
     getUniqueName = ruleName => {
