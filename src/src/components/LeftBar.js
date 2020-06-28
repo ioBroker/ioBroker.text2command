@@ -46,7 +46,7 @@ const styles = theme => ({
     },
     root: {
         width: '92%',
-        '& .MuiOutlinedInput-notchedOutline-63': {
+        '& .MuiOutlinedInput-notchedOutline-66': {
             border: `2px solid ${theme.palette.grey[700]}`,
         },
         '& #outlined-basic': {
