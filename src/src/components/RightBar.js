@@ -49,7 +49,7 @@ const styles = theme => ({
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('xs')]: {
             flexDirection: 'column',
         },
     },
@@ -76,7 +76,7 @@ const styles = theme => ({
     },
     btnDanger: {
         marginLeft: 20,
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('xs')]: {
             marginLeft: 0,
             marginTop: theme.spacing(0.5),
         },
@@ -84,7 +84,7 @@ const styles = theme => ({
     },
     saveAndGoBtn: {
         marginRight: 20,
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('xs')]: {
             marginRight: 0,
             marginBottom: theme.spacing(0.5),
         },
