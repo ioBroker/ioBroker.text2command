@@ -10,6 +10,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import MenuIcon from '@material-ui/icons/Menu';
 
 import I18n from '@iobroker/adapter-react/i18n';
 import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
@@ -21,14 +23,25 @@ const styles = theme => ({
         justifyContent: 'space-around',
         padding: theme.spacing(2),
         width: 'calc(100% - ' + theme.spacing(4) + 'px)',
+        position: 'relative',
     },
     container: {
         width: '70%',
-        minWidth: 400,
+        minWidth: 340,
         padding: theme.spacing(2),
+        [theme.breakpoints.down('md')]: {
+            width: '90%',
+        },
+        [theme.breakpoints.down('lg')]: {
+            width: '80%',
+        },
     },
     textField: {
         flexBasis: '60%',
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+            marginTop: theme.spacing(1),
+        },
     },
     submitForm: {
         flexDirection: 'row',
@@ -37,8 +50,26 @@ const styles = theme => ({
         justifyContent: 'center',
         width: '100%',
     },
-    title: {
+    mainTitle: {
         marginBottom: '30px',
+    },
+    title: {
+        [theme.breakpoints.down('md')]: {
+            maxWidth: 200,
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+        },
+    },
+    row: {
+        [theme.breakpoints.down('md')]: {
+            alignItems: 'center',
+        },
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            textAlign: 'center',
+        },
     },
     btnDanger: {
         marginLeft: 20,
@@ -46,6 +77,17 @@ const styles = theme => ({
     },
     saveAndGoBtn: {
         marginRight: 20,
+    },
+    toggleIcon: {
+        position: 'absolute',
+        top: -15,
+        left: 0,
+        backgroundColor: theme.palette.primary.main,
+        width: 20,
+        height: 25,
+        cursor: 'pointer',
+        padding: theme.spacing(1),
+        borderRadius: '0 5px 5px 0',
     },
 });
 
@@ -460,7 +502,7 @@ class RightBar extends PureComponent {
             localRule: { name },
             isLocalStateWasUpdated,
         } = this.state;
-        const { classes } = this.props;
+        const { classes, isLeftBarHidden, toggleLeftBar } = this.props;
 
         const handleSubmit = this.handleDialogSelectIdSubmit;
         const SaveSettingsForm = this.createSaveSettingsForm({});
@@ -473,7 +515,7 @@ class RightBar extends PureComponent {
                     <Typography
                         variant="h4"
                         align="center"
-                        className={!isLocalStateWasUpdated ? classes.title : ''}>
+                        className={!isLocalStateWasUpdated ? classes.mainTitle : ''}>
                         {name}
                     </Typography>
 
@@ -482,8 +524,17 @@ class RightBar extends PureComponent {
                     {this.createOptionsData().map(({ title, item, id }) => {
                         if (!item) return null;
                         return (
-                            <Box display="flex" justifyContent="space-between" mb="10px" key={id}>
-                                <Typography variant="h5" component="h2" align="left">
+                            <Box
+                                display="flex"
+                                justifyContent="space-between"
+                                mb="10px"
+                                key={id}
+                                className={classes.row}>
+                                <Typography
+                                    variant="h5"
+                                    component="h2"
+                                    align="left"
+                                    className={classes.title}>
                                     {title}
                                 </Typography>
                                 {item}
@@ -491,6 +542,10 @@ class RightBar extends PureComponent {
                         );
                     })}
                 </Paper>
+
+                <Box className={classes.toggleIcon} onClick={toggleLeftBar}>
+                    {isLeftBarHidden ? <MenuIcon /> : <ArrowBackIcon />}
+                </Box>
 
                 {this.state.showDialog && (
                     <DialogSelectID
@@ -552,4 +607,6 @@ RightBar.propTypes = {
     unsavedRules: PropTypes.object.isRequired,
     setUnsavedRule: PropTypes.func.isRequired,
     removeUnsavedRule: PropTypes.func.isRequired,
+    toggleLeftBar: PropTypes.func.isRequired,
+    isLeftBarHidden: PropTypes.bool,
 };

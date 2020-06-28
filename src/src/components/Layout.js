@@ -3,7 +3,7 @@ import SplitterLayout from 'react-splitter-layout';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import 'react-splitter-layout/lib/index.css';
 
 import I18n from '@iobroker/adapter-react/i18n';
@@ -14,7 +14,16 @@ import Modal from './Modal';
 import isEqual from 'lodash.isequal';
 
 const styles = theme => ({
-    mainLayout: {
+    hidden: {
+        '& .layout-pane:first-child': {
+            width: '0 !important',
+        },
+        background: theme.palette.background.default,
+    },
+    opened: {
+        '& .layout-pane-primary': {
+            width: '',
+        },
         background: theme.palette.background.default,
     },
 });
@@ -26,6 +35,7 @@ class Layout extends PureComponent {
         isEdit: false,
         selectedRule: {},
         unsavedRules: {},
+        isLeftBarHidden: false,
     };
 
     componentDidMount() {
@@ -45,6 +55,11 @@ class Layout extends PureComponent {
                 this.props.saveConfig({ rules: rulesWithId, ...settings });
             }
         });
+        if (!this.isMdScreen) {
+            this.setState({
+                isLeftBarHidden: true,
+            });
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -306,7 +321,9 @@ class Layout extends PureComponent {
         await this.setState({
             currentRules: rulesFullData,
             selectedRule:
-                rulesFullData.find(rule => rule.id === localStorage.getItem('selectedRule')) || {},
+                rulesFullData.find(rule => rule.id === localStorage.getItem('selectedRule')) ||
+                rulesFullData[rulesFullData.length - 1] ||
+                {},
             settings,
         });
         return config;
@@ -413,17 +430,43 @@ class Layout extends PureComponent {
         });
     };
 
+    isLargeScreen = isWidthUp('lg', this.props.width);
+    isMdScreen = isWidthUp('md', this.props.width);
+    isSmScreen = isWidthUp('sm', this.props.width);
+    isMobileScreen = isWidthUp('xs', this.props.width);
+
+    getLeftBarSizes = () => {
+        let leftBarSize;
+        if (this.isLargeScreen) {
+            leftBarSize = 27;
+        } else if (this.isMdScreen) {
+            leftBarSize = 35;
+        } else if (this.isSmScreen) {
+            leftBarSize = 60;
+        } else {
+            leftBarSize = 88;
+        }
+
+        return leftBarSize;
+    };
+
+    toggleLeftBar = () => {
+        this.setState({
+            isLeftBarHidden: !this.state.isLeftBarHidden,
+        });
+    };
+
     render() {
         console.log(this.state);
-        const { isEdit, isOpen, currentRules, selectedRule } = this.state;
+        const { classes } = this.props;
+        const { isEdit, isOpen, currentRules, selectedRule, isLeftBarHidden } = this.state;
         return [
             <SplitterLayout
                 key="splitterLayout"
-                customClassName={this.props.classes.mainLayout}
+                customClassName={isLeftBarHidden ? classes.hidden : classes.opened}
+                primaryIndex={1}
                 percentage
-                // primaryMinSize={15}
-                secondaryInitialSize={75}
-                secondaryMinSize={65}>
+                secondaryInitialSize={this.getLeftBarSizes()}>
                 <LeftBar
                     handleOpen={this.handleOpen}
                     rules={currentRules}
@@ -452,6 +495,8 @@ class Layout extends PureComponent {
                         lang={this.state.settings.language}
                         setUnsavedRule={this.setUnsavedRule}
                         removeUnsavedRule={this.removeUnsavedRule}
+                        toggleLeftBar={this.toggleLeftBar}
+                        isLeftBarHidden={this.state.isLeftBarHidden}
                     />
                 )}
             </SplitterLayout>,
@@ -480,4 +525,4 @@ Layout.propTypes = {
     saveConfig: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(Layout);
+export default withStyles(styles)(withWidth()(Layout));
