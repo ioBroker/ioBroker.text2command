@@ -241,7 +241,6 @@ class RightBar extends PureComponent {
         onSwitchChange,
     }) => {
         if (!value && !label && !keywords) return;
-
         const { classes } = this.props;
 
         return type !== 'checkbox' ? (
@@ -260,7 +259,7 @@ class RightBar extends PureComponent {
         ) : (
             <FormControl>
                 <FormControlLabel
-                    value={value}
+                    value={!!value}
                     label={label}
                     labelPlacement={'start'}
                     control={
@@ -451,6 +450,7 @@ class RightBar extends PureComponent {
                         : arg
                 ),
             },
+            isLocalStateWasUpdated: true,
         });
     };
 
