@@ -48,7 +48,7 @@ const styles = theme => ({
     },
     root: {
         width: '92%',
-        '& .MuiOutlinedInput-notchedOutline-66': {
+        '& .MuiOutlinedInput-notchedOutline-67': {
             border: `2px solid ${theme.palette.grey[700]}`,
         },
         '& #outlined-basic': {
@@ -63,13 +63,31 @@ const styles = theme => ({
     },
     textInput: {
         width: '60%',
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+        },
     },
     select: {
-        minWidth: '20%',
+        width: '60%',
+        '& .MuiOutlinedInput-input-68': {
+            padding: 10.5,
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+        },
     },
     settingsTitle: {
         fontSize: '20px',
         maxWidth: 145,
+        [theme.breakpoints.down('sm')]: {
+            marginBottom: theme.spacing(1),
+        },
+    },
+    settingsContent: {
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+            display: 'flex',
+        },
     },
     play: {
         padding: 8,
@@ -241,6 +259,7 @@ class LeftBar extends Component {
                         onChange={event => handleChange(event, 'language')}
                         value={this.state.localeSettings.language}
                         className={classes.select}
+                        variant="outlined"
                         autoWidth>
                         {Children.toArray(
                             options.map(option => <MenuItem value={option}>{option}</MenuItem>)
@@ -288,7 +307,12 @@ class LeftBar extends Component {
                 </DialogTitle>
                 <DialogContent>
                     {settingsItems.map(({ item, title, id }) => (
-                        <Box display="flex" justifyContent="space-between" mb="10px" key={id}>
+                        <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            mb="10px"
+                            key={id}
+                            className={classes.settingsContent}>
                             <Typography
                                 variant="h5"
                                 component="h5"

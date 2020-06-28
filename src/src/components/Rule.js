@@ -62,6 +62,7 @@ const Rule = React.forwardRef((props, ref) => {
         },
         maximize: {
             color: theme.palette.error?.dark,
+            marginBottom: -theme.spacing(2),
         },
     })();
 
