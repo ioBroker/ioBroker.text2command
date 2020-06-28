@@ -58,7 +58,6 @@ class Layout extends PureComponent {
             prevState.selectedRule?.id !== this.state.selectedRule?.id &&
             prevState.selectedRule?.id
         ) {
-            console.log(prevState.selectedRule?.id, this.state.selectedRule?.id);
             localStorage.setItem('selectedRule', this.state.selectedRule.id);
         }
     }
@@ -234,10 +233,11 @@ class Layout extends PureComponent {
             const newConfig = { rules: rules.filter(rule => rule.id !== id), ...settings };
             this.props.saveConfig(newConfig);
         };
+        const updatedRules = this.state.currentRules.filter(rule => rule.id !== id);
         this.setState(
             {
-                currentRules: this.state.currentRules.filter(rule => rule.id !== id),
-                selectedRule: {},
+                currentRules: updatedRules,
+                selectedRule: updatedRules.length ? updatedRules[updatedRules.length - 1] : {},
             },
             deleteRuleFromConfig
         );
@@ -305,9 +305,8 @@ class Layout extends PureComponent {
         });
         await this.setState({
             currentRules: rulesFullData,
-            selectedRule: rulesFullData.find(
-                rule => rule.id === localStorage.getItem('selectedRule')
-            ),
+            selectedRule:
+                rulesFullData.find(rule => rule.id === localStorage.getItem('selectedRule')) || {},
             settings,
         });
         return config;

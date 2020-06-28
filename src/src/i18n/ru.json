@@ -36,7 +36,7 @@
     "Test phrase": "Тестовая фраза",
     "Interrupt processing": "Прервать обработку",
     "Save and go": "Сохранить и перейти",
-    "Dont save and go": "Не сохранять и перейти",
+    "Don't save and go": "Не сохранять и перейти",
     "Please confirm or cancel changes before leaving": "Пожалуйста, подтвердите или отмените изменения перед тем как уйти",
     "You have changed rule": "Вы изменили правило",
     "Settings": "Настройки",
@@ -44,5 +44,7 @@
     "Processor's id": "ID обработчика",
     "Answer in id": "Ответ в ID",
     "Language": "Язык",
-    "System": "Системный"
+    "System": "Системный",
+    "Are you sure": "Вы уверены",
+    "You want to delete": "Вы хотите удалить"
 }
