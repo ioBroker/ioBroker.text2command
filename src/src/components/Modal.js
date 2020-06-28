@@ -30,11 +30,8 @@ class Modal extends Component {
         localRule: this.defaultRule,
     };
 
-    existingNames = [];
-
     componentDidUpdate(prevProps) {
         if (prevProps.currentRules !== this.props.currentRules) {
-            this.existingNames = this.props.currentRules?.map(rule => rule?.name);
         }
     }
     componentWillUnmount() {
@@ -70,7 +67,9 @@ class Modal extends Component {
     };
 
     getUniqueName = ruleName => {
-        const matchingNames = this.existingNames.filter(
+        const existingNames = this.props.currentRules?.map(rule => rule?.name);
+
+        const matchingNames = existingNames.filter(
             name => name.slice(0, name.length - 2) === ruleName
         );
         const isUnique = this.props.commands.find(
@@ -103,11 +102,13 @@ class Modal extends Component {
             });
 
         const handleInputChange = event => {
+            const existingNames = this.props.currentRules?.map(rule => rule?.name);
+
             this.setState({
                 localRule: {
                     ...localRule,
                     name: event.target.value,
-                    isError: this.existingNames.includes(event.target.value)
+                    isError: existingNames.includes(event.target.value)
                         ? `${I18n.t('Name already exist')}`
                         : '',
                 },

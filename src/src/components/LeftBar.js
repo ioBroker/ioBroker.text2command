@@ -43,6 +43,8 @@ const styles = theme => ({
     },
     main: {
         minWidth: 330,
+        overflow: 'auto',
+        height: '90%',
     },
     root: {
         width: '92%',
