@@ -40,6 +40,9 @@ const styles = theme => ({
         justifyContent: 'center',
         boxSizing: 'border-box',
     },
+    main: {
+        minWidth: 330,
+    },
     root: {
         width: '92%',
         '& .MuiOutlinedInput-notchedOutline-63': {
@@ -50,7 +53,8 @@ const styles = theme => ({
         },
     },
     header: {
-        height: 44,
+        minHeight: 44,
+        height: 'auto',
         padding: theme.spacing(1.3),
         border: `1px solid ${theme.palette.divider}`,
     },
@@ -318,7 +322,7 @@ class LeftBar extends Component {
         const SettingsDialog = this.createSettingsModal();
 
         return (
-            <Box>
+            <Box className={classes.main}>
                 <Box display="flex" justifyContent="space-between" className={classes.header}>
                     <div>{this.createIcons(this.mainIcons)}</div>
                     <div>{this.createIcons(this.additionalIcons)}</div>
