@@ -13,8 +13,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { ListItemIcon, IconButton, Box } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import DoneIcon from '@material-ui/icons/Done';
-import CloseIcon from '@material-ui/icons/Close';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import MaximizeIcon from '@material-ui/icons/Maximize';
 
 import { DropTarget, DragSource } from 'react-dnd';
 
@@ -60,6 +60,9 @@ const Rule = React.forwardRef((props, ref) => {
             height: 10,
             borderRadius: '50%',
         },
+        maximize: {
+            color: theme.palette.error?.dark,
+        },
     })();
 
     const elementRef = useRef(null);
@@ -75,7 +78,11 @@ const Rule = React.forwardRef((props, ref) => {
 
     const icons = [
         {
-            icon: _break ? <DoneIcon color="primary" /> : <CloseIcon color="primary" />,
+            icon: _break ? (
+                <MaximizeIcon className={classes.maximize} />
+            ) : (
+                <ArrowDownwardIcon color="primary" />
+            ),
         },
         { icon: <EditIcon />, handleClick: handleEditMemo },
     ];
