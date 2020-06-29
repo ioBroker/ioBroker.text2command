@@ -3,6 +3,7 @@ body, html {
     padding: 0;
     width: 100%;
     height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 /* scrollbar */
 *::-webkit-scrollbar-track {
@@ -21,6 +22,8 @@ body, html {
 }
 .App {
     min-height: 100%;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
     height: fit-content;
 }
 

@@ -2,9 +2,11 @@ import React, { PureComponent } from 'react';
 import SplitterLayout from 'react-splitter-layout';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import 'react-splitter-layout/lib/index.css';
+import Drawer from '@material-ui/core/Drawer';
 
 import I18n from '@iobroker/adapter-react/i18n';
 
@@ -14,6 +16,11 @@ import Modal from './Modal';
 import isEqual from 'lodash.isequal';
 
 const styles = theme => ({
+    layout: {
+        '& .layout-pane:first': {
+            overflow: 'hidden',
+        },
+    },
     hidden: {
         '& .layout-pane:first-child': {
             width: '0 !important',
@@ -24,19 +31,26 @@ const styles = theme => ({
         '& .layout-pane-primary': {
             width: '',
         },
+        overflow: 'hidden',
         background: theme.palette.background.default,
     },
 });
 
 class Layout extends PureComponent {
-    state = {
-        currentRules: [],
-        isOpen: false,
-        isEdit: false,
-        selectedRule: {},
-        unsavedRules: {},
-        isLeftBarHidden: false,
-    };
+    constructor(props) {
+        super(props);
+
+        this.menuSize = parseFloat(window.localStorage.getItem('App.menuSize')) || 350;
+        this.state = {
+            currentRules: [],
+            isOpen: false,
+            isEdit: false,
+            selectedRule: {},
+            unsavedRules: {},
+            isLeftBarHidden: window.localStorage.getItem('App.menuHidden') === 'true',
+        };
+        this.commands = this.getSelectedLanguageCommands();
+    }
 
     componentDidMount() {
         this.getDataFromConfig().then(({ rules, ...settings }) => {
@@ -78,7 +92,7 @@ class Layout extends PureComponent {
     }
 
     getSelectedLanguageCommands = () => {
-        const lang = this.state.settings?.language || I18n.getLanguage();
+        const lang = this.state?.settings?.language || I18n.getLanguage();
 
         return [
             { rule: I18n.t('Select rule'), unique: false },
@@ -289,7 +303,6 @@ class Layout extends PureComponent {
             unsavedRules: ids,
         });
     };
-
     getDataFromConfig = async () => {
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
@@ -435,53 +448,57 @@ class Layout extends PureComponent {
     isSmScreen = isWidthUp('sm', this.props.width);
     isMobileScreen = isWidthUp('xs', this.props.width);
 
-    getLeftBarSizes = () => {
-        let leftBarSize;
-        if (this.isLargeScreen) {
-            leftBarSize = 27;
-        } else if (this.isMdScreen) {
-            leftBarSize = 35;
-        } else if (this.isSmScreen) {
-            leftBarSize = 60;
-        } else {
-            leftBarSize = 88;
-        }
-
-        return leftBarSize;
-    };
-
     toggleLeftBar = () => {
+        window.localStorage.setItem('App.menuHidden', !this.state.isLeftBarHidden);
         this.setState({
             isLeftBarHidden: !this.state.isLeftBarHidden,
         });
     };
 
+    renderModalDialog() {
+        return this.state.isOpen ? (
+            <Modal
+                key="modal"
+                commands={this.commands}
+                isEdit={this.state.isEdit}
+                handleSubmitOnCreate={this.handleSubmitOnCreate}
+                handleSubmitOnEdit={this.handleSubmitOnEdit}
+                handleClose={this.handleClose}
+                isOpen={this.state.isOpen}
+                currentRules={this.state.currentRules}
+                selectedRule={this.state.selectedRule}
+                finishEdit={this.finishEdit}
+            />
+        ) : null;
+    }
     render() {
         console.log(this.state);
         const { classes } = this.props;
-        const { isEdit, isOpen, currentRules, selectedRule, isLeftBarHidden } = this.state;
-        return [
-            <SplitterLayout
-                key="splitterLayout"
-                customClassName={isLeftBarHidden ? classes.hidden : classes.opened}
-                primaryIndex={1}
-                percentage
-                secondaryInitialSize={this.getLeftBarSizes()}>
-                <LeftBar
-                    handleOpen={this.handleOpen}
-                    rules={currentRules}
-                    moveRule={this.moveRule}
-                    handleEdit={this.handleEdit}
-                    selectRule={this.selectRule}
-                    selectedRule={selectedRule}
-                    removeRule={this.removeRule}
-                    settings={this.state.settings}
-                    socket={this.props.socket}
-                    saveSettings={this.saveSettings}
-                    theme={this.props.theme}
-                    unsavedRules={this.state.unsavedRules}
-                />
-                {this.state.settings && (
+        const { currentRules, selectedRule, isLeftBarHidden } = this.state;
+
+        if (false && this.isMobileScreen) {
+            return [
+                <Drawer
+                    anchor="left"
+                    open={this.state.isLeftBarHidden}
+                    onClose={() => this.setState({ isLeftBarHidden: false })}>
+                    <LeftBar
+                        handleOpen={this.handleOpen}
+                        rules={currentRules}
+                        moveRule={this.moveRule}
+                        handleEdit={this.handleEdit}
+                        selectRule={this.selectRule}
+                        selectedRule={selectedRule}
+                        removeRule={this.removeRule}
+                        settings={this.state.settings}
+                        socket={this.props.socket}
+                        saveSettings={this.saveSettings}
+                        theme={this.props.theme}
+                        toggleLeftBar={this.toggleLeftBar}
+                        unsavedRules={this.state.unsavedRules}
+                    />
+                </Drawer>,
+                this.state.settings ? (
                     <RightBar
                         selectedRule={selectedRule}
                         socket={this.props.socket}
@@ -498,23 +515,60 @@ class Layout extends PureComponent {
                         toggleLeftBar={this.toggleLeftBar}
                         isLeftBarHidden={this.state.isLeftBarHidden}
                     />
-                )}
-            </SplitterLayout>,
-            this.state.isOpen && (
-                <Modal
-                    key="modal"
-                    commands={this.commands}
-                    isEdit={isEdit}
-                    handleSubmitOnCreate={this.handleSubmitOnCreate}
-                    handleSubmitOnEdit={this.handleSubmitOnEdit}
-                    handleClose={this.handleClose}
-                    isOpen={isOpen}
-                    currentRules={currentRules}
-                    selectedRule={selectedRule}
-                    finishEdit={this.finishEdit}
-                />
-            ),
-        ];
+                ) : null,
+            ];
+        } else {
+            return [
+                <SplitterLayout
+                    key="splitterLayout"
+                    customClassName={clsx(
+                        isLeftBarHidden ? classes.hidden : classes.opened,
+                        classes.layout
+                    )}
+                    primaryMinSize={350}
+                    primaryIndex={1}
+                    secondaryMinSize={350}
+                    onSecondaryPaneSizeChange={size => (this.menuSize = parseFloat(size))}
+                    onDragEnd={() => {
+                        window.localStorage.setItem('App.menuSize', this.menuSize.toString());
+                    }}
+                    secondaryInitialSize={this.menuSize}>
+                    <LeftBar
+                        handleOpen={this.handleOpen}
+                        rules={currentRules}
+                        moveRule={this.moveRule}
+                        handleEdit={this.handleEdit}
+                        selectRule={this.selectRule}
+                        selectedRule={selectedRule}
+                        removeRule={this.removeRule}
+                        settings={this.state.settings}
+                        socket={this.props.socket}
+                        saveSettings={this.saveSettings}
+                        theme={this.props.theme}
+                        unsavedRules={this.state.unsavedRules}
+                    />
+                    {this.state.settings && (
+                        <RightBar
+                            selectedRule={selectedRule}
+                            socket={this.props.socket}
+                            updateCurrentRules={this.updateCurrentRules}
+                            updateConfig={this.updateConfig}
+                            revertChangesFromConfig={this.revertChangesFromConfig}
+                            pendingSelectedRuleId={this.state.pendingSelectedRuleId}
+                            unsavedRules={this.state.unsavedRules}
+                            selectRule={this.selectRule}
+                            clearStateOnConfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
+                            lang={this.state.settings.language}
+                            setUnsavedRule={this.setUnsavedRule}
+                            removeUnsavedRule={this.removeUnsavedRule}
+                            toggleLeftBar={this.toggleLeftBar}
+                            isLeftBarHidden={this.state.isLeftBarHidden}
+                        />
+                    )}
+                </SplitterLayout>,
+                this.renderModalDialog(),
+            ];
+        }
     }
 }
 

@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
 import { TextField, Switch, Typography, withStyles, Box } from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -24,6 +24,10 @@ const styles = theme => ({
         padding: theme.spacing(2),
         width: 'calc(100% - ' + theme.spacing(4) + 'px)',
         position: 'relative',
+        '& .outlined-basic': {
+            padding: '12px 10px',
+            //border: `2px solid ${theme.palette.grey[700]}`,
+        },
     },
     container: {
         width: '70%',
@@ -57,6 +61,7 @@ const styles = theme => ({
         marginBottom: '30px',
     },
     title: {
+        marginTop: 16,
         [theme.breakpoints.down('md')]: {
             maxWidth: 200,
         },
@@ -100,6 +105,13 @@ const styles = theme => ({
         padding: theme.spacing(1),
         borderRadius: '0 5px 5px 0',
     },
+    switchControl: {
+        paddingTop: theme.spacing(1),
+        flexBasis: '60%'
+    },
+    emptyButtons: {
+        height: 36,
+    }
 });
 
 class RightBar extends PureComponent {
@@ -129,10 +141,8 @@ class RightBar extends PureComponent {
     };
 
     componentDidUpdate(prevProps, prevState) {
-        if (
-            prevProps.selectedRule?.name !== this.props.selectedRule?.name ||
-            prevState.localRule?.name !== this.state.localRule?.name
-        ) {
+        if (prevProps.selectedRule?.name !== this.props.selectedRule?.name ||
+            prevState.localRule?.name !== this.state.localRule?.name) {
             if (!this.props.selectedRule.name) {
                 this.setState({
                     localRule: this.defaultState,
@@ -264,16 +274,18 @@ class RightBar extends PureComponent {
             });
         };
 
-        return (
-            <FormControl className={classes.submitForm}>
+        if (!this.state.isLocalStateWasUpdated) {
+            return <div className={ this.props.classes.emptyButtons }/>
+        } else {
+            return <FormControl className={classes.submitForm}>
                 <Button onClick={handleSave} variant="contained" color="primary">
                     {t('Save')}
                 </Button>
                 <Button variant="contained" className={classes.btnDanger} onClick={revertChanges}>
                     {t('Cancel')}
                 </Button>
-            </FormControl>
-        );
+            </FormControl>;
+        }
     };
 
     closeConfirmDialog = () => {
@@ -289,45 +301,40 @@ class RightBar extends PureComponent {
         onChange,
         type,
         onClick,
+        note,
         disabled = this.state.localRule === this.defaultState,
         keywords,
         key,
         onSwitchChange,
     }) => {
-        if (!value && !label && !keywords) return;
+        if ((value === undefined || value === null) && !label && !keywords) {
+            return;
+        }
         const { classes } = this.props;
 
-        return type !== 'checkbox' ? (
+        return type !== 'checkbox' ?
             <TextField
-                label={label}
-                id="outlined-basic"
+                //label={label}
                 variant="outlined"
                 size="small"
                 disabled={disabled}
                 value={value}
+                helperText={note || ''}
                 onClick={onClick}
                 onChange={onChange}
                 key={key}
-                className={classes.textField}
+                className={clsx('outlined-basic', classes.textField)}
             />
-        ) : (
-            <FormControl>
-                <FormControlLabel
-                    value={!!value}
-                    label={label}
-                    labelPlacement={'start'}
-                    control={
-                        <Switch
-                            onClick={onSwitchChange}
-                            color={'primary'}
-                            disabled={disabled}
-                            checked={!!value}
-                        />
-                    }
+            :
+            <FormControl classes={{ root: classes.switchControl }}>
+                <Switch
                     key={key}
+                    onClick={onSwitchChange}
+                    color={'primary'}
+                    disabled={disabled}
+                    checked={!!value}
                 />
-            </FormControl>
-        );
+            </FormControl>;
     };
 
     createOptionsData = (state = this.state) => {
@@ -340,14 +347,17 @@ class RightBar extends PureComponent {
         const handlers = this.handlers;
 
         const isKeyWordsDisabled = () => {
-            if (editable === undefined) return false;
-            else if (editable === false) return true;
+            if (editable === undefined) {
+                return false;
+            } else if (editable === false) {
+                return true;
+            }
             return false;
         };
 
         return [
             {
-                title: `${t('Keywords')}:`,
+                title: t('Keywords'),
                 item: createInput({
                     value: this.state.localRule?.words || '',
                     onChange: handlers.keywordsText,
@@ -358,9 +368,8 @@ class RightBar extends PureComponent {
                 id: 1,
             },
             {
-                title: `${t('Break')}:`,
+                title: t('Interrupt processing'),//`${t('Break')}:`,
                 item: createInput({
-                    label: `${t('Interrupt processing')}`,
                     type: 'checkbox',
                     value: _break,
                     onSwitchChange: handlers.breakOnSwitch,
@@ -369,7 +378,7 @@ class RightBar extends PureComponent {
                 id: 2,
             },
             {
-                title: `${t('Argument')}:`,
+                title: args && args[0]?.name,//`${t('Argument')}:`,
                 item: createInput({
                     value: args && this.state.localRule.args[0]?.default,
                     label: args && args[0]?.name,
@@ -381,7 +390,7 @@ class RightBar extends PureComponent {
                 id: 3,
             },
             {
-                title: `${t('Argument')}:`,
+                title: args && args[1]?.name,//`${t('Argument')}:`,
                 item: createInput({
                     value: args && this.state.localRule.args[1]?.default,
                     label: args && args[1]?.name,
@@ -391,12 +400,13 @@ class RightBar extends PureComponent {
                 id: 4,
             },
             {
-                title: `${t('Confirmation text')}:`,
+                title: t('Confirmation text'),
                 item: createInput({
                     value: ack && ack.default,
                     label: ack && ack.name,
+                    note: t('You can use %s, that will be replaced with current value of state. %u will be replaced by unit'),
                     type: ack && ack.type,
-                    key: 'Confirmation text',
+                    key: 'confirmationText',
                     onChange: handlers.confirmText,
                     onSwitchChange: handlers.confirmOnSwitch,
                 }),
@@ -508,17 +518,40 @@ class RightBar extends PureComponent {
         });
     };
 
+    renderConfirmDialog() {
+        return this.state.confirmChanges ?
+            <Dialog fullWidth open={this.state.confirmChanges} maxWidth={'md'}>
+                <DialogTitle>
+                    {I18n.t('Please confirm or cancel changes before leaving')}
+                </DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        {I18n.t('You have changed rule') + ': '} <strong>{this.state.localRule.name}</strong>
+                    </Typography>
+                    <DialogActions>{this.createConfirmModalActions()}</DialogActions>
+                </DialogContent>
+            </Dialog> : null;
+    }
+
+    renderSelectIdDialog() {
+        return this.state.showDialog ?
+            <DialogSelectID
+                socket={this.props.socket}
+                title={'Select ID'}
+                onClose={id => {
+                    console.log(id);
+                    this.setState({ showDialog: false });
+                }}
+                onOk={this.handleDialogSelectIdSubmit}
+            /> : null;
+    }
+
     render() {
         const {
             localRule: { name },
-            isLocalStateWasUpdated,
+            isLocalStateWasUpdated
         } = this.state;
         const { classes, isLeftBarHidden, toggleLeftBar } = this.props;
-
-        const handleSubmit = this.handleDialogSelectIdSubmit;
-        const SaveSettingsForm = this.createSaveSettingsForm({});
-
-        console.log(this.state);
 
         return (
             <Box mt="30px" className={classes.box}>
@@ -530,7 +563,7 @@ class RightBar extends PureComponent {
                         {name}
                     </Typography>
 
-                    {isLocalStateWasUpdated && SaveSettingsForm}
+                    {this.createSaveSettingsForm()}
 
                     {this.createOptionsData().map(({ title, item, id }) => {
                         if (!item) return null;
@@ -542,11 +575,11 @@ class RightBar extends PureComponent {
                                 key={id}
                                 className={classes.row}>
                                 <Typography
-                                    variant="h5"
-                                    component="h2"
+                                    variant="h6"
+                                    component="h6"
                                     align="left"
                                     className={classes.title}>
-                                    {title}
+                                    {title ? title + ':' : ''}
                                 </Typography>
                                 {item}
                             </Box>
@@ -558,30 +591,8 @@ class RightBar extends PureComponent {
                     {isLeftBarHidden ? <MenuIcon /> : <ArrowBackIcon />}
                 </Box>
 
-                {this.state.showDialog && (
-                    <DialogSelectID
-                        socket={this.props.socket}
-                        title={'Select ID'}
-                        onClose={id => {
-                            console.log(id);
-                            this.setState({ showDialog: false });
-                        }}
-                        onOk={handleSubmit}
-                    />
-                )}
-                {this.state.confirmChanges && (
-                    <Dialog fullWidth open={this.state.confirmChanges} maxWidth={'md'}>
-                        <DialogTitle>
-                            {I18n.t('Please confirm or cancel changes before leaving')}
-                        </DialogTitle>
-                        <DialogContent>
-                            <Typography>
-                                {I18n.t('You have changed rule') + ': '} <strong>{name}</strong>
-                            </Typography>
-                            <DialogActions>{this.createConfirmModalActions()}</DialogActions>
-                        </DialogContent>
-                    </Dialog>
-                )}
+                {this.renderSelectIdDialog()}
+                {this.renderConfirmDialog()}
             </Box>
         );
     }
