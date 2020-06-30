@@ -1,3 +1,21 @@
 {
-
+  "Select rule": "Selecteer regel",
+  "System": "Systeem",
+  "Language": "Taal",
+  "Answer in id": "Antwoord in ID",
+  "Processor's id": "Verwerker ID",
+  "Timeout for processor": "Time-out voor processor",
+  "Settings": "Instellingen",
+  "Cancel": "Annuleer",
+  "Test phrase": "Testzin",
+  "Argument": "Argument",
+  "Confirmation text": "Bevestigingstekst",
+  "Keywords": "Sleutelwoorden",
+  "Interrupt processing": "Verwerking onderbreken",
+  "You can use %s, that will be replaced with current value of state. %u will be replaced by unit": "U kunt %s gebruiken, dat zal worden vervangen door de huidige waarde van de staat. %u wordt vervangen door eenheid",
+  "Ok": "OK",
+  "Create Rule": "Creëer regel",
+  "Are you sure?": "Weet je het zeker?",
+  "You want to delete: %s": "Je wilt verwijderen: %s",
+  "refresh": "Vernieuwen"
 }
