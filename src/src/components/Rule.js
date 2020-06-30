@@ -97,7 +97,7 @@ const Rule = React.forwardRef((props, ref) => {
         if (matchingRules.length) {
             const matchingRule = matchingRules.find(item => item.indexOf === index);
             if (matchingRule) {
-                setTimeout(() => setBg('lightblue'), matchingRule.timer);
+                setTimeout(() => setBg(theme?.palette?.secondary.dark), matchingRule.timer);
                 setTimeout(() => {
                     setBg(selectedRule.id === id ? theme?.palette?.background?.default : '');
                     if (_break) removeMatched();
