@@ -6,6 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/Settings';
 import CachedIcon from '@material-ui/icons/Cached';
 import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FormatClearIcon from '@material-ui/icons/FormatClear';
@@ -49,11 +50,12 @@ const styles = theme => ({
     },
     toolbar: {
         background: theme.palette.secondary.main,
+        position: 'relative',
     },
     list: {
         height: 'calc(100% - 64px - 64px)',
         overflowX: 'hidden',
-        overflowY: 'auto'
+        overflowY: 'auto',
     },
     root: {
         width: '92%',
@@ -95,6 +97,12 @@ const styles = theme => ({
             flexDirection: 'column',
             display: 'flex',
         },
+    },
+    closeBtn: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        color: theme.palette.common.white,
     },
     /*play: {
         padding: 8,
@@ -362,43 +370,52 @@ class LeftBar extends Component {
         ));
 
     renderSelectIdDialog() {
-        return this.state.showDialogSelectId ?
+        return this.state.showDialogSelectId ? (
             <DialogSelectID
                 socket={this.props.socket}
                 title={'Select ID'}
                 onClose={() => this.setState({ showDialogSelectId: false })}
                 onOk={selected =>
-                    this.handleDialogSelectIdSubmit(
-                        selected,
-                        this.state.selectedSettingsName
-                    )
+                    this.handleDialogSelectIdSubmit(selected, this.state.selectedSettingsName)
                 }
-            /> : null;
+            />
+        ) : null;
     }
 
     renderConfirmDialog() {
-        return this.state.isConfirmRemoveDialogOpen ? <Dialog
-            open={this.state.isConfirmRemoveDialogOpen}
-            onClose={this.handleCloseConfirmRemoveDialog}
-            fullWidth>
-            <DialogTitle>{I18n.t('Are you sure?')}</DialogTitle>
-            <DialogContent>
-                <Typography variant="h5" component="h5">
-                    {I18n.t('You want to delete') + ': '}
-                    <strong>{this.props.selectedRule.name}</strong>
-                </Typography>
-                <DialogActions>
-                    <Button onClick={this.handleDelete}>{I18n.t('Ok')}</Button>
-                    <Button onClick={this.handleCloseConfirmRemoveDialog}>
-                        {I18n.t('Cancel')}
-                    </Button>
-                </DialogActions>
-            </DialogContent>
-        </Dialog> : null;
+        return this.state.isConfirmRemoveDialogOpen ? (
+            <Dialog
+                open={this.state.isConfirmRemoveDialogOpen}
+                onClose={this.handleCloseConfirmRemoveDialog}
+                fullWidth>
+                <DialogTitle>{I18n.t('Are you sure?')}</DialogTitle>
+                <DialogContent>
+                    <Typography variant="h5" component="h5">
+                        {I18n.t('You want to delete') + ': '}
+                        <strong>{this.props.selectedRule.name}</strong>
+                    </Typography>
+                    <DialogActions>
+                        <Button onClick={this.handleDelete}>{I18n.t('Ok')}</Button>
+                        <Button onClick={this.handleCloseConfirmRemoveDialog}>
+                            {I18n.t('Cancel')}
+                        </Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
+        ) : null;
     }
 
     render() {
-        const { selectedRule, moveRule, handleEdit, rules, selectRule, classes } = this.props;
+        const {
+            selectedRule,
+            moveRule,
+            handleEdit,
+            rules,
+            selectRule,
+            classes,
+            isMdScreen,
+            closeDrawer,
+        } = this.props;
         const { filteredRules, isSearchActive } = this.state;
         const settingsDialog = this.createSettingsModal();
         const additionalIcons = [
@@ -418,13 +435,18 @@ class LeftBar extends Component {
 
         return (
             <Box className={classes.main}>
-                <Toolbar position="static" classes={{root: classes.toolbar}} >
-                    {isSearchActive ?
+                <Toolbar position="static" classes={{ root: classes.toolbar }}>
+                    {isSearchActive ? (
                         <TextField className={classes.search} onChange={this.handleSearch} />
-                     :
+                    ) : (
                         <div>{this.createIcons(this.mainIcons)}</div>
-                    }
+                    )}
                     <div>{this.createIcons(additionalIcons)}</div>
+                    {!isMdScreen && (
+                        <IconButton className={classes.closeBtn} onClick={closeDrawer}>
+                            <CloseIcon />
+                        </IconButton>
+                    )}
                 </Toolbar>
 
                 <DndProvider backend={HTML5Backend}>
@@ -458,8 +480,10 @@ class LeftBar extends Component {
                         onKeyDown={this.handleSubmit}
                         value={this.state.textCommand}
                     />
-                    <IconButton variant="outlined" onClick={event => this.handleSubmit(event, true)}>
-                        <PlayArrowIcon className={classes.play}/>
+                    <IconButton
+                        variant="outlined"
+                        onClick={event => this.handleSubmit(event, true)}>
+                        <PlayArrowIcon className={classes.play} />
                     </IconButton>
                 </Toolbar>
 
@@ -496,4 +520,6 @@ LeftBar.propTypes = {
     saveSettings: PropTypes.func.isRequired,
     unsavedRules: PropTypes.object,
     toggleLeftBar: PropTypes.func,
+    isMdScreen: PropTypes.bool.isRequired,
+    closeDrawer: PropTypes.func.isRequired,
 };
