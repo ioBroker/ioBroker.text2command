@@ -1,3 +1,21 @@
 {
-
+  "Select rule": "选择规则",
+  "System": "系统",
+  "Language": "语言",
+  "Answer in id": "输入答案",
+  "Processor's id": "处理器ID",
+  "Timeout for processor": "处理器超时",
+  "Settings": "设定值",
+  "Cancel": "取消",
+  "Test phrase": "测试词",
+  "Argument": "论据",
+  "Confirmation text": "确认文字",
+  "Keywords": "关键词",
+  "Interrupt processing": "中断处理",
+  "You can use %s, that will be replaced with current value of state. %u will be replaced by unit": "您可以使用％s，它将替换为state的当前值。 ％u将被单位替换",
+  "Ok": "好",
+  "Create Rule": "建立规则",
+  "Are you sure?": "你确定吗？",
+  "You want to delete: %s": "您要删除：％s",
+  "refresh": "刷新"
 }

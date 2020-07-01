@@ -396,7 +396,7 @@ class LeftBar extends Component {
                     </Typography>
                     <DialogActions>
                         <Button onClick={this.handleDelete}>{I18n.t('Ok')}</Button>
-                        <Button onClick={this.handleCloseConfirmRemoveDialog}>
+                        <Button onClick={this.handleCloseConfirmRemoveDialog} color="primary">
                             {I18n.t('Cancel')}
                         </Button>
                     </DialogActions>

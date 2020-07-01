@@ -1,0 +1,7 @@
+.selectedScene {
+    background-color: grey;
+}
+
+.App .splitter-layout .layout-splitter {
+    background: #595858;
+}

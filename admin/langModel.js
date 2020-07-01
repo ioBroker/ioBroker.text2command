@@ -1,6 +1,11 @@
+/* Attention:
+  This file used in Front-end and in the backend. Originally it is placed in /lib/langModel.js
+  and will be coped by gulp to src/public/langModel.js
+ */
 /* jshint -W097 */
 /* jshint strict: false */
 /* jslint node: true */
+
 // eslint-disable-next-line
 'use strict';
 
@@ -469,20 +474,11 @@ function findMatched(cmd, _rules) {
 
                 // if one of
                 if (typeof rule.words[j] === 'object') {
-                    let _isFound = false;
-
-                    for (let u = 0; u < rule.words[j].length; u++) {
-                        if (cmdWords.indexOf(rule.words[j][u]) !== -1) {
-                            _isFound = true;
-                            break;
-                        }
-                    }
-
-                    if (!_isFound) {
+                    if (!rule.words[j].find(w => cmdWords.includes(w))) {
                         isFound = false;
                         break;
                     }
-                } else if (cmdWords.indexOf(rule.words[j]) === -1) {
+                } else if (!cmdWords.includes(rule.words[j])) {
                     isFound = false;
                     break;
                 }
@@ -496,6 +492,7 @@ function findMatched(cmd, _rules) {
             }
         }
     }
+
     return matchedRules;
 }
 

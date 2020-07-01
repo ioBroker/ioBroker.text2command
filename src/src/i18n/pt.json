@@ -1,3 +1,21 @@
 {
-
+  "Select rule": "Selecionar regra",
+  "System": "Sistema",
+  "Language": "Língua",
+  "Answer in id": "Resposta em ID",
+  "Processor's id": "ID do processador",
+  "Timeout for processor": "Tempo limite do processador",
+  "Settings": "Configurações",
+  "Cancel": "Cancelar",
+  "Test phrase": "Frase de teste",
+  "Argument": "Argumento",
+  "Confirmation text": "Texto de confirmação",
+  "Keywords": "Palavras-chave",
+  "Interrupt processing": "Interromper o processamento",
+  "You can use %s, that will be replaced with current value of state. %u will be replaced by unit": "Você pode usar %s, que será substituído pelo valor atual do estado. %u será substituído por unidade",
+  "Ok": "Ok",
+  "Create Rule": "Criar regra",
+  "Are you sure?": "Você tem certeza?",
+  "You want to delete: %s": "Você deseja excluir: %s",
+  "refresh": "Atualizar"
 }
