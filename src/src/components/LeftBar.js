@@ -137,14 +137,18 @@ class LeftBar extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (this.props.settings !== prevProps.settings && this.props.settings) {
-            this.setState({
-                localeSettings: {
-                    ...this.props.settings,
-                    language: this.props.settings.language || I18n.t('System'),
-                },
-            });
+            this.getDefaultSettings();
         }
     }
+
+    getDefaultSettings = () => {
+        this.setState({
+            localeSettings: {
+                ...this.props.settings,
+                language: this.props.settings.language || I18n.t('System'),
+            },
+        });
+    };
 
     handleTextCommand = event => {
         this.setState({
@@ -225,6 +229,7 @@ class LeftBar extends Component {
         const handleClose = () => {
             this.setState({
                 isSettingsDialogOpen: false,
+                isSettingsWasNotSaved: true,
             });
         };
 
@@ -313,7 +318,11 @@ class LeftBar extends Component {
         ];
 
         return (
-            <Dialog open={this.state.isSettingsDialogOpen} onClose={handleClose} fullWidth>
+            <Dialog
+                open={this.state.isSettingsDialogOpen}
+                onClose={handleClose}
+                fullWidth
+                onExited={this.getDefaultSettings}>
                 <DialogTitle>
                     <Typography variant="h4" component="span" align="center">
                         {t('Settings')}
