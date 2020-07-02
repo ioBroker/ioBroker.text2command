@@ -14,6 +14,7 @@ import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
 import DialogActions from '@material-ui/core/DialogActions';
 import Toolbar from '@material-ui/core/Toolbar';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import Tooltip from '@material-ui/core/Tooltip';
 import List from '@material-ui/core/List';
 import {
     TextField,
@@ -36,12 +37,13 @@ import Rule from './Rule';
 
 const styles = theme => ({
     test: {
-        //position: 'absolute',
-        //bottom: '20px',
-        //width: '100%',
-        //display: 'flex',
-        //justifyContent: 'center',
-        //boxSizing: 'border-box',
+        position: 'absolute',
+        bottom: '35px',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        boxSizing: 'border-box',
     },
     main: {
         minWidth: 330,
@@ -59,9 +61,8 @@ const styles = theme => ({
     },
     root: {
         width: '92%',
-        '& .outlined-basic': {
-            padding: '12px 10px',
-            border: `2px solid ${theme.palette.grey[700]}`,
+        '& .MuiInputLabel-outlined-70.MuiInputLabel-marginDense-66': {
+            transform: '',
         },
     },
     header: {
@@ -118,6 +119,14 @@ const styles = theme => ({
         },
     },
 });
+
+const tooltipStyles = theme => ({
+    tooltip: {
+        fontSize: 14,
+    },
+});
+
+const CustomTooltip = withStyles(tooltipStyles)(Tooltip);
 
 class LeftBar extends Component {
     state = {
@@ -359,22 +368,27 @@ class LeftBar extends Component {
         {
             icon: <AddIcon />,
             handler: () => this.props.handleOpen(),
+            tooltip: I18n.t('Create rule'),
         },
         {
             icon: <SettingsIcon />,
             handler: () => this.handleOpenSettingsModal(),
+            tooltip: I18n.t('Settings'),
         },
         {
             icon: <CachedIcon />,
             handler: () => console.log('refresh'),
+            tooltip: I18n.t('Refresh'),
         },
     ];
 
     createIcons = iconsData =>
-        iconsData.map(({ icon, handler }, index) => (
-            <IconButton onClick={handler} key={index}>
-                {icon}
-            </IconButton>
+        iconsData.map(({ icon, handler, tooltip }, index) => (
+            <CustomTooltip title={tooltip}>
+                <IconButton onClick={handler} key={index}>
+                    {icon}
+                </IconButton>
+            </CustomTooltip>
         ));
 
     renderSelectIdDialog() {
@@ -435,10 +449,12 @@ class LeftBar extends Component {
                     this.setState({
                         isConfirmRemoveDialogOpen: true,
                     }),
+                tooltip: I18n.t('Remove rule'),
             },
             {
                 icon: isSearchActive ? <FormatClearIcon /> : <SearchIcon />,
                 handler: () => this.toggleSearch(),
+                tooltip: I18n.t('Search rule'),
             },
         ];
         const renderedRules = filteredRules.length ? filteredRules : rules;
@@ -489,6 +505,11 @@ class LeftBar extends Component {
                         className={clsx('outlined-basic', classes.root)}
                         onKeyDown={this.handleSubmit}
                         value={this.state.textCommand}
+                        inputProps={{
+                            style: {
+                                padding: '20px 10px',
+                            },
+                        }}
                     />
                     <IconButton
                         variant="outlined"
