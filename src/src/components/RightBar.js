@@ -117,6 +117,9 @@ const styles = theme => ({
     },
     emptyButtons: {
         height: 36,
+        [theme.breakpoints.down('sm')]: {
+            height: 0,
+        },
     },
 });
 

@@ -158,7 +158,7 @@ class LeftBar extends Component {
             this.setState({
                 matchingRules: matched.map((number, index) => ({
                     indexOf: number,
-                    timer: index * 500,
+                    timer: index * 1500,
                     index,
                 })),
                 textCommand: '',
