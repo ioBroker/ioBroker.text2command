@@ -28,12 +28,9 @@ class Modal extends Component {
 
     state = {
         localRule: this.defaultRule,
+        isDisabled: true,
     };
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.currentRules !== this.props.currentRules) {
-        }
-    }
     componentWillUnmount() {
         this.cleanState();
     }
@@ -99,6 +96,7 @@ class Modal extends Component {
                     name: this.getUniqueName(event.target.value),
                     isError: '',
                 },
+                isDisabled: event.target.value === this.defaultRule.rule ? true : false,
             });
 
         const handleInputChange = event => {
@@ -156,7 +154,8 @@ class Modal extends Component {
                             this,
                             this.state.localRule,
                             this.state.localRule.isError
-                        )}>
+                        )}
+                        disabled={this.state.isDisabled}>
                         Ok
                     </Button>
                     <Button onClick={handleClose}>{I18n.t('Cancel')}</Button>

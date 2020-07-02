@@ -161,7 +161,6 @@ class LeftBar extends Component {
                     timer: index * 1500,
                     index,
                 })),
-                textCommand: '',
             });
         }
     };
@@ -396,7 +395,9 @@ class LeftBar extends Component {
                     </Typography>
                     <DialogActions>
                         <Button onClick={this.handleDelete}>{I18n.t('Ok')}</Button>
-                        <Button onClick={this.handleCloseConfirmRemoveDialog} color="primary">
+                        <Button
+                            onClick={this.handleCloseConfirmRemoveDialog}
+                            color={this.props.rules.length <= 1 ? 'primary' : ''}>
                             {I18n.t('Cancel')}
                         </Button>
                     </DialogActions>
@@ -521,5 +522,5 @@ LeftBar.propTypes = {
     unsavedRules: PropTypes.object,
     toggleLeftBar: PropTypes.func,
     isMdScreen: PropTypes.bool.isRequired,
-    closeDrawer: PropTypes.func.isRequired,
+    closeDrawer: PropTypes.func,
 };
