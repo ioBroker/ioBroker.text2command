@@ -1,16 +1,10 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import AddIcon from '@material-ui/icons/Add';
-import SettingsIcon from '@material-ui/icons/Settings';
-import CachedIcon from '@material-ui/icons/Cached';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import SearchIcon from '@material-ui/icons/Search';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FormatClearIcon from '@material-ui/icons/FormatClear';
-import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
+// Material UI Components
 import DialogActions from '@material-ui/core/DialogActions';
 import Toolbar from '@material-ui/core/Toolbar';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -28,22 +22,30 @@ import {
     Select,
     MenuItem,
 } from '@material-ui/core';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+// icons
+import AddIcon from '@material-ui/icons/Add';
+import SettingsIcon from '@material-ui/icons/Settings';
+import CachedIcon from '@material-ui/icons/Cached';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import SearchIcon from '@material-ui/icons/Search';
+import DeleteIcon from '@material-ui/icons/Delete';
+import FormatClearIcon from '@material-ui/icons/FormatClear';
+import ClearIcon from '@material-ui/icons/Close';
 
 import I18n from '@iobroker/adapter-react/i18n';
+import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
+
 import Rule from './Rule';
 
 const styles = theme => ({
     test: {
-        position: 'absolute',
-        bottom: '35px',
         width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
         boxSizing: 'border-box',
+        height: 64,
     },
     main: {
         minWidth: 330,
@@ -55,12 +57,12 @@ const styles = theme => ({
         position: 'relative',
     },
     list: {
-        height: 'calc(100% - 64px - 64px)',
+        height: 'calc(100% - 64px - 64px - 18px)',
         overflowX: 'hidden',
         overflowY: 'auto',
     },
     root: {
-        width: '92%',
+        width: 'calc(100% - 48px)',
         '& .MuiInputLabel-outlined-70.MuiInputLabel-marginDense-66': {
             transform: '',
         },
@@ -73,15 +75,6 @@ const styles = theme => ({
     },
     textInput: {
         width: '60%',
-        [theme.breakpoints.down('sm')]: {
-            width: '100%',
-        },
-    },
-    select: {
-        width: '60%',
-        '& .MuiOutlinedInput-input-68': {
-            padding: 10.5,
-        },
         [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
@@ -105,19 +98,18 @@ const styles = theme => ({
         right: 0,
         color: theme.palette.common.white,
     },
-    /*play: {
-        padding: 8,
-        border: `2px solid ${theme.palette.grey[700]}`,
-        marginLeft: 5,
-        cursor: 'pointer',
-        borderRadius: 5,
-    },*/
     search: {
         flexBasis: '80%',
         [theme.breakpoints.down('sm')]: {
             flexBasis: '70%',
         },
     },
+    settingsItem: {
+        marginBottom: theme.spacing(3),
+    },
+    width100: {
+        width: '100%',
+    }
 });
 
 const tooltipStyles = theme => ({
@@ -136,7 +128,7 @@ class LeftBar extends Component {
         isConfirmRemoveDialogOpen: false,
         isSearchActive: false,
         filteredRules: [],
-        localeSettings: {
+        localSettings: {
             language: '',
             processorId: '',
             processorTimeout: 1000,
@@ -152,9 +144,8 @@ class LeftBar extends Component {
 
     getDefaultSettings = () => {
         this.setState({
-            localeSettings: {
+            localSettings: {
                 ...this.props.settings,
-                language: this.props.settings.language || I18n.t('System'),
             },
         });
     };
@@ -197,8 +188,8 @@ class LeftBar extends Component {
 
     handleDialogSelectIdSubmit = (selected, selectedSettingsName) => {
         this.setState({
-            localeSettings: {
-                ...this.state.localeSettings,
+            localSettings: {
+                ...this.state.localSettings,
                 [selectedSettingsName]: selected,
             },
         });
@@ -232,7 +223,7 @@ class LeftBar extends Component {
 
     createSettingsModal = () => {
         const { t } = I18n;
-        const options = [t('System'), 'en', 'de', 'ru'];
+        const options = ['en', 'de', 'ru'];
         const { classes } = this.props;
 
         const handleClose = () => {
@@ -243,14 +234,19 @@ class LeftBar extends Component {
         };
 
         const submitSettings = () => {
-            this.props.saveSettings(this.state.localeSettings, handleClose);
+            this.props.saveSettings(this.state.localSettings, handleClose);
         };
 
         const handleChange = (event, name) => {
+            let value = event.target.value;
+            if (name === 'language' && value === 'system') {
+                value = '';
+            }
+
             this.setState({
-                localeSettings: {
-                    ...this.state.localeSettings,
-                    [name]: event.target.value,
+                localSettings: {
+                    ...this.state.localSettings,
+                    [name]: value,
                 },
             });
         };
@@ -280,35 +276,26 @@ class LeftBar extends Component {
             );
         };
 
-        const settingsItems = [
+        /*const settingsItems = [
             {
                 item: (
-                    <Select
-                        onChange={event => handleChange(event, 'language')}
-                        value={this.state.localeSettings.language}
-                        className={classes.select}
-                        variant="outlined"
-                        autoWidth>
-                        {Children.toArray(
-                            options.map(option => <MenuItem value={option}>{option}</MenuItem>)
-                        )}
-                    </Select>
+
                 ),
-                title: t('Language'),
                 id: 1,
             },
             {
                 item: createInput({
-                    value: this.state.localeSettings.sayitInstance,
+                    value: this.state.localSettings.sayitInstance,
                     type: 'id',
+                    label: t('Answer in id'),
                     selectedSettingsName: 'sayitInstance',
                 }),
-                title: t('Answer in id'),
+                //title: t('Answer in id'),
                 id: 2,
             },
             {
                 item: createInput({
-                    value: this.state.localeSettings.processorId,
+                    value: this.state.localSettings.processorId,
                     type: 'id',
                     selectedSettingsName: 'processorId',
                 }),
@@ -317,14 +304,14 @@ class LeftBar extends Component {
             },
             {
                 item: createInput({
-                    value: this.state.localeSettings.processorTimeout,
+                    value: this.state.localSettings.processorTimeout,
                     type: 'text',
                     handler: event => handleChange(event, 'processorTimeout'),
                 }),
                 title: t('Timeout for processor') + '(ms)',
                 id: 4,
             },
-        ];
+        ];*/
 
         return (
             <Dialog
@@ -338,28 +325,42 @@ class LeftBar extends Component {
                     </Typography>
                 </DialogTitle>
                 <DialogContent>
-                    {settingsItems.map(({ item, title, id }) => (
-                        <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            mb="10px"
-                            key={id}
-                            className={classes.settingsContent}>
-                            <Typography
-                                variant="h5"
-                                component="h5"
-                                align="left"
-                                className={classes.settingsTitle}>
-                                {title}
-                            </Typography>
-                            {item}
-                        </Box>
-                    ))}
-                    <DialogActions>
-                        <Button onClick={submitSettings}>Ok</Button>
-                        <Button onClick={handleClose}>{I18n.t('Cancel')}</Button>
-                    </DialogActions>
+                    <form noValidate autoComplete="off">
+                        <FormControl fullWidth classes={{root: classes.settingsItem}}>
+                            <InputLabel id="demo-simple-select-label">{t('Language')}</InputLabel>
+                            <Select
+                                classes={{root: classes.width100}}
+                                onChange={event => handleChange(event, 'language')}
+                                value={!this.state.localSettings.language ? 'system' : this.state.localSettings.language}
+                            >
+                                <MenuItem value="system">{t('System')}</MenuItem>
+                                {Children.toArray(
+                                    options.map(option => <MenuItem value={option}>{t('lang_' + option)}</MenuItem>)
+                                )}
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth classes={{root: classes.settingsItem}}>
+                            <TextField label={t('Answer in id')} value={this.state.localSettings.sayitInstance} onClick={() => this.setState({
+                                showDialogSelectId: true,
+                                selectedSettingsName: 'sayitInstance',
+                            })}/>
+                        </FormControl>
+
+                        <FormControl fullWidth classes={{root: classes.settingsItem}}>
+                            <TextField label={t(`Processor's id`)} value={this.state.localSettings.processorId} onClick={() => this.setState({
+                                showDialogSelectId: true,
+                                selectedSettingsName: 'processorId',
+                            })}/>
+                        </FormControl>
+                        <FormControl fullWidth classes={{root: classes.settingsItem}}>
+                            <TextField label={t('Timeout for processor')} helperText={t('ms')} value={this.state.localSettings.processorTimeout} onChange={e => handleChange(e, 'processorTimeout')}/>
+                        </FormControl>
+                    </form>
                 </DialogContent>
+                <DialogActions>
+                    <Button onClick={submitSettings}>Ok</Button>
+                    <Button onClick={handleClose}>{I18n.t('Cancel')}</Button>
+                </DialogActions>
             </Dialog>
         );
     };
@@ -420,7 +421,7 @@ class LeftBar extends Component {
                         <Button onClick={this.handleDelete}>{I18n.t('Ok')}</Button>
                         <Button
                             onClick={this.handleCloseConfirmRemoveDialog}
-                            color={this.props.rules.length <= 1 ? 'primary' : ''}>
+                            color="primary">
                             {I18n.t('Cancel')}
                         </Button>
                     </DialogActions>
@@ -442,22 +443,24 @@ class LeftBar extends Component {
         } = this.props;
         const { filteredRules, isSearchActive } = this.state;
         const settingsDialog = this.createSettingsModal();
-        const additionalIcons = [
-            {
-                icon: !isSearchActive && <DeleteIcon />,
-                handler: () =>
-                    this.setState({
-                        isConfirmRemoveDialogOpen: true,
-                    }),
-                tooltip: I18n.t('Remove rule'),
-            },
-            {
-                icon: isSearchActive ? <FormatClearIcon /> : <SearchIcon />,
-                handler: () => this.toggleSearch(),
-                tooltip: I18n.t('Search rule'),
-            },
-        ];
         const renderedRules = filteredRules.length ? filteredRules : rules;
+        const additionalIcons = [];
+
+        selectedRule && selectedRule.id && additionalIcons.push({
+            icon: !isSearchActive && <DeleteIcon />,
+            handler: () =>
+                this.setState({
+                    isConfirmRemoveDialogOpen: true,
+                }),
+            tooltip: I18n.t('Remove rule'),
+            key: 'delete'
+        });
+        rules.length && additionalIcons.push({
+            icon: isSearchActive ? <FormatClearIcon /> : <SearchIcon />,
+            handler: () => this.toggleSearch(),
+            tooltip: I18n.t('Search rule'),
+            key: 'search'
+        });
 
         return (
             <Box className={classes.main}>
@@ -507,8 +510,15 @@ class LeftBar extends Component {
                         value={this.state.textCommand}
                         inputProps={{
                             style: {
-                                padding: '20px 10px',
+                                padding: '10px 10px',
                             },
+                        }}
+                        InputProps={{
+                            endAdornment: this.state.textCommand ?
+                                <IconButton onClick={() => this.setState({textCommand: ''})}>
+                                    <ClearIcon />
+                                </IconButton> : undefined
+
                         }}
                     />
                     <IconButton
