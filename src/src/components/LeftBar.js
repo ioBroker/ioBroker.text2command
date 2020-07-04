@@ -109,7 +109,7 @@ const styles = theme => ({
     },
     width100: {
         width: '100%',
-    }
+    },
 });
 
 const tooltipStyles = theme => ({
@@ -128,7 +128,7 @@ class LeftBar extends Component {
         isConfirmRemoveDialogOpen: false,
         isSearchActive: false,
         filteredRules: [],
-        searchedValue: "",
+        searchedValue: '',
         localSettings: {
             language: '',
             processorId: '',
@@ -213,12 +213,12 @@ class LeftBar extends Component {
         );
         this.setState({
             filteredRules: matchedRules || [],
-            searchedValue : event.target.value
+            searchedValue: event.target.value,
         });
     };
 
-    toggleSearch = () => {
-        this.setState({
+    toggleSearch = async () => {
+        await this.setState({
             isSearchActive: !this.state.isSearchActive,
         });
     };
@@ -266,34 +266,56 @@ class LeftBar extends Component {
                 </DialogTitle>
                 <DialogContent>
                     <form noValidate autoComplete="off">
-                        <FormControl fullWidth classes={{root: classes.settingsItem}}>
+                        <FormControl fullWidth classes={{ root: classes.settingsItem }}>
                             <InputLabel id="demo-simple-select-label">{t('Language')}</InputLabel>
                             <Select
-                                classes={{root: classes.width100}}
+                                classes={{ root: classes.width100 }}
                                 onChange={event => handleChange(event, 'language')}
-                                value={!this.state.localSettings.language ? 'system' : this.state.localSettings.language}
-                            >
+                                value={
+                                    !this.state.localSettings.language
+                                        ? 'system'
+                                        : this.state.localSettings.language
+                                }>
                                 <MenuItem value="system">{t('System')}</MenuItem>
                                 {Children.toArray(
-                                    options.map(option => <MenuItem value={option}>{t('lang_' + option)}</MenuItem>)
+                                    options.map(option => (
+                                        <MenuItem value={option}>{t('lang_' + option)}</MenuItem>
+                                    ))
                                 )}
                             </Select>
                         </FormControl>
-                        <FormControl fullWidth classes={{root: classes.settingsItem}}>
-                            <TextField label={t('Answer in id')} value={this.state.localSettings.sayitInstance} onClick={() => this.setState({
-                                showDialogSelectId: true,
-                                selectedSettingsName: 'sayitInstance',
-                            })}/>
+                        <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                            <TextField
+                                label={t('Answer in id')}
+                                value={this.state.localSettings.sayitInstance}
+                                onClick={() =>
+                                    this.setState({
+                                        showDialogSelectId: true,
+                                        selectedSettingsName: 'sayitInstance',
+                                    })
+                                }
+                            />
                         </FormControl>
 
-                        <FormControl fullWidth classes={{root: classes.settingsItem}}>
-                            <TextField label={t(`Processor's id`)} value={this.state.localSettings.processorId} onClick={() => this.setState({
-                                showDialogSelectId: true,
-                                selectedSettingsName: 'processorId',
-                            })}/>
+                        <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                            <TextField
+                                label={t(`Processor's id`)}
+                                value={this.state.localSettings.processorId}
+                                onClick={() =>
+                                    this.setState({
+                                        showDialogSelectId: true,
+                                        selectedSettingsName: 'processorId',
+                                    })
+                                }
+                            />
                         </FormControl>
-                        <FormControl fullWidth classes={{root: classes.settingsItem}}>
-                            <TextField label={t('Timeout for processor')} helperText={t('ms')} value={this.state.localSettings.processorTimeout} onChange={e => handleChange(e, 'processorTimeout')}/>
+                        <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                            <TextField
+                                label={t('Timeout for processor')}
+                                helperText={t('ms')}
+                                value={this.state.localSettings.processorTimeout}
+                                onChange={e => handleChange(e, 'processorTimeout')}
+                            />
                         </FormControl>
                     </form>
                 </DialogContent>
@@ -326,9 +348,7 @@ class LeftBar extends Component {
     createIcons = iconsData =>
         iconsData.map(({ icon, handler, tooltip }, index) => (
             <CustomTooltip title={tooltip} key={index}>
-                <IconButton onClick={handler}>
-                    {icon}
-                </IconButton>
+                <IconButton onClick={handler}>{icon}</IconButton>
             </CustomTooltip>
         ));
 
@@ -359,9 +379,7 @@ class LeftBar extends Component {
                     </Typography>
                     <DialogActions>
                         <Button onClick={this.handleDelete}>{I18n.t('Ok')}</Button>
-                        <Button
-                            onClick={this.handleCloseConfirmRemoveDialog}
-                            color="primary">
+                        <Button onClick={this.handleCloseConfirmRemoveDialog} color="primary">
                             {I18n.t('Cancel')}
                         </Button>
                     </DialogActions>
@@ -383,30 +401,38 @@ class LeftBar extends Component {
         } = this.props;
         const { filteredRules, isSearchActive, searchedValue } = this.state;
         const settingsDialog = this.createSettingsModal();
-        const renderedRules = isSearchActive && searchedValue.length? filteredRules : rules;
+        const renderedRules = isSearchActive && searchedValue.length ? filteredRules : rules;
         const additionalIcons = [];
 
-        selectedRule && selectedRule.id && additionalIcons.push({
-            icon: !isSearchActive && <DeleteIcon />,
-            handler: () =>
-                this.setState({
-                    isConfirmRemoveDialogOpen: true,
-                }),
-            tooltip: I18n.t('Remove rule'),
-            key: 'delete'
-        });
-        rules.length && additionalIcons.push({
-            icon: isSearchActive ? <FormatClearIcon /> : <SearchIcon />,
-            handler: () => this.toggleSearch(),
-            tooltip: I18n.t('Search rule'),
-            key: 'search'
-        });
+        selectedRule &&
+            selectedRule.id &&
+            additionalIcons.push({
+                icon: !isSearchActive && <DeleteIcon />,
+                handler: () =>
+                    this.setState({
+                        isConfirmRemoveDialogOpen: true,
+                    }),
+                tooltip: I18n.t('Remove rule'),
+                key: 'delete',
+            });
+        rules.length &&
+            additionalIcons.push({
+                icon: isSearchActive ? <FormatClearIcon /> : <SearchIcon />,
+                handler: () => this.toggleSearch(),
+                tooltip: I18n.t('Search rule'),
+                key: 'search',
+            });
 
         return (
             <Box className={classes.main}>
                 <Toolbar position="static" classes={{ root: classes.toolbar }}>
                     {isSearchActive ? (
-                        <TextField className={classes.search} onChange={this.handleSearch} value={this.state.searchedValue}/>
+                        <TextField
+                            className={classes.search}
+                            onChange={this.handleSearch}
+                            value={this.state.searchedValue}
+                            autoFocus
+                        />
                     ) : (
                         <div>{this.createIcons(this.mainIcons)}</div>
                     )}
@@ -454,11 +480,11 @@ class LeftBar extends Component {
                             },
                         }}
                         InputProps={{
-                            endAdornment: this.state.textCommand ?
-                                <IconButton onClick={() => this.setState({textCommand: ''})}>
+                            endAdornment: this.state.textCommand ? (
+                                <IconButton onClick={() => this.setState({ textCommand: '' })}>
                                     <ClearIcon />
-                                </IconButton> : undefined
-
+                                </IconButton>
+                            ) : undefined,
                         }}
                     />
                     <IconButton
