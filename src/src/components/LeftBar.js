@@ -57,7 +57,7 @@ const styles = theme => ({
         position: 'relative',
     },
     list: {
-        height: 'calc(100% - 64px - 64px - 12px)',
+        height: 'calc(100% - 64px - 64px - 18px)',
         overflowX: 'hidden',
         overflowY: 'auto',
     },
@@ -75,15 +75,6 @@ const styles = theme => ({
     },
     textInput: {
         width: '60%',
-        [theme.breakpoints.down('sm')]: {
-            width: '100%',
-        },
-    },
-    select: {
-        width: '60%',
-        '& .MuiOutlinedInput-input-68': {
-            padding: 10.5,
-        },
         [theme.breakpoints.down('sm')]: {
             width: '100%',
         },
