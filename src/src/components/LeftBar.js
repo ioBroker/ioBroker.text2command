@@ -128,6 +128,7 @@ class LeftBar extends Component {
         isConfirmRemoveDialogOpen: false,
         isSearchActive: false,
         filteredRules: [],
+        searchedValue: "",
         localSettings: {
             language: '',
             processorId: '',
@@ -212,6 +213,7 @@ class LeftBar extends Component {
         );
         this.setState({
             filteredRules: matchedRules || [],
+            searchedValue : event.target.value
         });
     };
 
@@ -250,68 +252,6 @@ class LeftBar extends Component {
                 },
             });
         };
-
-        const createInput = ({ value, handler, type, selectedSettingsName }) => {
-            const onClickHandler = () => {
-                if (type !== 'id') return;
-                this.setState({
-                    showDialogSelectId: true,
-                    selectedSettingsName,
-                });
-            };
-            if (!handler) {
-                handler = () => {
-                    return;
-                };
-            }
-            return (
-                <TextField
-                    variant="outlined"
-                    className={this.props.classes.textInput}
-                    onClick={onClickHandler}
-                    value={value}
-                    onChange={handler}
-                    size="small"
-                />
-            );
-        };
-
-        /*const settingsItems = [
-            {
-                item: (
-
-                ),
-                id: 1,
-            },
-            {
-                item: createInput({
-                    value: this.state.localSettings.sayitInstance,
-                    type: 'id',
-                    label: t('Answer in id'),
-                    selectedSettingsName: 'sayitInstance',
-                }),
-                //title: t('Answer in id'),
-                id: 2,
-            },
-            {
-                item: createInput({
-                    value: this.state.localSettings.processorId,
-                    type: 'id',
-                    selectedSettingsName: 'processorId',
-                }),
-                title: t(`Processor's id`),
-                id: 3,
-            },
-            {
-                item: createInput({
-                    value: this.state.localSettings.processorTimeout,
-                    type: 'text',
-                    handler: event => handleChange(event, 'processorTimeout'),
-                }),
-                title: t('Timeout for processor') + '(ms)',
-                id: 4,
-            },
-        ];*/
 
         return (
             <Dialog
@@ -441,9 +381,9 @@ class LeftBar extends Component {
             isMdScreen,
             closeDrawer,
         } = this.props;
-        const { filteredRules, isSearchActive } = this.state;
+        const { filteredRules, isSearchActive, searchedValue } = this.state;
         const settingsDialog = this.createSettingsModal();
-        const renderedRules = filteredRules.length ? filteredRules : rules;
+        const renderedRules = isSearchActive && searchedValue.length? filteredRules : rules;
         const additionalIcons = [];
 
         selectedRule && selectedRule.id && additionalIcons.push({
@@ -466,7 +406,7 @@ class LeftBar extends Component {
             <Box className={classes.main}>
                 <Toolbar position="static" classes={{ root: classes.toolbar }}>
                     {isSearchActive ? (
-                        <TextField className={classes.search} onChange={this.handleSearch} />
+                        <TextField className={classes.search} onChange={this.handleSearch} value={this.state.searchedValue}/>
                     ) : (
                         <div>{this.createIcons(this.mainIcons)}</div>
                     )}
