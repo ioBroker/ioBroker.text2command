@@ -47,7 +47,7 @@ class Layout extends PureComponent {
             isEdit: false,
             selectedRule: {},
             unsavedRules: {},
-            isLeftBarHidden: window.localStorage.getItem('App.menuHidden') === 'true',
+            isLeftBarOpen: window.localStorage.getItem('App.menuHidden') === 'true',
         };
         this.commands = this.getSelectedLanguageCommands();
     }
@@ -71,7 +71,7 @@ class Layout extends PureComponent {
         });
         if (!this.isMdScreen) {
             this.setState({
-                isLeftBarHidden: true,
+                isLeftBarOpen: true,
             });
         }
     }
@@ -213,6 +213,7 @@ class Layout extends PureComponent {
 
             this.setState({
                 selectedRule: rule,
+                isLeftBarOpen: !this.isMdScreen ? false : this.state.isLeftBarOpen
             });
         }
     };
@@ -446,15 +447,15 @@ class Layout extends PureComponent {
     isMobileScreen = isWidthUp('xs', this.props.width);
 
     toggleLeftBar = () => {
-        window.localStorage.setItem('App.menuHidden', !this.state.isLeftBarHidden);
+        window.localStorage.setItem('App.menuHidden', !this.state.isLeftBarOpen);
         this.setState({
-            isLeftBarHidden: !this.state.isLeftBarHidden,
+            isLeftBarOpen: !this.state.isLeftBarOpen,
         });
     };
 
     closeDrawer = () => {
         this.setState({
-            isLeftBarHidden: false,
+            isLeftBarOpen: false,
         });
     };
 
@@ -477,14 +478,14 @@ class Layout extends PureComponent {
     render() {
         console.log(this.state);
         const { classes } = this.props;
-        const { currentRules, selectedRule, isLeftBarHidden } = this.state;
+        const { currentRules, selectedRule, isLeftBarOpen } = this.state;
 
         if (!this.isMdScreen) {
             return (
                 <>
                     <Drawer
                         anchor="left"
-                        open={this.state.isLeftBarHidden}
+                        open={this.state.isLeftBarOpen}
                         onClose={this.closeDrawer}>
                         <LeftBar
                             handleOpen={this.handleOpen}
@@ -518,7 +519,7 @@ class Layout extends PureComponent {
                             setUnsavedRule={this.setUnsavedRule}
                             removeUnsavedRule={this.removeUnsavedRule}
                             toggleLeftBar={this.toggleLeftBar}
-                            isLeftBarHidden={this.state.isLeftBarHidden}
+                            isLeftBarOpen={this.state.isLeftBarOpen}
                             isMdScreen={this.isMdScreen}
                         />
                     )}
@@ -531,7 +532,7 @@ class Layout extends PureComponent {
                     <SplitterLayout
                         key="splitterLayout"
                         customClassName={clsx(
-                            isLeftBarHidden ? classes.hidden : classes.opened,
+                            isLeftBarOpen ? classes.hidden : classes.opened,
                             classes.layout
                         )}
                         primaryMinSize={350}
@@ -574,7 +575,7 @@ class Layout extends PureComponent {
                                 setUnsavedRule={this.setUnsavedRule}
                                 removeUnsavedRule={this.removeUnsavedRule}
                                 toggleLeftBar={this.toggleLeftBar}
-                                isLeftBarHidden={this.state.isLeftBarHidden}
+                                isLeftBarOpen={this.state.isLeftBarOpen}
                                 isMdScreen={this.isMdScreen}
                             />
                         )}
