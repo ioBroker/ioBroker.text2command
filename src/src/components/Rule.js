@@ -100,7 +100,7 @@ const Rule = React.forwardRef((props, ref) => {
                 setTimeout(() => setBg(theme?.palette?.secondary.dark), matchingRule.timer);
                 setTimeout(() => {
                     setBg(selectedRule.id === id ? theme?.palette?.background?.default : '');
-                    if (_break) removeMatched();
+                    if (_break || index === matchingRules[matchingRules.length - 1].indexOf) removeMatched();
                 }, 1500 * (matchingRule.index + 1));
             } // only when matching rules have been changed
         } // eslint-disable-next-line
