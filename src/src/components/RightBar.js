@@ -641,7 +641,6 @@ RightBar.propTypes = {
         words: PropTypes.string,
     }).isRequired,
     socket: PropTypes.object.isRequired,
-    updateCurrentRules: PropTypes.func.isRequired,
     updateConfig: PropTypes.func.isRequired,
     revertChangesFromConfig: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,

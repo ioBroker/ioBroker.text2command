@@ -273,15 +273,12 @@ class Layout extends PureComponent {
     };
 
     updateConfig = async currentSelectedRule => {
-        const { currentRules } = this.state;
         const { [currentSelectedRule.id]: removedId, ...ids } = this.state.unsavedRules;
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
 
         const matchingRule = rules.find(rule => rule.id === currentSelectedRule.id);
-        const updatedCurrentRules = matchingRule
-            ? this.updateCurrentRules(currentSelectedRule)
-            : currentRules;
+        const updatedCurrentRules = this.updateCurrentRules(currentSelectedRule)
 
         let updatedRules;
         if (matchingRule) {
@@ -511,7 +508,6 @@ class Layout extends PureComponent {
                         <RightBar
                             selectedRule={selectedRule}
                             socket={this.props.socket}
-                            updateCurrentRules={this.updateCurrentRules}
                             updateConfig={this.updateConfig}
                             revertChangesFromConfig={this.revertChangesFromConfig}
                             pendingSelectedRuleId={this.state.pendingSelectedRuleId}

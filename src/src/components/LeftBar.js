@@ -384,8 +384,8 @@ class LeftBar extends Component {
 
     createIcons = iconsData =>
         iconsData.map(({ icon, handler, tooltip }, index) => (
-            <CustomTooltip title={tooltip}>
-                <IconButton onClick={handler} key={index}>
+            <CustomTooltip title={tooltip} key={index}>
+                <IconButton onClick={handler}>
                     {icon}
                 </IconButton>
             </CustomTooltip>
