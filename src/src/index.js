@@ -30,7 +30,6 @@ function build() {
     );
 }
 
-console.log(theme(themeName));
 
 // if not local development
 if (window.location.host !== 'localhost:3000' && false) {

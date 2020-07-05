@@ -11,7 +11,7 @@ import { DialogActions, Button, Select, TextField, MenuItem, withStyles } from '
 
 const styles = theme => ({
     select: {
-        width: '50%',
+        width: '100%',
         marginBottom: theme.spacing(2.5),
     },
     TextField: {
@@ -19,7 +19,7 @@ const styles = theme => ({
     },
 });
 
-class Modal extends Component {
+class CreateRuleDialog extends Component {
     defaultRule = {
         rule: I18n.t('Select rule'),
         name: I18n.t('New rule'),
@@ -96,7 +96,7 @@ class Modal extends Component {
                     name: this.getUniqueName(event.target.value),
                     isError: '',
                 },
-                isDisabled: event.target.value === this.defaultRule.rule ? true : false,
+                isDisabled: event.target.value === this.defaultRule.rule,
             });
 
         const handleInputChange = event => {
@@ -115,7 +115,7 @@ class Modal extends Component {
 
         return (
             <FormGroup>
-                <FormControl>
+                <FormControl fullWidth>
                     <InputLabel shrink id="rule">
                         {I18n.t('Rule')}
                     </InputLabel>
@@ -132,12 +132,13 @@ class Modal extends Component {
                     </Select>
                 </FormControl>
                 <TextField
+                    fullWidth
                     id="standard-basic"
                     label={this.state.localRule.isError || I18n.t('Name')}
                     value={localRule.name}
                     onChange={handleInputChange}
                     error={!!this.state.localRule.isError}
-                    className={classes.TextField}></TextField>
+                    className={classes.TextField}/>
             </FormGroup>
         );
     };
@@ -180,9 +181,9 @@ class Modal extends Component {
     }
 }
 
-export default withStyles(styles)(Modal);
+export default withStyles(styles)(CreateRuleDialog);
 
-Modal.propTypes = {
+CreateRuleDialog.propTypes = {
     handleClose: PropTypes.func.isRequired,
     handleSubmitOnCreate: PropTypes.func.isRequired,
     handleSubmitOnEdit: PropTypes.func.isRequired,

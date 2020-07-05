@@ -431,6 +431,13 @@ class LeftBar extends Component {
                             className={classes.search}
                             onChange={this.handleSearch}
                             value={this.state.searchedValue}
+                            InputProps={{
+                                endAdornment: this.state.searchedValue ? (
+                                    <IconButton onClick={() => this.setState({ searchedValue: '' })}>
+                                        <ClearIcon />
+                                    </IconButton>
+                                ) : undefined,
+                            }}
                             autoFocus
                         />
                     ) : (

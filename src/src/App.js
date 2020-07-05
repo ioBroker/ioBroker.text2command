@@ -102,12 +102,6 @@ class App extends GenericApp {
         return (
             <MuiThemeProvider theme={this.state.theme}>
                 <div className="App">
-                    {
-                        // just an example
-                        /*  this.state.config.rules.map(rule => (
-                            <div className={this.props.classes.rule}>{JSON.stringify(rule)}</div>
-                        )) */
-                    }
                     <Layout
                         theme={this.state.theme}
                         socket={this.socket}

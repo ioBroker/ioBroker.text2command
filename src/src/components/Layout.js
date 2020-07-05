@@ -12,7 +12,7 @@ import I18n from '@iobroker/adapter-react/i18n';
 
 import LeftBar from './LeftBar';
 import RightBar from './RightBar';
-import Modal from './Modal';
+import CreateRuleDialog from './CreateRuleDialog';
 import isEqual from 'lodash.isequal';
 
 const styles = theme => ({
@@ -45,7 +45,7 @@ class Layout extends PureComponent {
             currentRules: [],
             isOpen: false,
             isEdit: false,
-            selectedRule: {},
+            selectedRule: null,
             unsavedRules: {},
             isLeftBarOpen: window.localStorage.getItem('App.menuHidden') === 'true',
         };
@@ -53,22 +53,24 @@ class Layout extends PureComponent {
     }
 
     componentDidMount() {
-        this.getDataFromConfig().then(({ rules, ...settings }) => {
-            const rulesWithId = rules.map(rule =>
-                !rule.id || !rule.name
-                    ? {
-                          ...rule,
-                          id: !rule.id ? uuid() : rule.id,
-                          name: !rule.name
-                              ? window.commands[rule.template]?.name[I18n.getLanguage()]
-                              : rule.name,
-                      }
-                    : rule
-            );
-            if (!isEqual(rules, rulesWithId)) {
-                this.props.saveConfig({ rules: rulesWithId, ...settings });
-            }
-        });
+        this.getDataFromConfig()
+            .then(({ rules, ...settings }) => {
+                const rulesWithId = rules.map(rule =>
+                    !rule.id || !rule.name
+                        ? {
+                              ...rule,
+                              id: !rule.id ? uuid() : rule.id,
+                              name: !rule.name
+                                  ? window.commands[rule.template]?.name[I18n.getLanguage()]
+                                  : rule.name,
+                          }
+                        : rule
+                );
+                if (!isEqual(rules, rulesWithId)) {
+                    this.props.saveConfig({ rules: rulesWithId, ...settings });
+                }
+            });
+
         if (!this.isMdScreen) {
             this.setState({
                 isLeftBarOpen: true,
@@ -83,6 +85,7 @@ class Layout extends PureComponent {
 
             this.commands = this.getSelectedLanguageCommands();
         }
+
         if (
             prevState.selectedRule?.id !== this.state.selectedRule?.id &&
             prevState.selectedRule?.id
@@ -146,7 +149,9 @@ class Layout extends PureComponent {
     };
 
     handleSubmitOnCreate = (selectedRule, isError) => {
-        if (isError) return;
+        if (isError) {
+            return;
+        }
 
         const id = uuid();
         const shortDataRule = {
@@ -184,7 +189,9 @@ class Layout extends PureComponent {
     };
 
     handleSubmitOnEdit = (selectedRule, isError) => {
-        if (isError) return;
+        if (isError) {
+            return;
+        }
 
         this.setState({
             unsavedRules: {
@@ -250,6 +257,7 @@ class Layout extends PureComponent {
         } else {
             updatedRule = editableRule;
         }
+
         this.setState({
             isEdit: false,
             selectedRule: updatedRule,
@@ -267,7 +275,7 @@ class Layout extends PureComponent {
         this.setState(
             {
                 currentRules: updatedRules,
-                selectedRule: updatedRules.length ? updatedRules[updatedRules.length - 1] : {},
+                selectedRule: updatedRules.length ? updatedRules[updatedRules.length - 1] : null,
             },
             deleteRuleFromConfig
         );
@@ -296,7 +304,7 @@ class Layout extends PureComponent {
         await this.props.saveConfig(newConfig);
 
         this.setState({
-            selectedRule: currentSelectedRule || this.state.selectedRule || {},
+            selectedRule: currentSelectedRule || this.state.selectedRule || null,
             currentRules: updatedCurrentRules,
             unsavedRules: ids,
         });
@@ -334,7 +342,7 @@ class Layout extends PureComponent {
             selectedRule:
                 rulesFullData.find(rule => rule.id === localStorage.getItem('selectedRule')) ||
                 rulesFullData[rulesFullData.length - 1] ||
-                {},
+                null,
             settings,
         });
         return config;
@@ -380,14 +388,14 @@ class Layout extends PureComponent {
             selectedRule:
                 (isRuleWasUpdatedGlobally
                     ? updatedRules.find(rule => rule.id === selectedRule.id)
-                    : this.state.selectedRule) || {},
+                    : this.state.selectedRule) || null,
             settings,
             unsavedRules: ids,
         });
 
         if (this.state.currentRules.length !== currentRules.length) {
             this.setState({
-                selectedRule: this.state.currentRules[this.state.currentRules.length - 1] || {},
+                selectedRule: this.state.currentRules[this.state.currentRules.length - 1] || null,
             });
         }
     };
@@ -461,7 +469,7 @@ class Layout extends PureComponent {
 
     renderModalDialog() {
         return this.state.isOpen ? (
-            <Modal
+            <CreateRuleDialog
                 key="modal"
                 commands={this.commands}
                 isEdit={this.state.isEdit}
@@ -505,7 +513,7 @@ class Layout extends PureComponent {
                             closeDrawer={this.closeDrawer}
                         />
                     </Drawer>
-                    {this.state.settings && (
+                    {this.state.settings ?
                         <RightBar
                             selectedRule={selectedRule}
                             socket={this.props.socket}
@@ -521,8 +529,7 @@ class Layout extends PureComponent {
                             toggleLeftBar={this.toggleLeftBar}
                             isLeftBarOpen={this.state.isLeftBarOpen}
                             isMdScreen={this.isMdScreen}
-                        />
-                    )}
+                        /> : null}
                     {this.renderModalDialog()}
                 </>
             );
@@ -558,7 +565,7 @@ class Layout extends PureComponent {
                             unsavedRules={this.state.unsavedRules}
                             isMdScreen={this.isMdScreen}
                         />
-                        {this.state.settings && (
+                        {this.state.settings ?
                             <RightBar
                                 selectedRule={selectedRule}
                                 socket={this.props.socket}
@@ -577,8 +584,7 @@ class Layout extends PureComponent {
                                 toggleLeftBar={this.toggleLeftBar}
                                 isLeftBarOpen={this.state.isLeftBarOpen}
                                 isMdScreen={this.isMdScreen}
-                            />
-                        )}
+                            /> : null}
                     </SplitterLayout>
                     {this.renderModalDialog()}
                 </>

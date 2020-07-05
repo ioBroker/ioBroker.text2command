@@ -121,6 +121,10 @@ const styles = theme => ({
             height: 0,
         },
     },
+    noRulesText: {
+        fontSize: 24,
+        color: theme.palette.primary.light
+    },
 });
 
 class RightBar extends PureComponent {
@@ -145,7 +149,7 @@ class RightBar extends PureComponent {
     };
 
     state = {
-        localRule: this.defaultState,
+        localRule: null,
         showDialog: false,
     };
 
@@ -156,7 +160,7 @@ class RightBar extends PureComponent {
         ) {
             if (!this.props.selectedRule.name) {
                 this.setState({
-                    localRule: this.defaultState,
+                    localRule: null,
                 });
             } else {
                 this.setState({
@@ -204,7 +208,7 @@ class RightBar extends PureComponent {
     }
 
     componentDidMount() {
-        if (this.state.localRule === this.defaultState && this.props.selectedRule) {
+        if (!this.state.localRule && this.props.selectedRule) {
             this.setState({
                 localRule: this.props.selectedRule,
             });
@@ -318,7 +322,7 @@ class RightBar extends PureComponent {
         type,
         onClick,
         note,
-        disabled = this.state.localRule === this.defaultState,
+        disabled = !this.state.localRule,
         keywords,
         key,
         onSwitchChange,
@@ -570,44 +574,49 @@ class RightBar extends PureComponent {
 
     render() {
         const {
-            localRule: { name },
+            localRule,
             isLocalStateWasUpdated,
         } = this.state;
         const { classes, isLeftBarHidden, toggleLeftBar } = this.props;
+        const name = localRule ? localRule.name : '';
 
         return (
             <Box mt="30px" className={classes.box}>
-                <Paper className={classes.container} mx="auto">
-                    <Typography
-                        variant="h4"
-                        align="center"
-                        className={!isLocalStateWasUpdated ? classes.mainTitle : ''}>
-                        {name}
-                    </Typography>
+                {localRule ?
+                    <Paper className={classes.container} mx="auto">
+                        <Typography
+                            variant="h4"
+                            align="center"
+                            className={!isLocalStateWasUpdated ? classes.mainTitle : ''}>
+                            {name}
+                        </Typography>
 
-                    {this.createSaveSettingsForm()}
+                        {this.createSaveSettingsForm()}
 
-                    {this.createOptionsData().map(({ title, item, id }) => {
-                        if (!item) return null;
-                        return (
-                            <Box
-                                display="flex"
-                                justifyContent="space-between"
-                                mb="10px"
-                                key={id}
-                                className={classes.row}>
-                                <Typography
-                                    variant="h6"
-                                    component="h6"
-                                    align="left"
-                                    className={classes.title}>
-                                    {title ? title + ':' : ''}
-                                </Typography>
-                                {item}
-                            </Box>
-                        );
-                    })}
-                </Paper>
+                        {this.createOptionsData().map(({title, item, id}) => {
+                            if (!item) return null;
+                            return (
+                                <Box
+                                    display="flex"
+                                    justifyContent="space-between"
+                                    mb="10px"
+                                    key={id}
+                                    className={classes.row}>
+                                    <Typography
+                                        variant="h6"
+                                        component="h6"
+                                        align="left"
+                                        className={classes.title}>
+                                        {title ? title + ':' : ''}
+                                    </Typography>
+                                    {item}
+                                </Box>
+                            );
+                        })}
+                    </Paper>
+                    :
+                    <div className={classes.noRulesText}>{I18n.t('Create a new rule with a "+" on the left')}</div>
+                }
 
                 <Box className={classes.toggleIcon} onClick={toggleLeftBar}>
                     {isLeftBarHidden || !this.props.isMdScreen ? <MenuIcon /> : <ArrowBackIcon />}
