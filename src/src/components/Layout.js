@@ -88,7 +88,7 @@ class Layout extends PureComponent {
 
         if (
             prevState.selectedRule?.id !== this.state.selectedRule?.id &&
-            prevState.selectedRule?.id
+            prevState.selectedRule?.id && this.state.selectedRule
         ) {
             localStorage.setItem('selectedRule', this.state.selectedRule.id);
         }

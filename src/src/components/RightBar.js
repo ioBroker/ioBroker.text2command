@@ -158,7 +158,7 @@ class RightBar extends PureComponent {
             prevProps.selectedRule?.name !== this.props.selectedRule?.name ||
             prevState.localRule?.name !== this.state.localRule?.name
         ) {
-            if (!this.props.selectedRule.name) {
+            if (!this.props.selectedRule || !this.props.selectedRule.name) {
                 this.setState({
                     localRule: null,
                 });
