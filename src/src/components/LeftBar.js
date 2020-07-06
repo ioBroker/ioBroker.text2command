@@ -63,9 +63,9 @@ const styles = theme => ({
     },
     root: {
         width: 'calc(100% - 48px)',
-        '& .MuiInputLabel-outlined-70.MuiInputLabel-marginDense-66': {
-            transform: '',
-        },
+        // '& .MuiInputLabel-outlined-70.MuiInputLabel-marginDense-66': {
+        //     transform: '',
+        // },
     },
     header: {
         minHeight: 44,
@@ -433,7 +433,8 @@ class LeftBar extends Component {
                             value={this.state.searchedValue}
                             InputProps={{
                                 endAdornment: this.state.searchedValue ? (
-                                    <IconButton onClick={() => this.setState({ searchedValue: '' })}>
+                                    <IconButton
+                                        onClick={() => this.setState({ searchedValue: '' })}>
                                         <ClearIcon />
                                     </IconButton>
                                 ) : undefined,
