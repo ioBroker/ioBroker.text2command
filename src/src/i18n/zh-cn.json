@@ -17,5 +17,14 @@
   "Create Rule": "建立规则",
   "Are you sure?": "你确定吗？",
   "You want to delete: %s": "您要删除：％s",
-  "refresh": "刷新"
+  "refresh": "刷新",
+  "lang_en": "英语",
+  "lang_de": "德语",
+  "lang_ru": "俄语",
+  "ms": "ms",
+  "Remove rule": "删除规则",
+  "Refresh": "刷新",
+  "Search rule": "Найтиправило",
+  "Create rule": "建立规则",
+  "Save": "保存"
 }

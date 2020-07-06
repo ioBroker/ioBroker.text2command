@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "1.3.1",
+        "version": "2.0.0",
         "news": {
+            "2.0.0": {
+                "en": "New GUI",
+                "de": "Neue GUI",
+                "ru": "Новый графический интерфейс",
+                "pt": "Nova GUI",
+                "nl": "Nieuwe GUI",
+                "fr": "Nouvelle interface graphique",
+                "it": "Nuova interfaccia grafica",
+                "es": "Nueva GUI",
+                "pl": "Nowe GUI",
+                "zh-cn": "新的GUI"
+            },
             "1.3.1": {
                 "en": "changes due to git conventions, command additions and typo",
                 "de": "Änderungen aufgrund von Git-Konventionen, Befehlsergänzungen und Tippfehler",

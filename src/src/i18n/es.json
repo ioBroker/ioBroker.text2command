@@ -17,5 +17,14 @@
   "Create Rule": "Crear regla",
   "Are you sure?": "¿Estás seguro?",
   "You want to delete: %s": "Desea eliminar: %s",
-  "refresh": "Actualizar"
+  "refresh": "Actualizar",
+  "lang_en": "Inglés",
+  "lang_de": "alemán",
+  "lang_ru": "ruso",
+  "ms": "ms",
+  "Remove rule": "Eliminar regla",
+  "Refresh": "Actualizar",
+  "Search rule": "Найти правило",
+  "Create rule": "Crear regla",
+  "Save": "Salvar"
 }

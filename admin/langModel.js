@@ -9,7 +9,7 @@
 // eslint-disable-next-line
 'use strict';
 
-// TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
+// TODO: translate it to 'it, es, pl, pt, nl, fr, 'zh-cn''
 // TODO alarm on/off
 // alarm clock set/off
 const commands = {
@@ -19,6 +19,13 @@ const commands = {
             en: 'What time is it?',
             de: 'Wie spät ist es?',
             ru: 'Сколько время?',
+            pt: 'Que horas são?',
+            nl: 'Hoe laat is het?',
+            fr: 'Quelle heure est-il?',
+            it: 'Che ore sono?',
+            es: '¿Que hora es?',
+            pl: 'Która godzina?',
+            'zh-cn': '现在是几奌？'
         },
         invisible: true,
         unique: true,
@@ -41,6 +48,13 @@ const commands = {
             en: 'your name',
             de: 'heißt/heisst du',
             ru: 'тебя зовут',
+            pt: 'Qual é o seu nome?',
+            nl: 'Wat is jouw naam?',
+            fr: 'Quel est votre nom?',
+            it: 'Come ti chiami?',
+            es: '¿Cuál es tu nombre?',
+            pl: 'Jak masz na imię?',
+            'zh-cn': '你叫什么名字？'
         },
         ack: {
             type: 'text',
@@ -48,6 +62,13 @@ const commands = {
                 en: 'Answer',
                 de: 'Antwort',
                 ru: 'Ответ',
+                pt: 'Responda',
+                nl: 'Antwoord',
+                fr: 'Répondre',
+                it: 'Risposta',
+                es: 'Responder',
+                pl: 'Odpowiedź',
+                'zh-cn': '回答'
             },
             default: {
                 en: 'My name is Alpha/Alpha',
@@ -62,6 +83,13 @@ const commands = {
             en: 'What is the outside temperature?',
             de: 'Wie kalt/warm ist es draußen?',
             ru: 'Какая температура на улице?',
+            pt: 'Qual é a temperatura externa?',
+            nl: 'Wat is de buitentemperatuur?',
+            fr: 'Quelle est la température extérieure?',
+            it: 'Qual è la temperatura esterna?',
+            es: '¿Cuál es la temperatura exterior?',
+            pl: 'Jaka jest temperatura zewnętrzna?',
+            'zh-cn': '外界温度是多少？'
         },
         unique: true,
         words: {
@@ -74,7 +102,14 @@ const commands = {
                 name: {
                     en: 'Outside temperature ID',
                     de: 'Außentemperatur ID',
-                    ru: "ID сенсора на улице '.TEMPERATURE'",
+                    ru: `ID сенсора на улице ".TEMPERATURE"`,
+                    pt: 'ID da temperatura externa',
+                    nl: 'Buitentemperatuur ID',
+                    fr: 'ID de température extérieure',
+                    it: 'ID temperatura esterna',
+                    es: 'ID de temperatura exterior',
+                    pl: 'ID temperatury zewnętrznej',
+                    'zh-cn': '外部温度ID'
                 },
                 type: 'id',
                 role: 'value.temperature',
@@ -86,6 +121,13 @@ const commands = {
                 en: 'Answer (use %s for value)',
                 de: 'Antwort (%s wird mit Wert ersetzt)',
                 ru: 'Ответ (%s заменится значением)',
+                pt: 'Resposta (use %s  como valor)',
+                nl: 'Antwoord (gebruik %s  als waarde)',
+                fr: 'Réponse (utilisez %s  pour la valeur)',
+                it: 'Risposta (usa %s  per valore)',
+                es: 'Respuesta (use %s  para el valor)',
+                pl: 'Odpowiedź (użyj wartości %s )',
+                'zh-cn': '答案（将％s用作值）'
             },
             default: {
                 en: 'Outside temperature is %s %u',
@@ -100,6 +142,13 @@ const commands = {
             en: 'What is the inside temperature?',
             de: 'Wie kalt/warm ist es drin?',
             ru: 'Какая температура дома?',
+            pt: 'Qual é a temperatura interna?',
+            nl: 'Wat is de binnentemperatuur?',
+            fr: 'Quelle est la température intérieure?',
+            it: 'Qual è la temperatura interna?',
+            es: '¿Cuál es la temperatura interior?',
+            pl: 'Jaka jest temperatura wewnętrzna?',
+            'zh-cn': '内部温度是多少？'
         },
         unique: true,
         words: {
@@ -112,7 +161,14 @@ const commands = {
                 name: {
                     en: 'Inside temperature ID',
                     de: 'Innentemperatur ID',
-                    ru: "ID сенсора дома '.TEMPERATURE'",
+                    ru: `ID сенсора дома ".TEMPERATURE"`,
+                    pt: 'ID da temperatura interna',
+                    nl: 'Binnentemperatuur ID',
+                    fr: 'ID de température intérieure',
+                    it: 'ID temperatura interna',
+                    es: 'ID de temperatura interior',
+                    pl: 'ID temperatury wewnętrznej',
+                    'zh-cn': '内部温度ID'
                 },
                 type: 'id',
                 role: 'value.temperature',
@@ -124,11 +180,25 @@ const commands = {
                 en: 'Answer (use %s for value)',
                 de: 'Antwort (%s wird mit Wert ersetzt)',
                 ru: 'Ответ (%s заменится значением)',
+                pt: 'Resposta (use %s  como valor)',
+                nl: 'Antwoord (gebruik %s  als waarde)',
+                fr: 'Réponse (utilisez %s  pour la valeur)',
+                it: 'Risposta (usa %s  per valore)',
+                es: 'Respuesta (use %s  para el valor)',
+                pl: 'Odpowiedź (użyj wartości %s )',
+                'zh-cn': '答案（将％s用作值）'
             },
             default: {
                 en: 'Inside temperature is %s %u',
                 de: 'Die Innentemperatur beträgt %s %u',
                 ru: 'Температура дома %s %u',
+                pt: 'A temperatura interna é %s %u',
+                nl: 'Binnentemperatuur is %s %u',
+                fr: 'La température intérieure est %s %u',
+                it: 'La temperatura interna è %s %u',
+                es: 'La temperatura interior es %s %u',
+                pl: 'Temperatura wewnętrzna wynosi %s %u',
+                'zh-cn': '内部温度为%s%u'
             },
         },
     },
@@ -138,14 +208,20 @@ const commands = {
             en: 'switch on/off by function',
             de: 'Schalte an oder aus mit Funktion',
             ru: 'Включить/выключить приборы',
+            pt: 'ligar / desligar por função',
+            nl: 'in- / uitschakelen per functie',
+            fr: 'allumer / éteindre par fonction',
+            it: 'accendere / spegnere per funzione',
+            es: 'encender / apagar por función',
+            pl: 'włącz / wyłącz według funkcji',
+            'zh-cn': '按功能打开/关闭'
         },
         unique: true,
         editable: false,
         words: {
             en: 'switch/turn/set on/off/percent',
             de: 'einschalten/ausschalten/ein/aus/an/prozent',
-            ru:
-                'ключи/включи/включить/выключи/выключить/потушить/потуши/зажги/зажечь/процентов/процент/процента',
+            ru: 'ключи/включи/включить/выключи/выключить/потушить/потуши/зажги/зажечь/процентов/процент/процента',
         },
         args: [
             {
@@ -153,6 +229,13 @@ const commands = {
                     en: 'Use 0/1, not false/true',
                     de: 'Benutze 0/1, nicht false/true',
                     ru: 'Писать 0/1, а не false/true',
+                    pt: 'Use 0/1, não falso / verdadeiro',
+                    nl: 'Gebruik 0/1, niet false / true',
+                    fr: 'Utilisez 0/1, pas faux / vrai',
+                    it: 'Usa 0/1, non falso / vero',
+                    es: 'Use 0/1, no falso / verdadero',
+                    pl: 'Użyj 0/1, nie fałsz / prawda',
+                    'zh-cn': '使用0/1，而不是false / true'
                 },
                 default: false,
                 type: 'checkbox',
@@ -164,6 +247,13 @@ const commands = {
                 en: 'Answer with acknowledge',
                 de: 'Antworten mit Bestätigung',
                 ru: 'Ответить подтверждением',
+                pt: 'Responder com reconhecimento',
+                nl: 'Antwoord met erkennen',
+                fr: 'Répondre avec accusé de réception',
+                it: 'Rispondi con conferma',
+                es: 'Responda con reconocimiento',
+                pl: 'Odpowiedz z potwierdzeniem',
+                'zh-cn': '确认答复'
             },
         },
     },
@@ -173,15 +263,20 @@ const commands = {
             en: 'open/close blinds',
             de: 'Rollladen auf/zu machen',
             ru: 'Поднять/опустить ставни',
+            pt: 'abrir / fechar persianas',
+            nl: 'jaloezieën openen / sluiten',
+            fr: 'ouvrir / fermer les stores',
+            it: 'aprire / chiudere i bui',
+            es: 'abrir / cerrar persianas',
+            pl: 'otwieranie / zamykanie żaluzji',
+            'zh-cn': '打开/关闭百叶窗'
         },
         unique: true,
         editable: false,
         words: {
             en: 'blind/blinds/shutter/shutters up/down/percent',
-            de:
-                'rollladen/rollläden/rolladen/rolläden/beschattung/fenster/laden/rollo auf/zu/hoch/runter/prozent',
-            ru:
-                'ставни/окно/окна/жалюзи поднять/подними/опустить/опусти/открой/открою/открыть/закрыть/закрою/закрой/процентов/процент/процента',
+            de: 'rollladen/rollläden/rolladen/rolläden/beschattung/fenster/laden/rollo auf/zu/hoch/runter/prozent',
+            ru: 'ставни/окно/окна/жалюзи поднять/подними/опустить/опусти/открой/открою/открыть/закрыть/закрою/закрой/процентов/процент/процента',
         },
         ack: {
             type: 'checkbox',
@@ -189,6 +284,13 @@ const commands = {
                 en: 'Answer with acknowledge',
                 de: 'Antworten mit Bestätigung',
                 ru: 'Ответить подтверждением',
+                pt: 'Responder com reconhecimento',
+                nl: 'Antwoord met erkennen',
+                fr: 'Répondre avec accusé de réception',
+                it: 'Rispondi con conferma',
+                es: 'Responda con reconocimiento',
+                pl: 'Odpowiedz z potwierdzeniem',
+                'zh-cn': '确认答复'
             },
         },
     },
@@ -198,6 +300,13 @@ const commands = {
             en: 'Write text to state',
             de: 'Schreibe Text in den Zustand',
             ru: 'Записать текст в переменную',
+            pt: 'Escreva texto para indicar',
+            nl: 'Schrijf tekst naar staat',
+            fr: 'Écrire du texte pour énoncer',
+            it: 'Scrivi testo per dichiarare',
+            es: 'Escribir texto para indicar',
+            pl: 'Napisz tekst do stwierdzenia',
+            'zh-cn': '写文字说明'
         },
         unique: false,
         editable: true,
@@ -206,6 +315,13 @@ const commands = {
             en: 'send text',
             de: 'sende text',
             ru: 'послать текст',
+            pt: 'mande mensagem',
+            nl: 'stuur tekst',
+            fr: 'envoyer du texte',
+            it: 'invia testo',
+            es: 'enviar texto',
+            pl: 'wyslij wiadomość',
+            'zh-cn': '发短讯'
         },
         args: [
             {
@@ -213,6 +329,13 @@ const commands = {
                     en: 'Device or variable ID',
                     de: 'Gerät- oder Variablen- ID',
                     ru: 'ID сенсора или переменной',
+                    pt: 'ID do dispositivo ou variável',
+                    nl: 'Apparaat- of variabele ID',
+                    fr: 'ID de périphérique ou de variable',
+                    it: 'ID dispositivo o variabile',
+                    es: 'ID de dispositivo o variable',
+                    pl: 'Identyfikator urządzenia lub zmiennej',
+                    'zh-cn': '设备或变量ID'
                 },
                 type: 'id',
             },
@@ -221,6 +344,13 @@ const commands = {
                     en: 'Value to write down',
                     de: 'Wert zum Schreiben',
                     ru: 'Записываемое значение',
+                    pt: 'Valor a anotar',
+                    nl: 'Waarde om op te schrijven',
+                    fr: 'Valeur à noter',
+                    it: 'Valore da annotare',
+                    es: 'Valor para anotar',
+                    pl: 'Wartość do zanotowania',
+                    'zh-cn': '写下价值'
                 },
                 type: 'value',
                 default: '%s',
@@ -232,34 +362,69 @@ const commands = {
                 en: 'Answer',
                 de: 'Antwort',
                 ru: 'Ответ',
+                pt: 'Responda',
+                nl: 'Antwoord',
+                fr: 'Répondre',
+                it: 'Risposta',
+                es: 'Responder',
+                pl: 'Odpowiedź',
+                'zh-cn': '回答'
             },
             default: {
                 en: 'Following text was sent: %s',
                 de: 'Folgender Text gesendet: %s',
                 ru: 'Отосланный текст %s',
+                pt: 'O texto a seguir foi enviado: %s',
+                nl: 'Volgende tekst is verzonden: %s',
+                fr: 'Le texte suivant a été envoyé: %s',
+                it: 'È stato inviato il seguente testo: %s',
+                es: 'Se envió el siguiente texto: %s',
+                pl: 'Wysłano następujący tekst: %s',
+                'zh-cn': '已发送以下文本：%s'
             },
         },
     } /*
     'openLock': {
         icon: '',
         name: {
-            'en': "Open/close door lock",
-            'de': "Türschloss auf/zu machen",
-            'ru': "Открыть/закрыть замок на двери"
+            'en': 'Open/close door lock',
+            'de': 'Türschloss auf/zu machen',
+            'ru': 'Открыть/закрыть замок на двери',
+            pt: 'Abrir / fechar a fechadura da porta',
+            nl: 'Deurslot openen / sluiten',
+            fr: 'Ouvrir / fermer la serrure de porte',
+            it: 'Aprire / chiudere la serratura della porta',
+            es: 'Abrir / cerrar cerradura de puerta',
+            pl: 'Otwórz / zamknij zamek drzwi',
+            'zh-cn': '开/关门锁'
         },
         unique:   true,
         editable: false,
         words: {
-            'en': "lock open/close",
-            'de': "schloß/türschloß auf/zu",
-            'ru': "замок открой/открою/открыть/закрыть/закрою/закрой"
+            'en': 'lock open/close',
+            'de': 'schloß/türschloß auf/zu',
+            'ru': 'замок открой/открою/открыть/закрыть/закрою/закрой',
+            pt: 'bloquear abrir / fechar',
+            nl: 'slot open / dicht',
+            fr: 'verrouillage ouvert / fermé',
+            it: 'blocco apertura / chiusura',
+            es: 'cerradura abierta / cerrada',
+            pl: 'zamek otwórz / zamknij',
+            'zh-cn': '锁打开/关闭'
         },
         ack: {
             type: 'checkbox',
             name: {
-                'en': "Answer with acknowledge",
-                'de': "Antworten mit Bestätigung",
-                'ru': "Ответить подтверждением"
+                'en': 'Answer with acknowledge',
+                'de': 'Antworten mit Bestätigung',
+                'ru': 'Ответить подтверждением',
+                pt: 'Responder com reconhecimento',
+                nl: 'Antwoord met erkennen',
+                fr: 'Répondre avec accusé de réception',
+                it: 'Rispondi con conferma',
+                es: 'Responda con reconocimiento',
+                pl: 'Odpowiedz z potwierdzeniem',
+                'zh-cn': '确认答复'
             },
             default: true
         }
@@ -270,6 +435,13 @@ const commands = {
             en: 'Switch something on/off',
             de: 'Schalte irgendwas an oder aus',
             ru: 'Что нибудь включить/выключить',
+            pt: 'Ligar / desligar algo',
+            nl: 'Zet iets aan / uit',
+            fr: 'Activer / désactiver quelque chose',
+            it: 'Accendi / spegni qualcosa',
+            es: 'Enciende / apaga algo',
+            pl: 'Włącz / wyłącz coś',
+            'zh-cn': '开启/关闭某些功能'
         },
         unique: false,
         args: [
@@ -278,6 +450,13 @@ const commands = {
                     en: 'Device or variable ID',
                     de: 'Gerät- oder Variablen- ID',
                     ru: 'ID сенсора или переменной',
+                    pt: 'ID do dispositivo ou variável',
+                    nl: 'Apparaat- of variabele ID',
+                    fr: 'ID de périphérique ou de variable',
+                    it: 'ID dispositivo o variabile',
+                    es: 'ID de dispositivo o variable',
+                    pl: 'Identyfikator urządzenia lub zmiennej',
+                    'zh-cn': '设备或变量ID'
                 },
                 type: 'id',
             },
@@ -286,6 +465,13 @@ const commands = {
                     en: 'Value to write down',
                     de: 'Wert zum Schreiben',
                     ru: 'Записываемое значение',
+                    pt: 'Valor a anotar',
+                    nl: 'Waarde om op te schrijven',
+                    fr: 'Valeur à noter',
+                    it: 'Valore da annotare',
+                    es: 'Valor para anotar',
+                    pl: 'Wartość do zanotowania',
+                    'zh-cn': '写下价值'
                 },
                 type: 'value',
             },
@@ -296,11 +482,25 @@ const commands = {
                 en: 'Answer',
                 de: 'Antworten',
                 ru: 'Ответить',
+                pt: 'Responda',
+                nl: 'Antwoord',
+                fr: 'Répondre',
+                it: 'Risposta',
+                es: 'Responder',
+                pl: 'Odpowiedź',
+                'zh-cn': '回答'
             },
             default: {
                 en: 'Switched on',
                 de: 'Eingeschaltet',
                 ru: 'Включено',
+                pt: 'Ligado',
+                nl: 'Ingeschakeld',
+                fr: 'Allumé',
+                it: 'Acceso',
+                es: 'Encendido',
+                pl: 'Włączony',
+                'zh-cn': '切换到'
             },
         },
     },
@@ -310,6 +510,13 @@ const commands = {
             en: 'Ask about something',
             de: 'Fragen über irgendwas',
             ru: 'Спросить о чём-нибудь',
+            pt: 'Pergunte sobre algo',
+            nl: 'Vraag iets',
+            fr: 'Demandez quelque chose',
+            it: 'Chiedi qualcosa',
+            es: 'Pregunta por algo',
+            pl: 'Zapytaj o coś',
+            'zh-cn': '询问一些事情'
         },
         unique: false,
         args: [
@@ -318,6 +525,13 @@ const commands = {
                     en: 'Device or variable ID',
                     de: 'Gerät- oder Variablen- ID',
                     ru: 'ID сенсора или переменной',
+                    pt: 'ID do dispositivo ou variável',
+                    nl: 'Apparaat- of variabele ID',
+                    fr: 'ID de périphérique ou de variable',
+                    it: 'ID dispositivo o variabile',
+                    es: 'ID de dispositivo o variable',
+                    pl: 'Identyfikator urządzenia lub zmiennej',
+                    'zh-cn': '设备或变量ID'
                 },
                 type: 'id',
             },
@@ -328,6 +542,13 @@ const commands = {
                 en: 'Answer (use %s for value)',
                 de: 'Antwort (%s wird mit Wert ersetzt)',
                 ru: 'Ответ (%s заменится значением)',
+                pt: 'Resposta (use %s  como valor)',
+                nl: 'Antwoord (gebruik %s  als waarde)',
+                fr: 'Réponse (utilisez %s  pour la valeur)',
+                it: 'Risposta (usa %s  per valore)',
+                es: 'Respuesta (use %s  para el valor)',
+                pl: 'Odpowiedź (użyj wartości %s )',
+                'zh-cn': '答案（将％s用作值）'
             },
             default: {
                 en: '%s',
@@ -342,6 +563,13 @@ const commands = {
             en: 'Create answer',
             de: 'Antwort erzeugen',
             ru: 'Создать ответ',
+            pt: 'Criar resposta',
+            nl: 'Creëer antwoord',
+            fr: 'Créer une réponse',
+            it: 'Crea una risposta',
+            es: 'Crear respuesta',
+            pl: 'Utwórz odpowiedź',
+            'zh-cn': '建立答案'
         },
         unique: false,
         ack: {
@@ -350,6 +578,13 @@ const commands = {
                 en: 'Answer (use {objectID} for value)',
                 de: 'Antwort ({objectID} wird mit Wert ersetzt)',
                 ru: 'Ответ ({objectID} заменится значением)',
+                pt: 'Resposta (use {objectID} como valor)',
+                nl: 'Antwoord (gebruik {objectID} voor waarde)',
+                fr: 'Réponse (utilisez {objectID} pour la valeur)',
+                it: 'Risposta (usa {objectID} per valore)',
+                es: 'Respuesta (use {objectID} para el valor)',
+                pl: 'Odpowiedź (użyj {objectID} dla wartości)',
+                'zh-cn': '答案（使用{objectID}作为值）'
             },
             default: {
                 en: '{objectID}',
@@ -364,6 +599,13 @@ const commands = {
             en: 'You are good',
             de: 'Du bist gut',
             ru: 'Молодец',
+            pt: 'Você é bom',
+            nl: 'Jij bent goed',
+            fr: 'Tu es bon',
+            it: 'Sei bravo',
+            es: 'Eres bueno',
+            pl: 'Jesteś dobry',
+            'zh-cn': '你很好'
         },
         invisible: true,
         unique: true,
@@ -378,11 +620,25 @@ const commands = {
                 en: 'Answer',
                 de: 'Antwort',
                 ru: 'Ответ',
+                pt: 'Responda',
+                nl: 'Antwoord',
+                fr: 'Répondre',
+                it: 'Risposta',
+                es: 'Responder',
+                pl: 'Odpowiedź',
+                'zh-cn': '回答'
             },
             default: {
                 en: 'Thank you/You are welcome',
                 de: 'Danke/Freut mich',
                 ru: 'Спасибо',
+                pt: 'Obrigado / De nada',
+                nl: 'Bedankt graag gedaan',
+                fr: 'Merci derien',
+                it: 'Grazie, prego',
+                es: 'Gracias / de nada',
+                pl: 'Dziękuję nie ma za co',
+                'zh-cn': '谢谢不用谢'
             },
         },
     },
@@ -392,6 +648,13 @@ const commands = {
             en: 'Thank you',
             de: 'Danke',
             ru: 'Спасибо',
+            pt: 'Obrigado',
+            nl: 'Dank u',
+            fr: 'Je vous remercie',
+            it: 'Grazie',
+            es: 'Gracias',
+            pl: 'Dziękuję Ci',
+            'zh-cn': '谢谢'
         },
         invisible: true,
         unique: true,
@@ -399,6 +662,13 @@ const commands = {
             en: 'thank',
             de: 'danke',
             ru: 'спасибо',
+            pt: 'obrigado',
+            nl: 'dank',
+            fr: 'remercier',
+            it: 'grazie',
+            es: 'gracias',
+            pl: 'podziękować',
+            'zh-cn': '谢谢'
         },
         ack: {
             type: 'text',
@@ -406,11 +676,25 @@ const commands = {
                 en: 'Answer',
                 de: 'Antwort',
                 ru: 'Ответ',
+                pt: 'Responda',
+                nl: 'Antwoord',
+                fr: 'Répondre',
+                it: 'Risposta',
+                es: 'Responder',
+                pl: 'Odpowiedź',
+                'zh-cn': '回答'
             },
             default: {
                 en: 'No problem/You are welcome',
                 de: 'Kein Problem/Bitte/Bitte sehr',
                 ru: 'Пожалуйста/Всегда пожалуйста/Не за что/С радостью',
+                pt: 'Sem problemas/De nada',
+                nl: 'Geen probleem graag gedaan',
+                fr: 'Pas de problème/vous êtes les bienvenus',
+                it: 'Nessun problema/Prego',
+                es: 'No hay problema, de nada',
+                pl: 'Nie ma sprawy, proszę bardzo',
+                'zh-cn': '没问题/不客气'
             },
         },
     },
@@ -420,7 +704,7 @@ function findMatched(cmd, _rules) {
     const matchedRules = [];
     cmd = cmd
         .toLowerCase()
-        .replace(/[#'"$&/\\!?.,;:(){}^]+/g, ' ')
+        .replace(/[#''$&/\\!?.,;:(){}^]+/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
 

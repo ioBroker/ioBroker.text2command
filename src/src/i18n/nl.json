@@ -17,5 +17,14 @@
   "Create Rule": "Creëer regel",
   "Are you sure?": "Weet je het zeker?",
   "You want to delete: %s": "Je wilt verwijderen: %s",
-  "refresh": "Vernieuwen"
+  "refresh": "Vernieuwen",
+  "lang_en": "Engels",
+  "lang_de": "Duitse",
+  "lang_ru": "Russisch",
+  "ms": "ms",
+  "Remove rule": "Regel verwijderen",
+  "Refresh": "Vernieuwen",
+  "Search rule": "Найти правило",
+  "Create rule": "Creëer regel",
+  "Save": "Sparen"
 }
