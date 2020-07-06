@@ -106,7 +106,8 @@
             "fr": "Texte à commander",
             "it": "Testo da comandare",
             "es": "Texto para mandar",
-            "pl": "Tekst do polecenia"
+            "pl": "Tekst do polecenia",
+            "zh-cn": "文字指令"
         },
         "desc": {
             "en": "This adapter allows to convert text to commands",
@@ -117,7 +118,8 @@
             "fr": "Cet adaptateur permet de convertir du texte en commandes",
             "it": "Questo adattatore consente di convertire il testo in comandi",
             "es": "Este adaptador permite convertir texto a comandos",
-            "pl": "Ten adapter umożliwia konwertowanie tekstu na polecenia"
+            "pl": "Ten adapter umożliwia konwertowanie tekstu na polecenia",
+            "zh-cn": "该适配器允许将文本转换为命令"
         },
         "authors": [
             "bluefox <dogafox@gmail.com>"
@@ -143,11 +145,23 @@
             "name": {
                 "en": "Text-&gt;Commands",
                 "de": "Text-&gt;Kommandos",
-                "ru": "Текст-&gt;Команды"
+                "ru": "Текст-&gt;Команды",
+                "pt": "Texto-&gt;Comandos",
+                "nl": "Tekst-&gt;Commando's",
+                "fr": "Texte-&gt;Commandes",
+                "it": "Testo-&gt;Comandi",
+                "es": "Texto-&gt;Comandos",
+                "pl": "Tekst-&gt;Polecenia",
+                "zh-cn": "文本-&gt;命令"
             },
             "singleton": false,
             "ignoreConfigUpdate": true,
             "fa-icon": "chat"
+        },
+        "plugins": {
+            "sentry": {
+                "dsn": "https://b421086baf0546cdb1f2aaf196939d7c@sentry.iobroker.net/49"
+            }
         }
     },
     "native": {

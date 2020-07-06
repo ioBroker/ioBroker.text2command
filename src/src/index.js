@@ -32,9 +32,9 @@ function build() {
 
 
 // if not local development
-if (window.location.host !== 'localhost:3000' && false) {
+if (window.location.host !== 'localhost:3000') {
     Sentry.init({
-        dsn: 'https://needToGetTheNumber@sentry.iobroker.net/86',
+        dsn: 'https://9806f910556240219f831ecfe2ee3ad1@sentry.iobroker.net/87',
         release: 'iobroker.' + window.adapterName + '@' + version,
         integrations: [new SentryIntegrations.Dedupe()],
     });
