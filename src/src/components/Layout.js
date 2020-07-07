@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import 'react-splitter-layout/lib/index.css';
+
 import Drawer from '@material-ui/core/Drawer';
 
 import I18n from '@iobroker/adapter-react/i18n';

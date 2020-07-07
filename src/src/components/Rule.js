@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { ListItemIcon, IconButton, Box } from '@material-ui/core';
+
 import EditIcon from '@material-ui/icons/Edit';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import MaximizeIcon from '@material-ui/icons/Maximize';

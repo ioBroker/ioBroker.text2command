@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import I18n from '@iobroker/adapter-react/i18n';
 import InputLabel from '@material-ui/core/InputLabel';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
 import { DialogActions, Button, Select, TextField, MenuItem, withStyles } from '@material-ui/core';
+
+import I18n from '@iobroker/adapter-react/i18n';
 
 const styles = theme => ({
     select: {

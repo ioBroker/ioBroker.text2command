@@ -5,11 +5,10 @@ gulpfile.js
 !/admin/*
 !/lib/**/*
 !/lib/*
-!/enums/**/*
-!/enums/*
+!/img/**/*
+!/img/*
 !/io-package.json
 !/package.json
 !/LICENSE
 !/main.js
 !/README.md
-admin/i18n
