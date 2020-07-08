@@ -269,6 +269,9 @@ First the command will be processed with your javascript and if javascript will 
 - in Russian male and female answers.
 
 ## Changelog
+### 2.0.1 (2020-07-08)
+* (bluefox) Fixed select ID dialog
+
 ### 2.0.0 (2020-07-06)
 * (bluefox) New GUI
 

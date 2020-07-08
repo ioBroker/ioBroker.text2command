@@ -60,15 +60,15 @@ class Layout extends PureComponent {
                     !rule.id || !rule.name
                         ? {
                               ...rule,
-                              id: !rule.id ? uuid() : rule.id,
-                              name: !rule.name
-                                  ? window.commands[rule.template]?.name[I18n.getLanguage()]
-                                  : rule.name,
+                              id: rule.id || uuid(),
+                              name: rule.name || window.commands[rule.template]?.name[I18n.getLanguage()] || window.commands[rule.template]?.name.en,
                           }
                         : rule
                 );
+
                 if (!isEqual(rules, rulesWithId)) {
                     this.props.saveConfig({ rules: rulesWithId, ...settings });
+                    setTimeout(() => this.setState({currentRules: rulesWithId}), 50);
                 }
             });
 

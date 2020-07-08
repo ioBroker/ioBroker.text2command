@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 // Material UI Components
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,18 +11,15 @@ import Toolbar from '@material-ui/core/Toolbar';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import Tooltip from '@material-ui/core/Tooltip';
 import List from '@material-ui/core/List';
-import {
-    TextField,
-    Typography,
-    Box,
-    withStyles,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    Button,
-    Select,
-    MenuItem,
-} from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
