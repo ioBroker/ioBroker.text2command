@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "2.0.1",
+        "version": "2.0.2",
         "news": {
+            "2.0.2": {
+                "en": "Fixed GUI errors",
+                "de": "GUI-Fehler behoben",
+                "ru": "Исправлены ошибки графического интерфейса",
+                "pt": "Corrigidos erros de GUI",
+                "nl": "Vaste GUI-fouten",
+                "fr": "Erreurs GUI fixes",
+                "it": "Risolti errori GUI",
+                "es": "Se corrigieron los errores de la GUI",
+                "pl": "Naprawiono błędy GUI",
+                "zh-cn": "修复了GUI错误"
+            },
             "2.0.1": {
                 "en": "Fixed select ID dialog",
                 "de": "Der Dialog zur Auswahl der ID wurde korrigiert",
@@ -155,16 +167,16 @@
         "compact": true,
         "adminTab": {
             "name": {
-                "en": "Text-&gt;Commands",
-                "de": "Text-&gt;Kommandos",
-                "ru": "Текст-&gt;Команды",
-                "pt": "Texto-&gt;Comandos",
-                "nl": "Tekst-&gt;Commando's",
-                "fr": "Texte-&gt;Commandes",
-                "it": "Testo-&gt;Comandi",
-                "es": "Texto-&gt;Comandos",
-                "pl": "Tekst-&gt;Polecenia",
-                "zh-cn": "文本-&gt;命令"
+                "en": "Commands",
+                "de": "Kommandos",
+                "ru": "Команды",
+                "pt": "Comandos",
+                "nl": "Commando's",
+                "fr": "Commandes",
+                "it": "Comandi",
+                "es": "Comandos",
+                "pl": "Polecenia",
+                "zh-cn": "指令"
             },
             "singleton": false,
             "ignoreConfigUpdate": true,

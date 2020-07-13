@@ -154,6 +154,16 @@ class RightBar extends PureComponent {
         showDialog: false,
     };
 
+    static getDerivedStateFromProps(props, state) {
+        if ((!props.selectedRule && state.localRule) ||
+            (props.selectedRule && !state.localRule) ||
+            (props.selectedRule?.id !== state.localRule?.id)) {
+            return {
+                localRule: {...props.selectedRule}
+            };
+        }
+    }
+
     componentDidUpdate(prevProps, prevState) {
         if (
             prevProps.selectedRule?.name !== this.props.selectedRule?.name ||
@@ -581,8 +591,13 @@ class RightBar extends PureComponent {
         const { classes, isLeftBarHidden, toggleLeftBar } = this.props;
         const name = localRule ? localRule.name : '';
 
+        if (!this.props.selectedRule) {
+            return null;
+        }
+
+
         return (
-            <Box mt="30px" className={classes.box}>
+            <Box mt="30px" className={classes.box} key={this.props.selectedRule ? this.props.selectedRule.id : 'emptyLeft'}>
                 {localRule ?
                     <Paper className={classes.container} mx="auto">
                         <Typography

@@ -2,22 +2,26 @@ import React, {
     useRef,
     useImperativeHandle,
     useCallback,
-    Children,
     useState,
     useEffect,
 } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import { DropTarget, DragSource } from 'react-dnd';
 
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { ListItemIcon, IconButton, Box } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Box from '@material-ui/core/Box';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+
+import I18n from '@iobroker/adapter-react/i18n';
 
 import EditIcon from '@material-ui/icons/Edit';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import MaximizeIcon from '@material-ui/icons/Maximize';
-
-import { DropTarget, DragSource } from 'react-dnd';
 
 const Rule = React.forwardRef((props, ref) => {
     const {
@@ -66,8 +70,11 @@ const Rule = React.forwardRef((props, ref) => {
         },
         maximize: {
             color: theme.palette.error?.dark,
-            marginBottom: -theme.spacing(2),
+            marginTop: theme.spacing(1),
         },
+        ruleButton: {
+            paddingTop: theme.spacing(1.5),
+        }
     })();
 
     const elementRef = useRef(null);
@@ -80,17 +87,6 @@ const Rule = React.forwardRef((props, ref) => {
 
     const selectRuleMemo = useCallback(() => selectRule(id), [id, selectRule]);
     const handleEditMemo = useCallback(() => handleEdit(id), [id, handleEdit]);
-
-    const icons = [
-        {
-            icon: _break ? (
-                <MaximizeIcon className={classes.maximize} />
-            ) : (
-                <ArrowDownwardIcon color="primary" />
-            ),
-        },
-        { icon: <EditIcon />, handleClick: handleEditMemo },
-    ];
 
     const [bg, setBg] = useState('');
 
@@ -107,37 +103,37 @@ const Rule = React.forwardRef((props, ref) => {
         } // eslint-disable-next-line
     }, [matchingRules]);
 
-    let secondary = rule !== name ? rule : '';
+    let secondary = rule !== name ? rule || '' : '';
     secondary += `${secondary ? ' ' : ''}[${words}]`;
-    return (
-        <div
-            ref={elementRef}
-            style={{
-                opacity,
-                backgroundColor: bg,
-            }}>
-            <ListItem
-                onClick={selectRuleMemo}
-                selected={selectedRule?.id === id}
-                className={classes.listItem}>
-                <ListItemText
-                    primary={name}
-                    secondary={secondary}
-                    className={classes.listItemText}
-                />
-                <ListItemIcon>
-                    {Children.toArray(
-                        icons.map(({ icon, handleClick }, index) => (
-                            <IconButton disabled={!index} onClick={handleClick}>
-                                {icon}
-                            </IconButton>
-                        ))
-                    )}
-                </ListItemIcon>
-                {unsavedRules[id] && <Box className={classes.dot} />}
-            </ListItem>
-        </div>
-    );
+    return <div
+        ref={elementRef}
+        style={{
+            opacity,
+            backgroundColor: bg,
+        }}>
+        <ListItem
+            onClick={selectRuleMemo}
+            selected={selectedRule?.id === id}
+            className={classes.listItem}>
+            <ListItemText
+                primary={name}
+                secondary={secondary}
+                className={classes.listItemText}
+            />
+            <ListItemIcon>
+                {
+                    _break ?
+                        <Tooltip title={I18n.t('Interrupt processing')}>
+                            <MaximizeIcon className={clsx(classes.ruleButton, classes.maximize)} />
+                        </Tooltip>
+                    :
+                        <Tooltip title={I18n.t('Do not interrupt processing')}><ArrowDownwardIcon className={classes.ruleButton} color="primary"/></Tooltip>
+                }
+                <Tooltip title={I18n.t('Edit name or type of rule')}><IconButton onClick={handleEditMemo}><EditIcon /></IconButton></Tooltip>
+            </ListItemIcon>
+            {unsavedRules[id] && <Box className={classes.dot} />}
+        </ListItem>
+    </div>;
 });
 
 const ItemTypes = {
@@ -148,7 +144,9 @@ export default DropTarget(
     ItemTypes.RULE,
     {
         hover(props, monitor, component) {
-            if (!component) return null;
+            if (!component) {
+                return null;
+            }
 
             const node = component.getNode();
             if (!node) {
@@ -156,7 +154,9 @@ export default DropTarget(
             }
             const dragIndex = monitor.getItem().index;
             const hoverIndex = props.index;
-            if (dragIndex === hoverIndex) return;
+            if (dragIndex === hoverIndex) {
+                return;
+            }
 
             const hoverBoundingRect = node.getBoundingClientRect();
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;

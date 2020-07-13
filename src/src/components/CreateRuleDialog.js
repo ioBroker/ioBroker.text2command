@@ -55,7 +55,7 @@ class CreateRuleDialog extends Component {
         });
     };
 
-    getAvaliableOptions = () => {
+    getAvailableOptions = () => {
         const { commands, currentRules, selectedRule, isEdit } = this.props;
 
         const uniqueOptions = commands?.filter(
@@ -88,7 +88,7 @@ class CreateRuleDialog extends Component {
     createForm = () => {
         const { localRule } = this.state;
         const { classes } = this.props;
-        const commands = this.getAvaliableOptions();
+        const commands = this.getAvailableOptions();
 
         const handleSelectChange = event =>
             this.setState({
@@ -98,7 +98,6 @@ class CreateRuleDialog extends Component {
                     name: this.getUniqueName(event.target.value),
                     isError: '',
                 },
-                isDisabled: event.target.value === this.defaultRule.rule,
             });
 
         const handleInputChange = event => {
@@ -158,8 +157,9 @@ class CreateRuleDialog extends Component {
                             this.state.localRule,
                             this.state.localRule.isError
                         )}
-                        disabled={this.state.isDisabled}>
-                        Ok
+                        disabled={!this.state.localRule.name || !this.state.localRule.rule || (this.state.localRule.name === this.defaultRule.name && this.state.localRule.rule === this.defaultRule.rule) ||
+                        (this.state.localRule.name === this.props.selectedRule?.name && this.state.localRule.rule === this.props.selectedRule?.rule)}>
+                        { I18n.t('Ok') }
                     </Button>
                     <Button onClick={handleClose}>{I18n.t('Cancel')}</Button>
                 </DialogActions>
@@ -197,6 +197,12 @@ CreateRuleDialog.propTypes = {
         }).isRequired
     ),
     isOpen: PropTypes.bool.isRequired,
+    selectedRule: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        rule: PropTypes.string.isRequired,
+        unique: PropTypes.bool,
+    }),
     currentRules: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,

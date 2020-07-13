@@ -35,6 +35,12 @@ const styles = theme => ({
         overflow: 'hidden',
         background: theme.palette.background.default,
     },
+    noRulesText: {
+        fontSize: 24,
+        color: theme.palette.primary.light,
+        textAlign: 'center',
+        paddingTop: theme.spacing(2),
+    },
 });
 
 class Layout extends PureComponent {
@@ -469,7 +475,7 @@ class Layout extends PureComponent {
     };
 
     renderModalDialog() {
-        return this.state.isOpen ? (
+        return this.state.isOpen ?
             <CreateRuleDialog
                 key="modal"
                 commands={this.commands}
@@ -482,7 +488,7 @@ class Layout extends PureComponent {
                 selectedRule={this.state.selectedRule}
                 finishEdit={this.finishEdit}
             />
-        ) : null;
+         : null;
     }
     render() {
         console.log(this.state);
@@ -491,7 +497,7 @@ class Layout extends PureComponent {
 
         if (!this.isMdScreen) {
             return (
-                <>
+                <React.Fragment>
                     <Drawer
                         anchor="left"
                         open={this.state.isLeftBarOpen}
@@ -514,8 +520,9 @@ class Layout extends PureComponent {
                             closeDrawer={this.closeDrawer}
                         />
                     </Drawer>
-                    {this.state.settings ?
+                    {this.state.settings && selectedRule ?
                         <RightBar
+                            key={selectedRule.id}
                             selectedRule={selectedRule}
                             socket={this.props.socket}
                             updateConfig={this.updateConfig}
@@ -530,13 +537,16 @@ class Layout extends PureComponent {
                             toggleLeftBar={this.toggleLeftBar}
                             isLeftBarOpen={this.state.isLeftBarOpen}
                             isMdScreen={this.isMdScreen}
-                        /> : null}
+                        />
+                        :
+                        <div className={classes.noRulesText}>{I18n.t('Create a new rule with a "+" on the left')}</div>}
+
                     {this.renderModalDialog()}
-                </>
+                </React.Fragment>
             );
         } else {
             return (
-                <>
+                <React.Fragment>
                     <SplitterLayout
                         key="splitterLayout"
                         customClassName={clsx(
@@ -566,7 +576,7 @@ class Layout extends PureComponent {
                             unsavedRules={this.state.unsavedRules}
                             isMdScreen={this.isMdScreen}
                         />
-                        {this.state.settings ?
+                        {this.state.settings && selectedRule ?
                             <RightBar
                                 selectedRule={selectedRule}
                                 socket={this.props.socket}
@@ -585,10 +595,12 @@ class Layout extends PureComponent {
                                 toggleLeftBar={this.toggleLeftBar}
                                 isLeftBarOpen={this.state.isLeftBarOpen}
                                 isMdScreen={this.isMdScreen}
-                            /> : null}
+                            />
+                            :
+                            <div className={classes.noRulesText}>{I18n.t('Create a new rule with a "+" on the left')}</div>}
                     </SplitterLayout>
                     {this.renderModalDialog()}
-                </>
+                </React.Fragment>
             );
         }
     }

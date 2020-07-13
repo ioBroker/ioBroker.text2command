@@ -1,6 +1,6 @@
 {
   "name": "iobroker.text2command",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Convert texts to ioBroker commands.",
   "author": {
     "name": "bluefox",
