@@ -256,7 +256,7 @@ If activated so by every command (no matter if the request came via state or sen
 - in Russian male and female answers.
 
 ## Changelog
-### __WORK IN PROGRESS__
+### 2.0.3 (2020-07-14)
 * (bluefox) Fixed GUI errors
 
 ### 2.0.2 (2020-07-13)

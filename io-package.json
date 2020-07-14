@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "2.0.2",
+        "version": "2.0.3",
         "news": {
+            "2.0.3": {
+                "en": "Fixed GUI errors",
+                "de": "GUI-Fehler behoben",
+                "ru": "Исправлены ошибки графического интерфейса",
+                "pt": "Corrigidos erros de GUI",
+                "nl": "Vaste GUI-fouten",
+                "fr": "Erreurs GUI fixes",
+                "it": "Risolti errori GUI",
+                "es": "Se corrigieron los errores de la GUI",
+                "pl": "Naprawiono błędy GUI",
+                "zh-cn": "修复了GUI错误"
+            },
             "2.0.2": {
                 "en": "Fixed GUI errors",
                 "de": "GUI-Fehler behoben",
