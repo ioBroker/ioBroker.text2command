@@ -26,5 +26,14 @@
   "Refresh": "Vernieuwen",
   "Search rule": "Zoek de regel",
   "Create rule": "Creëer regel",
-  "Save": "Sparen"
+  "Save": "Sparen",
+  "Do not interrupt processing": "Onderbreek de verwerking niet",
+  "Instance is not running": "Instantie is niet actief",
+  "Create a new rule with a \"+\" on the left": "Maak een nieuwe regel met een \"+\" aan de linkerkant",
+  "Edit name or type of rule": "Bewerk naam of type regel",
+  "New rule": "Nieuwe regel",
+  "Edit rule": "Regel bewerken",
+  "Rule": "Regel",
+  "Name": "Naam",
+  "Write to response by every command": "Schrijf bij elke opdracht op het antwoord"
 }

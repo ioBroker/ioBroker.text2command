@@ -25,5 +25,15 @@
   "lang_de": "Немецкий",
   "lang_ru": "русский",
   "ms": "мс",
-  "Save": "Сохранить"
+  "Save": "Сохранить",
+  "Do not interrupt processing": "Применять последующие правила",
+  "Instance is not running": "Инстанция не запущена",
+  "Create a new rule with a \"+\" on the left": "Создайте новое правило нажав на «+» слева",
+  "Edit name or type of rule": "Изменить имя или тип правила",
+  "New rule": "Новое правило",
+  "Edit rule": "Изменить правило",
+  "Rule": "правило",
+  "Name": "Имя",
+  "refresh": "Обновить",
+  "Write to response by every command": "Записывать в состояние при любой команде"
 }

@@ -26,5 +26,14 @@
   "Refresh": "ricaricare",
   "Search rule": "Cerca la regola",
   "Create rule": "Crea regola",
-  "Save": "Salva"
+  "Save": "Salva",
+  "Do not interrupt processing": "Non interrompere l'elaborazione",
+  "Instance is not running": "L'istanza non è in esecuzione",
+  "Create a new rule with a \"+\" on the left": "Crea una nuova regola con un \"+\" a sinistra",
+  "Edit name or type of rule": "Modifica il nome o il tipo di regola",
+  "New rule": "Nuova regola",
+  "Edit rule": "Modifica regola",
+  "Rule": "Regola",
+  "Name": "Nome",
+  "Write to response by every command": "Scrivi alla risposta con ogni comando"
 }

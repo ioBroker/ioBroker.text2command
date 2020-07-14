@@ -26,5 +26,14 @@
   "Refresh": "刷新",
   "Search rule": "搜索规则",
   "Create rule": "建立规则",
-  "Save": "保存"
+  "Save": "保存",
+  "Do not interrupt processing": "不要中断处理",
+  "Instance is not running": "实例未运行",
+  "Create a new rule with a \"+\" on the left": "用左侧的“ +”创建一个新规则",
+  "Edit name or type of rule": "编辑名称或规则类型",
+  "New rule": "新规定",
+  "Edit rule": "修改规则",
+  "Rule": "规则",
+  "Name": "名称",
+  "Write to response by every command": "通过每个命令写入响应"
 }

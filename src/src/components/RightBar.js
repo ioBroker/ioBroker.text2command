@@ -339,11 +339,11 @@ class RightBar extends PureComponent {
         onSwitchChange,
     }) => {
         if ((value === undefined || value === null) && !label && !keywords) {
-            return;
+            return null;
         }
         const { classes } = this.props;
 
-        return type !== 'checkbox' ? (
+        return type !== 'checkbox' ?
             <TextField
                 //label={label}
                 variant="outlined"
@@ -356,7 +356,7 @@ class RightBar extends PureComponent {
                 key={key}
                 className={clsx('outlined-basic', classes.textField)}
             />
-        ) : (
+            :
             <FormControl classes={{ root: classes.switchControl }}>
                 <Switch
                     key={key}
@@ -366,7 +366,7 @@ class RightBar extends PureComponent {
                     checked={!!value}
                 />
             </FormControl>
-        );
+        ;
     };
 
     createOptionsData = (state = this.state) => {
@@ -426,7 +426,9 @@ class RightBar extends PureComponent {
                 item: createInput({
                     value: args && this.state.localRule.args[1]?.default,
                     label: args && args[1]?.name,
+                    type: args && args[1]?.type,
                     onChange: handlers.param2Text,
+                    onSwitchChange: handlers.param2OnSwitch,
                     key: 'Param2',
                 }),
                 id: 4,
@@ -496,6 +498,17 @@ class RightBar extends PureComponent {
                         ..._this.state.localRule,
                         args: _this.state.localRule.args.map((arg, index) =>
                             !index ? { ...arg, default: !arg.default ? true : !arg.default } : arg
+                        ),
+                    },
+                    isLocalStateWasUpdated: true,
+                });
+            },
+            param2OnSwitch() {
+                _this.setState({
+                    localRule: {
+                        ..._this.state.localRule,
+                        args: _this.state.localRule.args.map((arg, index) =>
+                            index ? { ...arg, default: !arg.default ? true : !arg.default } : arg
                         ),
                     },
                     isLocalStateWasUpdated: true,
@@ -588,6 +601,7 @@ class RightBar extends PureComponent {
             localRule,
             isLocalStateWasUpdated,
         } = this.state;
+
         const { classes, isLeftBarHidden, toggleLeftBar } = this.props;
         const name = localRule ? localRule.name : '';
 
@@ -595,53 +609,51 @@ class RightBar extends PureComponent {
             return null;
         }
 
+        return <Box mt="30px" className={classes.box} key={this.props.selectedRule ? this.props.selectedRule.id : 'emptyLeft'}>
+            {localRule ?
+                <Paper className={classes.container} mx="auto">
+                    <Typography
+                        variant="h4"
+                        align="center"
+                        className={!isLocalStateWasUpdated ? classes.mainTitle : ''}>
+                        {name}
+                    </Typography>
 
-        return (
-            <Box mt="30px" className={classes.box} key={this.props.selectedRule ? this.props.selectedRule.id : 'emptyLeft'}>
-                {localRule ?
-                    <Paper className={classes.container} mx="auto">
-                        <Typography
-                            variant="h4"
-                            align="center"
-                            className={!isLocalStateWasUpdated ? classes.mainTitle : ''}>
-                            {name}
-                        </Typography>
+                    {this.createSaveSettingsForm()}
 
-                        {this.createSaveSettingsForm()}
+                    {this.createOptionsData().map(({title, item, id}) => {
+                        if (!item) {
+                            return null;
+                        }
 
-                        {this.createOptionsData().map(({title, item, id}) => {
-                            if (!item) return null;
-                            return (
-                                <Box
-                                    display="flex"
-                                    justifyContent="space-between"
-                                    mb="10px"
-                                    key={id}
-                                    className={classes.row}>
-                                    <Typography
-                                        variant="h6"
-                                        component="h6"
-                                        align="left"
-                                        className={classes.title}>
-                                        {title ? title + ':' : ''}
-                                    </Typography>
-                                    {item}
-                                </Box>
-                            );
-                        })}
-                    </Paper>
-                    :
-                    <div className={classes.noRulesText}>{I18n.t('Create a new rule with a "+" on the left')}</div>
-                }
+                        return <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            mb="10px"
+                            key={id}
+                            className={classes.row}>
+                            <Typography
+                                variant="h6"
+                                component="h6"
+                                align="left"
+                                className={classes.title}>
+                                {title ? title + ':' : ''}
+                            </Typography>
+                            {item}
+                        </Box>;
+                    })}
+                </Paper>
+                :
+                null
+            }
 
-                <Box className={classes.toggleIcon} onClick={toggleLeftBar}>
-                    {isLeftBarHidden || !this.props.isMdScreen ? <MenuIcon /> : <ArrowBackIcon />}
-                </Box>
-
-                {this.renderSelectIdDialog()}
-                {this.renderConfirmDialog()}
+            <Box className={classes.toggleIcon} onClick={toggleLeftBar}>
+                {isLeftBarHidden || !this.props.isMdScreen ? <MenuIcon /> : <ArrowBackIcon />}
             </Box>
-        );
+
+            {this.renderSelectIdDialog()}
+            {this.renderConfirmDialog()}
+        </Box>;
     }
 }
 

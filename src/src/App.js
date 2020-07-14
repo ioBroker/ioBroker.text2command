@@ -91,12 +91,10 @@ class App extends GenericApp {
     }
 
     render() {
-        if (!this.state.config) {
-            return (
-                <MuiThemeProvider theme={this.state.theme}>
+        if (!this.state.config || !this.state.ready) {
+            return <MuiThemeProvider theme={this.state.theme}>
                     <Loader theme={this.state.themeType} />
-                </MuiThemeProvider>
-            );
+                </MuiThemeProvider>;
         }
 
         return (
@@ -105,6 +103,7 @@ class App extends GenericApp {
                     <Layout
                         theme={this.state.theme}
                         socket={this.socket}
+                        instance={this.instance}
                         readConfig={this.readConfig.bind(this)}
                         saveConfig={this.saveConfig.bind(this)}
                     />

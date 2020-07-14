@@ -26,5 +26,14 @@
   "ms": "ms",
   "Create rule": "Create rule",
   "refresh": "Refresh",
-  "Save": "Save"
+  "Save": "Save",
+  "Do not interrupt processing": "Do not interrupt processing",
+  "Instance is not running": "Instance is not running",
+  "Create a new rule with a \"+\" on the left": "Create a new rule with a \"+\" on the left",
+  "Edit name or type of rule": "Edit name or type of rule",
+  "New rule": "New rule",
+  "Edit rule": "Edit rule",
+  "Rule": "Rule",
+  "Name": "Name",
+  "Write to response by every command": "Write to response by every command"
 }

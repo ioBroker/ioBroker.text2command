@@ -23,6 +23,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 // icons
 import AddIcon from '@material-ui/icons/Add';
@@ -33,6 +37,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FormatClearIcon from '@material-ui/icons/FormatClear';
 import ClearIcon from '@material-ui/icons/Close';
+import WarningIcon from '@material-ui/icons/Warning';
 
 import I18n from '@iobroker/adapter-react/i18n';
 import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
@@ -96,6 +101,10 @@ const styles = theme => ({
         right: 0,
         color: theme.palette.common.white,
     },
+    iconNotAlive: {
+        color: '#ffc10a',
+        float: 'right'
+    },
     search: {
         flexBasis: '80%',
         [theme.breakpoints.down('sm')]: {
@@ -133,7 +142,19 @@ class LeftBar extends Component {
             processorTimeout: 1000,
             sayitInstance: '',
         },
+        toast: null,
+        alive: false,
     };
+
+    componentDidMount() {
+        this.props.socket.subscribeState('text2command.' + this.props.instance + '.response', this.onResponse);
+        this.props.socket.subscribeState('system.adapter.text2command.' + this.props.instance + '.alive', this.onAlive);
+    }
+
+    componentWillUnmount() {
+        this.props.socket.unsubscribeState('text2command.' + this.props.instance + '.response', this.onResponse);
+        this.props.socket.unsubscribeState('system.adapter.text2command.' + this.props.instance + '.alive', this.onAlive);
+    }
 
     componentDidUpdate(prevProps, prevState) {
         if (this.props.settings !== prevProps.settings && this.props.settings) {
@@ -149,22 +170,53 @@ class LeftBar extends Component {
         });
     };
 
+    onAlive = (id, state) => {
+        if (state && state.val) {
+            !this.state.alive && this.setState({alive: true});
+        } else {
+            this.state.alive && this.setState({alive: false});
+        }
+    };
+
+    onResponse = (id, state) => {
+        if (this.state.toast === null) {
+            this.setState({toast: '', toastError: false});
+        } else
+        if (state) {
+            if (state.val && state.val.match(/^Error\.|^Fehler\.|^Ошибка\./)) {
+                this.props.socket.getState('text2command.' + this.props.instance + '.error')
+                    .then(state =>
+                        this.setState({toast: state && state.val ? state.val : (state.val || ''), toastError: true}));
+            } else {
+                this.setState({toast: state.val || '', toastError: false});
+            }
+        }
+    };
+
     handleTextCommand = event => {
-        this.setState({
-            textCommand: event.target.value,
+        this.setState({textCommand: event.target.value}, () => {
+            this.testTimer && clearTimeout(this.testTimer);
+            this.testTimer = setTimeout(() => {
+                const matched = this.findMatchingRules();
+                this.setState({
+                    matchingRules: matched.map((number, index) => ({
+                        indexOf: number,
+                        timer: index * 1500,
+                        index,
+                    })),
+                });
+            }, 500);
         });
     };
 
     handleSubmit = (event, iconPlay) => {
-        if (event.key === 'Enter' || iconPlay) {
-            const matched = this.findMatchingRules();
-            this.setState({
-                matchingRules: matched.map((number, index) => ({
-                    indexOf: number,
-                    timer: index * 1500,
-                    index,
-                })),
-            });
+        if ((event && event.key === 'Enter') || iconPlay) {
+            this.props.socket.setState('text2command.' + this.props.instance + '.text', this.state.textCommand)
+                .catch(err => console.error(err));
+
+            if (!this.state.alive) {
+                this.setState({toast: I18n.t('Instance is not running'), toastError: true});
+            }
         }
     };
 
@@ -238,7 +290,7 @@ class LeftBar extends Component {
         };
 
         const handleChange = (event, name) => {
-            let value = event.target.value;
+            let value = event.target.checked !== undefined ? event.target.checked : event.target.value;
             if (name === 'language' && value === 'system') {
                 value = '';
             }
@@ -294,7 +346,6 @@ class LeftBar extends Component {
                                 }
                             />
                         </FormControl>
-
                         <FormControl fullWidth classes={{ root: classes.settingsItem }}>
                             <TextField
                                 label={t(`Processor's id`)}
@@ -313,6 +364,12 @@ class LeftBar extends Component {
                                 helperText={t('ms')}
                                 value={this.state.localSettings.processorTimeout}
                                 onChange={e => handleChange(e, 'processorTimeout')}
+                            />
+                        </FormControl>
+                        <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                            <FormControlLabel
+                                control={<Checkbox checked={this.state.localSettings.writeEveryAnswer} onChange={e => handleChange(e, 'writeEveryAnswer')} />}
+                                label={t('Write to response by every command')}
                             />
                         </FormControl>
                     </form>
@@ -386,6 +443,29 @@ class LeftBar extends Component {
         ) : null;
     }
 
+    renderToast() {
+        if (this.state.toast) {
+            return <Snackbar
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                open={true}
+                autoHideDuration={4000}
+                onClose={() => this.setState({toast: ''})}
+            >
+                {
+                    this.state.toastError ?
+                        <Alert elevation={6} variant="filled" onClose={() => this.setState({toast: ''})} severity="error">{this.state.toast}</Alert>
+                        :
+                        <Alert elevation={6} variant="filled" onClose={() => this.setState({toast: ''})} severity="success">{this.state.toast}</Alert>
+                }
+            </Snackbar>
+        } else {
+            return null;
+        }
+    }
+
     render() {
         const {
             selectedRule,
@@ -413,6 +493,7 @@ class LeftBar extends Component {
                 tooltip: I18n.t('Remove rule'),
                 key: 'delete',
             });
+
         rules.length &&
             additionalIcons.push({
                 icon: isSearchActive ? <FormatClearIcon /> : <SearchIcon />,
@@ -448,6 +529,9 @@ class LeftBar extends Component {
                             <CloseIcon />
                         </IconButton>
                     )}
+                    {!isSearchActive && !this.state.alive ? <div style={{flexGrow: 1}}/> : null}
+                    {!isSearchActive && !this.state.alive ? <Tooltip title={I18n.t('Instance is not running')}><WarningIcon className={classes.iconNotAlive}/></Tooltip> : null}
+
                 </Toolbar>
 
                 <DndProvider backend={HTML5Backend}>
@@ -503,8 +587,8 @@ class LeftBar extends Component {
                 {settingsDialog}
 
                 {this.renderConfirmDialog()}
-
                 {this.renderSelectIdDialog()}
+                {this.renderToast()}
             </Box>
         );
     }
@@ -519,6 +603,7 @@ LeftBar.propTypes = {
             id: PropTypes.string,
         })
     ),
+    instance: PropTypes.number.isRequired,
     moveRule: PropTypes.func.isRequired,
     selectRule: PropTypes.func.isRequired,
     theme: PropTypes.object.isRequired,

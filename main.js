@@ -72,7 +72,7 @@ function startAdapter(options) {
         if (id.substring(0, 5) === 'enum.') {
             // read all enums
             //noinspection JSUnresolvedFunction
-            adapter.getEnums('', function (err, list) {
+            adapter.getEnums('', (err, list) => {
                 enums = list;
                 devicesControl.init(enums);
             });
@@ -93,9 +93,12 @@ function startAdapter(options) {
                 case 'send':
                     if (obj.message) {
                         //noinspection JSUnresolvedVariable
-                        processText(typeof obj.message === 'object' ? obj.message.text : obj.message, function (res) {
+                        processText(typeof obj.message === 'object' ? obj.message.text : obj.message, res => {
                             let responseObj = JSON.parse(JSON.stringify(obj.message));
-                            if (typeof responseObj !== 'object') responseObj = {text: responseObj};
+                            if (typeof responseObj !== 'object') {
+                                responseObj = {text: responseObj};
+                            }
+
                             responseObj.response = res;
 
                             if (obj.callback) {
@@ -231,16 +234,15 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
                     result += (result ? ', ' : '') + response;
                 }
 
+                adapter.config.writeEveryAnswer && adapter.setState('response', response);
+
                 if (!--count) {
-                    if (cb) {
-                        //noinspection JSReferencingMutableVariableFromClosure
-                        cb(result ? ((withLang ? lang + ';' : '') + result) : '');
-                    }
+                    //noinspection JSReferencingMutableVariableFromClosure
+                    cb && cb(result ? ((withLang ? lang + ';' : '') + result) : '');
                     cb = null;
                 }
             });
-        }
-        else {
+        } else {
             count--;
             if (rules[matchedRules[m]].ack) {
                 //noinspection JSUnresolvedFunction
