@@ -51,7 +51,7 @@ const styles = theme => ({
         height: 64,
     },
     main: {
-        minWidth: 330,
+        minWidth: 300,
         overflow: 'hidden',
         height: '100%',
     },
@@ -149,6 +149,15 @@ class LeftBar extends Component {
     componentDidMount() {
         this.props.socket.subscribeState('text2command.' + this.props.instance + '.response', this.onResponse);
         this.props.socket.subscribeState('system.adapter.text2command.' + this.props.instance + '.alive', this.onAlive);
+        if (this.props.selectedRule && this.props.selectedRule.id) {
+            //scroll to
+            setTimeout(() => {
+                const rules = window.document.getElementsByClassName('rule-selected');
+                if (rules.length) {
+                    rules[0].scrollIntoView()
+                }
+            }, 50);
+        }
     }
 
     componentWillUnmount() {
@@ -259,8 +268,7 @@ class LeftBar extends Component {
 
     handleSearch = event => {
         const matchedRules = this.props.rules.filter(rule =>
-            rule.name.toLowerCase().includes(event.target.value.toLowerCase())
-        );
+            rule.name.toLowerCase().includes(event.target.value.toLowerCase()));
         this.setState({
             filteredRules: matchedRules || [],
             searchedValue: event.target.value,
@@ -474,7 +482,7 @@ class LeftBar extends Component {
             rules,
             selectRule,
             classes,
-            isMdScreen,
+            isMobile,
             closeDrawer,
         } = this.props;
         const { filteredRules, isSearchActive, searchedValue } = this.state;
@@ -502,95 +510,93 @@ class LeftBar extends Component {
                 key: 'search',
             });
 
-        return (
-            <Box className={classes.main}>
-                <Toolbar position="static" classes={{ root: classes.toolbar }}>
-                    {isSearchActive ? (
-                        <TextField
-                            className={classes.search}
-                            onChange={this.handleSearch}
-                            value={this.state.searchedValue}
-                            InputProps={{
-                                endAdornment: this.state.searchedValue ? (
-                                    <IconButton
-                                        onClick={() => this.setState({ searchedValue: '' })}>
-                                        <ClearIcon />
-                                    </IconButton>
-                                ) : undefined,
-                            }}
-                            autoFocus
-                        />
-                    ) : (
-                        <div>{this.createIcons(this.mainIcons)}</div>
-                    )}
-                    <div>{this.createIcons(additionalIcons)}</div>
-                    {!isMdScreen && (
-                        <IconButton className={classes.closeBtn} onClick={closeDrawer}>
-                            <CloseIcon />
-                        </IconButton>
-                    )}
-                    {!isSearchActive && !this.state.alive ? <div style={{flexGrow: 1}}/> : null}
-                    {!isSearchActive && !this.state.alive ? <Tooltip title={I18n.t('Instance is not running')}><WarningIcon className={classes.iconNotAlive}/></Tooltip> : null}
-
-                </Toolbar>
-
-                <DndProvider backend={HTML5Backend}>
-                    <List className={classes.list}>
-                        {renderedRules.map((rule, index) => (
-                            <Rule
-                                theme={this.props.theme}
-                                handleEdit={handleEdit}
-                                {...rule}
-                                index={index}
-                                moveRule={moveRule}
-                                key={rule.id}
-                                selectRule={selectRule}
-                                selectedRule={selectedRule}
-                                matchingRules={this.state.matchingRules}
-                                unsavedRules={this.props.unsavedRules}
-                                removeMatched={this.removeMatched}
-                            />
-                        ))}
-                    </List>
-                </DndProvider>
-
-                <Toolbar className={classes.test} variant="dense">
+        return <Box className={classes.main}>
+            <Toolbar position="static" classes={{ root: classes.toolbar }}>
+                {isSearchActive ? (
                     <TextField
-                        onChange={this.handleTextCommand}
-                        label={I18n.t('Test phrase')}
-                        variant="outlined"
-                        size="small"
-                        color="primary"
-                        className={clsx('outlined-basic', classes.root)}
-                        onKeyDown={this.handleSubmit}
-                        value={this.state.textCommand}
-                        inputProps={{
-                            style: {
-                                padding: '10px 10px',
-                            },
-                        }}
+                        className={classes.search}
+                        onChange={this.handleSearch}
+                        value={this.state.searchedValue}
                         InputProps={{
-                            endAdornment: this.state.textCommand ? (
-                                <IconButton onClick={() => this.setState({ textCommand: '' })}>
+                            endAdornment: this.state.searchedValue ? (
+                                <IconButton
+                                    onClick={() => this.setState({ searchedValue: '' })}>
                                     <ClearIcon />
                                 </IconButton>
                             ) : undefined,
                         }}
+                        autoFocus
                     />
-                    <IconButton
-                        variant="outlined"
-                        onClick={event => this.handleSubmit(event, true)}>
-                        <PlayArrowIcon className={classes.play} />
+                ) : (
+                    <div>{this.createIcons(this.mainIcons)}</div>
+                )}
+                <div>{this.createIcons(additionalIcons)}</div>
+                {isMobile && (
+                    <IconButton className={classes.closeBtn} onClick={closeDrawer}>
+                        <CloseIcon />
                     </IconButton>
-                </Toolbar>
+                )}
+                {!isSearchActive && !this.state.alive ? <div style={{flexGrow: 1}}/> : null}
+                {!isSearchActive && !this.state.alive ? <Tooltip title={I18n.t('Instance is not running')}><WarningIcon className={classes.iconNotAlive}/></Tooltip> : null}
 
-                {settingsDialog}
+            </Toolbar>
 
-                {this.renderConfirmDialog()}
-                {this.renderSelectIdDialog()}
-                {this.renderToast()}
-            </Box>
-        );
+            <DndProvider backend={HTML5Backend}>
+                <List className={classes.list}>
+                    {renderedRules.map((rule, index) => (
+                        <Rule
+                            theme={this.props.theme}
+                            handleEdit={handleEdit}
+                            {...rule}
+                            index={index}
+                            moveRule={moveRule}
+                            key={rule.id}
+                            selectRule={selectRule}
+                            selectedRule={selectedRule}
+                            matchingRules={this.state.matchingRules}
+                            unsavedRules={this.props.unsavedRules}
+                            removeMatched={this.removeMatched}
+                        />
+                    ))}
+                </List>
+            </DndProvider>
+
+            <Toolbar className={classes.test} variant="dense">
+                <TextField
+                    onChange={this.handleTextCommand}
+                    label={I18n.t('Test phrase')}
+                    variant="outlined"
+                    size="small"
+                    color="primary"
+                    className={clsx('outlined-basic', classes.root)}
+                    onKeyDown={this.handleSubmit}
+                    value={this.state.textCommand}
+                    inputProps={{
+                        style: {
+                            padding: '10px 10px',
+                        },
+                    }}
+                    InputProps={{
+                        endAdornment: this.state.textCommand ? (
+                            <IconButton onClick={() => this.setState({ textCommand: '' })}>
+                                <ClearIcon />
+                            </IconButton>
+                        ) : undefined,
+                    }}
+                />
+                <IconButton
+                    variant="outlined"
+                    onClick={event => this.handleSubmit(event, true)}>
+                    <PlayArrowIcon className={classes.play} />
+                </IconButton>
+            </Toolbar>
+
+            {settingsDialog}
+
+            {this.renderConfirmDialog()}
+            {this.renderSelectIdDialog()}
+            {this.renderToast()}
+        </Box>;
     }
 }
 
@@ -618,6 +624,6 @@ LeftBar.propTypes = {
     saveSettings: PropTypes.func.isRequired,
     unsavedRules: PropTypes.object,
     toggleLeftBar: PropTypes.func,
-    isMdScreen: PropTypes.bool.isRequired,
+    isMobile: PropTypes.bool.isRequired,
     closeDrawer: PropTypes.func,
 };

@@ -114,7 +114,7 @@ const Rule = React.forwardRef((props, ref) => {
         <ListItem
             onClick={selectRuleMemo}
             selected={selectedRule?.id === id}
-            className={classes.listItem}>
+            className={clsx(classes.listItem, selectedRule?.id === id && 'rule-selected')}>
             <ListItemText
                 primary={name}
                 secondary={secondary}

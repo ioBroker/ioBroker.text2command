@@ -19,11 +19,16 @@ import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
 import isEqual from 'lodash.isequal';
 
 const styles = theme => ({
+    root: {
+        width: '100%',
+        height: '100%',
+        padding: 0,
+        margin: 0,
+        position: 'relative',
+    },
     box: {
         display: 'inline-flex',
         justifyContent: 'space-around',
-        padding: theme.spacing(2),
-        width: 'calc(100% - ' + theme.spacing(4) + 'px)',
         position: 'relative',
         '& .outlined-basic': {
             padding: '12px 10px',
@@ -35,15 +40,26 @@ const styles = theme => ({
             },
         },
     },
-    container: {
-        width: '70%',
-        // minWidth: 340,
+    boxMobile: {
+        padding: 0,
+        width: '100%',
+        marginTop: theme.spacing(1),
+        height: '100%',
+        overflow: 'hidden'
+    },
+    boxDesktop: {
         padding: theme.spacing(2),
+        width: 'calc(100% - ' + theme.spacing(4) + 'px)',
+        marginTop: 30,
+    },
+    container: {
+        width: 'calc(100% - 32px)',
+        padding: theme.spacing(2),
+        height: '100%',
+        overflow: 'auto',
         [theme.breakpoints.down('md')]: {
-            width: '90%',
-        },
-        [theme.breakpoints.down('lg')]: {
-            width: '80%',
+            width: 'calc(100% - ' + theme.spacing(3) + 'px)',
+            padding: theme.spacing(1),
         },
     },
     textField: {
@@ -103,7 +119,8 @@ const styles = theme => ({
     },
     toggleIcon: {
         position: 'absolute',
-        top: -15,
+        opacity: 0.8,
+        top: 10,
         left: 0,
         backgroundColor: theme.palette.primary.main,
         width: 20,
@@ -161,6 +178,8 @@ class RightBar extends PureComponent {
             return {
                 localRule: {...props.selectedRule}
             };
+        } else {
+            return null;
         }
     }
 
@@ -207,7 +226,9 @@ class RightBar extends PureComponent {
         }
 
         if (this.props.pendingSelectedRuleId && this.state.isLocalStateWasUpdated) {
-            if (this.props.pendingSelectedRuleId === this.state.localRule.id) return;
+            if (this.props.pendingSelectedRuleId === this.state.localRule.id) {
+                return;
+            }
             this.setState({
                 confirmChanges: true,
             });
@@ -583,7 +604,7 @@ class RightBar extends PureComponent {
     }
 
     renderSelectIdDialog() {
-        return this.state.showDialog ? (
+        return this.state.showDialog ?
             <DialogSelectID
                 socket={this.props.socket}
                 title={'Select ID'}
@@ -592,8 +613,7 @@ class RightBar extends PureComponent {
                     this.setState({ showDialog: false });
                 }}
                 onOk={this.handleDialogSelectIdSubmit}
-            />
-        ) : null;
+            />: null;
     }
 
     render() {
@@ -609,51 +629,54 @@ class RightBar extends PureComponent {
             return null;
         }
 
-        return <Box mt="30px" className={classes.box} key={this.props.selectedRule ? this.props.selectedRule.id : 'emptyLeft'}>
-            {localRule ?
-                <Paper className={classes.container} mx="auto">
-                    <Typography
-                        variant="h4"
-                        align="center"
-                        className={!isLocalStateWasUpdated ? classes.mainTitle : ''}>
-                        {name}
-                    </Typography>
 
-                    {this.createSaveSettingsForm()}
+        return <div className={classes.root}>
+            <Box mt="30px" className={clsx(classes.box, this.props.isMobile ? classes.boxMobile : classes.boxDesktop)} key={this.props.selectedRule ? this.props.selectedRule.id : 'emptyLeft'}>
+                {localRule ?
+                    <Paper className={classes.container} mx="auto">
+                        <Typography
+                            variant="h4"
+                            align="center"
+                            className={!isLocalStateWasUpdated ? classes.mainTitle : ''}>
+                            {name}
+                        </Typography>
 
-                    {this.createOptionsData().map(({title, item, id}) => {
-                        if (!item) {
-                            return null;
-                        }
+                        {this.createSaveSettingsForm()}
 
-                        return <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            mb="10px"
-                            key={id}
-                            className={classes.row}>
-                            <Typography
-                                variant="h6"
-                                component="h6"
-                                align="left"
-                                className={classes.title}>
-                                {title ? title + ':' : ''}
-                            </Typography>
-                            {item}
-                        </Box>;
-                    })}
-                </Paper>
-                :
-                null
-            }
+                        {this.createOptionsData().map(({title, item, id}) => {
+                            if (!item) {
+                                return null;
+                            }
 
-            <Box className={classes.toggleIcon} onClick={toggleLeftBar}>
-                {isLeftBarHidden || !this.props.isMdScreen ? <MenuIcon /> : <ArrowBackIcon />}
+                            return <Box
+                                display="flex"
+                                justifyContent="space-between"
+                                mb="10px"
+                                key={id}
+                                className={classes.row}>
+                                <Typography
+                                    variant="h6"
+                                    component="h6"
+                                    align="left"
+                                    className={classes.title}>
+                                    {title ? title + ':' : ''}
+                                </Typography>
+                                {item}
+                            </Box>;
+                        })}
+                    </Paper>
+                    :
+                    null
+                }
+
+                {this.renderSelectIdDialog()}
+                {this.renderConfirmDialog()}
             </Box>
 
-            {this.renderSelectIdDialog()}
-            {this.renderConfirmDialog()}
-        </Box>;
+            <Box className={classes.toggleIcon} onClick={toggleLeftBar}>
+                {isLeftBarHidden || this.props.isMobile ? <MenuIcon /> : <ArrowBackIcon />}
+            </Box>
+        </div>;
     }
 }
 
@@ -689,5 +712,5 @@ RightBar.propTypes = {
     removeUnsavedRule: PropTypes.func.isRequired,
     toggleLeftBar: PropTypes.func.isRequired,
     isLeftBarHidden: PropTypes.bool,
-    isMdScreen: PropTypes.bool.isRequired,
+    isMobile: PropTypes.bool.isRequired,
 };

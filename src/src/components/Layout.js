@@ -58,6 +58,7 @@ class Layout extends PureComponent {
             isLeftBarOpen: window.localStorage.getItem('App.menuHidden') === 'true',
         };
         this.commands = this.getSelectedLanguageCommands();
+        this.isMobile = this.props.width === 'sm' || this.props.width === 'xs';
     }
 
     componentDidMount() {
@@ -79,7 +80,7 @@ class Layout extends PureComponent {
                 }
             });
 
-        if (!this.isMdScreen) {
+        if (this.isMobile) {
             this.setState({
                 isLeftBarOpen: true,
             });
@@ -219,6 +220,9 @@ class Layout extends PureComponent {
 
         if (selectedRule.id === id) {
             // ignore
+            if (this.isMobile) {
+                this.setState({isLeftBarOpen: false});
+            }
         } else if (this.state.unsavedRules[selectedRule.id]) {
             this.setState({
                 pendingSelectedRuleId: id,
@@ -228,7 +232,7 @@ class Layout extends PureComponent {
 
             this.setState({
                 selectedRule: rule,
-                isLeftBarOpen: !this.isMdScreen ? false : this.state.isLeftBarOpen
+                isLeftBarOpen: this.isMobile ? false : this.state.isLeftBarOpen
             });
         }
     };
@@ -464,11 +468,6 @@ class Layout extends PureComponent {
         });
     };
 
-    isLargeScreen = isWidthUp('lg', this.props.width);
-    isMdScreen = isWidthUp('md', this.props.width);
-    isSmScreen = isWidthUp('sm', this.props.width);
-    isMobileScreen = isWidthUp('xs', this.props.width);
-
     toggleLeftBar = () => {
         window.localStorage.setItem('App.menuHidden', !this.state.isLeftBarOpen);
         this.setState({
@@ -508,55 +507,53 @@ class Layout extends PureComponent {
             return null;
         }
 
-        if (!this.isMdScreen) {
-            return (
-                <React.Fragment>
-                    <Drawer
-                        anchor="left"
-                        open={this.state.isLeftBarOpen}
-                        onClose={this.closeDrawer}>
-                        <LeftBar
-                            handleOpen={this.handleOpen}
-                            rules={currentRules}
-                            moveRule={this.moveRule}
-                            handleEdit={this.handleEdit}
-                            selectRule={this.selectRule}
-                            selectedRule={selectedRule}
-                            removeRule={this.removeRule}
-                            settings={this.state.settings}
-                            socket={this.props.socket}
-                            saveSettings={this.saveSettings}
-                            theme={this.props.theme}
-                            toggleLeftBar={this.toggleLeftBar}
-                            unsavedRules={this.state.unsavedRules}
-                            isMdScreen={this.isMdScreen}
-                            closeDrawer={this.closeDrawer}
-                        />
-                    </Drawer>
-                    {this.state.settings && selectedRule ?
-                        <RightBar
-                            key={selectedRule.id}
-                            selectedRule={selectedRule}
-                            socket={this.props.socket}
-                            updateConfig={this.updateConfig}
-                            revertChangesFromConfig={this.revertChangesFromConfig}
-                            pendingSelectedRuleId={this.state.pendingSelectedRuleId}
-                            unsavedRules={this.state.unsavedRules}
-                            selectRule={this.selectRule}
-                            clearStateOnConfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
-                            lang={this.state.settings.language}
-                            setUnsavedRule={this.setUnsavedRule}
-                            removeUnsavedRule={this.removeUnsavedRule}
-                            toggleLeftBar={this.toggleLeftBar}
-                            isLeftBarOpen={this.state.isLeftBarOpen}
-                            isMdScreen={this.isMdScreen}
-                        />
-                        :
-                        <div className={classes.noRulesText}>{I18n.t('Create a new rule with a "+" on the left')}</div>}
+        if (this.isMobile) {
+            return <React.Fragment>
+                <Drawer
+                    anchor="left"
+                    open={this.state.isLeftBarOpen}
+                    onClose={this.closeDrawer}>
+                    <LeftBar
+                        handleOpen={this.handleOpen}
+                        rules={currentRules}
+                        moveRule={this.moveRule}
+                        handleEdit={this.handleEdit}
+                        selectRule={this.selectRule}
+                        selectedRule={selectedRule}
+                        removeRule={this.removeRule}
+                        settings={this.state.settings}
+                        socket={this.props.socket}
+                        saveSettings={this.saveSettings}
+                        theme={this.props.theme}
+                        toggleLeftBar={this.toggleLeftBar}
+                        unsavedRules={this.state.unsavedRules}
+                        isMobile={this.isMobile}
+                        closeDrawer={this.closeDrawer}
+                    />
+                </Drawer>
+                {this.state.settings && selectedRule ?
+                    <RightBar
+                        key={selectedRule.id}
+                        selectedRule={selectedRule}
+                        socket={this.props.socket}
+                        updateConfig={this.updateConfig}
+                        revertChangesFromConfig={this.revertChangesFromConfig}
+                        pendingSelectedRuleId={this.state.pendingSelectedRuleId}
+                        unsavedRules={this.state.unsavedRules}
+                        selectRule={this.selectRule}
+                        clearStateOnConfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
+                        lang={this.state.settings.language}
+                        setUnsavedRule={this.setUnsavedRule}
+                        removeUnsavedRule={this.removeUnsavedRule}
+                        toggleLeftBar={this.toggleLeftBar}
+                        isLeftBarOpen={this.state.isLeftBarOpen}
+                        isMobile={this.isMobile}
+                    />
+                    :
+                    <div className={classes.noRulesText}>{I18n.t('Create a new rule with a "+" on the left')}</div>}
 
-                    {this.renderModalDialog()}
-                </React.Fragment>
-            );
+                {this.renderModalDialog()}
+            </React.Fragment>;
         } else {
             return <React.Fragment>
                 <SplitterLayout
@@ -585,7 +582,7 @@ class Layout extends PureComponent {
                         saveSettings={this.saveSettings}
                         theme={this.props.theme}
                         unsavedRules={this.state.unsavedRules}
-                        isMdScreen={this.isMdScreen}
+                        isMobile={this.isMobile}
                     />
                     {this.state.settings && selectedRule ?
                         <RightBar
@@ -603,7 +600,7 @@ class Layout extends PureComponent {
                             removeUnsavedRule={this.removeUnsavedRule}
                             toggleLeftBar={this.toggleLeftBar}
                             isLeftBarOpen={this.state.isLeftBarOpen}
-                            isMdScreen={this.isMdScreen}
+                            isMobile={this.isMobile}
                         />
                         :
                         <div className={classes.noRulesText}>{I18n.t('Create a new rule with a "+" on the left')}</div>}

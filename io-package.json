@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "2.0.3",
+        "version": "2.0.4",
         "news": {
+            "2.0.4": {
+                "en": "Updated the select ID dialog.",
+                "de": "Das Dialogfeld \"ID auswählen\" wurde aktualisiert.",
+                "ru": "Обновлен диалог выбора идентификатора.",
+                "pt": "Atualizado a caixa de diálogo de seleção de ID.",
+                "nl": "Het dialoogvenster ID selecteren bijgewerkt.",
+                "fr": "Mise à jour de la boîte de dialogue de sélection d'ID.",
+                "it": "Aggiornata la finestra di dialogo Seleziona ID.",
+                "es": "Se actualizó el cuadro de diálogo Seleccionar ID.",
+                "pl": "Zaktualizowano okno dialogowe wyboru identyfikatora.",
+                "zh-cn": "更新了选择ID对话框。"
+            },
             "2.0.3": {
                 "en": "Fixed GUI errors",
                 "de": "GUI-Fehler behoben",

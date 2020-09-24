@@ -22,25 +22,21 @@ const styles = theme => ({
 
 class App extends GenericApp {
     constructor(props) {
-        super(props);
-        this.translations = {
-            en: require('./i18n/en'),
-            de: require('./i18n/de'),
-            ru: require('./i18n/ru'),
-            pt: require('./i18n/pt'),
-            nl: require('./i18n/nl'),
-            fr: require('./i18n/fr'),
-            it: require('./i18n/it'),
-            es: require('./i18n/es'),
-            pl: require('./i18n/pl'),
+        const extendedProps = {...props};
+        extendedProps.translations = {
+            'en': require('./i18n/en'),
+            'de': require('./i18n/de'),
+            'ru': require('./i18n/ru'),
+            'pt': require('./i18n/pt'),
+            'nl': require('./i18n/nl'),
+            'fr': require('./i18n/fr'),
+            'it': require('./i18n/it'),
+            'es': require('./i18n/es'),
+            'pl': require('./i18n/pl'),
             'zh-cn': require('./i18n/zh-cn'),
         };
 
-        // init translations
-        I18n.setTranslations(this.translations);
-        I18n.setLanguage(
-            (navigator.language || navigator.userLanguage || 'en').substring(0, 2).toLowerCase()
-        );
+        super(props, extendedProps);
     }
 
     onConnectionReady() {
