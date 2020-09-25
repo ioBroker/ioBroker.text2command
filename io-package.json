@@ -1,9 +1,9 @@
 {
     "common": {
         "name": "text2command",
-        "version": "2.0.4",
+        "version": "2.0.5",
         "news": {
-            "2.0.4": {
+            "2.0.5": {
                 "en": "Updated the select ID dialog.",
                 "de": "Das Dialogfeld \"ID auswählen\" wurde aktualisiert.",
                 "ru": "Обновлен диалог выбора идентификатора.",

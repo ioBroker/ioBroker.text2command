@@ -606,6 +606,7 @@ class RightBar extends PureComponent {
     renderSelectIdDialog() {
         return this.state.showDialog ?
             <DialogSelectID
+                imagePrefix={'../..'}
                 socket={this.props.socket}
                 title={'Select ID'}
                 onClose={id => {

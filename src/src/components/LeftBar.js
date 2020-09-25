@@ -418,6 +418,7 @@ class LeftBar extends Component {
     renderSelectIdDialog() {
         return this.state.showDialogSelectId ? (
             <DialogSelectID
+                imagePrefix={'../..'}
                 socket={this.props.socket}
                 title={'Select ID'}
                 onClose={() => this.setState({ showDialogSelectId: false })}
