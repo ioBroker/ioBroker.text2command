@@ -173,6 +173,9 @@
             "ignoreConfigUpdate": true,
             "fa-icon": "chat"
         },
+        "dependencies": {
+            "js-controller": ">=2.0.0"
+        },
         "plugins": {
             "sentry": {
                 "dsn": "https://b421086baf0546cdb1f2aaf196939d7c@sentry.iobroker.net/49"
