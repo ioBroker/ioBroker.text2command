@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { withStyles } from '@material-ui/core/styles';
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import withWidth from '@material-ui/core/withWidth';
 import 'react-splitter-layout/lib/index.css';
 
 import Drawer from '@material-ui/core/Drawer';
