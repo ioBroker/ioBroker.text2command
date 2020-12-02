@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "2.0.5",
+        "version": "2.0.6",
         "news": {
+            "2.0.6": {
+                "en": "Prevent crash case (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+                "de": "Absturz verhindern (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+                "ru": "Случай предотвращения сбоя (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+                "pt": "Evitar caso de travamento (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+                "nl": "Voorkom een crashcase (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+                "fr": "Prévenir les cas de crash (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+                "it": "Prevenire il crash case (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+                "es": "Caso de prevención de accidentes (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+                "pl": "Zapobiegaj awariom (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+                "zh-cn": "防止崩溃情况（Sentry IOBROKER-TEXT2COMMAND-D，IOBROKER-TEXT2COMMAND-C）"
+            },
             "2.0.5": {
                 "en": "Updated the select ID dialog.",
                 "de": "Das Dialogfeld \"ID auswählen\" wurde aktualisiert.",
