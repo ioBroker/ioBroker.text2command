@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "2.0.6",
+        "version": "2.0.7",
         "news": {
+            "2.0.7": {
+                "en": "Prevent crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
+                "de": "Absturz verhindern (Sentry IOBROKER-TEXT2COMMAND-J)",
+                "ru": "Случай предотвращения сбоя (Sentry IOBROKER-TEXT2COMMAND-J)",
+                "pt": "Prevenir caso de falha (Sentry IOBROKER-TEXT2COMMAND-J)",
+                "nl": "Voorkom crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
+                "fr": "Prévenir les cas de crash (Sentry IOBROKER-TEXT2COMMAND-J)",
+                "it": "Prevenire il crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
+                "es": "Caso de prevención de accidentes (Sentry IOBROKER-TEXT2COMMAND-J)",
+                "pl": "Zapobiegaj awariom (Sentry IOBROKER-TEXT2COMMAND-J)",
+                "zh-cn": "防止发生崩溃情况（Sentry IOBROKER-TEXT2COMMAND-J）"
+            },
             "2.0.6": {
                 "en": "Prevent crash case (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
                 "de": "Absturz verhindern (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
