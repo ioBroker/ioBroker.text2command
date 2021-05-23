@@ -93,20 +93,19 @@ class App extends GenericApp {
                 </MuiThemeProvider>;
         }
 
-        return (
-            <MuiThemeProvider theme={this.state.theme}>
-                <div className="App">
-                    <Layout
-                        theme={this.state.theme}
-                        socket={this.socket}
-                        instance={this.instance}
-                        readConfig={this.readConfig.bind(this)}
-                        saveConfig={this.saveConfig.bind(this)}
-                    />
-                    {this.renderError()}
-                </div>
-            </MuiThemeProvider>
-        );
+        return <MuiThemeProvider theme={this.state.theme}>
+            <div className="App">
+                <Layout
+                    themeType={this.state.themeType}
+                    theme={this.state.theme}
+                    socket={this.socket}
+                    instance={this.instance}
+                    readConfig={this.readConfig.bind(this)}
+                    saveConfig={this.saveConfig.bind(this)}
+                />
+                {this.renderError()}
+            </div>
+        </MuiThemeProvider>;
     }
 }
 

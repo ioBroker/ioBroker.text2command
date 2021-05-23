@@ -114,72 +114,69 @@ class CreateRuleDialog extends Component {
             });
         };
 
-        return (
-            <FormGroup>
-                <FormControl fullWidth>
-                    <InputLabel shrink id="rule">
-                        {I18n.t('Rule')}
-                    </InputLabel>
-                    <Select
-                        onChange={handleSelectChange}
-                        value={localRule.rule}
-                        labelId={'rule'}
-                        className={classes.select}>
-                        {commands?.map(option => (
-                            <MenuItem key={option.rule} value={option.rule}>
-                                {option.rule}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <TextField
-                    fullWidth
-                    id="standard-basic"
-                    label={this.state.localRule.isError || I18n.t('Name')}
-                    value={localRule.name}
-                    onChange={handleInputChange}
-                    error={!!this.state.localRule.isError}
-                    className={classes.TextField}/>
-            </FormGroup>
-        );
+        return <FormGroup>
+            <FormControl fullWidth>
+                <InputLabel shrink id="rule">
+                    {I18n.t('Rule')}
+                </InputLabel>
+                <Select
+                    onChange={handleSelectChange}
+                    value={localRule.rule}
+                    labelId={'rule'}
+                    className={classes.select}>
+                    {commands?.map(option =>
+                        <MenuItem key={option.rule} value={option.rule}>
+                            {option.rule}
+                        </MenuItem>
+                    )}
+                </Select>
+            </FormControl>
+            <TextField
+                fullWidth
+                id="standard-basic"
+                label={this.state.localRule.isError || I18n.t('Name')}
+                value={localRule.name}
+                onChange={handleInputChange}
+                error={!!this.state.localRule.isError}
+                className={classes.TextField}/>
+        </FormGroup>;
     };
 
     setDialogContent = () => {
         const { handleClose, handleSubmitOnCreate, handleSubmitOnEdit, isEdit } = this.props;
         const onSubmitHandler = !isEdit ? handleSubmitOnCreate : handleSubmitOnEdit;
-        return (
-            <DialogContent>
-                {this.createForm()}
-                <DialogActions>
-                    <Button
-                        onClick={onSubmitHandler.bind(
-                            this,
-                            this.state.localRule,
-                            this.state.localRule.isError
-                        )}
-                        disabled={!this.state.localRule.name || !this.state.localRule.rule || (this.state.localRule.name === this.defaultRule.name && this.state.localRule.rule === this.defaultRule.rule) ||
-                        (this.state.localRule.name === this.props.selectedRule?.name && this.state.localRule.rule === this.props.selectedRule?.rule)}>
-                        { I18n.t('Ok') }
-                    </Button>
-                    <Button onClick={handleClose}>{I18n.t('Cancel')}</Button>
-                </DialogActions>
-            </DialogContent>
-        );
+        return <DialogContent>
+            {this.createForm()}
+            <DialogActions>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={onSubmitHandler.bind(
+                        this,
+                        this.state.localRule,
+                        this.state.localRule.isError
+                    )}
+                    disabled={!this.state.localRule.name || !this.state.localRule.rule || (this.state.localRule.name === this.defaultRule.name && this.state.localRule.rule === this.defaultRule.rule) ||
+                    (this.state.localRule.name === this.props.selectedRule?.name && this.state.localRule.rule === this.props.selectedRule?.rule)}>
+                    { I18n.t('Ok') }
+                </Button>
+                <Button variant="contained" onClick={handleClose}>{I18n.t('Cancel')}</Button>
+            </DialogActions>
+        </DialogContent>;
     };
+
     render() {
-        return (
-            <Dialog
-                open={this.props.isOpen}
-                onClose={this.props.handleClose}
-                onExited={this.cleanState}
-                onEnter={this.setRuleOnMount}
-                fullWidth>
-                <DialogTitle>
-                    {I18n.t(!this.props.isEdit ? 'Create new rule' : 'Edit rule')}
-                </DialogTitle>
-                {this.setDialogContent()}
-            </Dialog>
-        );
+        return <Dialog
+            open={this.props.isOpen}
+            onClose={this.props.handleClose}
+            onExited={this.cleanState}
+            onEnter={this.setRuleOnMount}
+            fullWidth>
+            <DialogTitle>
+                {I18n.t(!this.props.isEdit ? 'Create new rule' : 'Edit rule')}
+            </DialogTitle>
+            {this.setDialogContent()}
+        </Dialog>;
     }
 }
 

@@ -10,9 +10,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import Toolbar from '@material-ui/core/Toolbar';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import MenuIcon from '@material-ui/icons/Menu';
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
 
 import I18n from '@iobroker/adapter-react/i18n';
 import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
@@ -43,19 +46,18 @@ const styles = theme => ({
     boxMobile: {
         padding: 0,
         width: '100%',
-        marginTop: theme.spacing(1),
-        height: '100%',
-        overflow: 'hidden'
+        height: 'calc(100% - 48px - 48px)',
+        overflow: 'auto'
     },
     boxDesktop: {
-        padding: theme.spacing(2),
-        width: 'calc(100% - ' + theme.spacing(4) + 'px)',
-        marginTop: 30,
+        padding: theme.spacing(1),
+        width: 'calc(100% - ' + theme.spacing(2) + 'px)',
+        height: 'calc(100% - 48px - 48px - ' + theme.spacing(2) + 'px)',
+        overflow: 'auto'
     },
     container: {
-        width: 'calc(100% - 32px)',
+        width: '100%',
         padding: theme.spacing(2),
-        height: '100%',
         overflow: 'auto',
         [theme.breakpoints.down('md')]: {
             width: 'calc(100% - ' + theme.spacing(3) + 'px)',
@@ -71,9 +73,9 @@ const styles = theme => ({
     },
     submitForm: {
         flexDirection: 'row',
-        margin: '10px auto 20px',
+        //margin: '10px auto 20px',
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'right',
         width: '100%',
         [theme.breakpoints.down('xs')]: {
             flexDirection: 'column',
@@ -103,7 +105,7 @@ const styles = theme => ({
         },
     },
     btnDanger: {
-        marginLeft: 20,
+        marginLeft: 8,
         [theme.breakpoints.down('xs')]: {
             marginLeft: 0,
             marginTop: theme.spacing(0.5),
@@ -119,14 +121,16 @@ const styles = theme => ({
     },
     toggleIcon: {
         position: 'absolute',
+        zIndex: 1,
         opacity: 0.8,
-        top: 10,
+        top: 8,
         left: 0,
         backgroundColor: theme.palette.primary.main,
-        width: 20,
+        width: 18,
         height: 25,
         cursor: 'pointer',
-        padding: theme.spacing(1),
+        padding: '4px 8px 4px 2px',
+        color: theme.palette.type === 'dark' ? '#FFF': '#000',
         borderRadius: '0 5px 5px 0',
     },
     switchControl: {
@@ -134,7 +138,6 @@ const styles = theme => ({
         flexBasis: '60%',
     },
     emptyButtons: {
-        height: 36,
         [theme.breakpoints.down('sm')]: {
             height: 0,
         },
@@ -143,6 +146,14 @@ const styles = theme => ({
         fontSize: 24,
         color: theme.palette.primary.light
     },
+    header: {
+        backgroundColor: theme.palette.secondary.main,
+        fontSize: 18,
+        fontWeight: 'bold',
+        paddingLeft: 40,
+        zIndex: 0,
+        color: theme.palette.type === 'dark' ? '#FFF' : '#000',
+    }
 });
 
 class RightBar extends PureComponent {
@@ -278,26 +289,29 @@ class RightBar extends PureComponent {
 
             this.closeConfirmDialog();
         };
-        return (
-            <FormControl className={classes.submitForm}>
-                <Button
-                    variant="contained"
-                    onClick={handleSaveAndGo}
-                    color="primary"
-                    className={classes.saveAndGoBtn}>
-                    {t('Save and go')}
-                </Button>
-                <Button onClick={dontSaveAndGo} variant="contained" color="secondary">
-                    {t(`Don't save and go`)}
-                </Button>
-                <Button
-                    variant="contained"
-                    className={classes.btnDanger}
-                    onClick={cancelSavingChanges}>
-                    {t('Cancel')}
-                </Button>
-            </FormControl>
-        );
+        return <FormControl className={classes.submitForm}>
+            <div style={{flexGrow: 1}}/>
+            <Button
+                variant="contained"
+                onClick={handleSaveAndGo}
+                color="primary"
+                startIcon={<CheckIcon/>}
+                className={classes.saveAndGoBtn}>
+                {t('Save and go')}
+            </Button>
+            <Button onClick={dontSaveAndGo} variant="contained" color="secondary"
+                    startIcon={<CheckIcon/>}
+            >
+                {t(`Don't save and go`)}
+            </Button>
+            <Button
+                variant="contained"
+                className={classes.btnDanger}
+                startIcon={<CloseIcon/>}
+                onClick={cancelSavingChanges}>
+                {t('Cancel')}
+            </Button>
+        </FormControl>;
     };
 
     createSaveSettingsForm = () => {
@@ -307,9 +321,7 @@ class RightBar extends PureComponent {
 
         const handleSave = async () => {
             await updateConfig(localRule);
-            this.setState({
-                isLocalStateWasUpdated: false,
-            });
+            this.setState({isLocalStateWasUpdated: false,});
         };
 
         const revertChanges = async () => {
@@ -324,19 +336,24 @@ class RightBar extends PureComponent {
         if (!this.state.isLocalStateWasUpdated) {
             return <div className={this.props.classes.emptyButtons} />;
         } else {
-            return (
-                <FormControl className={classes.submitForm}>
-                    <Button onClick={handleSave} variant="contained" color="primary">
-                        {t('Save')}
-                    </Button>
-                    <Button
-                        variant="contained"
-                        className={classes.btnDanger}
-                        onClick={revertChanges}>
-                        {t('Cancel')}
-                    </Button>
-                </FormControl>
-            );
+            return <FormControl className={classes.submitForm}>
+                <div style={{flexGrow: 1}}/>
+                <Button
+                    autoFocus
+                    onClick={handleSave}
+                    variant="contained"
+                    startIcon={<CheckIcon/>}
+                    color="primary">
+                    {t('Save')}
+                </Button>
+                <Button
+                    variant="contained"
+                    className={classes.btnDanger}
+                    startIcon={<CloseIcon/>}
+                    onClick={revertChanges}>
+                    {t('Cancel')}
+                </Button>
+            </FormControl>;
         }
     };
 
@@ -623,27 +640,24 @@ class RightBar extends PureComponent {
             isLocalStateWasUpdated,
         } = this.state;
 
-        const { classes, isLeftBarHidden, toggleLeftBar } = this.props;
+        const { classes, isLeftBarOpen, toggleLeftBar } = this.props;
         const name = localRule ? localRule.name : '';
 
         if (!this.props.selectedRule) {
             return null;
         }
 
-
         return <div className={classes.root}>
-            <Box mt="30px" className={clsx(classes.box, this.props.isMobile ? classes.boxMobile : classes.boxDesktop)} key={this.props.selectedRule ? this.props.selectedRule.id : 'emptyLeft'}>
+            <Box className={classes.toggleIcon} onClick={toggleLeftBar}>
+                {isLeftBarOpen || this.props.isMobile ? <MenuIcon /> : <ArrowBackIcon />}
+            </Box>
+            <Toolbar position="static" variant="dense" className={this.props.classes.header}>
+                {name}
+            </Toolbar>
+
+            <Box className={clsx(classes.box, this.props.isMobile ? classes.boxMobile : classes.boxDesktop)} key={this.props.selectedRule ? this.props.selectedRule.id : 'emptyLeft'}>
                 {localRule ?
                     <Paper className={classes.container} mx="auto">
-                        <Typography
-                            variant="h4"
-                            align="center"
-                            className={!isLocalStateWasUpdated ? classes.mainTitle : ''}>
-                            {name}
-                        </Typography>
-
-                        {this.createSaveSettingsForm()}
-
                         {this.createOptionsData().map(({title, item, id}) => {
                             if (!item) {
                                 return null;
@@ -674,9 +688,10 @@ class RightBar extends PureComponent {
                 {this.renderConfirmDialog()}
             </Box>
 
-            <Box className={classes.toggleIcon} onClick={toggleLeftBar}>
-                {isLeftBarHidden || this.props.isMobile ? <MenuIcon /> : <ArrowBackIcon />}
-            </Box>
+            {localRule ? <Toolbar position="static" variant="dense" className={this.props.classes.header}>
+                {this.createSaveSettingsForm()}
+            </Toolbar> : null}
+
         </div>;
     }
 }
@@ -712,6 +727,6 @@ RightBar.propTypes = {
     setUnsavedRule: PropTypes.func.isRequired,
     removeUnsavedRule: PropTypes.func.isRequired,
     toggleLeftBar: PropTypes.func.isRequired,
-    isLeftBarHidden: PropTypes.bool,
+    isLeftBarOpen: PropTypes.bool,
     isMobile: PropTypes.bool.isRequired,
 };

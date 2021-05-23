@@ -48,7 +48,7 @@ const styles = theme => ({
     test: {
         width: '100%',
         boxSizing: 'border-box',
-        height: 64,
+        paddingLeft: theme.spacing(1)
     },
     main: {
         minWidth: 300,
@@ -60,7 +60,7 @@ const styles = theme => ({
         position: 'relative',
     },
     list: {
-        height: 'calc(100% - 64px - 64px - 18px)',
+        height: 'calc(100% - 48px - 48px - 18px)',
         overflowX: 'hidden',
         overflowY: 'auto',
     },
@@ -127,7 +127,7 @@ const tooltipStyles = theme => ({
 
 const CustomTooltip = withStyles(tooltipStyles)(Tooltip);
 
-class LeftBar extends Component {
+class Drawer extends Component {
     state = {
         textCommand: '',
         matchingRules: [],
@@ -383,8 +383,8 @@ class LeftBar extends Component {
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={submitSettings}>Ok</Button>
-                    <Button onClick={handleClose}>{I18n.t('Cancel')}</Button>
+                    <Button variant="contained" color="primary" onClick={submitSettings}>Ok</Button>
+                    <Button variant="contained" onClick={handleClose}>{I18n.t('Cancel')}</Button>
                 </DialogActions>
             </Dialog>
         );
@@ -442,8 +442,8 @@ class LeftBar extends Component {
                         <strong>{this.props.selectedRule.name}</strong>
                     </Typography>
                     <DialogActions>
-                        <Button onClick={this.handleDelete}>{I18n.t('Ok')}</Button>
-                        <Button onClick={this.handleCloseConfirmRemoveDialog} color="primary">
+                        <Button variant="contained" color="primary" autoFocus onClick={this.handleDelete}>{I18n.t('Ok')}</Button>
+                        <Button variant="contained" onClick={this.handleCloseConfirmRemoveDialog} color="primary">
                             {I18n.t('Cancel')}
                         </Button>
                     </DialogActions>
@@ -486,6 +486,7 @@ class LeftBar extends Component {
             isMobile,
             closeDrawer,
         } = this.props;
+
         const { filteredRules, isSearchActive, searchedValue } = this.state;
         const settingsDialog = this.createSettingsModal();
         const renderedRules = isSearchActive && searchedValue.length ? filteredRules : rules;
@@ -496,9 +497,7 @@ class LeftBar extends Component {
             additionalIcons.push({
                 icon: !isSearchActive && <DeleteIcon />,
                 handler: () =>
-                    this.setState({
-                        isConfirmRemoveDialogOpen: true,
-                    }),
+                    this.setState({isConfirmRemoveDialogOpen: true,}),
                 tooltip: I18n.t('Remove rule'),
                 key: 'delete',
             });
@@ -512,8 +511,8 @@ class LeftBar extends Component {
             });
 
         return <Box className={classes.main}>
-            <Toolbar position="static" classes={{ root: classes.toolbar }}>
-                {isSearchActive ? (
+            <Toolbar position="static" variant="dense" classes={{ root: classes.toolbar }} disableGutters>
+                {isSearchActive ?
                     <TextField
                         className={classes.search}
                         onChange={this.handleSearch}
@@ -528,9 +527,7 @@ class LeftBar extends Component {
                         }}
                         autoFocus
                     />
-                ) : (
-                    <div>{this.createIcons(this.mainIcons)}</div>
-                )}
+                 : <div>{this.createIcons(this.mainIcons)}</div>}
                 <div>{this.createIcons(additionalIcons)}</div>
                 {isMobile && (
                     <IconButton className={classes.closeBtn} onClick={closeDrawer}>
@@ -562,7 +559,7 @@ class LeftBar extends Component {
                 </List>
             </DndProvider>
 
-            <Toolbar className={classes.test} variant="dense">
+            <Toolbar className={classes.test} variant="dense" disableGutters>
                 <TextField
                     onChange={this.handleTextCommand}
                     label={I18n.t('Test phrase')}
@@ -572,11 +569,7 @@ class LeftBar extends Component {
                     className={clsx('outlined-basic', classes.root)}
                     onKeyDown={this.handleSubmit}
                     value={this.state.textCommand}
-                    inputProps={{
-                        style: {
-                            padding: '10px 10px',
-                        },
-                    }}
+                    inputProps={{style: {padding: '10px 10px'}}}
                     InputProps={{
                         endAdornment: this.state.textCommand ? (
                             <IconButton onClick={() => this.setState({ textCommand: '' })}>
@@ -601,10 +594,11 @@ class LeftBar extends Component {
     }
 }
 
-export default withStyles(styles)(LeftBar);
+export default withStyles(styles)(Drawer);
 
-LeftBar.propTypes = {
+Drawer.propTypes = {
     handleOpen: PropTypes.func.isRequired,
+    themeType: PropTypes.string,
     rules: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string,

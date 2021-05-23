@@ -11,7 +11,7 @@ import Drawer from '@material-ui/core/Drawer';
 
 import I18n from '@iobroker/adapter-react/i18n';
 
-import LeftBar from './LeftBar';
+import DrawerComponent from './Drawer';
 import RightBar from './RightBar';
 import CreateRuleDialog from './CreateRuleDialog';
 import isEqual from 'lodash.isequal';
@@ -81,9 +81,7 @@ class Layout extends PureComponent {
             });
 
         if (this.isMobile) {
-            this.setState({
-                isLeftBarOpen: true,
-            });
+            this.setState({isLeftBarOpen: true});
         }
     }
 
@@ -149,10 +147,9 @@ class Layout extends PureComponent {
     };
 
     handleOpen = () => {
-        this.setState({
-            isOpen: true,
-        });
+        this.setState({isOpen: true,});
     };
+
     handleClose = () => {
         this.setState({ isOpen: false });
     };
@@ -470,15 +467,11 @@ class Layout extends PureComponent {
 
     toggleLeftBar = () => {
         window.localStorage.setItem('App.menuHidden', !this.state.isLeftBarOpen);
-        this.setState({
-            isLeftBarOpen: !this.state.isLeftBarOpen,
-        });
+        this.setState({isLeftBarOpen: !this.state.isLeftBarOpen,});
     };
 
     closeDrawer = () => {
-        this.setState({
-            isLeftBarOpen: false,
-        });
+        this.setState({isLeftBarOpen: false});
     };
 
     renderModalDialog() {
@@ -513,7 +506,8 @@ class Layout extends PureComponent {
                     anchor="left"
                     open={this.state.isLeftBarOpen}
                     onClose={this.closeDrawer}>
-                    <LeftBar
+                    <DrawerComponent
+                        themeType={this.props.themeType}
                         handleOpen={this.handleOpen}
                         rules={currentRules}
                         moveRule={this.moveRule}
@@ -568,7 +562,7 @@ class Layout extends PureComponent {
                     onSecondaryPaneSizeChange={size => (this.menuSize = parseFloat(size))}
                     onDragEnd={() => window.localStorage.setItem('App.menuSize', this.menuSize.toString())}
                     secondaryInitialSize={this.menuSize}>
-                    <LeftBar
+                    <DrawerComponent
                         handleOpen={this.handleOpen}
                         rules={currentRules}
                         moveRule={this.moveRule}
@@ -614,6 +608,7 @@ class Layout extends PureComponent {
 Layout.propTypes = {
     socket: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
+    themeType: PropTypes.string,
     instance: PropTypes.number.isRequired,
     readConfig: PropTypes.func.isRequired,
     saveConfig: PropTypes.func.isRequired,
