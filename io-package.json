@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "2.0.7",
+        "version": "2.1.0",
         "news": {
+            "2.1.0": {
+                "en": "Updated GUI.",
+                "de": "Aktualisierte GUI.",
+                "ru": "Обновлен графический интерфейс.",
+                "pt": "GUI atualizada.",
+                "nl": "Bijgewerkte GUI.",
+                "fr": "Interface graphique mise à jour.",
+                "it": "GUI aggiornata.",
+                "es": "GUI actualizada.",
+                "pl": "Zaktualizowany GUI.",
+                "zh-cn": "更新了GUI。"
+            },
             "2.0.7": {
                 "en": "Prevent crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
                 "de": "Absturz verhindern (Sentry IOBROKER-TEXT2COMMAND-J)",
@@ -173,6 +185,10 @@
             "text",
             "commands"
         ],
+        "adminUI": {
+            "config": "none",
+            "tab": "materialize"
+        },
         "messagebox": true,
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
@@ -197,9 +213,11 @@
             "ignoreConfigUpdate": true,
             "fa-icon": "chat"
         },
-        "dependencies": {
-            "js-controller": ">=2.0.0"
-        },
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ],
         "plugins": {
             "sentry": {
                 "dsn": "https://b421086baf0546cdb1f2aaf196939d7c@sentry.iobroker.net/49"

@@ -16,7 +16,7 @@
   "Ok": "Ok",
   "Create Rule": "Create Rule",
   "Are you sure?": "Are you sure?",
-  "You want to delete: %s": "You want to delete: %s",
+  "You want to delete: %s": "You want to delete: \"%s\"",
   "Refresh": "Refresh",
   "Remove rule": "Remove rule",
   "Search rule": "Search rule",
@@ -35,5 +35,13 @@
   "Edit rule": "Edit rule",
   "Rule": "Rule",
   "Name": "Name",
-  "Write to response by every command": "Write to response by every command"
+  "Write to response by every command": "Write to response by every command",
+  "Clone rule": "Clone the rule",
+  "Name already exist": "Name already exist",
+  "Create new rule": "Create new rule",
+  "Copy rule": "Copy rule",
+  "Please confirm or cancel changes before leaving": "Please confirm or cancel changes before leaving",
+  "You have changed rule": "You have changed rule",
+  "Save and go": "Save and go",
+  "Don't save and go": "Don't save and leave"
 }

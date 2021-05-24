@@ -9,6 +9,9 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
 import { DialogActions, Button, Select, TextField, MenuItem, withStyles } from '@material-ui/core';
 
+import CheckIcon from '@material-ui/icons/Check';
+import CloseIcon from '@material-ui/icons/Close';
+
 import I18n from '@iobroker/adapter-react/i18n';
 
 const styles = theme => ({
@@ -47,26 +50,24 @@ class CreateRuleDialog extends Component {
     };
 
     cleanState = () => {
-        if (this.props.isEdit) {
+        if (this.props.isEdit && !this.props.isCopy) {
             this.props.finishEdit(this.state.localRule);
         }
-        this.setState({
-            localRule: this.defaultRule,
-        });
+        this.setState({localRule: this.defaultRule});
     };
 
     getAvailableOptions = () => {
-        const { commands, currentRules, selectedRule, isEdit } = this.props;
+        const { commands, rules, selectedRule, isEdit } = this.props;
 
         const uniqueOptions = commands?.filter(
-            option => !(option.unique && currentRules.find(item => item?.rule === option.rule))
+            option => !(option.unique && rules.find(item => item?.rule === option.rule))
         );
 
         return selectedRule?.unique && isEdit ? uniqueOptions.concat(selectedRule) : uniqueOptions;
     };
 
     getUniqueName = ruleName => {
-        const existingNames = this.props.currentRules?.map(rule => rule?.name);
+        const existingNames = this.props.rules?.map(rule => rule?.name);
 
         const matchingNames = existingNames.filter(
             name => name.slice(0, name.length - 2) === ruleName
@@ -85,10 +86,11 @@ class CreateRuleDialog extends Component {
         return isUnique ? ruleName : `${ruleName} 1`;
     };
 
-    createForm = () => {
+    createForm = disabled => {
         const { localRule } = this.state;
         const { classes } = this.props;
         const commands = this.getAvailableOptions();
+        const onSubmitHandler = !this.props.isEdit ? this.props.handleSubmitOnCreate : (this.props.isCopy ? this.props.handleSubmitOnCopy : this.props.handleSubmitOnEdit);
 
         const handleSelectChange = event =>
             this.setState({
@@ -101,7 +103,7 @@ class CreateRuleDialog extends Component {
             });
 
         const handleInputChange = event => {
-            const existingNames = this.props.currentRules?.map(rule => rule?.name);
+            const existingNames = this.props.rules?.map(rule => rule?.name);
 
             this.setState({
                 localRule: {
@@ -115,7 +117,7 @@ class CreateRuleDialog extends Component {
         };
 
         return <FormGroup>
-            <FormControl fullWidth>
+            {!this.props.isCopy ? <FormControl fullWidth>
                 <InputLabel shrink id="rule">
                     {I18n.t('Rule')}
                 </InputLabel>
@@ -130,12 +132,23 @@ class CreateRuleDialog extends Component {
                         </MenuItem>
                     )}
                 </Select>
-            </FormControl>
+            </FormControl> : null}
             <TextField
                 fullWidth
+                autoFocus
                 id="standard-basic"
                 label={this.state.localRule.isError || I18n.t('Name')}
                 value={localRule.name}
+                onKeyDown={e => {
+                    if (e.keyCode === 13 && !disabled) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onSubmitHandler(
+                            this.state.localRule,
+                            this.state.localRule.isError
+                        );
+                    }
+                }}
                 onChange={handleInputChange}
                 error={!!this.state.localRule.isError}
                 className={classes.TextField}/>
@@ -143,24 +156,25 @@ class CreateRuleDialog extends Component {
     };
 
     setDialogContent = () => {
-        const { handleClose, handleSubmitOnCreate, handleSubmitOnEdit, isEdit } = this.props;
-        const onSubmitHandler = !isEdit ? handleSubmitOnCreate : handleSubmitOnEdit;
+        const { handleClose, handleSubmitOnCreate, handleSubmitOnEdit, isEdit, isCopy, handleSubmitOnCopy } = this.props;
+        const onSubmitHandler = !isEdit ? handleSubmitOnCreate : (isCopy ? handleSubmitOnCopy : handleSubmitOnEdit);
+        const disabled = !this.state.localRule.name || !this.state.localRule.rule || (this.state.localRule.name === this.defaultRule.name && this.state.localRule.rule === this.defaultRule.rule) ||
+        (this.state.localRule.name === this.props.selectedRule?.name && this.state.localRule.rule === this.props.selectedRule?.rule);
         return <DialogContent>
-            {this.createForm()}
+            {this.createForm(disabled, onSubmitHandler)}
             <DialogActions>
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={onSubmitHandler.bind(
-                        this,
+                    onClick={() => onSubmitHandler(
                         this.state.localRule,
                         this.state.localRule.isError
                     )}
-                    disabled={!this.state.localRule.name || !this.state.localRule.rule || (this.state.localRule.name === this.defaultRule.name && this.state.localRule.rule === this.defaultRule.rule) ||
-                    (this.state.localRule.name === this.props.selectedRule?.name && this.state.localRule.rule === this.props.selectedRule?.rule)}>
+                    startIcon={<CheckIcon/>}
+                    disabled={disabled}>
                     { I18n.t('Ok') }
                 </Button>
-                <Button variant="contained" onClick={handleClose}>{I18n.t('Cancel')}</Button>
+                <Button variant="contained" onClick={handleClose} startIcon={<CloseIcon/>}>{I18n.t('Cancel')}</Button>
             </DialogActions>
         </DialogContent>;
     };
@@ -173,7 +187,7 @@ class CreateRuleDialog extends Component {
             onEnter={this.setRuleOnMount}
             fullWidth>
             <DialogTitle>
-                {I18n.t(!this.props.isEdit ? 'Create new rule' : 'Edit rule')}
+                {I18n.t(!this.props.isEdit ? 'Create new rule' : (this.props.isCopy ? 'Clone rule' : 'Edit rule'))}
             </DialogTitle>
             {this.setDialogContent()}
         </Dialog>;
@@ -186,6 +200,7 @@ CreateRuleDialog.propTypes = {
     handleClose: PropTypes.func.isRequired,
     handleSubmitOnCreate: PropTypes.func.isRequired,
     handleSubmitOnEdit: PropTypes.func.isRequired,
+    handleSubmitOnCopy: PropTypes.func.isRequired,
     isEdit: PropTypes.bool.isRequired,
     commands: PropTypes.arrayOf(
         PropTypes.shape({
@@ -200,7 +215,7 @@ CreateRuleDialog.propTypes = {
         rule: PropTypes.string.isRequired,
         unique: PropTypes.bool,
     }),
-    currentRules: PropTypes.arrayOf(
+    rules: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string.isRequired,
             name: PropTypes.string.isRequired,

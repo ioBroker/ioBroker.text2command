@@ -124,7 +124,7 @@ function startAdapter(options) {
 
 function sayIt(text) {
     //noinspection JSUnresolvedFunction
-    adapter.setState('response', text || '', err => err && adapter.log.error(err));
+    adapter.setState('response', text || '', true, err => err && adapter.log.error(err));
 
     //noinspection JSUnresolvedVariable
     if (!text || !adapter.config.sayitInstance) return;
@@ -234,7 +234,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
                     result += (result ? ', ' : '') + response;
                 }
 
-                adapter.config.writeEveryAnswer && adapter.setState('response', response);
+                adapter.config.writeEveryAnswer && adapter.setState('response', response, true);
 
                 if (!--count) {
                     //noinspection JSReferencingMutableVariableFromClosure

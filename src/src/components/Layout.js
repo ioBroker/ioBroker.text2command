@@ -12,7 +12,7 @@ import Drawer from '@material-ui/core/Drawer';
 import I18n from '@iobroker/adapter-react/i18n';
 
 import DrawerComponent from './Drawer';
-import RightBar from './RightBar';
+import RuleEditor from './RuleEditor';
 import CreateRuleDialog from './CreateRuleDialog';
 import isEqual from 'lodash.isequal';
 
@@ -49,9 +49,10 @@ class Layout extends PureComponent {
 
         this.menuSize = parseFloat(window.localStorage.getItem('App.menuSize')) || 350;
         this.state = {
-            currentRules: [],
+            rules: [],
             isOpen: false,
             isEdit: false,
+            isCopy: false,
             selectedRule: null,
             unsavedRules: {},
             ready: false,
@@ -76,7 +77,7 @@ class Layout extends PureComponent {
 
                 if (!isEqual(rules, rulesWithId)) {
                     this.props.saveConfig({ rules: rulesWithId, ...settings });
-                    setTimeout(() => this.setState({currentRules: rulesWithId}), 50);
+                    setTimeout(() => this.setState({rules: rulesWithId}), 50);
                 }
             });
 
@@ -139,11 +140,11 @@ class Layout extends PureComponent {
     commands = this.getSelectedLanguageCommands();
 
     moveRule = (dragIndex, hoverIndex) => {
-        const { currentRules } = this.state;
-        const sourceRule = currentRules.find((_, index) => index === hoverIndex);
-        const sortRules = currentRules.filter((_, index) => index !== hoverIndex);
+        const { rules } = this.state;
+        const sourceRule = rules.find((_, index) => index === hoverIndex);
+        const sortRules = rules.filter((_, index) => index !== hoverIndex);
         sortRules.splice(dragIndex, 0, sourceRule);
-        this.setState({ currentRules: sortRules });
+        this.setState({ rules: sortRules });
     };
 
     handleOpen = () => {
@@ -174,7 +175,7 @@ class Layout extends PureComponent {
 
         this.setState(
             {
-                currentRules: [...this.state.currentRules, rule],
+                rules: [...this.state.rules, rule],
                 unsavedRules: {
                     ...this.state.unsavedRules,
                     [id]: {
@@ -199,21 +200,44 @@ class Layout extends PureComponent {
             return;
         }
 
+        const unsavedRules = JSON.parse(JSON.stringify(this.state.unsavedRules));
+        unsavedRules[selectedRule.id] = { id: selectedRule.id, wasChangedGlobally: true};
+
         this.setState({
-            unsavedRules: {
-                ...this.state.unsavedRules,
-                [selectedRule.id]: {
-                    id: selectedRule.id,
-                    wasChangedGlobally: true,
-                },
-            },
-            currentRules: this.updateCurrentRules(selectedRule),
+            unsavedRules,
+            rules: this.updateRule(selectedRule),
         });
         this.handleClose();
     };
 
+    handleSubmitOnCopy = (selectedRule, isError) => {
+        if (isError) {
+            return;
+        }
+
+        const newRule = JSON.parse(JSON.stringify(selectedRule));
+        newRule.id = uuid();
+
+        const rules = JSON.parse(JSON.stringify(this.state.rules));
+        rules.push(newRule);
+
+        const unsavedRules = JSON.parse(JSON.stringify(this.state.unsavedRules));
+        unsavedRules[newRule.id] = {id: newRule.id, wasChangedGlobally: true};
+
+        this.setState({
+                rules,
+                unsavedRules,
+                selectedRule: newRule,
+                isOpen: false
+            },
+            () => {
+                this.selectRule(newRule.id);
+            }
+        );
+    };
+
     selectRule = id => {
-        const { selectedRule, currentRules } = this.state;
+        const { selectedRule, rules } = this.state;
 
         if (selectedRule.id === id) {
             // ignore
@@ -225,7 +249,7 @@ class Layout extends PureComponent {
                 pendingSelectedRuleId: id,
             });
         } else {
-            const rule = currentRules.find(item => item.id === id);
+            const rule = rules.find(item => item.id === id);
 
             this.setState({
                 selectedRule: rule,
@@ -234,28 +258,35 @@ class Layout extends PureComponent {
         }
     };
 
-    updateCurrentRules = selectedRule => {
-        return this.state.currentRules.map(item =>
-            item.id === selectedRule.id ? selectedRule : item
-        );
+    updateRule = selectedRule => {
+        const rules = JSON.parse(JSON.stringify(this.state.rules));
+
+        const item = rules.find(item => item.id === selectedRule.id);
+        rules[rules.indexOf(item)] = selectedRule;
+
+        return rules;
     };
 
     handleEdit = () => {
-        this.setState({
-            isEdit: true,
-        });
+        this.setState({isEdit: true});
+        this.handleOpen();
+    };
+
+    handleCopy = () => {
+        this.setState({isCopy: true, isEdit: true});
         this.handleOpen();
     };
 
     finishEdit = editableRule => {
-        let updatedRule;
+        let selectedRule;
 
         const { rule, id, name, _break, template } = editableRule;
-        const initialSelectedRule = this.state.selectedRule;
 
-        if (initialSelectedRule.rule !== rule) {
+        // if rule was updated => apply fields
+        if (this.state.selectedRule.rule !== rule) {
             const updatedRuleOptions = this.commands.find(command => command.rule === rule);
-            updatedRule = {
+
+            selectedRule = {
                 ...updatedRuleOptions,
                 name,
                 rule,
@@ -264,30 +295,41 @@ class Layout extends PureComponent {
                 template,
             };
         } else {
-            updatedRule = editableRule;
+            selectedRule = JSON.parse(JSON.stringify(editableRule));
+        }
+
+        const rules = JSON.parse(JSON.stringify(this.state.rules));
+        const _rule = rules.find(it => it.id === selectedRule.id);
+        if (_rule) {
+            rules[rules.indexOf(_rule)] = selectedRule;
+        } else {
+            rules.push(selectedRule);
         }
 
         this.setState({
             isEdit: false,
-            selectedRule: updatedRule,
+            isCopy: false,
+            rules,
+            selectedRule,
         });
     };
 
     removeRule = id => {
-        const deleteRuleFromConfig = async () => {
-            const config = await this.props.readConfig();
-            const { rules, ...settings } = config;
-            const newConfig = { rules: rules.filter(rule => rule.id !== id), ...settings };
-            this.props.saveConfig(newConfig);
-        };
-        const updatedRules = this.state.currentRules.filter(rule => rule.id !== id);
+        const rules = this.state.rules.filter(rule => rule.id !== id);
+
         this.setState(
             {
-                currentRules: updatedRules,
-                selectedRule: updatedRules.length ? updatedRules[updatedRules.length - 1] : null,
+                rules,
+                selectedRule: rules.length ? rules[rules.length - 1] : null,
             },
-            deleteRuleFromConfig
-        );
+            () => {
+                this.props.readConfig()
+                    .then(config => {
+                        const { rules, ...settings } = config;
+                        const newConfig = { rules: rules.filter(rule => rule.id !== id), ...settings };
+                        this.props.saveConfig(newConfig);
+                    });
+            });
     };
 
     updateConfig = async currentSelectedRule => {
@@ -296,7 +338,7 @@ class Layout extends PureComponent {
         const { rules, ...settings } = config;
 
         const matchingRule = rules.find(rule => rule.id === currentSelectedRule.id);
-        const updatedCurrentRules = this.updateCurrentRules(currentSelectedRule)
+        const updatedCurrentRules = this.updateRule(currentSelectedRule)
 
         let updatedRules;
         if (matchingRule) {
@@ -314,7 +356,7 @@ class Layout extends PureComponent {
 
         this.setState({
             selectedRule: currentSelectedRule || this.state.selectedRule || null,
-            currentRules: updatedCurrentRules,
+            rules: updatedCurrentRules,
             unsavedRules: ids,
         });
     };
@@ -350,11 +392,10 @@ class Layout extends PureComponent {
                 });
 
                 this.setState({
-                    currentRules,
+                    rules: currentRules,
                     ready: true,
                     selectedRule:
-                        currentRules.find(rule =>
-                            rule.id === localStorage.getItem('selectedRule')) ||
+                        currentRules.find(rule => rule.id === localStorage.getItem('selectedRule')) ||
                         currentRules[currentRules.length - 1] ||
                         null,
                     settings,
@@ -365,7 +406,7 @@ class Layout extends PureComponent {
     };
 
     revertChangesFromConfig = async selectedRule => {
-        const { currentRules } = this.state;
+        const actualRules = this.state.rules;
         const { [selectedRule.id]: removedId, ...ids } = this.state.unsavedRules;
         const config = await this.props.readConfig();
         const { rules, ...settings } = config;
@@ -376,7 +417,7 @@ class Layout extends PureComponent {
 
         let updatedRules;
         if (matchingRule && isRuleWasUpdatedGlobally) {
-            updatedRules = currentRules.map(rule =>
+            updatedRules = actualRules.map(rule =>
                 rule.id === matchingRule.id
                     ? {
                           ...rule,
@@ -396,35 +437,34 @@ class Layout extends PureComponent {
                     : rule
             );
         } else if (!matchingRule) {
-            updatedRules = currentRules.filter(rule => rule.id !== selectedRule.id);
+            updatedRules = actualRules.filter(rule => rule.id !== selectedRule.id);
         }
 
-        await this.setState({
-            currentRules: updatedRules || currentRules,
+        const newState = {
+            rules: updatedRules || actualRules,
             selectedRule:
                 (isRuleWasUpdatedGlobally
                     ? updatedRules.find(rule => rule.id === selectedRule.id)
                     : this.state.selectedRule) || null,
             settings,
             unsavedRules: ids,
-        });
+        };
 
-        if (this.state.currentRules.length !== currentRules.length) {
-            this.setState({
-                selectedRule: this.state.currentRules[this.state.currentRules.length - 1] || null,
-            });
+        if (this.state.rules.length !== newState.rules.length) {
+            newState.selectedRule = newState.rules[newState.rules.length - 1] || null;
         }
+
+        this.setState(newState);
     };
 
     saveSettings = async (localeSettings, closeModal) => {
         const config = await this.props.readConfig();
         const { rules } = config;
-        this.setState({
-            settings: localeSettings,
-        });
+
         const newConfig = { rules, ...localeSettings };
         await this.props.saveConfig(newConfig);
-        closeModal();
+        this.setState({settings: localeSettings}, () =>
+            closeModal());
     };
 
     setUnsavedRule = id => {
@@ -480,11 +520,13 @@ class Layout extends PureComponent {
                 key="modal"
                 commands={this.commands}
                 isEdit={this.state.isEdit}
+                isCopy={this.state.isCopy}
                 handleSubmitOnCreate={this.handleSubmitOnCreate}
                 handleSubmitOnEdit={this.handleSubmitOnEdit}
+                handleSubmitOnCopy={this.handleSubmitOnCopy}
                 handleClose={this.handleClose}
                 isOpen={this.state.isOpen}
-                currentRules={this.state.currentRules}
+                rules={this.state.rules}
                 selectedRule={this.state.selectedRule}
                 finishEdit={this.finishEdit}
             />
@@ -494,7 +536,7 @@ class Layout extends PureComponent {
     render() {
         console.log(this.state);
         const { classes } = this.props;
-        const { currentRules, selectedRule, isLeftBarOpen } = this.state;
+        const { rules, selectedRule, isLeftBarOpen } = this.state;
 
         if (!this.state.ready) {
             return null;
@@ -509,9 +551,10 @@ class Layout extends PureComponent {
                     <DrawerComponent
                         themeType={this.props.themeType}
                         handleOpen={this.handleOpen}
-                        rules={currentRules}
+                        rules={rules}
                         moveRule={this.moveRule}
                         handleEdit={this.handleEdit}
+                        handleCopy={this.handleCopy}
                         selectRule={this.selectRule}
                         selectedRule={selectedRule}
                         removeRule={this.removeRule}
@@ -526,7 +569,7 @@ class Layout extends PureComponent {
                     />
                 </Drawer>
                 {this.state.settings && selectedRule ?
-                    <RightBar
+                    <RuleEditor
                         key={selectedRule.id}
                         selectedRule={selectedRule}
                         socket={this.props.socket}
@@ -564,9 +607,10 @@ class Layout extends PureComponent {
                     secondaryInitialSize={this.menuSize}>
                     <DrawerComponent
                         handleOpen={this.handleOpen}
-                        rules={currentRules}
+                        rules={rules}
                         moveRule={this.moveRule}
                         handleEdit={this.handleEdit}
+                        handleCopy={this.handleCopy}
                         selectRule={this.selectRule}
                         selectedRule={selectedRule}
                         removeRule={this.removeRule}
@@ -579,10 +623,10 @@ class Layout extends PureComponent {
                         isMobile={this.isMobile}
                     />
                     {this.state.settings && selectedRule ?
-                        <RightBar
+                        <RuleEditor
                             selectedRule={selectedRule}
                             socket={this.props.socket}
-                            updateCurrentRules={this.updateCurrentRules}
+                            updateRule={this.updateRule}
                             updateConfig={this.updateConfig}
                             revertChangesFromConfig={this.revertChangesFromConfig}
                             pendingSelectedRuleId={this.state.pendingSelectedRuleId}

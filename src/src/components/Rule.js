@@ -14,7 +14,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import Box from '@material-ui/core/Box';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import I18n from '@iobroker/adapter-react/i18n';
@@ -22,11 +21,13 @@ import I18n from '@iobroker/adapter-react/i18n';
 import EditIcon from '@material-ui/icons/Edit';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import MaximizeIcon from '@material-ui/icons/Maximize';
+import {FileCopy} from "@material-ui/icons";
 
 const Rule = React.forwardRef((props, ref) => {
     const {
         name,
         handleEdit,
+        handleCopy,
         rule,
         isDragging,
         connectDragSource,
@@ -41,6 +42,7 @@ const Rule = React.forwardRef((props, ref) => {
         theme,
         removeMatched,
         words,
+        unique,
     } = props;
 
     const classes = makeStyles({
@@ -48,25 +50,35 @@ const Rule = React.forwardRef((props, ref) => {
             cursor: 'pointer',
             transition: 'background-color 0.3s linear',
             position: 'relative',
+            paddingTop: 4,
+            paddingBottom: 12,
+            borderBottom: '1px dashed ' + theme.palette.text.primary + (theme.palette.text.primary.startsWith('rgb') ? '' : '30'),
         },
         listItemText: {
-            '& span': {
-                color: theme.palette.text.primary,
-            },
-            '& p': {
-                color: theme.palette.text.secondary,
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-            },
+        },
+        listItemTextPrimary: {
+            color: theme.palette.text.primary,
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+        },
+        listItemTextSecondary: {
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            opacity: theme.palette.type === 'dark' ? 0.2 : 0.7,
+            fontStyle: 'italic',
         },
         dot: {
             position: 'absolute',
             backgroundColor: 'red',
-            top: 5,
+            top: 3,
             right: 15,
-            width: 10,
             height: 10,
-            borderRadius: '50%',
+            fontSize: 10,
+            borderRadius: 10,
+            padding: '0 5px 5px 5px',
+            textAlign: 'center',
+            color: '#FFF',
         },
         maximize: {
             color: theme.palette.error?.dark,
@@ -74,6 +86,29 @@ const Rule = React.forwardRef((props, ref) => {
         },
         ruleButton: {
             paddingTop: theme.spacing(1.5),
+        },
+        editButton: {
+            height: 32,
+        },
+        words: {
+            fontSize: 12,
+            opacity: 0.5,
+            width: 'calc(100% - 40px)',
+            position: 'absolute',
+            bottom: 4,
+            left: 0,
+            paddingLeft: 17,
+            color: theme.palette.text.primary,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+        },
+        emptyButton: {
+            width: 30,
+        },
+        multiline: {
+            marginTop: 0,
+            marginBottom: 12,
         }
     })();
 
@@ -87,37 +122,44 @@ const Rule = React.forwardRef((props, ref) => {
 
     const selectRuleMemo = useCallback(() => selectRule(id), [id, selectRule]);
     const handleEditMemo = useCallback(() => handleEdit(id), [id, handleEdit]);
+    const handleCopyMemo = useCallback(() => handleCopy(id), [id, handleCopy]);
 
-    const [bg, setBg] = useState('');
+    const [ruleStyle, setRuleStyle] = useState({});
 
     useEffect(() => {
         if (matchingRules.length) {
             const matchingRule = matchingRules.find(item => item.indexOf === index);
             if (matchingRule) {
-                setTimeout(() => setBg(theme?.palette?.secondary.dark), matchingRule.timer);
+                setTimeout(() => setRuleStyle({backgroundColor: theme.palette.type === 'dark' ? theme?.palette?.secondary.dark : theme?.palette?.secondary.light}), matchingRule.timer);
+
                 setTimeout(() => {
-                    setBg(selectedRule.id === id ? theme?.palette?.background?.default : '');
-                    if (_break || index === matchingRules[matchingRules.length - 1].indexOf) removeMatched();
+                    setRuleStyle(selectedRule.id === id ? {backgroundColor: theme?.palette?.background?.default} : {});
+                    if (_break || index === matchingRules[matchingRules.length - 1].indexOf) {
+                        removeMatched();
+                    }
                 }, 1500 * (matchingRule.index + 1));
             } // only when matching rules have been changed
         } // eslint-disable-next-line
     }, [matchingRules]);
 
     let secondary = rule !== name ? rule || '' : '';
-    secondary += `${secondary ? ' ' : ''}[${words}]`;
+
     return <div
         ref={elementRef}
-        style={{
-            opacity,
-            backgroundColor: bg,
-        }}>
+        style={Object.assign({}, {opacity}, ruleStyle)}>
         <ListItem
             onClick={selectRuleMemo}
             selected={selectedRule?.id === id}
-            className={clsx(classes.listItem, selectedRule?.id === id && 'rule-selected')}>
+            className={clsx(selectedRule?.id === id && 'rule-selected')}
+            classes={{root: classes.listItem}}
+        >
             <ListItemText
                 primary={name}
                 secondary={secondary}
+                classes={{
+                    primary: classes.listItemTextPrimary,
+                    secondary: classes.listItemTextSecondary,
+                    multiline: classes.multiline}}
                 className={classes.listItemText}
             />
             <ListItemIcon>
@@ -129,9 +171,19 @@ const Rule = React.forwardRef((props, ref) => {
                     :
                         <Tooltip title={I18n.t('Do not interrupt processing')}><ArrowDownwardIcon className={classes.ruleButton} color="primary"/></Tooltip>
                 }
-                <Tooltip title={I18n.t('Edit name or type of rule')}><IconButton onClick={handleEditMemo}><EditIcon /></IconButton></Tooltip>
+                {!unique ? <Tooltip title={I18n.t('Copy rule')}>
+                    <IconButton onClick={handleCopyMemo}  size="small" className={classes.editButton}>
+                        <FileCopy />
+                    </IconButton>
+                </Tooltip> : <div className={classes.emptyButton} />}
+                <Tooltip title={I18n.t('Edit name or type of rule')}>
+                    <IconButton onClick={handleEditMemo} size="small" className={classes.editButton}>
+                        <EditIcon />
+                    </IconButton>
+                </Tooltip>
             </ListItemIcon>
-            {unsavedRules[id] && <Box className={classes.dot} />}
+            {unsavedRules[id] && <div className={classes.dot}>{I18n.t('unsaved')}</div>}
+            <div className={classes.words}>[{words}]</div>
         </ListItem>
     </div>;
 });
@@ -201,8 +253,7 @@ Rule.propTypes = {
     selectRule: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     matchingRules: PropTypes.array,
-    selectedRule: PropTypes.shape({
-        id: PropTypes.string,
-    }),
+    unique: PropTypes.bool,
+    selectedRule: PropTypes.shape({id: PropTypes.string}),
     unsavedRules: PropTypes.object,
 };

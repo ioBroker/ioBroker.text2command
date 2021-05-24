@@ -43,6 +43,9 @@ import I18n from '@iobroker/adapter-react/i18n';
 import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
 
 import Rule from './Rule';
+import CheckIcon from "@material-ui/icons/Check";
+import {Grid} from "@material-ui/core";
+
 
 const styles = theme => ({
     test: {
@@ -60,9 +63,10 @@ const styles = theme => ({
         position: 'relative',
     },
     list: {
-        height: 'calc(100% - 48px - 48px - 18px)',
+        height: 'calc(100% - 48px - 48px - 8px)',
         overflowX: 'hidden',
         overflowY: 'auto',
+        paddingTop: 0.,
     },
     root: {
         width: 'calc(100% - 48px)',
@@ -103,7 +107,8 @@ const styles = theme => ({
     },
     iconNotAlive: {
         color: '#ffc10a',
-        float: 'right'
+        float: 'right',
+        marginRight: theme.spacing(1)
     },
     search: {
         flexBasis: '80%',
@@ -117,6 +122,12 @@ const styles = theme => ({
     width100: {
         width: '100%',
     },
+    selectIdText: {
+        width: 'calc(100% - 50px)'
+    },
+    selectIdButton: {
+        minWidth: 40,
+    }
 });
 
 const tooltipStyles = theme => ({
@@ -128,27 +139,32 @@ const tooltipStyles = theme => ({
 const CustomTooltip = withStyles(tooltipStyles)(Tooltip);
 
 class Drawer extends Component {
-    state = {
-        textCommand: '',
-        matchingRules: [],
-        isSettingsDialogOpen: false,
-        isConfirmRemoveDialogOpen: false,
-        isSearchActive: false,
-        filteredRules: [],
-        searchedValue: '',
-        localSettings: {
-            language: '',
-            processorId: '',
-            processorTimeout: 1000,
-            sayitInstance: '',
-        },
-        toast: null,
-        alive: false,
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            textCommand: '',
+            matchingRules: [],
+            isSettingsDialogOpen: false,
+            isConfirmRemoveDialogOpen: false,
+            isSearchActive: false,
+            filteredRules: [],
+            searchedValue: '',
+            localSettings: {
+                language: this.props.settings.language || '',
+                processorId:  this.props.settings.processorId || '',
+                processorTimeout:  this.props.settings.processorTimeout || 1000,
+                sayitInstance:  this.props.settings.sayitInstance || '',
+            },
+            toast: null,
+            alive: false,
+        };
+    }
 
     componentDidMount() {
-        this.props.socket.subscribeState('text2command.' + this.props.instance + '.response', this.onResponse);
-        this.props.socket.subscribeState('system.adapter.text2command.' + this.props.instance + '.alive', this.onAlive);
+        this.props.socket.subscribeState(`text2command.${this.props.instance}.response`, this.onResponse);
+        this.props.socket.subscribeState(`system.adapter.text2command.${this.props.instance}.alive`, this.onAlive);
+
         if (this.props.selectedRule && this.props.selectedRule.id) {
             //scroll to
             setTimeout(() => {
@@ -161,8 +177,8 @@ class Drawer extends Component {
     }
 
     componentWillUnmount() {
-        this.props.socket.unsubscribeState('text2command.' + this.props.instance + '.response', this.onResponse);
-        this.props.socket.unsubscribeState('system.adapter.text2command.' + this.props.instance + '.alive', this.onAlive);
+        this.props.socket.unsubscribeState(`text2command.${this.props.instance}.response`, this.onResponse);
+        this.props.socket.unsubscribeState(`system.adapter.text2command.${this.props.instance}.alive`, this.onAlive);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -220,7 +236,7 @@ class Drawer extends Component {
 
     handleSubmit = (event, iconPlay) => {
         if ((event && event.key === 'Enter') || iconPlay) {
-            this.props.socket.setState('text2command.' + this.props.instance + '.text', this.state.textCommand)
+            this.props.socket.setState(`text2command.${this.props.instance}.text`, this.state.textCommand)
                 .catch(err => console.error(err));
 
             if (!this.state.alive) {
@@ -230,9 +246,7 @@ class Drawer extends Component {
     };
 
     removeMatched = () => {
-        this.setState({
-            matchingRules: [],
-        });
+        this.setState({matchingRules: []});
     };
 
     findMatchingRules() {
@@ -241,9 +255,7 @@ class Drawer extends Component {
     }
 
     handleOpenSettingsModal = () => {
-        this.setState({
-            isSettingsDialogOpen: true,
-        });
+        this.setState({isSettingsDialogOpen: true});
     };
 
     handleDialogSelectIdSubmit = (selected, selectedSettingsName) => {
@@ -261,14 +273,13 @@ class Drawer extends Component {
     };
 
     handleCloseConfirmRemoveDialog = () => {
-        this.setState({
-            isConfirmRemoveDialogOpen: false,
-        });
+        this.setState({isConfirmRemoveDialogOpen: false});
     };
 
     handleSearch = event => {
         const matchedRules = this.props.rules.filter(rule =>
             rule.name.toLowerCase().includes(event.target.value.toLowerCase()));
+
         this.setState({
             filteredRules: matchedRules || [],
             searchedValue: event.target.value,
@@ -276,12 +287,14 @@ class Drawer extends Component {
     };
 
     toggleSearch = async () => {
-        await this.setState({
-            isSearchActive: !this.state.isSearchActive,
-        });
+        await this.setState({isSearchActive: !this.state.isSearchActive});
     };
 
     createSettingsModal = () => {
+        if (!this.state.isSettingsDialogOpen) {
+            return null;
+        }
+
         const { t } = I18n;
         const options = ['en', 'de', 'ru'];
         const { classes } = this.props;
@@ -293,9 +306,7 @@ class Drawer extends Component {
             });
         };
 
-        const submitSettings = () => {
-            this.props.saveSettings(this.state.localSettings, handleClose);
-        };
+        const submitSettings = () => this.props.saveSettings(this.state.localSettings, handleClose);
 
         const handleChange = (event, name) => {
             let value = event.target.checked !== undefined ? event.target.checked : event.target.value;
@@ -311,20 +322,21 @@ class Drawer extends Component {
             });
         };
 
-        return (
-            <Dialog
-                open={this.state.isSettingsDialogOpen}
-                onClose={handleClose}
-                fullWidth
-                onExited={this.getDefaultSettings}>
-                <DialogTitle>
-                    <Typography variant="h4" component="span" align="center">
-                        {t('Settings')}
-                    </Typography>
-                </DialogTitle>
-                <DialogContent>
-                    <form noValidate autoComplete="off">
-                        <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+        return <Dialog
+            open={this.state.isSettingsDialogOpen}
+            onClose={handleClose}
+            fullWidth
+            onExited={this.getDefaultSettings}>
+            <DialogTitle>
+                <Typography variant="h4" component="span" align="center">
+                    {t('Settings')}
+                </Typography>
+            </DialogTitle>
+            <DialogContent>
+                <form noValidate autoComplete="off">
+                    <Grid container direction="column">
+                        <Grid item>
+                            <FormControl fullWidth classes={{ root: classes.settingsItem }}>
                             <InputLabel id="demo-simple-select-label">{t('Language')}</InputLabel>
                             <Select
                                 classes={{ root: classes.width100 }}
@@ -342,31 +354,47 @@ class Drawer extends Component {
                                 )}
                             </Select>
                         </FormControl>
-                        <FormControl fullWidth classes={{ root: classes.settingsItem }}>
-                            <TextField
-                                label={t('Answer in id')}
-                                value={this.state.localSettings.sayitInstance}
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth classes={{ root: clsx(classes.settingsItem, classes.selectIdText) }}>
+                                <TextField
+                                    label={t('Answer in id')}
+                                    value={this.state.localSettings.sayitInstance}
+                                    onChange={event => handleChange(event, 'sayitInstance')}
+                                />
+                            </FormControl>
+                            <Button
+                                variant="outlined"
+                                className={classes.selectIdButton}
                                 onClick={() =>
                                     this.setState({
                                         showDialogSelectId: true,
                                         selectedSettingsName: 'sayitInstance',
-                                    })
-                                }
-                            />
-                        </FormControl>
-                        <FormControl fullWidth classes={{ root: classes.settingsItem }}>
-                            <TextField
-                                label={t(`Processor's id`)}
-                                value={this.state.localSettings.processorId}
+                                        selectedId: this.state.localSettings.sayitInstance || '',
+                                    })}
+                            >...</Button>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth classes={{ root: clsx(classes.settingsItem, classes.selectIdText) }}>
+                                <TextField
+                                    label={t(`Processor's id`)}
+                                    value={this.state.localSettings.processorId}
+                                    onChange={event => handleChange(event, 'processorId')}
+                                />
+                            </FormControl>
+                            <Button
+                                variant="outlined"
+                                className={classes.selectIdButton}
                                 onClick={() =>
                                     this.setState({
                                         showDialogSelectId: true,
                                         selectedSettingsName: 'processorId',
-                                    })
-                                }
-                            />
-                        </FormControl>
-                        <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                                        selectedId: this.state.localSettings.processorId || '',
+                                    })}
+                            >...</Button>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth classes={{ root: classes.settingsItem }}>
                             <TextField
                                 label={t('Timeout for processor')}
                                 helperText={t('ms')}
@@ -374,20 +402,23 @@ class Drawer extends Component {
                                 onChange={e => handleChange(e, 'processorTimeout')}
                             />
                         </FormControl>
-                        <FormControl fullWidth classes={{ root: classes.settingsItem }}>
-                            <FormControlLabel
-                                control={<Checkbox checked={this.state.localSettings.writeEveryAnswer} onChange={e => handleChange(e, 'writeEveryAnswer')} />}
-                                label={t('Write to response by every command')}
-                            />
-                        </FormControl>
-                    </form>
-                </DialogContent>
-                <DialogActions>
-                    <Button variant="contained" color="primary" onClick={submitSettings}>Ok</Button>
-                    <Button variant="contained" onClick={handleClose}>{I18n.t('Cancel')}</Button>
-                </DialogActions>
-            </Dialog>
-        );
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                        <FormControlLabel
+                            control={<Checkbox checked={this.state.localSettings.writeEveryAnswer} onChange={e => handleChange(e, 'writeEveryAnswer')} />}
+                            label={t('Write to response by every command')}
+                        />
+                    </FormControl>
+                        </Grid>
+                    </Grid>
+                </form>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="contained" color="primary" onClick={submitSettings} startIcon={<CheckIcon/>}>{I18n.t('Ok')}</Button>
+                <Button variant="contained" onClick={handleClose}startIcon={<CloseIcon/>}>{I18n.t('Cancel')}</Button>
+            </DialogActions>
+        </Dialog>;
     };
 
     mainIcons = [
@@ -421,35 +452,43 @@ class Drawer extends Component {
                 imagePrefix={'../..'}
                 socket={this.props.socket}
                 title={'Select ID'}
+                selected={this.state.selectedId}
                 onClose={() => this.setState({ showDialogSelectId: false })}
-                onOk={selected =>
-                    this.handleDialogSelectIdSubmit(selected, this.state.selectedSettingsName)
-                }
+                onOk={selected => this.handleDialogSelectIdSubmit(selected, this.state.selectedSettingsName)}
             />
         ) : null;
     }
 
     renderConfirmDialog() {
-        return this.state.isConfirmRemoveDialogOpen ? (
+        return this.state.isConfirmRemoveDialogOpen ?
             <Dialog
                 open={this.state.isConfirmRemoveDialogOpen}
                 onClose={this.handleCloseConfirmRemoveDialog}
                 fullWidth>
                 <DialogTitle>{I18n.t('Are you sure?')}</DialogTitle>
                 <DialogContent>
-                    <Typography variant="h5" component="h5">
-                        {I18n.t('You want to delete') + ': '}
-                        <strong>{this.props.selectedRule.name}</strong>
+                    <Typography component="p">
+                        {I18n.t('You want to delete: %s', this.props.selectedRule.name)}
                     </Typography>
                     <DialogActions>
-                        <Button variant="contained" color="primary" autoFocus onClick={this.handleDelete}>{I18n.t('Ok')}</Button>
-                        <Button variant="contained" onClick={this.handleCloseConfirmRemoveDialog} color="primary">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            autoFocus
+                            onClick={this.handleDelete}
+                            startIcon={<DeleteIcon/>}
+                        >{I18n.t('Delete')}</Button>
+                        <Button
+                            variant="contained"
+                            onClick={this.handleCloseConfirmRemoveDialog}
+                                startIcon={<CloseIcon/>}
+                                >
                             {I18n.t('Cancel')}
                         </Button>
                     </DialogActions>
                 </DialogContent>
             </Dialog>
-        ) : null;
+         : null;
     }
 
     renderToast() {
@@ -480,6 +519,7 @@ class Drawer extends Component {
             selectedRule,
             moveRule,
             handleEdit,
+            handleCopy,
             rules,
             selectRule,
             classes,
@@ -536,7 +576,6 @@ class Drawer extends Component {
                 )}
                 {!isSearchActive && !this.state.alive ? <div style={{flexGrow: 1}}/> : null}
                 {!isSearchActive && !this.state.alive ? <Tooltip title={I18n.t('Instance is not running')}><WarningIcon className={classes.iconNotAlive}/></Tooltip> : null}
-
             </Toolbar>
 
             <DndProvider backend={HTML5Backend}>
@@ -545,6 +584,8 @@ class Drawer extends Component {
                         <Rule
                             theme={this.props.theme}
                             handleEdit={handleEdit}
+                            handleCopy={handleCopy}
+                            unique={rule.unique}
                             {...rule}
                             index={index}
                             moveRule={moveRule}
@@ -608,11 +649,10 @@ Drawer.propTypes = {
     moveRule: PropTypes.func.isRequired,
     selectRule: PropTypes.func.isRequired,
     theme: PropTypes.object.isRequired,
-    selectedRule: PropTypes.shape({
-        id: PropTypes.string,
-    }),
+    selectedRule: PropTypes.shape({id: PropTypes.string}),
     removeRule: PropTypes.func,
     handleEdit: PropTypes.func.isRequired,
+    handleCopy: PropTypes.func.isRequired,
     classes: PropTypes.object.isRequired,
     settings: PropTypes.object,
     socket: PropTypes.object.isRequired,
