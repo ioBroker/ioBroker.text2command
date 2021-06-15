@@ -732,7 +732,7 @@ function findMatched(cmd, _rules) {
         if (typeof rule.words === 'string') {
             // if regex
             if (rule.words[0] === '/') {
-                rule.words = new RegExp(rule.words.slice(1,-1), 'i');
+                rule.words = new RegExp(rule.words.slice(1, -1), 'i');
             } else {
                 rule.words = rule.words.toLowerCase().trim().split(/\s+/g);
             }
@@ -748,7 +748,7 @@ function findMatched(cmd, _rules) {
                     continue;
                 }
 
-                if (rule.words[j].indexOf('/') !== -1) {
+                if (rule.words[j].includes('/')) {
                     rule.words[j] = rule.words[j].split('/');
                 }
 

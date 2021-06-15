@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "text2command",
-        "version": "2.1.0",
+        "version": "2.1.1",
         "news": {
+            "2.1.1": {
+                "en": "Corrected usage of regex",
+                "de": "Korrigierte Verwendung von Regex",
+                "ru": "Исправлено использование регулярного выражения",
+                "pt": "Uso corrigido de regex",
+                "nl": "Gecorrigeerd gebruik van regex",
+                "fr": "Utilisation corrigée de regex",
+                "it": "Utilizzo corretto di regex",
+                "es": "Uso corregido de expresiones regulares",
+                "pl": "Poprawione użycie wyrażenia regularnego",
+                "zh-cn": "更正正则表达式的使用"
+            },
             "2.1.0": {
                 "en": "Updated GUI.",
                 "de": "Aktualisierte GUI.",
