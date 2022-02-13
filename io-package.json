@@ -1,289 +1,218 @@
 {
-    "common": {
-        "name": "text2command",
-        "version": "2.1.1",
-        "news": {
-            "2.1.1": {
-                "en": "Corrected usage of regex",
-                "de": "Korrigierte Verwendung von Regex",
-                "ru": "Исправлено использование регулярного выражения",
-                "pt": "Uso corrigido de regex",
-                "nl": "Gecorrigeerd gebruik van regex",
-                "fr": "Utilisation corrigée de regex",
-                "it": "Utilizzo corretto di regex",
-                "es": "Uso corregido de expresiones regulares",
-                "pl": "Poprawione użycie wyrażenia regularnego",
-                "zh-cn": "更正正则表达式的使用"
-            },
-            "2.1.0": {
-                "en": "Updated GUI.",
-                "de": "Aktualisierte GUI.",
-                "ru": "Обновлен графический интерфейс.",
-                "pt": "GUI atualizada.",
-                "nl": "Bijgewerkte GUI.",
-                "fr": "Interface graphique mise à jour.",
-                "it": "GUI aggiornata.",
-                "es": "GUI actualizada.",
-                "pl": "Zaktualizowany GUI.",
-                "zh-cn": "更新了GUI。"
-            },
-            "2.0.7": {
-                "en": "Prevent crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
-                "de": "Absturz verhindern (Sentry IOBROKER-TEXT2COMMAND-J)",
-                "ru": "Случай предотвращения сбоя (Sentry IOBROKER-TEXT2COMMAND-J)",
-                "pt": "Prevenir caso de falha (Sentry IOBROKER-TEXT2COMMAND-J)",
-                "nl": "Voorkom crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
-                "fr": "Prévenir les cas de crash (Sentry IOBROKER-TEXT2COMMAND-J)",
-                "it": "Prevenire il crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
-                "es": "Caso de prevención de accidentes (Sentry IOBROKER-TEXT2COMMAND-J)",
-                "pl": "Zapobiegaj awariom (Sentry IOBROKER-TEXT2COMMAND-J)",
-                "zh-cn": "防止发生崩溃情况（Sentry IOBROKER-TEXT2COMMAND-J）"
-            },
-            "2.0.6": {
-                "en": "Prevent crash case (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
-                "de": "Absturz verhindern (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
-                "ru": "Случай предотвращения сбоя (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
-                "pt": "Evitar caso de travamento (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
-                "nl": "Voorkom een crashcase (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
-                "fr": "Prévenir les cas de crash (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
-                "it": "Prevenire il crash case (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
-                "es": "Caso de prevención de accidentes (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
-                "pl": "Zapobiegaj awariom (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
-                "zh-cn": "防止崩溃情况（Sentry IOBROKER-TEXT2COMMAND-D，IOBROKER-TEXT2COMMAND-C）"
-            },
-            "2.0.5": {
-                "en": "Updated the select ID dialog.",
-                "de": "Das Dialogfeld \"ID auswählen\" wurde aktualisiert.",
-                "ru": "Обновлен диалог выбора идентификатора.",
-                "pt": "Atualizado a caixa de diálogo de seleção de ID.",
-                "nl": "Het dialoogvenster ID selecteren bijgewerkt.",
-                "fr": "Mise à jour de la boîte de dialogue de sélection d'ID.",
-                "it": "Aggiornata la finestra di dialogo Seleziona ID.",
-                "es": "Se actualizó el cuadro de diálogo Seleccionar ID.",
-                "pl": "Zaktualizowano okno dialogowe wyboru identyfikatora.",
-                "zh-cn": "更新了选择ID对话框。"
-            },
-            "2.0.3": {
-                "en": "Fixed GUI errors",
-                "de": "GUI-Fehler behoben",
-                "ru": "Исправлены ошибки графического интерфейса",
-                "pt": "Corrigidos erros de GUI",
-                "nl": "Vaste GUI-fouten",
-                "fr": "Erreurs GUI fixes",
-                "it": "Risolti errori GUI",
-                "es": "Se corrigieron los errores de la GUI",
-                "pl": "Naprawiono błędy GUI",
-                "zh-cn": "修复了GUI错误"
-            },
-            "2.0.2": {
-                "en": "Fixed GUI errors",
-                "de": "GUI-Fehler behoben",
-                "ru": "Исправлены ошибки графического интерфейса",
-                "pt": "Corrigidos erros de GUI",
-                "nl": "Vaste GUI-fouten",
-                "fr": "Erreurs GUI fixes",
-                "it": "Risolti errori GUI",
-                "es": "Se corrigieron los errores de la GUI",
-                "pl": "Naprawiono błędy GUI",
-                "zh-cn": "修复了GUI错误"
-            },
-            "2.0.1": {
-                "en": "Fixed select ID dialog",
-                "de": "Der Dialog zur Auswahl der ID wurde korrigiert",
-                "ru": "Исправлен диалог выбора идентификатора",
-                "pt": "Corrigido o diálogo de seleção de ID",
-                "nl": "Vaste selectie ID-dialoog",
-                "fr": "Correction de la boîte de dialogue de sélection de l'ID",
-                "it": "Risolto il problema con la finestra di dialogo Seleziona ID",
-                "es": "Diálogo de selección de ID fijo",
-                "pl": "Naprawiono okno dialogowe wyboru ID",
-                "zh-cn": "固定选择ID对话框"
-            },
-            "2.0.0": {
-                "en": "New GUI",
-                "de": "Neue GUI",
-                "ru": "Новый графический интерфейс",
-                "pt": "Nova GUI",
-                "nl": "Nieuwe GUI",
-                "fr": "Nouvelle interface graphique",
-                "it": "Nuova interfaccia grafica",
-                "es": "Nueva GUI",
-                "pl": "Nowe GUI",
-                "zh-cn": "新的GUI"
-            },
-            "1.3.1": {
-                "en": "changes due to git conventions, command additions and typo",
-                "de": "Änderungen aufgrund von Git-Konventionen, Befehlsergänzungen und Tippfehler",
-                "ru": "изменения из-за соглашений git, дополнений команд и опечаток",
-                "pt": "mudanças devido a convenções de git, adições de comando e erro de digitação",
-                "nl": "veranderingen als gevolg van git conventies, opdracht toevoegingen en typfouten",
-                "fr": "modifications dues aux conventions git, aux ajouts de commandes et aux fautes de frappe",
-                "it": "modifiche dovute a convenzioni git, aggiunte di comandi e errori di battitura",
-                "es": "Cambios debidos a convenciones de git, adiciones de comandos y errores tipográficos.",
-                "pl": "zmiany spowodowane konwencjami git, dodatkami do poleceń i literówką",
-                "zh-cn": "由git约定，命令添加和拼写错误引起的更改"
-            },
-            "1.3.0": {
-                "en": "Using the defined language by words",
-                "de": "Die definierte Sprache in Worten verwenden",
-                "ru": "Использование определенного языка по словам",
-                "pt": "Usando a linguagem definida por palavras",
-                "nl": "De gedefinieerde taal gebruiken met woorden",
-                "fr": "Utiliser le langage défini par des mots",
-                "it": "Usando la lingua definita per parole",
-                "es": "Uso del lenguaje definido por palabras.",
-                "pl": "Używanie zdefiniowanego języka słowami",
-                "zh-cn": "通过单词使用定义的语言"
-            },
-            "1.2.5": {
-                "en": "Description in german corrected\nAdded percent to true/false rules",
-                "de": "Beschreibung in deutsch korrigiert\nProzent zu dentrue/false-Regeln hinzugefügt",
-                "ru": "Описание на немецком языке исправлено\nДобавлен процент к true/false правилам",
-                "pt": "Descrição em alemão corrigido\nPorcentagem adicionada a regras de true/false",
-                "nl": "Beschrijving in Duits gecorrigeerd\nPercentage toegevoegd aan true/false regels",
-                "fr": "Description en allemand corrigée\nAjout du pourcentage aux règles true/false",
-                "it": "Descrizione in tedesco corretta\nAggiunta percentuale alle regole true/false",
-                "es": "Descripción en alemán corregida\nPorcentaje agregado a reglas true/false",
-                "pl": "Opis w języku niemieckim poprawiony\nDodano procent do reguł true/false",
-                "zh-cn": "德语描述已更正\n为真/假规则添加百分比"
-            },
-            "1.2.4": {
-                "en": "fix",
-                "de": "Fix",
-                "ru": "фиксировать",
-                "pt": "consertar",
-                "nl": "repareren",
-                "fr": "réparer",
-                "it": "fissare",
-                "es": "fijar",
-                "pl": "naprawić"
-            }
-        },
-        "title": "Text to command",
-        "titleLang": {
-            "en": "Text to command",
-            "de": "Text zu Kommandos",
-            "ru": "Текст в команды",
-            "pt": "Texto para comando",
-            "nl": "Te besturen tekst",
-            "fr": "Texte à commander",
-            "it": "Testo da comandare",
-            "es": "Texto para mandar",
-            "pl": "Tekst do polecenia",
-            "zh-cn": "文字指令"
-        },
-        "desc": {
-            "en": "This adapter allows to convert text to commands",
-            "de": "Dieser Adapter ermöglicht es, Text in Befehle zu konvertieren",
-            "ru": "Этот адаптер позволяет преобразовывать текст в команды",
-            "pt": "Este adaptador permite converter texto em comandos",
-            "nl": "Met deze adapter kunt u tekst converteren naar opdrachten",
-            "fr": "Cet adaptateur permet de convertir du texte en commandes",
-            "it": "Questo adattatore consente di convertire il testo in comandi",
-            "es": "Este adaptador permite convertir texto a comandos",
-            "pl": "Ten adapter umożliwia konwertowanie tekstu na polecenia",
-            "zh-cn": "该适配器允许将文本转换为命令"
-        },
-        "authors": [
-            "bluefox <dogafox@gmail.com>"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "readme": "https://github.com/ioBroker/ioBroker.text2command/blob/master/README.md",
-        "loglevel": "info",
-        "icon": "text2command.png",
-        "keywords": [
-            "text",
-            "commands"
-        ],
-        "adminUI": {
-            "config": "none",
-            "tab": "materialize"
-        },
-        "connectionType": "local",
-        "dataSource": "push",
-        "messagebox": true,
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
-        "localLink": "/adapter/text2command/tab.html",
-        "type": "logic",
-        "noConfig": true,
-        "compact": true,
-        "adminTab": {
-            "name": {
-                "en": "Commands",
-                "de": "Kommandos",
-                "ru": "Команды",
-                "pt": "Comandos",
-                "nl": "Commando's",
-                "fr": "Commandes",
-                "it": "Comandi",
-                "es": "Comandos",
-                "pl": "Polecenia",
-                "zh-cn": "指令"
-            },
-            "singleton": false,
-            "ignoreConfigUpdate": true,
-            "fa-icon": "chat"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=2.0.0"
-            }
-        ],
-        "plugins": {
-            "sentry": {
-                "dsn": "https://b421086baf0546cdb1f2aaf196939d7c@sentry.iobroker.net/49"
-            }
-        }
+  "common": {
+    "name": "text2command",
+    "version": "2.1.2",
+    "news": {
+      "2.1.2": {
+        "en": "Updated GUI.\nUpdated releaser",
+        "de": "Aktualisierte GUI.\nReleaser aktualisiert",
+        "ru": "Обновлен графический интерфейс.\nОбновленный релиз",
+        "pt": "GUI atualizada.\nLiberador atualizado",
+        "nl": "Bijgewerkte GUI.\nBijgewerkte releaser",
+        "fr": "Interface graphique mise à jour.\nOutil de libération mis à jour",
+        "it": "GUI aggiornata.\nRilascio aggiornato",
+        "es": "Interfaz gráfica de usuario actualizada.\nLiberador actualizado",
+        "pl": "Zaktualizowany GUI.\nZaktualizowany wydawca",
+        "zh-cn": "更新了图形用户界面。\n更新的发布者"
+      },
+      "2.1.1": {
+        "en": "Corrected usage of regex",
+        "de": "Korrigierte Verwendung von Regex",
+        "ru": "Исправлено использование регулярного выражения",
+        "pt": "Uso corrigido de regex",
+        "nl": "Gecorrigeerd gebruik van regex",
+        "fr": "Utilisation corrigée de regex",
+        "it": "Utilizzo corretto di regex",
+        "es": "Uso corregido de expresiones regulares",
+        "pl": "Poprawione użycie wyrażenia regularnego",
+        "zh-cn": "更正正则表达式的使用"
+      },
+      "2.1.0": {
+        "en": "Updated GUI.",
+        "de": "Aktualisierte GUI.",
+        "ru": "Обновлен графический интерфейс.",
+        "pt": "GUI atualizada.",
+        "nl": "Bijgewerkte GUI.",
+        "fr": "Interface graphique mise à jour.",
+        "it": "GUI aggiornata.",
+        "es": "GUI actualizada.",
+        "pl": "Zaktualizowany GUI.",
+        "zh-cn": "更新了GUI。"
+      },
+      "2.0.7": {
+        "en": "Prevent crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
+        "de": "Absturz verhindern (Sentry IOBROKER-TEXT2COMMAND-J)",
+        "ru": "Случай предотвращения сбоя (Sentry IOBROKER-TEXT2COMMAND-J)",
+        "pt": "Prevenir caso de falha (Sentry IOBROKER-TEXT2COMMAND-J)",
+        "nl": "Voorkom crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
+        "fr": "Prévenir les cas de crash (Sentry IOBROKER-TEXT2COMMAND-J)",
+        "it": "Prevenire il crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
+        "es": "Caso de prevención de accidentes (Sentry IOBROKER-TEXT2COMMAND-J)",
+        "pl": "Zapobiegaj awariom (Sentry IOBROKER-TEXT2COMMAND-J)",
+        "zh-cn": "防止发生崩溃情况（Sentry IOBROKER-TEXT2COMMAND-J）"
+      },
+      "2.0.6": {
+        "en": "Prevent crash case (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+        "de": "Absturz verhindern (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+        "ru": "Случай предотвращения сбоя (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+        "pt": "Evitar caso de travamento (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+        "nl": "Voorkom een crashcase (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+        "fr": "Prévenir les cas de crash (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+        "it": "Prevenire il crash case (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+        "es": "Caso de prevención de accidentes (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+        "pl": "Zapobiegaj awariom (Sentry IOBROKER-TEXT2COMMAND-D, IOBROKER-TEXT2COMMAND-C)",
+        "zh-cn": "防止崩溃情况（Sentry IOBROKER-TEXT2COMMAND-D，IOBROKER-TEXT2COMMAND-C）"
+      },
+      "2.0.5": {
+        "en": "Updated the select ID dialog.",
+        "de": "Das Dialogfeld \"ID auswählen\" wurde aktualisiert.",
+        "ru": "Обновлен диалог выбора идентификатора.",
+        "pt": "Atualizado a caixa de diálogo de seleção de ID.",
+        "nl": "Het dialoogvenster ID selecteren bijgewerkt.",
+        "fr": "Mise à jour de la boîte de dialogue de sélection d'ID.",
+        "it": "Aggiornata la finestra di dialogo Seleziona ID.",
+        "es": "Se actualizó el cuadro de diálogo Seleccionar ID.",
+        "pl": "Zaktualizowano okno dialogowe wyboru identyfikatora.",
+        "zh-cn": "更新了选择ID对话框。"
+      },
+      "2.0.3": {
+        "en": "Fixed GUI errors",
+        "de": "GUI-Fehler behoben",
+        "ru": "Исправлены ошибки графического интерфейса",
+        "pt": "Corrigidos erros de GUI",
+        "nl": "Vaste GUI-fouten",
+        "fr": "Erreurs GUI fixes",
+        "it": "Risolti errori GUI",
+        "es": "Se corrigieron los errores de la GUI",
+        "pl": "Naprawiono błędy GUI",
+        "zh-cn": "修复了GUI错误"
+      }
     },
-    "native": {
-        "rules": [],
-        "sayitInstance": "sayit.0.tts.text",
-        "language": "",
-        "processorId": "",
-        "processorTimeout": 500,
-        "writeEveryAnswer": false
+    "title": "Text to command",
+    "titleLang": {
+      "en": "Text to command",
+      "de": "Text zu Kommandos",
+      "ru": "Текст в команды",
+      "pt": "Texto para comando",
+      "nl": "Te besturen tekst",
+      "fr": "Texte à commander",
+      "it": "Testo da comandare",
+      "es": "Texto para mandar",
+      "pl": "Tekst do polecenia",
+      "zh-cn": "文字指令"
     },
-    "instanceObjects": [
-        {
-            "_id": "text",
-            "type": "state",
-            "common": {
-                "name": "Text to process",
-                "type": "string",
-                "role": "text",
-                "read": true,
-                "write": true,
-                "desc": "Write your text here with ack=false, and you will get answer with ack=true"
-            },
-            "native": {}
-        },
-        {
-            "_id": "response",
-            "type": "state",
-            "common": {
-                "name": "Answer on requested question",
-                "type": "string",
-                "role": "text",
-                "read": true,
-                "write": false,
-                "desc": "Answer for written into text2command.0.text text"
-            },
-            "native": {}
-        },
-        {
-            "_id": "error",
-            "type": "state",
-            "common": {
-                "name": "Error text",
-                "type": "string",
-                "role": "value.error",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        }
-    ]
+    "desc": {
+      "en": "This adapter allows to convert text to commands",
+      "de": "Dieser Adapter ermöglicht es, Text in Befehle zu konvertieren",
+      "ru": "Этот адаптер позволяет преобразовывать текст в команды",
+      "pt": "Este adaptador permite converter texto em comandos",
+      "nl": "Met deze adapter kunt u tekst converteren naar opdrachten",
+      "fr": "Cet adaptateur permet de convertir du texte en commandes",
+      "it": "Questo adattatore consente di convertire il testo in comandi",
+      "es": "Este adaptador permite convertir texto a comandos",
+      "pl": "Ten adapter umożliwia konwertowanie tekstu na polecenia",
+      "zh-cn": "该适配器允许将文本转换为命令"
+    },
+    "authors": [
+      "bluefox <dogafox@gmail.com>"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "readme": "https://github.com/ioBroker/ioBroker.text2command/blob/master/README.md",
+    "loglevel": "info",
+    "icon": "text2command.png",
+    "keywords": [
+      "text",
+      "commands"
+    ],
+    "adminUI": {
+      "config": "none",
+      "tab": "materialize"
+    },
+    "connectionType": "local",
+    "dataSource": "push",
+    "messagebox": true,
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
+    "localLink": "/adapter/text2command/tab.html",
+    "type": "logic",
+    "noConfig": true,
+    "compact": true,
+    "adminTab": {
+      "name": {
+        "en": "Commands",
+        "de": "Kommandos",
+        "ru": "Команды",
+        "pt": "Comandos",
+        "nl": "Commando's",
+        "fr": "Commandes",
+        "it": "Comandi",
+        "es": "Comandos",
+        "pl": "Polecenia",
+        "zh-cn": "指令"
+      },
+      "singleton": false,
+      "ignoreConfigUpdate": true,
+      "fa-icon": "chat"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=2.0.0"
+      }
+    ],
+    "plugins": {
+      "sentry": {
+        "dsn": "https://b421086baf0546cdb1f2aaf196939d7c@sentry.iobroker.net/49"
+      }
+    }
+  },
+  "native": {
+    "rules": [],
+    "sayitInstance": "sayit.0.tts.text",
+    "language": "",
+    "processorId": "",
+    "processorTimeout": 500,
+    "writeEveryAnswer": false
+  },
+  "instanceObjects": [
+    {
+      "_id": "text",
+      "type": "state",
+      "common": {
+        "name": "Text to process",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": true,
+        "desc": "Write your text here with ack=false, and you will get answer with ack=true"
+      },
+      "native": {}
+    },
+    {
+      "_id": "response",
+      "type": "state",
+      "common": {
+        "name": "Answer on requested question",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": false,
+        "desc": "Answer for written into text2command.0.text text"
+      },
+      "native": {}
+    },
+    {
+      "_id": "error",
+      "type": "state",
+      "common": {
+        "name": "Error text",
+        "type": "string",
+        "role": "value.error",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    }
+  ]
 }
