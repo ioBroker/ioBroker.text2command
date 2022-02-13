@@ -201,6 +201,8 @@
             "config": "none",
             "tab": "materialize"
         },
+        "connectionType": "local",
+        "dataSource": "push",
         "messagebox": true,
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
