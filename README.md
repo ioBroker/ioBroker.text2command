@@ -261,7 +261,7 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
-### 2.1.5 (2022-02-16)
+### __WORK IN PROGRESS__
 * (bluefox) Corrected GUI
 
 ### 2.1.4 (2022-02-16)
