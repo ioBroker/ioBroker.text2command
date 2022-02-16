@@ -80,9 +80,9 @@ function startAdapter(options) {
     });
 
     adapter.on('ready', () => {
-        main();
-        //noinspection JSUnresolvedFunction
-        adapter.subscribeStates(adapter.namespace + '.text');
+        main()
+            //noinspection JSUnresolvedFunction
+            .then(() =>  adapter.subscribeStates(adapter.namespace + '.text'));
     });
 
     // New message arrived. obj is array with current messages
@@ -263,7 +263,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
     }
 }
 
-function main() {
+async function main() {
     rules = adapter.config.rules || {};
     //noinspection JSUnresolvedVariable
     commandsCallbacks = {
@@ -280,28 +280,25 @@ function main() {
         buildAnswer:        simpleControl.buildAnswer
     };
 
-    //noinspection JSUnresolvedFunction
-    adapter.subscribeForeignObjects('enum.*');
-    //noinspection JSUnresolvedVariable
-    if (adapter.config.processorId) {
-        //noinspection JSUnresolvedFunction,JSUnresolvedVariable
-        adapter.subscribeForeignStates(adapter.config.processorId);
-    }
-
     // read system configuration
     //noinspection JSUnresolvedFunction
-    adapter.getForeignObject('system.config', (err, obj) => {
-        //noinspection JSUnresolvedVariable
-        systemConfig = (obj ? obj.common : {}) || {};
-        simpleControl.init(systemConfig, adapter);
-    });
+    const obj = await adapter.getForeignObjectAsync('system.config');
+    //noinspection JSUnresolvedVariable
+    systemConfig = (obj ? obj.common : {}) || {};
+    simpleControl.init(systemConfig, adapter);
 
     // read all enums
     //noinspection JSUnresolvedFunction
-    adapter.getEnums('', (err, list) => {
-        enums = list;
-        devicesControl.init(enums, adapter);
-    });
+    const enums = await adapter.getEnumsAsync('');
+    devicesControl.init(enums, adapter);
+
+    //noinspection JSUnresolvedFunction
+    await adapter.subscribeForeignObjectsAsync('enum.*');
+    //noinspection JSUnresolvedVariable
+    if (adapter.config.processorId) {
+        //noinspection JSUnresolvedFunction,JSUnresolvedVariable
+        await adapter.subscribeForeignStatesAsync(adapter.config.processorId);
+    }
 }
 
 // If started as allInOne mode => return function to create instance
