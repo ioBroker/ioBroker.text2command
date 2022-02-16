@@ -21,7 +21,7 @@ import I18n from '@iobroker/adapter-react/i18n';
 import EditIcon from '@material-ui/icons/Edit';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import MaximizeIcon from '@material-ui/icons/Maximize';
-import {FileCopy} from "@material-ui/icons";
+import FileCopy from '@material-ui/icons/FileCopy';
 
 const Rule = React.forwardRef((props, ref) => {
     const {

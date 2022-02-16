@@ -1,14 +1,14 @@
 import React from 'react';
+import isEqual from 'lodash.isequal';
+
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 
 import Loader from '@iobroker/adapter-react/Components/Loader';
 import I18n from '@iobroker/adapter-react/i18n';
 import GenericApp from '@iobroker/adapter-react/GenericApp';
-import Layout from './components/Layout';
-import isEqual from 'lodash.isequal';
 
-// Icons
+import Layout from './components/Layout';
 
 const styles = theme => ({
     root: {},
@@ -50,7 +50,9 @@ class App extends GenericApp {
             })
             .then(config => {
                 console.log(config);
-                this.setState({ config, ready: true });
+                newState.config = config || false;
+                newState.ready = true;
+                this.setState(newState);
                 if (config.language !== I18n.getLanguage() && config.language) {
                     I18n.setLanguage(config.language);
                 }
@@ -60,8 +62,9 @@ class App extends GenericApp {
 
     readConfig() {
         return this.socket
-            .getObject('system.adapter.' + this.adapterName + '.' + this.instance)
+            .getObject(`system.adapter.${this.adapterName}.${this.instance}`)
             .then(config => {
+                config = config || {};
                 const native = config.native || {};
                 native.rules = native.rules || [];
                 native.sayitInstance = native.sayitInstance || '';
@@ -74,12 +77,12 @@ class App extends GenericApp {
 
     saveConfig(config) {
         return this.socket
-            .getObject('system.adapter.' + this.adapterName + '.' + this.instance)
+            .getObject(`system.adapter.${this.adapterName}.${this.instance}`)
             .then(obj => {
                 if (!isEqual(obj.native, config)) {
                     obj.native = config;
                     return this.socket.setObject(
-                        'system.adapter.' + this.adapterName + '.' + this.instance,
+                        `system.adapter.${this.adapterName}.${this.instance}`,
                         obj
                     );
                 }
@@ -90,6 +93,7 @@ class App extends GenericApp {
         if (!this.state.config || !this.state.ready) {
             return <MuiThemeProvider theme={this.state.theme}>
                     <Loader theme={this.state.themeType} />
+                {this.state.config === false ? <div>No instance found</div> : null}
                 </MuiThemeProvider>;
         }
 
