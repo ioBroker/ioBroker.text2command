@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "text2command",
-    "version": "2.1.5",
+    "version": "2.1.6",
     "news": {
+      "2.1.6": {
+        "en": "Corrected GUI",
+        "de": "Korrigierte GUI",
+        "ru": "Исправлен графический интерфейс",
+        "pt": "GUI corrigida",
+        "nl": "Gecorrigeerde GUI",
+        "fr": "Interface graphique corrigée",
+        "it": "GUI corretta",
+        "es": "Interfaz gráfica de usuario corregida",
+        "pl": "Poprawione GUI",
+        "zh-cn": "更正的图形用户界面"
+      },
       "2.1.5": {
         "en": "Corrected GUI",
         "de": "Korrigierte GUI",
@@ -74,18 +86,6 @@
         "es": "GUI actualizada.",
         "pl": "Zaktualizowany GUI.",
         "zh-cn": "更新了GUI。"
-      },
-      "2.0.7": {
-        "en": "Prevent crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
-        "de": "Absturz verhindern (Sentry IOBROKER-TEXT2COMMAND-J)",
-        "ru": "Случай предотвращения сбоя (Sentry IOBROKER-TEXT2COMMAND-J)",
-        "pt": "Prevenir caso de falha (Sentry IOBROKER-TEXT2COMMAND-J)",
-        "nl": "Voorkom crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
-        "fr": "Prévenir les cas de crash (Sentry IOBROKER-TEXT2COMMAND-J)",
-        "it": "Prevenire il crash case (Sentry IOBROKER-TEXT2COMMAND-J)",
-        "es": "Caso de prevención de accidentes (Sentry IOBROKER-TEXT2COMMAND-J)",
-        "pl": "Zapobiegaj awariom (Sentry IOBROKER-TEXT2COMMAND-J)",
-        "zh-cn": "防止发生崩溃情况（Sentry IOBROKER-TEXT2COMMAND-J）"
       }
     },
     "title": "Text to command",
