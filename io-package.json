@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "text2command",
-    "version": "2.1.2",
+    "version": "2.1.3",
     "news": {
+      "2.1.3": {
+        "en": "Some errors will be caught at start",
+        "de": "Einige Fehler werden beim Start abgefangen",
+        "ru": "Некоторые ошибки будут обнаружены при запуске",
+        "pt": "Alguns erros serão detectados no início",
+        "nl": "Sommige fouten worden bij het starten opgemerkt",
+        "fr": "Certaines erreurs seront détectées au démarrage",
+        "it": "Alcuni errori verranno rilevati all'inizio",
+        "es": "Algunos errores serán detectados al inicio",
+        "pl": "Niektóre błędy zostaną wyłapane na początku",
+        "zh-cn": "一些错误会在开始时被捕获"
+      },
       "2.1.2": {
         "en": "Updated GUI.\nUpdated releaser",
         "de": "Aktualisierte GUI.\nReleaser aktualisiert",
@@ -74,18 +86,6 @@
         "es": "Se actualizó el cuadro de diálogo Seleccionar ID.",
         "pl": "Zaktualizowano okno dialogowe wyboru identyfikatora.",
         "zh-cn": "更新了选择ID对话框。"
-      },
-      "2.0.3": {
-        "en": "Fixed GUI errors",
-        "de": "GUI-Fehler behoben",
-        "ru": "Исправлены ошибки графического интерфейса",
-        "pt": "Corrigidos erros de GUI",
-        "nl": "Vaste GUI-fouten",
-        "fr": "Erreurs GUI fixes",
-        "it": "Risolti errori GUI",
-        "es": "Se corrigieron los errores de la GUI",
-        "pl": "Naprawiono błędy GUI",
-        "zh-cn": "修复了GUI错误"
       }
     },
     "title": "Text to command",
