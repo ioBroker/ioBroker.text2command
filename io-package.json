@@ -173,7 +173,8 @@
     "language": "",
     "processorId": "",
     "processorTimeout": 500,
-    "writeEveryAnswer": false
+    "writeEveryAnswer": false,
+    "noNegativeMessage": false
   },
   "instanceObjects": [
     {

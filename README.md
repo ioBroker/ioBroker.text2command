@@ -261,8 +261,11 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
-### 2.1.7 (2022-02-21)
+### __WORK IN PROGRESS__
 * (bluefox) Checked the existence of sayit instance before output
+* (bluefox) Added the decimal places settings to temperature  
+* (bluefox) Added the second object ID to user queries
+* (bluefox) Added the option: "No negative answer"
 
 ### 2.1.6 (2022-02-16)
 * (bluefox) Corrected GUI

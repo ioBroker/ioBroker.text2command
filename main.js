@@ -260,10 +260,15 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
 
     if (!matchedRules.length) {
         //noinspection JSUnresolvedFunction
-        simpleAnswers.sayIDontUnderstand(lang, cmd, null, null, result => {
-            cb && cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+        if (!adapter.config.noNegativeMessage) {
+            simpleAnswers.sayIDontUnderstand(lang, cmd, null, null, result => {
+                cb && cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+                cb = null;
+            });
+        } else {
+            cb && cb('');
             cb = null;
-        });
+        }
     } else if (!count) {
         cb && cb(result ? ((withLang ? lang + ';' : '') + result) : '');
         cb = null;

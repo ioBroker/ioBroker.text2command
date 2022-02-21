@@ -172,7 +172,7 @@ const Rule = React.forwardRef((props, ref) => {
                         <Tooltip title={I18n.t('Do not interrupt processing')}><ArrowDownwardIcon className={classes.ruleButton} color="primary"/></Tooltip>
                 }
                 {!unique ? <Tooltip title={I18n.t('Copy rule')}>
-                    <IconButton onClick={handleCopyMemo}  size="small" className={classes.editButton}>
+                    <IconButton onClick={handleCopyMemo} size="small" className={classes.editButton}>
                         <FileCopy />
                     </IconButton>
                 </Tooltip> : <div className={classes.emptyButton} />}

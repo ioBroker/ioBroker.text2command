@@ -43,5 +43,7 @@
   "Please confirm or cancel changes before leaving": "Confirme o cancele los cambios antes de salir",
   "You have changed rule": "Has cambiado de regla",
   "Save and go": "Guardar y listo",
-  "Don't save and go": "No guardes y te vayas"
+  "Don't save and go": "No guardes y te vayas",
+  "Do not answer \"I don't understand\" if no rules found": "No responda \"No entiendo\" si no se encuentran reglas",
+  "Convert 0/1 to false/true": "Convertir 0/1 a falso/verdadero"
 }

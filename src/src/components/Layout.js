@@ -119,7 +119,7 @@ class Layout extends PureComponent {
                     args: command.args?.map(arg => ({
                         ...arg,
                         name: arg.name[lang] || '',
-                        default: arg.default || (arg.type === 'checkbox' ? false : ''),
+                        default: arg.default !== undefined ? arg.default : (arg.type === 'checkbox' ? false : ''),
                     })),
                     ack: command.ack && {
                         ...command.ack,
@@ -147,8 +147,12 @@ class Layout extends PureComponent {
         this.setState({ rules: sortRules });
     };
 
-    handleOpen = () => {
-        this.setState({isOpen: true,});
+    handleOpen = add => {
+        if (add) {
+            this.setState({isEdit: false, isCopy: false, isOpen: true});
+        } else {
+            this.setState({isOpen: true,});
+        }
     };
 
     handleClose = () => {
@@ -268,13 +272,13 @@ class Layout extends PureComponent {
     };
 
     handleEdit = () => {
-        this.setState({isEdit: true});
-        this.handleOpen();
+        this.setState({isEdit: true, isCopy: false}, () =>
+            this.handleOpen());
     };
 
     handleCopy = () => {
-        this.setState({isCopy: true, isEdit: true});
-        this.handleOpen();
+        this.setState({isCopy: true, isEdit: true}, () =>
+            this.handleOpen());
     };
 
     finishEdit = editableRule => {
@@ -368,7 +372,12 @@ class Layout extends PureComponent {
                 const lang = I18n.getLanguage();
 
                 const currentRules = rules.map(rule => {
-                    const obj = window.commands[rule.template];
+                    const obj = window.commands[rule?.template];
+
+                    if (!obj) {
+                        window.alert(`Unknown rule: "${rule?.template}". Please report an issue on Github!`);
+                        return null;
+                    }
 
                     return {
                         ...obj,
@@ -389,7 +398,8 @@ class Layout extends PureComponent {
                         id: rule.id || uuid(),
                         template: rule.template,
                     };
-                });
+                })
+                    .filter(rule => rule);
 
                 this.setState({
                     rules: currentRules,

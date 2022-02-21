@@ -43,5 +43,7 @@
   "Please confirm or cancel changes before leaving": "Please confirm or cancel changes before leaving",
   "You have changed rule": "You have changed rule",
   "Save and go": "Save and go",
-  "Don't save and go": "Don't save and leave"
+  "Don't save and go": "Don't save and leave",
+  "Do not answer \"I don't understand\" if no rules found": "Do not answer \"I don't understand\" if no rules found",
+  "Convert 0/1 to false/true": "Convert 0/1 to false/true"
 }

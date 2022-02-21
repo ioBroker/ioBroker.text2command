@@ -43,5 +43,7 @@
   "Please confirm or cancel changes before leaving": "Potwierdź lub anuluj zmiany przed opuszczeniem",
   "You have changed rule": "Zmieniłeś regułę",
   "Save and go": "Zapisz i idź",
-  "Don't save and go": "Nie zapisuj i nie wychodź"
+  "Don't save and go": "Nie zapisuj i nie wychodź",
+  "Do not answer \"I don't understand\" if no rules found": "Nie odpowiadaj „Nie rozumiem”, jeśli nie znaleziono żadnych reguł",
+  "Convert 0/1 to false/true": "Konwertuj 0/1 na fałsz/prawdę"
 }

@@ -364,9 +364,8 @@ class Drawer extends Component {
                                 }>
                                 <MenuItem value="system">{t('System')}</MenuItem>
                                 {Children.toArray(
-                                    options.map(option => (
-                                        <MenuItem value={option}>{t('lang_' + option)}</MenuItem>
-                                    ))
+                                    options.map(option =>
+                                        <MenuItem value={option}>{t('lang_' + option)}</MenuItem>)
                                 )}
                             </Select>
                         </FormControl>
@@ -421,11 +420,19 @@ class Drawer extends Component {
                         </Grid>
                         <Grid item>
                             <FormControl fullWidth classes={{ root: classes.settingsItem }}>
-                        <FormControlLabel
-                            control={<Checkbox checked={this.state.localSettings.writeEveryAnswer} onChange={e => handleChange(e, 'writeEveryAnswer')} />}
-                            label={t('Write to response by every command')}
-                        />
-                    </FormControl>
+                                <FormControlLabel
+                                    control={<Checkbox checked={this.state.localSettings.writeEveryAnswer} onChange={e => handleChange(e, 'writeEveryAnswer')} />}
+                                    label={t('Write to response by every command')}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                                <FormControlLabel
+                                    control={<Checkbox checked={this.state.localSettings.noNegativeMessage} onChange={e => handleChange(e, 'noNegativeMessage')} />}
+                                    label={t('Do not answer "I don\'t understand" if no rules found')}
+                                />
+                            </FormControl>
                         </Grid>
                     </Grid>
                 </form>
@@ -440,7 +447,7 @@ class Drawer extends Component {
     mainIcons = [
         {
             icon: <AddIcon />,
-            handler: () => this.props.handleOpen(),
+            handler: () => this.props.handleOpen(true),
             tooltip: I18n.t('Create rule'),
         },
         {
@@ -456,11 +463,9 @@ class Drawer extends Component {
     ];
 
     createIcons = iconsData =>
-        iconsData.map(({ icon, handler, tooltip }, index) => (
-            <CustomTooltip title={tooltip} key={index}>
-                <IconButton onClick={handler}>{icon}</IconButton>
-            </CustomTooltip>
-        ));
+        iconsData.map(({ icon, handler, tooltip }, index) => <CustomTooltip title={tooltip} key={index}>
+            <IconButton onClick={handler}>{icon}</IconButton>
+        </CustomTooltip>);
 
     renderSelectIdDialog() {
         return this.state.showDialogSelectId ? (
