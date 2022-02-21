@@ -72,7 +72,10 @@ function build() {
     return new Promise((resolve, reject) => {
         const options = {
             stdio: 'pipe',
-            cwd:   __dirname + '/src/'
+            cwd:   __dirname + '/src/',
+            env: {
+                SKIP_PREFLIGHT_CHECK: 'true'
+            }
         };
 
         // copy langModel.js from lib to src/public
@@ -197,7 +200,7 @@ gulp.task('updateReadme', done => {
                 news += '* ' + iopackage.common.news[pkg.version].en;
             }
 
-            fs.writeFileSync('README.md', readmeStart + '### ' + version + ' (' + date + ')\n' + (news ? news + '\n\n' : '\n') + readmeEnd);
+            fs.writeFileSync('README.md', `${readmeStart}### ${version} (${date})\n${news ? news + '\n\n' : '\n'}${readmeEnd}`);
         }
     }
     done();

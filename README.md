@@ -261,7 +261,7 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
-### __WORK IN PROGRESS__
+### 2.2.0 (2022-02-21)
 * (bluefox) Checked the existence of sayit instance before output
 * (bluefox) Added the decimal places settings to temperature  
 * (bluefox) Added the second object ID to user queries
