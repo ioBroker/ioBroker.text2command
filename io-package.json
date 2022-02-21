@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "text2command",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "news": {
+      "2.2.1": {
+        "en": "Checked the existence of sayit instance before output\nAdded the decimal places settings to temperature  \nAdded the second object ID to user queries\nAdded the option: \"No negative answer\"",
+        "de": "Vor der Ausgabe wurde die Existenz der sayit-Instanz überprüft\nDezimalstelleneinstellungen zur Temperatur hinzugefügt\nDie zweite Objekt-ID wurde zu Benutzerabfragen hinzugefügt\nOption hinzugefügt: „Keine negative Antwort“",
+        "ru": "Проверено существование экземпляра sayit перед выводом\nДобавлены настройки десятичных разрядов к температуре\nДобавлен второй идентификатор объекта в пользовательские запросы\nДобавлена опция: \"Нет отрицательного ответа\"",
+        "pt": "Verificada a existência da instância sayit antes da saída\nAdicionadas as configurações de casas decimais à temperatura\nAdicionado o segundo ID de objeto às consultas do usuário\nAdicionada a opção: \"Nenhuma resposta negativa\"",
+        "nl": "Controleer het bestaan van de sayit-instantie vóór de uitvoer\nDe instellingen voor de decimalen toegevoegd aan de temperatuur\nDe tweede object-ID toegevoegd aan gebruikersquery's\nOptie toegevoegd: \"Geen negatief antwoord\"",
+        "fr": "Vérifié l'existence de l'instance sayit avant la sortie\nAjout des paramètres de décimales à la température\nAjout du deuxième ID d'objet aux requêtes des utilisateurs\nAjout de l'option : \"Pas de réponse négative\"",
+        "it": "Verificata l'esistenza dell'istanza sayit prima dell'output\nAggiunte le impostazioni dei decimali alla temperatura\nAggiunto il secondo ID oggetto alle query degli utenti\nAggiunta l'opzione: \"Nessuna risposta negativa\"",
+        "es": "Verificó la existencia de la instancia de sayit antes de la salida\nSe agregaron los lugares decimales a la temperatura.\nSe agregó el segundo ID de objeto a las consultas de los usuarios.\nSe agregó la opción: \"Sin respuesta negativa\"",
+        "pl": "Sprawdzono istnienie instancji sayit przed wyjściem\nDodano ustawienia miejsc dziesiętnych do temperatury\nDodano drugi identyfikator obiektu do zapytań użytkowników\nDodano opcję: „Brak negatywnej odpowiedzi”",
+        "zh-cn": "在输出前检查 sayit 实例的存在\n将小数位设置添加到温度\n向用户查询添加了第二个对象 ID\n添加了选项：“没有否定答案”"
+      },
       "2.2.0": {
         "en": "Checked the existence of sayit instance before output\nAdded the decimal places settings to temperature  \nAdded the second object ID to user queries\nAdded the option: \"No negative answer\"",
         "de": "Vor der Ausgabe wurde die Existenz der sayit-Instanz überprüft\nDezimalstelleneinstellungen zur Temperatur hinzugefügt\nDie zweite Objekt-ID wurde zu Benutzerabfragen hinzugefügt\nOption hinzugefügt: „Keine negative Antwort“",
@@ -74,18 +86,6 @@
         "es": "Algunos errores serán detectados al inicio",
         "pl": "Niektóre błędy zostaną wyłapane na początku",
         "zh-cn": "一些错误会在开始时被捕获"
-      },
-      "2.1.2": {
-        "en": "Updated GUI.\nUpdated releaser",
-        "de": "Aktualisierte GUI.\nReleaser aktualisiert",
-        "ru": "Обновлен графический интерфейс.\nОбновленный релиз",
-        "pt": "GUI atualizada.\nLiberador atualizado",
-        "nl": "Bijgewerkte GUI.\nBijgewerkte releaser",
-        "fr": "Interface graphique mise à jour.\nOutil de libération mis à jour",
-        "it": "GUI aggiornata.\nRilascio aggiornato",
-        "es": "Interfaz gráfica de usuario actualizada.\nLiberador actualizado",
-        "pl": "Zaktualizowany GUI.\nZaktualizowany wydawca",
-        "zh-cn": "更新了图形用户界面。\n更新的发布者"
       }
     },
     "title": "Text to command",
