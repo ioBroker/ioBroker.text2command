@@ -92,9 +92,9 @@ class App extends GenericApp {
     render() {
         if (!this.state.config || !this.state.ready) {
             return <MuiThemeProvider theme={this.state.theme}>
-                    <Loader theme={this.state.themeType} />
+                <Loader theme={this.state.themeType} />
                 {this.state.config === false ? <div>No instance found</div> : null}
-                </MuiThemeProvider>;
+            </MuiThemeProvider>;
         }
 
         return <MuiThemeProvider theme={this.state.theme}>

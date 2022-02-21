@@ -40,11 +40,9 @@ function startAdapter(options) {
 
     adapter.on('stateChange', (id, state) => {
         //noinspection JSUnresolvedVariable
-        if (state && !state.ack && state.val) {
-            if (id === adapter.namespace + '.text') {
-                //noinspection JSUnresolvedVariable
-                processText(state.val.toString(), sayIt);
-            }
+        if (state && !state.ack && state.val && id === adapter.namespace + '.text') {
+            //noinspection JSUnresolvedVariable
+            processText(state.val.toString(), sayIt);
         } else
         //noinspection JSUnresolvedVariable
         if (state && id === adapter.config.processorId && state.ack) {
@@ -82,7 +80,7 @@ function startAdapter(options) {
     adapter.on('ready', () => {
         main()
             //noinspection JSUnresolvedFunction
-            .then(() =>  adapter.subscribeStates(adapter.namespace + '.text'));
+            .then(() => adapter.subscribeStates(adapter.namespace + '.text'));
     });
 
     // New message arrived. obj is array with current messages
@@ -124,13 +122,22 @@ function startAdapter(options) {
 
 function sayIt(text) {
     //noinspection JSUnresolvedFunction
-    adapter.setState('response', text || '', true, err => err && adapter.log.error(err));
-
-    //noinspection JSUnresolvedVariable
-    if (!text || !adapter.config.sayitInstance) return;
-
-    //noinspection JSUnresolvedVariable,JSUnresolvedFunction
-    adapter.setForeignState(adapter.config.sayitInstance, text, err => err && adapter.log.error(err));
+    adapter.setStateAsync('response', text || '', true)
+        .then(() => {
+            if (text && adapter.config.sayitInstance) {
+                //noinspection JSUnresolvedVariable
+                return adapter.getForeignObjectAsync(adapter.config.sayitInstance)
+                    .then(obj => {
+                        if (obj) {
+                            //noinspection JSUnresolvedVariable,JSUnresolvedFunction
+                            return adapter.setForeignStateAsync(adapter.config.sayitInstance, text);
+                        } else {
+                            adapter.log.warn('If you want to use sayit functionality, please install sayit or disable it in settings (Answer in id)');
+                        }
+                    });
+            }
+        })
+        .catch(err => adapter.log.error(err));
 }
 
 function useExternalProcessor() {
@@ -160,16 +167,17 @@ function useExternalProcessor() {
 }
 
 function processText(cmd, cb, messageObj, from, afterProcessor) {
-    adapter.log.info('processText: "' + cmd + '"');
+    adapter.log.info(`processText: "${cmd}"`);
+
     let lang = adapter.config.language || systemConfig.language || 'en';
     if (cmd === null || cmd === undefined) {
         adapter.log.error('processText: invalid command!');
         adapter.setState('error', 'invalid command', true);
         //noinspection JSUnresolvedFunction
-        simpleAnswers.sayError(lang, 'processText: invalid command!', null, null, result =>
+        return simpleAnswers.sayError(lang, 'processText: invalid command!', null, null, result =>
             cb(result ? ((withLang ? lang + ';' : '') + result) : ''));
-        return;
     }
+
     cmd = cmd.toString();
     let originalCmd = cmd;
 
@@ -191,16 +199,15 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
     if (!afterProcessor && adapter.config.processorId) {
         let task = messageObj || {};
 
-        task.language =       lang;
-        task.command =        originalCmd;
-        task.withLanguage =   withLang;
-        task.from =           from;
-        task.callback =       cb;
+        task.language     = lang;
+        task.command      = originalCmd;
+        task.withLanguage = withLang;
+        task.from         = from;
+        task.callback     = cb;
 
         if (processQueue.length < 100) {
             processQueue.push(task);
-            useExternalProcessor();
-            return;
+            return useExternalProcessor();
         } else {
             adapter.log.error('External process queue is full. Try to use rules.');
         }
@@ -214,8 +221,8 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
 
     let result = '';
     let count = matchedRules.length;
-    for (let m = 0; m < matchedRules.length; m++) {
 
+    for (let m = 0; m < matchedRules.length; m++) {
         //noinspection JSUnresolvedVariable
         if (model.commands[rules[matchedRules[m]].template] && model.commands[rules[matchedRules[m]].template].extractText) {
             //noinspection JSUnresolvedFunction,JSUnresolvedVariable
