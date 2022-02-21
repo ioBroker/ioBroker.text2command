@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "text2command",
-    "version": "2.1.6",
+    "version": "2.1.7",
     "news": {
+      "2.1.7": {
+        "en": "Checked the existence of sayit instance before output",
+        "de": "Vor der Ausgabe wurde die Existenz der sayit-Instanz überprüft",
+        "ru": "Проверено существование экземпляра sayit перед выводом",
+        "pt": "Verificada a existência da instância sayit antes da saída",
+        "nl": "Controleer het bestaan van de sayit-instantie vóór de uitvoer",
+        "fr": "Vérifié l'existence de l'instance sayit avant la sortie",
+        "it": "Verificata l'esistenza dell'istanza sayit prima dell'output",
+        "es": "Verificó la existencia de la instancia de sayit antes de la salida",
+        "pl": "Sprawdzono istnienie instancji sayit przed wyjściem",
+        "zh-cn": "在输出前检查 sayit 实例的存在"
+      },
       "2.1.6": {
         "en": "Corrected GUI",
         "de": "Korrigierte GUI",
@@ -74,18 +86,6 @@
         "es": "Uso corregido de expresiones regulares",
         "pl": "Poprawione użycie wyrażenia regularnego",
         "zh-cn": "更正正则表达式的使用"
-      },
-      "2.1.0": {
-        "en": "Updated GUI.",
-        "de": "Aktualisierte GUI.",
-        "ru": "Обновлен графический интерфейс.",
-        "pt": "GUI atualizada.",
-        "nl": "Bijgewerkte GUI.",
-        "fr": "Interface graphique mise à jour.",
-        "it": "GUI aggiornata.",
-        "es": "GUI actualizada.",
-        "pl": "Zaktualizowany GUI.",
-        "zh-cn": "更新了GUI。"
       }
     },
     "title": "Text to command",

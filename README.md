@@ -261,7 +261,7 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
-### __WORK IN PROGRESS__
+### 2.1.7 (2022-02-21)
 * (bluefox) Checked the existence of sayit instance before output
 
 ### 2.1.6 (2022-02-16)
