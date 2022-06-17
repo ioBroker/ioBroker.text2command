@@ -261,8 +261,7 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
-
-### __WORK IN PROGRESS__
+### 2.2.2 (2022-06-17)
 * (Apollon77) Fix crash cases reported by Sentry
 
 ### 2.2.1 (2022-02-21)

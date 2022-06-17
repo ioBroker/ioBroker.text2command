@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "text2command",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "news": {
+      "2.2.2": {
+        "en": "Fix crash cases reported by Sentry",
+        "de": "Reparieren Crashfälle gemeldet von Sentry",
+        "ru": "Исправление случаев аварии, описанных Sentry",
+        "pt": "Corrigir casos de acidente relatados por Sentry",
+        "nl": "Vertaling:",
+        "fr": "Troubles de crash signalés par Sentry",
+        "it": "Correzione dei casi di crash segnalati da Sentry",
+        "es": "Casos de accidente fijo reportados por Sentry",
+        "pl": "Sprawy katastrofy Fix podane przez Sentry’a",
+        "zh-cn": "Sentry所报告的六例事故"
+      },
       "2.2.1": {
         "en": "Checked the existence of sayit instance before output\nAdded the decimal places settings to temperature  \nAdded the second object ID to user queries\nAdded the option: \"No negative answer\"",
         "de": "Vor der Ausgabe wurde die Existenz der sayit-Instanz überprüft\nDezimalstelleneinstellungen zur Temperatur hinzugefügt\nDie zweite Objekt-ID wurde zu Benutzerabfragen hinzugefügt\nOption hinzugefügt: „Keine negative Antwort“",
@@ -64,18 +76,6 @@
         "zh-cn": "更正的图形用户界面"
       },
       "2.1.4": {
-        "en": "Some errors will be caught at start",
-        "de": "Einige Fehler werden beim Start abgefangen",
-        "ru": "Некоторые ошибки будут обнаружены при запуске",
-        "pt": "Alguns erros serão detectados no início",
-        "nl": "Sommige fouten worden bij het starten opgemerkt",
-        "fr": "Certaines erreurs seront détectées au démarrage",
-        "it": "Alcuni errori verranno rilevati all'inizio",
-        "es": "Algunos errores serán detectados al inicio",
-        "pl": "Niektóre błędy zostaną wyłapane na początku",
-        "zh-cn": "一些错误会在开始时被捕获"
-      },
-      "2.1.3": {
         "en": "Some errors will be caught at start",
         "de": "Einige Fehler werden beim Start abgefangen",
         "ru": "Некоторые ошибки будут обнаружены при запуске",
