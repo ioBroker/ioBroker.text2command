@@ -61,7 +61,7 @@ function startAdapter(options) {
                     //noinspection JSUnresolvedVariable
                     processText((task.withLanguage ? task.language + ';' : '') + task.command, task.callback, null, null, true);
                 }
-                setTimeout(useExternalProcessor, 0);
+                setImmediate(useExternalProcessor);
             }
         }
     });
@@ -113,6 +113,14 @@ function startAdapter(options) {
                     break;
             }
         }
+
+        adapter.on('unload', callback => {
+            if (processTimeout) {
+                clearTimeout(processTimeout);
+                processTimeout = null;
+            }
+            callback();
+        });
 
         return true;
     });
