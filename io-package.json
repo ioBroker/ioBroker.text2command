@@ -3,18 +3,6 @@
     "name": "text2command",
     "version": "2.3.0",
     "news": {
-      "2.3.0": {
-        "en": "Migrated GUI to v5",
-        "de": "Migrated GUI to v5",
-        "ru": "Migrated GUI для v5",
-        "pt": "GUI migrado para v5",
-        "nl": "Gemigreerde GUI",
-        "fr": "Migrated GUI to v5",
-        "it": "GUI emigrata a v5",
-        "es": "GUI migrado al v5",
-        "pl": "Migrated GUI (ang.)",
-        "zh-cn": "第5条"
-      },
       "2.2.2": {
         "en": "Fix crash cases reported by Sentry",
         "de": "Reparieren Crashfälle gemeldet von Sentry",
