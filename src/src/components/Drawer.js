@@ -5,48 +5,48 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from '@mui/styles';
 
 // Material UI Components
-import DialogActions from '@material-ui/core/DialogActions';
-import Toolbar from '@material-ui/core/Toolbar';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import Tooltip from '@material-ui/core/Tooltip';
-import List from '@material-ui/core/List';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import IconButton from '@material-ui/core/IconButton';
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import DialogActions from '@mui/material/DialogActions';
+import Toolbar from '@mui/material/Toolbar';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import Tooltip from '@mui/material/Tooltip';
+import List from '@mui/material/List';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert'
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 // icons
-import AddIcon from '@material-ui/icons/Add';
-import SettingsIcon from '@material-ui/icons/Settings';
-import CachedIcon from '@material-ui/icons/Cached';
-import CloseIcon from '@material-ui/icons/Close';
-import SearchIcon from '@material-ui/icons/Search';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FormatClearIcon from '@material-ui/icons/FormatClear';
-import ClearIcon from '@material-ui/icons/Close';
-import WarningIcon from '@material-ui/icons/Warning';
+import AddIcon from '@mui/icons-material/Add';
+import SettingsIcon from '@mui/icons-material/Settings';
+import CachedIcon from '@mui/icons-material/Cached';
+import CloseIcon from '@mui/icons-material/Close';
+import SearchIcon from '@mui/icons-material/Search';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FormatClearIcon from '@mui/icons-material/FormatClear';
+import ClearIcon from '@mui/icons-material/Close';
+import WarningIcon from '@mui/icons-material/Warning';
 
-import I18n from '@iobroker/adapter-react/i18n';
-import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
+import I18n from '@iobroker/adapter-react-v5/i18n';
+import DialogSelectID from '@iobroker/adapter-react-v5/Dialogs/SelectID';
 
 import Rule from './Rule';
-import CheckIcon from "@material-ui/icons/Check";
-import {Grid} from "@material-ui/core";
+import CheckIcon from "@mui/icons-material/Check";
+import {Grid} from "@mui/material";
 
 function mobileCheck() {
     let check = false;
@@ -213,29 +213,29 @@ class Drawer extends Component {
 
     onAlive = (id, state) => {
         if (state && state.val) {
-            !this.state.alive && this.setState({alive: true});
+            !this.state.alive && this.setState({ alive: true });
         } else {
-            this.state.alive && this.setState({alive: false});
+            this.state.alive && this.setState({ alive: false });
         }
     };
 
     onResponse = (id, state) => {
         if (this.state.toast === null) {
-            this.setState({toast: '', toastError: false});
+            this.setState({ toast: '', toastError: false });
         } else
         if (state) {
             if (state.val && state.val.match(/^Error\.|^Fehler\.|^Ошибка\./)) {
-                this.props.socket.getState('text2command.' + this.props.instance + '.error')
+                this.props.socket.getState(`text2command.${this.props.instance}.error`)
                     .then(state =>
-                        this.setState({toast: state && state.val ? state.val : (state.val || ''), toastError: true}));
+                        this.setState({ toast: state && state.val ? state.val : (state.val || ''), toastError: true }));
             } else {
-                this.setState({toast: state.val || '', toastError: false});
+                this.setState({ toast: state.val || '', toastError: false });
             }
         }
     };
 
     handleTextCommand = event => {
-        this.setState({textCommand: event.target.value}, () => {
+        this.setState({ textCommand: event.target.value }, () => {
             this.testTimer && clearTimeout(this.testTimer);
             this.testTimer = setTimeout(() => {
                 const matched = this.findMatchingRules();
@@ -256,13 +256,13 @@ class Drawer extends Component {
                 .catch(err => console.error(err));
 
             if (!this.state.alive) {
-                this.setState({toast: I18n.t('Instance is not running'), toastError: true});
+                this.setState({ toast: I18n.t('Instance is not running'), toastError: true });
             }
         }
     };
 
     removeMatched = () => {
-        this.setState({matchingRules: []});
+        this.setState({ matchingRules: [] });
     };
 
     findMatchingRules() {
@@ -271,7 +271,7 @@ class Drawer extends Component {
     }
 
     handleOpenSettingsModal = () => {
-        this.setState({isSettingsDialogOpen: true});
+        this.setState({ isSettingsDialogOpen: true });
     };
 
     handleDialogSelectIdSubmit = (selected, selectedSettingsName) => {
@@ -289,7 +289,7 @@ class Drawer extends Component {
     };
 
     handleCloseConfirmRemoveDialog = () => {
-        this.setState({isConfirmRemoveDialogOpen: false});
+        this.setState({ isConfirmRemoveDialogOpen: false });
     };
 
     handleSearch = event => {
@@ -303,7 +303,7 @@ class Drawer extends Component {
     };
 
     toggleSearch = async () => {
-        await this.setState({isSearchActive: !this.state.isSearchActive});
+        await this.setState({ isSearchActive: !this.state.isSearchActive });
     };
 
     createSettingsModal = () => {
@@ -352,9 +352,10 @@ class Drawer extends Component {
                 <form noValidate autoComplete="off">
                     <Grid container direction="column">
                         <Grid item>
-                            <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                            <FormControl fullWidth classes={{ root: classes.settingsItem }} variant="standard">
                             <InputLabel id="demo-simple-select-label">{t('Language')}</InputLabel>
                             <Select
+                                variant="standard"
                                 classes={{ root: classes.width100 }}
                                 onChange={event => handleChange(event, 'language')}
                                 value={
@@ -371,14 +372,16 @@ class Drawer extends Component {
                         </FormControl>
                         </Grid>
                         <Grid item>
-                            <FormControl fullWidth classes={{ root: clsx(classes.settingsItem, classes.selectIdText) }}>
+                            <FormControl fullWidth classes={{ root: clsx(classes.settingsItem, classes.selectIdText) }} variant="standard">
                                 <TextField
+                                    variant="standard"
                                     label={t('Answer in id')}
                                     value={this.state.localSettings.sayitInstance}
                                     onChange={event => handleChange(event, 'sayitInstance')}
                                 />
                             </FormControl>
                             <Button
+                                color="grey"
                                 variant="outlined"
                                 className={classes.selectIdButton}
                                 onClick={() =>
@@ -390,14 +393,16 @@ class Drawer extends Component {
                             >...</Button>
                         </Grid>
                         <Grid item>
-                            <FormControl fullWidth classes={{ root: clsx(classes.settingsItem, classes.selectIdText) }}>
+                            <FormControl fullWidth classes={{ root: clsx(classes.settingsItem, classes.selectIdText) }} variant="standard">
                                 <TextField
+                                    variant="standard"
                                     label={t(`Processor's id`)}
                                     value={this.state.localSettings.processorId}
                                     onChange={event => handleChange(event, 'processorId')}
                                 />
                             </FormControl>
                             <Button
+                                color="grey"
                                 variant="outlined"
                                 className={classes.selectIdButton}
                                 onClick={() =>
@@ -409,8 +414,9 @@ class Drawer extends Component {
                             >...</Button>
                         </Grid>
                         <Grid item>
-                            <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                            <FormControl fullWidth classes={{ root: classes.settingsItem }} variant="standard">
                             <TextField
+                                variant="standard"
                                 label={t('Timeout for processor')}
                                 helperText={t('ms')}
                                 value={this.state.localSettings.processorTimeout}
@@ -419,7 +425,7 @@ class Drawer extends Component {
                         </FormControl>
                         </Grid>
                         <Grid item>
-                            <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                            <FormControl fullWidth classes={{ root: classes.settingsItem }} variant="standard">
                                 <FormControlLabel
                                     control={<Checkbox checked={this.state.localSettings.writeEveryAnswer} onChange={e => handleChange(e, 'writeEveryAnswer')} />}
                                     label={t('Write to response by every command')}
@@ -427,7 +433,7 @@ class Drawer extends Component {
                             </FormControl>
                         </Grid>
                         <Grid item>
-                            <FormControl fullWidth classes={{ root: classes.settingsItem }}>
+                            <FormControl fullWidth classes={{ root: classes.settingsItem }} variant="standard">
                                 <FormControlLabel
                                     control={<Checkbox checked={this.state.localSettings.noNegativeMessage} onChange={e => handleChange(e, 'noNegativeMessage')} />}
                                     label={t('Do not answer "I don\'t understand" if no rules found')}
@@ -439,7 +445,7 @@ class Drawer extends Component {
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" color="primary" onClick={submitSettings} startIcon={<CheckIcon/>}>{I18n.t('Ok')}</Button>
-                <Button variant="contained" onClick={handleClose}startIcon={<CloseIcon/>}>{I18n.t('Cancel')}</Button>
+                <Button variant="contained" color="grey"    onClick={handleClose}    startIcon={<CloseIcon/>}>{I18n.t('Cancel')}</Button>
             </DialogActions>
         </Dialog>;
     };
@@ -500,6 +506,7 @@ class Drawer extends Component {
                             startIcon={<DeleteIcon/>}
                         >{I18n.t('Delete')}</Button>
                         <Button
+                            color="grey"
                             variant="contained"
                             onClick={this.handleCloseConfirmRemoveDialog}
                                 startIcon={<CloseIcon/>}
@@ -575,6 +582,7 @@ class Drawer extends Component {
             <Toolbar position="static" variant="dense" classes={{ root: classes.toolbar }} disableGutters>
                 {isSearchActive ?
                     <TextField
+                        variant="standard"
                         className={classes.search}
                         onChange={this.handleSearch}
                         value={this.state.searchedValue}

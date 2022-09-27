@@ -5,23 +5,23 @@ import React, {
     useState,
     useEffect,
 } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { DropTarget, DragSource } from 'react-dnd';
 
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
-import I18n from '@iobroker/adapter-react/i18n';
+import I18n from '@iobroker/adapter-react-v5/i18n';
 
-import EditIcon from '@material-ui/icons/Edit';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MaximizeIcon from '@material-ui/icons/Maximize';
-import FileCopy from '@material-ui/icons/FileCopy';
+import EditIcon from '@mui/icons-material/Edit';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import MaximizeIcon from '@mui/icons-material/Maximize';
+import FileCopy from '@mui/icons-material/FileCopy';
 
 const Rule = React.forwardRef((props, ref) => {
     const {
@@ -65,7 +65,7 @@ const Rule = React.forwardRef((props, ref) => {
         listItemTextSecondary: {
             textOverflow: 'ellipsis',
             overflow: 'hidden',
-            opacity: theme.palette.type === 'dark' ? 0.2 : 0.7,
+            opacity: theme.palette.mode === 'dark' ? 0.2 : 0.7,
             fontStyle: 'italic',
         },
         dot: {
@@ -130,7 +130,7 @@ const Rule = React.forwardRef((props, ref) => {
         if (matchingRules.length) {
             const matchingRule = matchingRules.find(item => item.indexOf === index);
             if (matchingRule) {
-                setTimeout(() => setRuleStyle({backgroundColor: theme.palette.type === 'dark' ? theme?.palette?.secondary.dark : theme?.palette?.secondary.light}), matchingRule.timer);
+                setTimeout(() => setRuleStyle({backgroundColor: theme.palette.mode === 'dark' ? theme?.palette?.secondary.dark : theme?.palette?.secondary.light}), matchingRule.timer);
 
                 setTimeout(() => {
                     setRuleStyle(selectedRule.id === id ? {backgroundColor: theme?.palette?.background?.default} : {});
@@ -254,6 +254,6 @@ Rule.propTypes = {
     id: PropTypes.string.isRequired,
     matchingRules: PropTypes.array,
     unique: PropTypes.bool,
-    selectedRule: PropTypes.shape({id: PropTypes.string}),
+    selectedRule: PropTypes.shape({ id: PropTypes.string }),
     unsavedRules: PropTypes.object,
 };

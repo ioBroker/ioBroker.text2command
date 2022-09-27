@@ -257,10 +257,13 @@ If activated so by every command (no matter if the request came via state or sen
 
 <!--
 	Placeholder for the next version (at the beginning of the line):
-	### __WORK IN PROGRESS__
+	### **WORK IN PROGRESS**
 -->
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (bluefox) Migrated GUI to v5
+
 ### 2.2.2 (2022-06-17)
 * (Apollon77) Fix crash cases reported by Sentry
 

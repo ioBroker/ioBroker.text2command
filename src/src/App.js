@@ -1,12 +1,12 @@
 import React from 'react';
 import isEqual from 'lodash.isequal';
 
-import { withStyles } from '@material-ui/core/styles';
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { withStyles } from '@mui/styles';
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 
-import Loader from '@iobroker/adapter-react/Components/Loader';
-import I18n from '@iobroker/adapter-react/i18n';
-import GenericApp from '@iobroker/adapter-react/GenericApp';
+import Loader from '@iobroker/adapter-react-v5/Components/Loader';
+import I18n from '@iobroker/adapter-react-v5/i18n';
+import GenericApp from '@iobroker/adapter-react-v5/GenericApp';
 
 import Layout from './components/Layout';
 
@@ -36,6 +36,7 @@ class App extends GenericApp {
             'zh-cn': require('./i18n/zh-cn'),
         };
 
+        extendedProps.sentryDSN = window.sentryDSN;
         super(props, extendedProps);
     }
 
@@ -91,25 +92,29 @@ class App extends GenericApp {
 
     render() {
         if (!this.state.config || !this.state.ready) {
-            return <MuiThemeProvider theme={this.state.theme}>
-                <Loader theme={this.state.themeType} />
-                {this.state.config === false ? <div>No instance found</div> : null}
-            </MuiThemeProvider>;
+            return <StyledEngineProvider injectFirst>
+                    <ThemeProvider theme={this.state.theme}>
+                        <Loader theme={this.state.themeType} />
+                        {this.state.config === false ? <div>No instance found</div> : null}
+                </ThemeProvider>
+            </StyledEngineProvider>;
         }
 
-        return <MuiThemeProvider theme={this.state.theme}>
-            <div className="App">
-                <Layout
-                    themeType={this.state.themeType}
-                    theme={this.state.theme}
-                    socket={this.socket}
-                    instance={this.instance}
-                    readConfig={this.readConfig.bind(this)}
-                    saveConfig={this.saveConfig.bind(this)}
-                />
-                {this.renderError()}
-            </div>
-        </MuiThemeProvider>;
+        return <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={this.state.theme}>
+                <div className="App">
+                    <Layout
+                        themeType={this.state.themeType}
+                        theme={this.state.theme}
+                        socket={this.socket}
+                        instance={this.instance}
+                        readConfig={this.readConfig.bind(this)}
+                        saveConfig={this.saveConfig.bind(this)}
+                    />
+                    {this.renderError()}
+                </div>
+            </ThemeProvider>
+        </StyledEngineProvider>;
     }
 }
 

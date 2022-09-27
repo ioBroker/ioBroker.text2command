@@ -3,13 +3,13 @@ import SplitterLayout from 'react-splitter-layout';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { withStyles } from '@material-ui/core/styles';
-import withWidth from '@material-ui/core/withWidth';
+import { withStyles } from '@mui/styles';
+import { withWidth } from '@iobroker/adapter-react-v5';
 import 'react-splitter-layout/lib/index.css';
 
-import Drawer from '@material-ui/core/Drawer';
+import Drawer from '@mui/material/Drawer';
 
-import I18n from '@iobroker/adapter-react/i18n';
+import I18n from '@iobroker/adapter-react-v5/i18n';
 
 import DrawerComponent from './Drawer';
 import RuleEditor from './RuleEditor';

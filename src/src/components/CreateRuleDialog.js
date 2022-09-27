@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import InputLabel from '@material-ui/core/InputLabel';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControl from '@material-ui/core/FormControl';
-import { DialogActions, Button, Select, TextField, MenuItem, withStyles } from '@material-ui/core';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import InputLabel from '@mui/material/InputLabel';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormGroup from '@mui/material/FormGroup';
+import FormControl from '@mui/material/FormControl';
+import { withStyles } from '@mui/styles';
+import { DialogActions, Button, Select, TextField, MenuItem } from '@mui/material';
 
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
-import I18n from '@iobroker/adapter-react/i18n';
+import I18n from '@iobroker/adapter-react-v5/i18n';
 
 const styles = theme => ({
     select: {
@@ -117,11 +118,12 @@ class CreateRuleDialog extends Component {
         };
 
         return <FormGroup>
-            {!this.props.isCopy ? <FormControl fullWidth>
+            {!this.props.isCopy ? <FormControl fullWidth variant="standard">
                 <InputLabel shrink id="rule">
                     {I18n.t('Rule')}
                 </InputLabel>
                 <Select
+                    variant="standard"
                     onChange={handleSelectChange}
                     value={localRule.rule}
                     labelId={'rule'}
@@ -134,6 +136,7 @@ class CreateRuleDialog extends Component {
                 </Select>
             </FormControl> : null}
             <TextField
+                variant="standard"
                 fullWidth
                 autoFocus
                 id="standard-basic"
@@ -174,7 +177,7 @@ class CreateRuleDialog extends Component {
                     disabled={disabled}>
                     { I18n.t('Ok') }
                 </Button>
-                <Button variant="contained" onClick={handleClose} startIcon={<CloseIcon/>}>{I18n.t('Cancel')}</Button>
+                <Button variant="contained" color="grey" onClick={handleClose} startIcon={<CloseIcon/>}>{I18n.t('Cancel')}</Button>
             </DialogActions>
         </DialogContent>;
     };

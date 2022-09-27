@@ -1,24 +1,25 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import { withStyles } from '@mui/styles';
 
-import {TextField, Switch, Typography, withStyles, Box, FormLabel} from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import FormControl from '@material-ui/core/FormControl';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Toolbar from '@material-ui/core/Toolbar';
+import {TextField, Switch, Typography, Box, FormLabel} from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Toolbar from '@mui/material/Toolbar';
 
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import MenuIcon from '@material-ui/icons/Menu';
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MenuIcon from '@mui/icons-material/Menu';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
-import I18n from '@iobroker/adapter-react/i18n';
-import DialogSelectID from '@iobroker/adapter-react/Dialogs/SelectID';
+import I18n from '@iobroker/adapter-react-v5/i18n';
+import DialogSelectID from '@iobroker/adapter-react-v5/Dialogs/SelectID';
 import isEqual from 'lodash.isequal';
 
 const styles = theme => ({
@@ -51,8 +52,8 @@ const styles = theme => ({
     },
     boxDesktop: {
         padding: theme.spacing(1),
-        width: 'calc(100% - ' + theme.spacing(2) + 'px)',
-        height: 'calc(100% - 48px - 48px - ' + theme.spacing(2) + 'px)',
+        width: `calc(100% - ${theme.spacing(2)})`,
+        height: `calc(100% - 48px - 48px - ${theme.spacing(2)})`,
         overflow: 'auto'
     },
     container: {
@@ -60,7 +61,7 @@ const styles = theme => ({
         padding: theme.spacing(2),
         overflow: 'auto',
         [theme.breakpoints.down('md')]: {
-            width: 'calc(100% - ' + theme.spacing(3) + 'px)',
+            width: `calc(100% - ${theme.spacing(3)})`,
             padding: theme.spacing(1),
         },
     },
@@ -296,7 +297,7 @@ class RuleEditor extends PureComponent {
 
             this.closeConfirmDialog();
         };
-        return <FormControl className={classes.submitForm}>
+        return <FormControl className={classes.submitForm} variant="standard">
             <div style={{flexGrow: 1}}/>
             <Button
                 variant="contained"
@@ -306,12 +307,16 @@ class RuleEditor extends PureComponent {
                 className={classes.saveAndGoBtn}>
                 {t('Save and go')}
             </Button>
-            <Button onClick={dontSaveAndGo} variant="contained" color="secondary"
-                    startIcon={<CheckIcon/>}
+            <Button
+                onClick={dontSaveAndGo}
+                variant="contained"
+                color="secondary"
+                startIcon={<CheckIcon/>}
             >
                 {t(`Don't save and go`)}
             </Button>
             <Button
+                color="grey"
                 variant="contained"
                 className={classes.btnDanger}
                 startIcon={<CloseIcon/>}
@@ -343,7 +348,7 @@ class RuleEditor extends PureComponent {
         if (!this.state.isLocalStateWasUpdated) {
             return <div className={this.props.classes.emptyButtons} />;
         } else {
-            return <FormControl className={classes.submitForm}>
+            return <FormControl className={classes.submitForm} variant="standard">
                 <div style={{flexGrow: 1}}/>
                 <Button
                     onClick={handleSave}
@@ -353,6 +358,7 @@ class RuleEditor extends PureComponent {
                     {t('Save')}
                 </Button>
                 <Button
+                    color="grey"
                     variant="contained"
                     className={classes.btnDanger}
                     startIcon={<CloseIcon/>}
@@ -391,6 +397,7 @@ class RuleEditor extends PureComponent {
         if (onOpenSelectDialog) {
             return <div>
                 <TextField
+                    variant="standard"
                     classes={{root: classes.inputOid}}
                     fullWidth
                     label={isMobile ? label : ''}
@@ -403,6 +410,7 @@ class RuleEditor extends PureComponent {
                     key={key}
                 />
                 <Button
+                    color="grey"
                     onClick={() => onOpenSelectDialog(value)}
                     size="small"
                     className={classes.inputOidButton}
@@ -411,7 +419,8 @@ class RuleEditor extends PureComponent {
             </div>
         } else if (type !== 'checkbox') {
             return <TextField
-                classes={{root: classes.textField}}
+                variant="standard"
+                classes={{ root: classes.textField }}
                 label={isMobile ? label : ''}
                 //variant="outlined"
                 size="small"
@@ -425,7 +434,7 @@ class RuleEditor extends PureComponent {
                 //className={clsx('outlined-basic', classes.textField)}
             />;
         } else {
-            return <FormControl classes={{ root: classes.switchControl }}>
+            return <FormControl classes={{ root: classes.switchControl }} variant="standard">
                 <Switch
                     key={key}
                     onClick={onSwitchChange}
