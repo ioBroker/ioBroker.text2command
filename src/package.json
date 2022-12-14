@@ -39,6 +39,6 @@
     ],
     "devDependencies": {
         "react-app-rewire-alias": "^0.1.4",
-        "react-app-rewired": "^2.1.6"
+        "react-app-rewired": "^2.2.1"
     }
 }
