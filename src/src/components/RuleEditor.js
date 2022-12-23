@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { withStyles } from '@mui/styles';
 
 import {TextField, Switch, Typography, Box, FormLabel} from '@mui/material';
@@ -18,7 +17,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 
-import I18n from '@iobroker/adapter-react-v5/i18n';
+import { Utils, I18n } from '@iobroker/adapter-react-v5';
 import DialogSelectID from '@iobroker/adapter-react-v5/Dialogs/SelectID';
 import isEqual from 'lodash.isequal';
 
@@ -431,7 +430,7 @@ class RuleEditor extends PureComponent {
                 key={key}
                 className={classes.rowPadding}
                 type={type === 'number' ? 'number' : 'text'}
-                //className={clsx('outlined-basic', classes.textField)}
+                //className={Utils.clsx('outlined-basic', classes.textField)}
             />;
         } else {
             return <FormControl classes={{ root: classes.switchControl }} variant="standard">
@@ -717,7 +716,7 @@ class RuleEditor extends PureComponent {
                 {name}
             </Toolbar>
 
-            <Box className={clsx(classes.box, this.props.isMobile ? classes.boxMobile : classes.boxDesktop)} key={this.props.selectedRule ? this.props.selectedRule.id : 'emptyLeft'}>
+            <Box className={Utils.clsx(classes.box, this.props.isMobile ? classes.boxMobile : classes.boxDesktop)} key={this.props.selectedRule ? this.props.selectedRule.id : 'emptyLeft'}>
                 {localRule ?
                     <Paper className={classes.container}>
                         <div style={this.props.isMobile ? {width: '100%'} : {display: 'grid', gridTemplateColumns: 'minmax(50px, 265px) 1fr'}}>
@@ -727,7 +726,7 @@ class RuleEditor extends PureComponent {
                                 }
 
                                 return [
-                                    !this.props.isMobile ?<div key={1} className={clsx(classes.title, classes.rowSpace)}>{title}</div> : null,
+                                    !this.props.isMobile ?<div key={1} className={Utils.clsx(classes.title, classes.rowSpace)}>{title}</div> : null,
                                     <div key={2} className={classes.rowSpace}>{item}</div>
                                 ];
                             })}

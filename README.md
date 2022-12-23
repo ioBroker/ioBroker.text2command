@@ -254,6 +254,7 @@ If activated so by every command (no matter if the request came via state or sen
 
 # ToDo
 - in Russian male and female answers.
+- Migrate ReactDnD from 14 to 16
 
 <!--
 	Placeholder for the next version (at the beginning of the line):

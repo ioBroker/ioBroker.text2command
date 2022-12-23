@@ -1,6 +1,5 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
@@ -29,6 +28,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert'
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { Grid } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 
 // icons
 import AddIcon from '@mui/icons-material/Add';
@@ -41,12 +42,10 @@ import FormatClearIcon from '@mui/icons-material/FormatClear';
 import ClearIcon from '@mui/icons-material/Close';
 import WarningIcon from '@mui/icons-material/Warning';
 
-import I18n from '@iobroker/adapter-react-v5/i18n';
+import { Utils, I18n } from '@iobroker/adapter-react-v5';
 import DialogSelectID from '@iobroker/adapter-react-v5/Dialogs/SelectID';
 
 import Rule from './Rule';
-import CheckIcon from "@mui/icons-material/Check";
-import {Grid} from "@mui/material";
 
 function mobileCheck() {
     let check = false;
@@ -372,7 +371,7 @@ class Drawer extends Component {
                         </FormControl>
                         </Grid>
                         <Grid item>
-                            <FormControl fullWidth classes={{ root: clsx(classes.settingsItem, classes.selectIdText) }} variant="standard">
+                            <FormControl fullWidth classes={{ root: Utils.clsx(classes.settingsItem, classes.selectIdText) }} variant="standard">
                                 <TextField
                                     variant="standard"
                                     label={t('Answer in id')}
@@ -393,7 +392,7 @@ class Drawer extends Component {
                             >...</Button>
                         </Grid>
                         <Grid item>
-                            <FormControl fullWidth classes={{ root: clsx(classes.settingsItem, classes.selectIdText) }} variant="standard">
+                            <FormControl fullWidth classes={{ root: Utils.clsx(classes.settingsItem, classes.selectIdText) }} variant="standard">
                                 <TextField
                                     variant="standard"
                                     label={t(`Processor's id`)}
@@ -636,7 +635,7 @@ class Drawer extends Component {
                     variant="outlined"
                     size="small"
                     color="primary"
-                    className={clsx('outlined-basic', classes.root)}
+                    className={Utils.clsx('outlined-basic', classes.root)}
                     onKeyDown={this.handleSubmit}
                     value={this.state.textCommand}
                     inputProps={{style: {padding: '10px 10px'}}}
