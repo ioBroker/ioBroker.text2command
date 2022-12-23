@@ -2,14 +2,13 @@ import React, { PureComponent } from 'react';
 import SplitterLayout from 'react-splitter-layout';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { withStyles } from '@mui/styles';
 import { withWidth } from '@iobroker/adapter-react-v5';
 import 'react-splitter-layout/lib/index.css';
 
 import Drawer from '@mui/material/Drawer';
 
-import I18n from '@iobroker/adapter-react-v5/i18n';
+import { Utils, I18n } from '@iobroker/adapter-react-v5';
 
 import DrawerComponent from './Drawer';
 import RuleEditor from './RuleEditor';
@@ -605,7 +604,7 @@ class Layout extends PureComponent {
             return <React.Fragment>
                 <SplitterLayout
                     key="splitterLayout"
-                    customClassName={clsx(
+                    customClassName={Utils.clsx(
                         isLeftBarOpen ? classes.hidden : classes.opened,
                         classes.layout
                     )}

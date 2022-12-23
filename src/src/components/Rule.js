@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { makeStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import { DropTarget, DragSource } from 'react-dnd';
 
 import ListItem from '@mui/material/ListItem';
@@ -16,7 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
-import I18n from '@iobroker/adapter-react-v5/i18n';
+import { Utils, I18n } from '@iobroker/adapter-react-v5';
 
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -150,7 +149,7 @@ const Rule = React.forwardRef((props, ref) => {
         <ListItem
             onClick={selectRuleMemo}
             selected={selectedRule?.id === id}
-            className={clsx(selectedRule?.id === id && 'rule-selected')}
+            className={Utils.clsx(selectedRule?.id === id && 'rule-selected')}
             classes={{root: classes.listItem}}
         >
             <ListItemText
@@ -166,7 +165,7 @@ const Rule = React.forwardRef((props, ref) => {
                 {
                     _break ?
                         <Tooltip title={I18n.t('Interrupt processing')}>
-                            <MaximizeIcon className={clsx(classes.ruleButton, classes.maximize)} />
+                            <MaximizeIcon className={Utils.clsx(classes.ruleButton, classes.maximize)} />
                         </Tooltip>
                     :
                         <Tooltip title={I18n.t('Do not interrupt processing')}><ArrowDownwardIcon className={classes.ruleButton} color="primary"/></Tooltip>
