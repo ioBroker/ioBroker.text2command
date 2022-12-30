@@ -38,7 +38,7 @@
         "not op_mini all"
     ],
     "devDependencies": {
-        "react-app-rewire-alias": "^0.1.4",
+        "react-app-rewire-alias": "^1.1.7",
         "react-app-rewired": "^2.2.1"
     }
 }
