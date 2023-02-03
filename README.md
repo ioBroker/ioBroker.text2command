@@ -262,7 +262,7 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 2.3.1 (2023-02-03)
 * (bluefox) Migrated GUI to v5
 
 ### 2.2.2 (2022-06-17)
