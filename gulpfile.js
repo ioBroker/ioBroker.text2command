@@ -9,24 +9,36 @@
 const gulp       = require('gulp');
 const fs         = require('fs');
 const rename     = require('gulp-rename');
-const del        = require('del');
 const cp         = require('child_process');
 
 const pkg       = require('./package.json');
 const iopackage = require('./io-package.json');
 const version   = (pkg && pkg.version) ? pkg.version : iopackage.common.version;
 
-gulp.task('clean', () => {
-    return del([
-        // 'src/node_modules/**/*',
-        'admin/**/*',
-        'admin/*',
-        'src/build/**/*'
-    ]).then(del([
-        // 'src/node_modules',
-        'src/build',
-        'admin/'
-    ]));
+function deleteFoldersRecursive(path, exceptions) {
+    if (fs.existsSync(path)) {
+        const files = fs.readdirSync(path);
+        for (const file of files) {
+            const curPath = `${path}/${file}`;
+            if (exceptions && exceptions.find(e => curPath.endsWith(e))) {
+                continue;
+            }
+
+            const stat = fs.statSync(curPath);
+            if (stat.isDirectory()) {
+                deleteFoldersRecursive(curPath);
+                fs.rmdirSync(curPath);
+            } else {
+                fs.unlinkSync(curPath);
+            }
+        }
+    }
+}
+
+gulp.task('clean', done => {
+    deleteFoldersRecursive(`${__dirname}/admin`);
+    deleteFoldersRecursive(`${__dirname}/src/build`);
+    done();
 });
 
 function npmInstall() {
@@ -112,32 +124,29 @@ gulp.task('3-build', () => build());
 gulp.task('3-build-dep', gulp.series('2-npm', '3-build'));
 
 function copyFiles() {
-    return del([
-        'admin/**/*'
-    ]).then(() => {
-        return Promise.all([
-            gulp.src([
-                'src/build/**/*',
-                '!src/build/index.html',
-                '!src/build/static/js/main.*.chunk.js',
-                '!src/build/i18n/**/*',
-                '!src/build/i18n',
-                'admin-config/*'
-            ])
-                .pipe(gulp.dest('admin/')),
+    deleteFoldersRecursive(`${__dirname}/admin`);
+    return Promise.all([
+        gulp.src([
+            'src/build/**/*',
+            '!src/build/index.html',
+            '!src/build/static/js/main.*.chunk.js',
+            '!src/build/i18n/**/*',
+            '!src/build/i18n',
+            'admin-config/*'
+        ])
+            .pipe(gulp.dest('admin/')),
 
-            gulp.src([
-                'src/build/index.html',
-            ])
-                .pipe(rename('tab.html'))
-                .pipe(gulp.dest('admin/')),
+        gulp.src([
+            'src/build/index.html',
+        ])
+            .pipe(rename('tab.html'))
+            .pipe(gulp.dest('admin/')),
 
-            gulp.src([
-                'src/build/static/js/main.*.chunk.js',
-            ])
-                .pipe(gulp.dest('admin/static/js/')),
-        ]);
-    });
+        gulp.src([
+            'src/build/static/js/main.*.chunk.js',
+        ])
+            .pipe(gulp.dest('admin/static/js/')),
+    ]);
 }
 
 gulp.task('5-copy', () => copyFiles());
