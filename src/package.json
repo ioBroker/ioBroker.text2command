@@ -3,13 +3,13 @@
     "version": "2.3.0",
     "private": true,
     "dependencies": {
-        "@iobroker/adapter-react-v5": "^4.0.8",
-        "@mui/material": "^5.11.1",
+        "@iobroker/adapter-react-v5": "^4.0.9",
+        "@mui/material": "^5.11.7",
         "@mui/icons-material": "^5.11.0",
-        "@mui/styles": "^5.11.1",
+        "@mui/styles": "^5.11.7",
         "babel-eslint": "^10.1.0",
-        "@sentry/browser": "^7.28.1",
-        "@sentry/integrations": "^7.28.1",
+        "@sentry/browser": "^7.36.0",
+        "@sentry/integrations": "^7.36.0",
         "lodash.isequal": "^4.5.0",
         "react": "^18.2.0",
         "react-dnd": "^14.0.5",
@@ -18,7 +18,9 @@
         "react-dom": "^18.2.0",
         "react-scripts": "^5.0.1",
         "react-splitter-layout": "^4.0.0",
-        "uuid": "^9.0.0"
+        "uuid": "^9.0.0",
+        "react-app-rewire-alias": "^1.1.7",
+        "react-app-rewired": "^2.2.1"
     },
     "scripts": {
         "start": "react-app-rewired start",
@@ -35,9 +37,5 @@
         "not dead",
         "not ie <= 11",
         "not op_mini all"
-    ],
-    "devDependencies": {
-        "react-app-rewire-alias": "^1.1.7",
-        "react-app-rewired": "^2.2.1"
-    }
+    ]
 }
