@@ -322,8 +322,7 @@ class Drawer extends Component {
 
         const submitSettings = () => this.props.saveSettings(this.state.localSettings, handleClose);
 
-        const handleChange = (event, name) => {
-            let value = event.target.checked !== undefined ? event.target.checked : event.target.value;
+        const handleChange = (value, name) => {
             if (name === 'language' && value === 'system') {
                 value = '';
             }
@@ -356,7 +355,7 @@ class Drawer extends Component {
                                 <Select
                                     variant="standard"
                                     classes={{ root: classes.width100 }}
-                                    onChange={event => handleChange(event, 'language')}
+                                    onChange={e => handleChange(e.target.value, 'language')}
                                     value={
                                         !this.state.localSettings.language
                                             ? 'system'
@@ -376,8 +375,14 @@ class Drawer extends Component {
                                 <TextField
                                     variant="standard"
                                     label={t('Answer in id')}
-                                    value={this.state.localSettings.sayitInstance}
-                                    onChange={event => handleChange(event, 'sayitInstance')}
+                                    value={this.state.localSettings.sayitInstance || ''}
+                                    onChange={e => handleChange(e.target.value, 'sayitInstance')}
+                                    InputProps={{
+                                        endAdornment: this.state.localSettings.sayitInstance ?
+                                            <IconButton onClick={() => handleChange('', 'sayitInstance')}>
+                                                <CloseIcon />
+                                            </IconButton> : undefined,
+                                    }}
                                 />
                             </FormControl>
                             <Button
@@ -400,7 +405,13 @@ class Drawer extends Component {
                                     variant="standard"
                                     label={t('Processor\'s id')}
                                     value={this.state.localSettings.processorId}
-                                    onChange={event => handleChange(event, 'processorId')}
+                                    onChange={e => handleChange(e.target.value, 'processorId')}
+                                    InputProps={{
+                                        endAdornment: this.state.localSettings.processorId ?
+                                            <IconButton onClick={() => handleChange('', 'processorId')}>
+                                                <CloseIcon />
+                                            </IconButton> : undefined,
+                                    }}
                                 />
                             </FormControl>
                             <Button
@@ -423,15 +434,18 @@ class Drawer extends Component {
                                     variant="standard"
                                     label={t('Timeout for processor')}
                                     helperText={t('ms')}
+                                    type="number"
+                                    min={50}
+                                    max={15000}
                                     value={this.state.localSettings.processorTimeout}
-                                    onChange={e => handleChange(e, 'processorTimeout')}
+                                    onChange={e => handleChange(e.target.value, 'processorTimeout')}
                                 />
                             </FormControl>
                         </Grid>
                         <Grid item>
                             <FormControl fullWidth classes={{ root: classes.settingsItem }} variant="standard">
                                 <FormControlLabel
-                                    control={<Checkbox checked={this.state.localSettings.writeEveryAnswer} onChange={e => handleChange(e, 'writeEveryAnswer')} />}
+                                    control={<Checkbox checked={this.state.localSettings.writeEveryAnswer} onChange={e => handleChange(e.target.checked, 'writeEveryAnswer')} />}
                                     label={t('Write to response by every command')}
                                 />
                             </FormControl>
@@ -439,7 +453,7 @@ class Drawer extends Component {
                         <Grid item>
                             <FormControl fullWidth classes={{ root: classes.settingsItem }} variant="standard">
                                 <FormControlLabel
-                                    control={<Checkbox checked={this.state.localSettings.noNegativeMessage} onChange={e => handleChange(e, 'noNegativeMessage')} />}
+                                    control={<Checkbox checked={this.state.localSettings.noNegativeMessage} onChange={e => handleChange(e.target.checked, 'noNegativeMessage')} />}
                                     label={t('Do not answer "I don\'t understand" if no rules found')}
                                 />
                             </FormControl>
@@ -594,11 +608,10 @@ class Drawer extends Component {
                         onChange={this.handleSearch}
                         value={this.state.searchedValue}
                         InputProps={{
-                            endAdornment: this.state.searchedValue ? (
+                            endAdornment: this.state.searchedValue ?
                                 <IconButton onClick={() => this.setState({ searchedValue: '' })}>
                                     <CloseIcon />
-                                </IconButton>
-                            ) : undefined,
+                                </IconButton> : undefined,
                         }}
                         autoFocus
                     />

@@ -8,7 +8,6 @@ import 'react-splitter-layout/lib/index.css';
 
 import Drawer from '@mui/material/Drawer';
 
-import isEqual from 'lodash.isequal';
 import DrawerComponent from './Drawer';
 import RuleEditor from './RuleEditor';
 import CreateRuleDialog from './CreateRuleDialog';
@@ -62,19 +61,30 @@ class Layout extends PureComponent {
 
     componentDidMount() {
         this.getDataFromConfig()
-            .then(({ rules, ...settings }) => {
-                const rulesWithId = rules.map(rule =>
-                    (!rule.id || !rule.name
-                        ? {
-                            ...rule,
-                            id: rule.id || uuid(),
-                            name: rule.name || window.commands[rule.template]?.name[I18n.getLanguage()] || window.commands[rule.template]?.name.en,
-                        }
-                        : rule));
+            .then(instanceConfig => {
+                // convert from rules without ID to rules with ID
+                const rulesWithId = instanceConfig.rules.map(rule => {
+                    const ruleStruct = window.commands[rule?.template];
 
-                if (!isEqual(rules, rulesWithId)) {
-                    this.props.saveConfig({ rules: rulesWithId, ...settings });
-                    setTimeout(() => this.setState({ rules: rulesWithId }), 50);
+                    if (!ruleStruct) {
+                        return null;
+                    }
+                    if (rule.id && rule.name) {
+                        return rule;
+                    }
+
+                    rule = JSON.parse(JSON.stringify(rule));
+                    rule.name = rule.name || window.commands[rule.template]?.name[I18n.getLanguage()] || window.commands[rule.template]?.name.en;
+                    rule.id = rule.id || uuid();
+                    return rule;
+                }).filter(rule => rule);
+
+                // if some rules were converted, save them
+                if (JSON.stringify(instanceConfig.rules) !== JSON.stringify(rulesWithId)) {
+                    const newConfig = JSON.parse(JSON.stringify(instanceConfig));
+                    newConfig.rules = rulesWithId;
+                    this.props.saveConfig(newConfig)
+                        .then(isChanged => isChanged && this.getDataFromConfig());
                 }
             });
 
@@ -142,7 +152,7 @@ class Layout extends PureComponent {
             this.props.readConfig()
                 .then(config => {
                     const newConfig = JSON.parse(JSON.stringify(config));
-                    newConfig.rules = rules;
+                    newConfig.rules = rules.map(rule => Layout.getRuleShortData(rule));
                     this.props.saveConfig(newConfig);
                 }));
     };
@@ -225,7 +235,7 @@ class Layout extends PureComponent {
                 this.props.readConfig()
                     .then(config => {
                         const newConfig = JSON.parse(JSON.stringify(config));
-                        newConfig.rules = newState.rules;
+                        newConfig.rules = newState.rules.map(rule => Layout.getRuleShortData(rule));
                         this.props.saveConfig(newConfig);
                     });
             }
@@ -264,7 +274,7 @@ class Layout extends PureComponent {
                 this.props.readConfig()
                     .then(config => {
                         const newConfig = JSON.parse(JSON.stringify(config));
-                        newConfig.rules = rules;
+                        newConfig.rules = rules.map(rule => Layout.getRuleShortData(rule));
                         this.props.saveConfig(newConfig);
                     });
             }
@@ -355,47 +365,33 @@ class Layout extends PureComponent {
         let rules = JSON.parse(JSON.stringify(this.state.rules));
         rules = rules.filter(rule => rule.id !== id);
 
-        this.setState(
-            {
-                rules,
-                selectedRule: rules.length ? rules[rules.length - 1] : null,
-            },
-            () => {
-                this.props.readConfig()
-                    .then(config => {
-                        const newConfig = JSON.parse(JSON.stringify(config));
-                        newConfig.rules = rules;
-                        this.props.saveConfig(newConfig);
-                    });
-            },
-        );
+        this.setState({
+            rules,
+            selectedRule: rules.length ? rules[rules.length - 1] : null,
+        },
+        () => {
+            this.props.readConfig()
+                .then(config => {
+                    const newConfig = JSON.parse(JSON.stringify(config));
+                    newConfig.rules = rules.map(rule => Layout.getRuleShortData(rule));
+                    this.props.saveConfig(newConfig);
+                });
+        });
     };
 
     updateConfig = async currentSelectedRule => {
-        const { [currentSelectedRule.id]: removedId, ...ids } = this.state.unsavedRules;
+        currentSelectedRule = currentSelectedRule || this.state.selectedRule;
+        const rules = this.updateRule(currentSelectedRule);
+
         const config = await this.props.readConfig();
-        const { rules, ...settings } = config;
-
-        const matchingRule = rules.find(rule => rule.id === currentSelectedRule.id);
-        const updatedCurrentRules = this.updateRule(currentSelectedRule);
-
-        let updatedRules;
-        if (matchingRule) {
-            updatedRules = rules.map(rule =>
-                (rule.id === currentSelectedRule.id
-                    ? Layout.getRuleShortData(currentSelectedRule)
-                    : rule));
-        } else {
-            updatedRules = [...rules, Layout.getRuleShortData(currentSelectedRule)];
-        }
-
-        const newConfig = { rules: updatedRules, ...settings };
+        const newConfig = JSON.parse(JSON.stringify(config));
+        newConfig.rules = rules.map(rule => Layout.getRuleShortData(rule));
         await this.props.saveConfig(newConfig);
 
         this.setState({
-            selectedRule: currentSelectedRule || this.state.selectedRule || null,
-            rules: updatedCurrentRules,
-            unsavedRules: ids,
+            selectedRule: currentSelectedRule || null,
+            rules,
+            unsavedRules: {},
         });
     };
 
@@ -405,27 +401,37 @@ class Layout extends PureComponent {
             const lang = I18n.getLanguage();
 
             const currentRules = rules.map(rule => {
-                const obj = window.commands[rule?.template];
+                const ruleStruct = window.commands[rule?.template];
 
-                if (!obj) {
-                    window.alert(`Unknown rule: "${rule?.template}". Please report an issue on Github!`);
+                if (!ruleStruct) {
+                    // window.alert(`Unknown rule: "${rule?.template}". Please report an issue on Github!`);
                     return null;
                 }
 
+                // fix wrong saved data
+                if (typeof rule.ack === 'object') {
+                    rule.ack = rule.ack.default;
+                }
+                rule.args.forEach((arg, index) => {
+                    if (typeof arg === 'object') {
+                        rule.args[index] = arg.default;
+                    }
+                });
+
                 return {
-                    ...obj,
-                    rule: obj.name[lang] || obj.name.en,
+                    ...ruleStruct,
+                    rule: ruleStruct.name[lang] || ruleStruct.name.en,
                     ack: {
-                        ...obj.ack,
-                        default: rule.ack ? rule.ack.default : (obj.ack?.type === 'checkbox' ? false : ''),
-                        name: obj.ack?.name[lang] || obj.ack?.name.en,
+                        ...ruleStruct.ack,
+                        default: rule.ack || (ruleStruct.ack?.type === 'checkbox' ? false : ''),
+                        name: ruleStruct.ack?.name[lang] || ruleStruct.ack?.name.en,
                     },
-                    args: obj.args?.map((arg, index) => ({
+                    args: ruleStruct.args?.map((arg, index) => ({
                         ...arg,
-                        default: rule.args[index] ? rule.args[index].default : (arg?.type === 'checkbox' ? false : ''),
+                        default: rule.args[index] || (arg?.type === 'checkbox' ? false : ''),
                         name: arg?.name[lang] || arg?.name.en || '',
                     })),
-                    name: rule.name || obj.name[lang] || obj.name.en,
+                    name: rule.name || ruleStruct.name[lang] || ruleStruct.name.en,
                     words: rule.words,
                     _break: rule._break,
                     id: rule.id || uuid(),
@@ -580,7 +586,7 @@ class Layout extends PureComponent {
     }
 
     render() {
-        console.log(this.state);
+        // console.log(this.state);
         const { classes } = this.props;
         const { rules, selectedRule, isLeftBarOpen } = this.state;
 

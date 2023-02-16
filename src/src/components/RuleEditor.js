@@ -21,7 +21,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { Utils, I18n } from '@iobroker/adapter-react-v5';
 import DialogSelectID from '@iobroker/adapter-react-v5/Dialogs/SelectID';
-import isEqual from 'lodash.isequal';
+import IconButton from "@mui/material/IconButton";
 
 const styles = theme => ({
     root: {
@@ -199,6 +199,8 @@ class RuleEditor extends PureComponent {
             showDialog: false,
             editIndex: 0,
         };
+
+        this.handlers = this.createInputHandlers();
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -232,7 +234,7 @@ class RuleEditor extends PureComponent {
             const unsavedRule = this.props.unsavedRules[this.state.localRule.id];
 
             if (
-                isEqual(this.props.selectedRule, this.state.localRule) &&
+                JSON.stringify(this.props.selectedRule) === JSON.stringify(this.state.localRule) &&
                 !unsavedRule?.wasChangedGlobally
             ) {
                 this.setState({ isLocalStateWasUpdated: false });
@@ -413,10 +415,16 @@ class RuleEditor extends PureComponent {
                     // variant="outlined"
                     size="small"
                     disabled={disabled}
-                    value={value}
+                    value={value === undefined || value === null ? '' : value}
                     helperText={note || ''}
                     onChange={onChange}
                     key={key}
+                    InputProps={{
+                        endAdornment: value ?
+                            <IconButton onClick={() => onChange({ target: { value: '' } })}>
+                                <CloseIcon />
+                            </IconButton> : undefined,
+                    }}
                 />
                 <Button
                     color="grey"
@@ -436,13 +444,19 @@ class RuleEditor extends PureComponent {
                 // variant="outlined"
                 size="small"
                 disabled={disabled}
-                value={value}
+                value={value === undefined || value === null ? '' : value}
                 helperText={note || ''}
                 onChange={onChange}
                 key={key}
                 className={classes.rowPadding}
                 type={type === 'number' ? 'number' : 'text'}
                 // className={Utils.clsx('outlined-basic', classes.textField)}
+                InputProps={{
+                    endAdornment: value ?
+                        <IconButton onClick={() => onChange({ target: { value: '' } })}>
+                            <CloseIcon />
+                        </IconButton> : undefined,
+                }}
             />;
         }
         return <FormControl classes={{ root: classes.switchControl }} variant="standard">
@@ -472,10 +486,8 @@ class RuleEditor extends PureComponent {
             if (editable === undefined) {
                 return false;
             }
-            if (editable === false) {
-                return true;
-            }
-            return false;
+
+            return editable === false;
         };
 
         return [
@@ -655,8 +667,6 @@ class RuleEditor extends PureComponent {
         };
     };
 
-    handlers = this.createInputHandlers();
-
     openSelectIdDialog = (arg, selectedId, editIndex) => {
         if (arg.type === 'id') {
             this.setState({ showDialog: true, showDialogId: selectedId, editIndex });
@@ -681,21 +691,22 @@ class RuleEditor extends PureComponent {
     };
 
     renderConfirmDialog() {
-        return this.state.confirmChanges ? (
-            <Dialog fullWidth open={this.state.confirmChanges} maxWidth="md">
-                <DialogTitle>
-                    {I18n.t('Please confirm or cancel changes before leaving')}
-                </DialogTitle>
-                <DialogContent>
-                    <Typography>
-                        {`${I18n.t('You have changed rule')}: `}
-                        {' '}
-                        <strong>{this.state.localRule.name}</strong>
-                    </Typography>
-                    <DialogActions>{this.createConfirmModalActions()}</DialogActions>
-                </DialogContent>
-            </Dialog>
-        ) : null;
+        if (!this.state.confirmChanges) {
+            return null;
+        }
+        return <Dialog fullWidth open={this.state.confirmChanges} maxWidth="md">
+            <DialogTitle>
+                {I18n.t('Please confirm or cancel changes before leaving')}
+            </DialogTitle>
+            <DialogContent>
+                <Typography>
+                    {`${I18n.t('You have changed rule')}: `}
+                    {' '}
+                    <strong>{this.state.localRule.name}</strong>
+                </Typography>
+                <DialogActions>{this.createConfirmModalActions()}</DialogActions>
+            </DialogContent>
+        </Dialog>;
     }
 
     renderSelectIdDialog() {

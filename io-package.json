@@ -167,7 +167,48 @@
       "sentry": {
         "dsn": "https://b421086baf0546cdb1f2aaf196939d7c@sentry.iobroker.net/49"
       }
-    }
+    },
+    "messages": [
+      {
+        "condition": {
+          "operand": "and",
+          "rules": [
+            "oldVersion<3",
+            "newVersion>=3"
+          ]
+        },
+        "title": {
+          "en": "Important notice!",
+          "de": "Wichtiger Hinweis!",
+          "ru": "Важное замечание!",
+          "pt": "Notícia importante!",
+          "nl": "Belangrijke mededeling!",
+          "fr": "Avis important!",
+          "it": "Avviso IMPORTANTE!",
+          "es": "Noticia importante!",
+          "pl": "Ważna uwaga!",
+          "zh-cn": "重要通知!"
+        },
+        "text": {
+          "en": "Please check all settings of all rules in settings and save them again!",
+          "de": "Bitte überprüfen Sie alle Einstellungen aller Regeln in Einstellungen und speichern Sie sie wieder!",
+          "ru": "Пожалуйста, проверьте все настройки всех правил в настройках и сохраните их снова!",
+          "pt": "Por favor, verifique todas as configurações de todas as regras nas configurações e salve-as novamente!",
+          "nl": "Controleer alle instellingen van alle regels in de settings en red ze opnieuw!",
+          "fr": "Veuillez vérifier tous les paramètres de toutes les règles dans les paramètres et les sauvegarder à nouveau!",
+          "it": "Si prega di controllare tutte le impostazioni di tutte le regole nelle impostazioni e salvarle di nuovo!",
+          "es": "Por favor, compruebe todos los ajustes de todas las reglas en la configuración y guárdalas de nuevo!",
+          "pl": "Wszystko o wszystkich zasadach i oszczędza ich ponownie!",
+          "uk": "Будь ласка, перевірте всі налаштування всіх правил в налаштуваннях та зберігайте їх знову!",
+          "zh-cn": "请检查一切环境规则,并再次挽救这些规则!"
+        },
+        "level": "warn",
+        "buttons": [
+          "agree",
+          "cancel"
+        ]
+      }
+    ]
   },
   "native": {
     "rules": [],

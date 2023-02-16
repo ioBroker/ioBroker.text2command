@@ -1,5 +1,4 @@
 import React from 'react';
-import isEqual from 'lodash.isequal';
 
 import { withStyles } from '@mui/styles';
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
@@ -51,7 +50,7 @@ class App extends GenericApp {
                 return this.readConfig();
             })
             .then(config => {
-                console.log(config);
+                // console.log(config);
                 newState.config = config || false;
                 newState.ready = true;
                 this.setState(newState);
@@ -76,14 +75,14 @@ class App extends GenericApp {
         });
 
     saveConfig = config => this.socket.getObject(`system.adapter.${this.adapterName}.${this.instance}`)
-        .then(async obj => {
-            if (!isEqual(obj.native, config)) {
+        .then(obj => {
+            if (JSON.stringify(obj.native) !== JSON.stringify(config)) {
                 obj.native = config;
-                await this.socket.setObject(
-                    `system.adapter.${this.adapterName}.${this.instance}`,
-                    obj,
-                );
+                return this.socket.setObject(`system.adapter.${this.adapterName}.${this.instance}`, obj)
+                    .then(() => true);
             }
+
+            return false; // nothing changed
         });
 
     render() {
