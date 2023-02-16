@@ -1,10 +1,9 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { TouchBackend } from 'react-dnd-touch-backend';
 
 import { withStyles } from '@mui/styles';
+
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 // Material UI Components
 import DialogActions from '@mui/material/DialogActions';
@@ -606,8 +605,17 @@ class Drawer extends Component {
                 {!isSearchActive && !this.state.alive ? <Tooltip title={I18n.t('Instance is not running')}><WarningIcon className={classes.iconNotAlive}/></Tooltip> : null}
             </Toolbar>
 
-            <DndProvider backend={isTouchDevice() ? TouchBackend : HTML5Backend}>
-                <List className={classes.list}>
+            <DragDropContext onDragEnd={(result) => {
+                moveRule(result.source.index, result.destination.index);
+            }}>
+                <Droppable droppableId="droppable">
+                {(provided, snapshot) => (
+                    <List className={classes.list}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                    >
+
                     {renderedRules.map((rule, index) => (
                         <Rule
                             theme={this.props.theme}
@@ -625,8 +633,11 @@ class Drawer extends Component {
                             removeMatched={this.removeMatched}
                         />
                     ))}
-                </List>
-            </DndProvider>
+                    {provided.placeholder}
+                    </List>
+                )}
+                </Droppable>
+            </DragDropContext>
 
             <Toolbar className={classes.test} variant="dense" disableGutters>
                 <TextField

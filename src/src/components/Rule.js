@@ -6,8 +6,10 @@ import React, {
     useEffect,
 } from 'react';
 import { makeStyles } from '@mui/styles';
+
+import { Draggable } from "react-beautiful-dnd";
+
 import PropTypes from 'prop-types';
-import { DropTarget, DragSource } from 'react-dnd';
 
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -22,15 +24,13 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MaximizeIcon from '@mui/icons-material/Maximize';
 import FileCopy from '@mui/icons-material/FileCopy';
 
-const Rule = React.forwardRef((props, ref) => {
+const Rule = React.forwardRef((props) => {
     const {
         name,
         handleEdit,
         handleCopy,
         rule,
         isDragging,
-        connectDragSource,
-        connectDropTarget,
         id,
         selectRule,
         selectedRule,
@@ -111,14 +111,6 @@ const Rule = React.forwardRef((props, ref) => {
         }
     })();
 
-    const elementRef = useRef(null);
-    connectDragSource(elementRef);
-    connectDropTarget(elementRef);
-    const opacity = isDragging ? 0 : 1;
-    useImperativeHandle(ref, () => ({
-        getNode: () => elementRef.current,
-    }));
-
     const selectRuleMemo = useCallback(() => selectRule(id), [id, selectRule]);
     const handleEditMemo = useCallback(() => handleEdit(id), [id, handleEdit]);
     const handleCopyMemo = useCallback(() => handleCopy(id), [id, handleCopy]);
@@ -143,103 +135,57 @@ const Rule = React.forwardRef((props, ref) => {
 
     let secondary = rule !== name ? rule || '' : '';
 
-    return <div
-        ref={elementRef}
-        style={Object.assign({}, {opacity}, ruleStyle)}>
-        <ListItem
-            onClick={selectRuleMemo}
-            selected={selectedRule?.id === id}
-            className={Utils.clsx(selectedRule?.id === id && 'rule-selected')}
-            classes={{root: classes.listItem}}
-        >
-            <ListItemText
-                primary={name}
-                secondary={secondary}
-                classes={{
-                    primary: classes.listItemTextPrimary,
-                    secondary: classes.listItemTextSecondary,
-                    multiline: classes.multiline}}
-                className={classes.listItemText}
-            />
-            <ListItemIcon>
-                {
-                    _break ?
-                        <Tooltip title={I18n.t('Interrupt processing')}>
-                            <MaximizeIcon className={Utils.clsx(classes.ruleButton, classes.maximize)} />
-                        </Tooltip>
-                    :
-                        <Tooltip title={I18n.t('Do not interrupt processing')}><ArrowDownwardIcon className={classes.ruleButton} color="primary"/></Tooltip>
-                }
-                {!unique ? <Tooltip title={I18n.t('Copy rule')}>
-                    <IconButton onClick={handleCopyMemo} size="small" className={classes.editButton}>
-                        <FileCopy />
-                    </IconButton>
-                </Tooltip> : <div className={classes.emptyButton} />}
-                <Tooltip title={I18n.t('Edit name or type of rule')}>
-                    <IconButton onClick={handleEditMemo} size="small" className={classes.editButton}>
-                        <EditIcon />
-                    </IconButton>
-                </Tooltip>
-            </ListItemIcon>
-            {unsavedRules[id] && <div className={classes.dot}>{I18n.t('unsaved')}</div>}
-            <div className={classes.words}>[{words}]</div>
-        </ListItem>
-    </div>;
+    return <Draggable key={id} draggableId={id} index={index}>
+    {(provided, snapshot) => (<div
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        style={Object.assign({}, provided.draggableProps.style, ruleStyle)}>
+            
+            <ListItem
+                onClick={selectRuleMemo}
+                selected={selectedRule?.id === id}
+                className={Utils.clsx(selectedRule?.id === id && 'rule-selected')}
+                classes={{root: classes.listItem}}
+            >
+                <ListItemText
+                    primary={name}
+                    secondary={secondary}
+                    classes={{
+                        primary: classes.listItemTextPrimary,
+                        secondary: classes.listItemTextSecondary,
+                        multiline: classes.multiline}}
+                    className={classes.listItemText}
+                />
+                <ListItemIcon>
+                    {
+                        _break ?
+                            <Tooltip title={I18n.t('Interrupt processing')}>
+                                <MaximizeIcon className={Utils.clsx(classes.ruleButton, classes.maximize)} />
+                            </Tooltip>
+                        :
+                            <Tooltip title={I18n.t('Do not interrupt processing')}><ArrowDownwardIcon className={classes.ruleButton} color="primary"/></Tooltip>
+                    }
+                    {!unique ? <Tooltip title={I18n.t('Copy rule')}>
+                        <IconButton onClick={handleCopyMemo} size="small" className={classes.editButton}>
+                            <FileCopy />
+                        </IconButton>
+                    </Tooltip> : <div className={classes.emptyButton} />}
+                    <Tooltip title={I18n.t('Edit name or type of rule')}>
+                        <IconButton onClick={handleEditMemo} size="small" className={classes.editButton}>
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                </ListItemIcon>
+                {unsavedRules[id] && <div className={classes.dot}>{I18n.t('unsaved')}</div>}
+                <div className={classes.words}>[{words}]</div>
+            </ListItem>
+        </div>
+    )}
+    </Draggable>;
 });
 
-const ItemTypes = {
-    RULE: 'rule',
-};
-
-export default DropTarget(
-    ItemTypes.RULE,
-    {
-        hover(props, monitor, component) {
-            if (!component) {
-                return null;
-            }
-
-            const node = component.getNode();
-            if (!node) {
-                return null;
-            }
-            const dragIndex = monitor.getItem().index;
-            const hoverIndex = props.index;
-            if (dragIndex === hoverIndex) {
-                return;
-            }
-
-            const hoverBoundingRect = node.getBoundingClientRect();
-            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            const clientOffset = monitor.getClientOffset();
-            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-                return;
-            }
-            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-                return;
-            }
-            props.moveRule(dragIndex, hoverIndex);
-
-            monitor.getItem().index = hoverIndex;
-        },
-    },
-    connect => ({ connectDropTarget: connect.dropTarget() })
-)(
-    DragSource(
-        ItemTypes.RULE,
-        {
-            beginDrag: props => ({
-                id: props.id,
-                index: props.index,
-            }),
-        },
-        (connect, monitor) => ({
-            connectDragSource: connect.dragSource(),
-            isDragging: monitor.isDragging(),
-        })
-    )(Rule)
-);
+export default Rule;
 
 Rule.propTypes = {
     removeRule: PropTypes.func,
