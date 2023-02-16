@@ -113,7 +113,7 @@ You can use patterns in acknowledges:
 - `%s`: value
 - `%u`: unit
 - `%n`: name (planned!)
-- `{objectId}`: the state of this objectID will be placed here
+- `{objectId}`: the state of this objectID will be placed here. Actually it will be same bindings supported as by [iobroker.vis]()
 
 Following commands are supported:
 
@@ -261,7 +261,7 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 3.0.0 (2023-02-16)
 * (bluefox) Corrected many GUI errors
 
 ### 2.3.1 (2023-02-03)

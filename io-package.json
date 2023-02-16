@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "text2command",
-    "version": "2.3.1",
+    "version": "3.0.0",
     "news": {
+      "3.0.0": {
+        "en": "Corrected many GUI errors",
+        "de": "Viele GUI-Fehler korrigiert",
+        "ru": "Исправлено множество ошибок GUI",
+        "pt": "Corrigido muitos erros GUI",
+        "nl": "Vertaling:",
+        "fr": "Correction de nombreuses erreurs GUI",
+        "it": "Corretto molti errori GUI",
+        "es": "Corregido muchos errores de GUI",
+        "pl": "Poprawka wielu błędów GUI",
+        "uk": "Виправлено багато помилок інтерфейсу",
+        "zh-cn": "纠正许多古伊错误"
+      },
       "2.3.1": {
         "en": "Migrated GUI to v5",
         "de": "Migrated GUI to v5",
@@ -65,18 +78,6 @@
         "zh-cn": "在输出前检查 sayit 实例的存在"
       },
       "2.1.6": {
-        "en": "Corrected GUI",
-        "de": "Korrigierte GUI",
-        "ru": "Исправлен графический интерфейс",
-        "pt": "GUI corrigida",
-        "nl": "Gecorrigeerde GUI",
-        "fr": "Interface graphique corrigée",
-        "it": "GUI corretta",
-        "es": "Interfaz gráfica de usuario corregida",
-        "pl": "Poprawione GUI",
-        "zh-cn": "更正的图形用户界面"
-      },
-      "2.1.5": {
         "en": "Corrected GUI",
         "de": "Korrigierte GUI",
         "ru": "Исправлен графический интерфейс",

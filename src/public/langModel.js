@@ -89,7 +89,7 @@ const commands = {
             it: 'Qual è la temperatura esterna?',
             es: '¿Cuál es la temperatura exterior?',
             pl: 'Jaka jest temperatura zewnętrzna?',
-            'zh-cn': '外界温度是多少？'
+            'zh-cn': '外界温度是多少？',
         },
         unique: true,
         words: {
@@ -109,7 +109,7 @@ const commands = {
                     it: 'ID temperatura esterna',
                     es: 'ID de temperatura exterior',
                     pl: 'ID temperatury zewnętrznej',
-                    'zh-cn': '外部温度ID'
+                    'zh-cn': '外部温度ID',
                 },
                 type: 'id',
                 role: 'value.temperature',
@@ -125,7 +125,7 @@ const commands = {
                     "it": "Decimali",
                     "es": "Lugares decimales",
                     "pl": "Miejsca dziesiętne",
-                    "zh-cn": "小数位"
+                    "zh-cn": "小数位",
                 },
                 type: 'number',
                 decimal: true,
@@ -144,7 +144,7 @@ const commands = {
                 it: 'Risposta (usa %s  per valore)',
                 es: 'Respuesta (use %s  para el valor)',
                 pl: 'Odpowiedź (użyj wartości %s )',
-                'zh-cn': '答案（将％s用作值）'
+                'zh-cn': '答案（将％s用作值）',
             },
             default: {
                 en: 'Outside temperature is %s %u',
@@ -165,7 +165,7 @@ const commands = {
             it: 'Qual è la temperatura interna?',
             es: '¿Cuál es la temperatura interior?',
             pl: 'Jaka jest temperatura wewnętrzna?',
-            'zh-cn': '内部温度是多少？'
+            'zh-cn': '内部温度是多少？',
         },
         unique: true,
         words: {
@@ -185,7 +185,7 @@ const commands = {
                     it: 'ID temperatura interna',
                     es: 'ID de temperatura interior',
                     pl: 'ID temperatury wewnętrznej',
-                    'zh-cn': '内部温度ID'
+                    'zh-cn': '内部温度ID',
                 },
                 type: 'id',
                 role: 'value.temperature',
@@ -201,11 +201,11 @@ const commands = {
                     "it": "Decimali",
                     "es": "Lugares decimales",
                     "pl": "Miejsca dziesiętne",
-                    "zh-cn": "小数位"
+                    "zh-cn": "小数位",
                 },
                 decimal: true,
                 type: 'number',
-                default: 0
+                default: 0,
             },
         ],
         ack: {
@@ -220,7 +220,7 @@ const commands = {
                 it: 'Risposta (usa %s  per valore)',
                 es: 'Respuesta (use %s  para el valor)',
                 pl: 'Odpowiedź (użyj wartości %s )',
-                'zh-cn': '答案（将％s用作值）'
+                'zh-cn': '答案（将％s用作值）',
             },
             default: {
                 en: 'Inside temperature is %s %u',
@@ -232,7 +232,7 @@ const commands = {
                 it: 'La temperatura interna è %s %u',
                 es: 'La temperatura interior es %s %u',
                 pl: 'Temperatura wewnętrzna wynosi %s %u',
-                'zh-cn': '内部温度为%s%u'
+                'zh-cn': '内部温度为%s%u',
             },
         },
     },
@@ -248,7 +248,7 @@ const commands = {
             it: 'accendere / spegnere per funzione',
             es: 'encender / apagar por función',
             pl: 'włącz / wyłącz według funkcji',
-            'zh-cn': '按功能打开/关闭'
+            'zh-cn': '按功能打开/关闭',
         },
         unique: true,
         editable: false,
@@ -269,7 +269,7 @@ const commands = {
                     it: 'Usa 0/1, non falso / vero',
                     es: 'Use 0/1, no falso / verdadero',
                     pl: 'Użyj 0/1, nie fałsz / prawda',
-                    'zh-cn': '使用0/1，而不是false / true'
+                    'zh-cn': '使用0/1，而不是false / true',
                 },
                 default: false,
                 type: 'checkbox',
@@ -287,7 +287,7 @@ const commands = {
                 it: 'Rispondi con conferma',
                 es: 'Responda con reconocimiento',
                 pl: 'Odpowiedz z potwierdzeniem',
-                'zh-cn': '确认答复'
+                'zh-cn': '确认答复',
             },
         },
     },
@@ -303,7 +303,7 @@ const commands = {
             it: 'aprire / chiudere i bui',
             es: 'abrir / cerrar persianas',
             pl: 'otwieranie / zamykanie żaluzji',
-            'zh-cn': '打开/关闭百叶窗'
+            'zh-cn': '打开/关闭百叶窗',
         },
         unique: true,
         editable: false,
@@ -324,7 +324,7 @@ const commands = {
                 it: 'Rispondi con conferma',
                 es: 'Responda con reconocimiento',
                 pl: 'Odpowiedz z potwierdzeniem',
-                'zh-cn': '确认答复'
+                'zh-cn': '确认答复',
             },
         },
     },
@@ -340,7 +340,7 @@ const commands = {
             it: 'Scrivi testo per dichiarare',
             es: 'Escribir texto para indicar',
             pl: 'Napisz tekst do stwierdzenia',
-            'zh-cn': '写文字说明'
+            'zh-cn': '写文字说明',
         },
         unique: false,
         editable: true,
@@ -355,7 +355,7 @@ const commands = {
             it: 'invia testo',
             es: 'enviar texto',
             pl: 'wyslij wiadomość',
-            'zh-cn': '发短讯'
+            'zh-cn': '发短讯',
         },
         args: [
             {
@@ -369,7 +369,7 @@ const commands = {
                     it: 'ID dispositivo o variabile',
                     es: 'ID de dispositivo o variable',
                     pl: 'Identyfikator urządzenia lub zmiennej',
-                    'zh-cn': '设备或变量ID'
+                    'zh-cn': '设备或变量ID',
                 },
                 type: 'id',
             },
@@ -384,7 +384,7 @@ const commands = {
                     it: 'Valore da annotare',
                     es: 'Valor para anotar',
                     pl: 'Wartość do zanotowania',
-                    'zh-cn': '写下价值'
+                    'zh-cn': '写下价值',
                 },
                 type: 'value',
                 default: '%s',
@@ -402,7 +402,7 @@ const commands = {
                 it: 'Risposta',
                 es: 'Responder',
                 pl: 'Odpowiedź',
-                'zh-cn': '回答'
+                'zh-cn': '回答',
             },
             default: {
                 en: 'Following text was sent: %s',
@@ -414,7 +414,7 @@ const commands = {
                 it: 'È stato inviato il seguente testo: %s',
                 es: 'Se envió el siguiente texto: %s',
                 pl: 'Wysłano następujący tekst: %s',
-                'zh-cn': '已发送以下文本：%s'
+                'zh-cn': '已发送以下文本：%s',
             },
         },
     } /*
@@ -475,7 +475,7 @@ const commands = {
             it: 'Accendi / spegni qualcosa',
             es: 'Enciende / apaga algo',
             pl: 'Włącz / wyłącz coś',
-            'zh-cn': '开启/关闭某些功能'
+            'zh-cn': '开启/关闭某些功能',
         },
         unique: false,
         args: [
@@ -490,7 +490,7 @@ const commands = {
                     it: 'ID dispositivo o variabile',
                     es: 'ID de dispositivo o variable',
                     pl: 'Identyfikator urządzenia lub zmiennej',
-                    'zh-cn': '设备或变量ID'
+                    'zh-cn': '设备或变量ID',
                 },
                 type: 'id',
             },
@@ -505,7 +505,7 @@ const commands = {
                     it: 'Valore da annotare',
                     es: 'Valor para anotar',
                     pl: 'Wartość do zanotowania',
-                    'zh-cn': '写下价值'
+                    'zh-cn': '写下价值',
                 },
                 type: 'value',
             },
@@ -522,7 +522,7 @@ const commands = {
                 it: 'Risposta',
                 es: 'Responder',
                 pl: 'Odpowiedź',
-                'zh-cn': '回答'
+                'zh-cn': '回答',
             },
             default: {
                 en: 'Switched on',
@@ -534,7 +534,7 @@ const commands = {
                 it: 'Acceso',
                 es: 'Encendido',
                 pl: 'Włączony',
-                'zh-cn': '切换到'
+                'zh-cn': '切换到',
             },
         },
     },
@@ -550,7 +550,7 @@ const commands = {
             it: 'Chiedi qualcosa',
             es: 'Pregunta por algo',
             pl: 'Zapytaj o coś',
-            'zh-cn': '询问一些事情'
+            'zh-cn': '询问一些事情',
         },
         unique: false,
         args: [
@@ -565,7 +565,7 @@ const commands = {
                     it: 'ID dispositivo o variabile',
                     es: 'ID de dispositivo o variable',
                     pl: 'Identyfikator urządzenia lub zmiennej',
-                    'zh-cn': '设备或变量ID'
+                    'zh-cn': '设备或变量ID',
                 },
                 type: 'id',
             },
@@ -580,7 +580,7 @@ const commands = {
                     "it": "Converti 0/1 in falso/vero",
                     "es": "Convertir 0/1 a falso/verdadero",
                     "pl": "Konwertuj 0/1 na fałsz/prawdę",
-                    "zh-cn": "将 0/1 转换为假/真"
+                    "zh-cn": "将 0/1 转换为假/真",
                 },
                 default: false,
                 type: 'checkbox',
@@ -596,7 +596,7 @@ const commands = {
                     it: 'ID dispositivo o variabile (%s1, %u1)',
                     es: 'ID de dispositivo o variable (%s1, %u1)',
                     pl: 'Identyfikator urządzenia lub zmiennej (%s1, %u1)',
-                    'zh-cn': '设备或变量ID (%s1, %u1)'
+                    'zh-cn': '设备或变量ID (%s1, %u1)',
                 },
                 type: 'id',
             },
@@ -613,7 +613,7 @@ const commands = {
                 it: 'Risposta (usa %s  per valore)',
                 es: 'Respuesta (use %s  para el valor)',
                 pl: 'Odpowiedź (użyj wartości %s )',
-                'zh-cn': '答案（将％s用作值）'
+                'zh-cn': '答案（将％s用作值）',
             },
             default: {
                 en: '%s',
@@ -634,7 +634,7 @@ const commands = {
             it: 'Crea una risposta',
             es: 'Crear respuesta',
             pl: 'Utwórz odpowiedź',
-            'zh-cn': '建立答案'
+            'zh-cn': '建立答案',
         },
         unique: false,
         ack: {
@@ -649,7 +649,7 @@ const commands = {
                 it: 'Risposta (usa {objectID} per valore)',
                 es: 'Respuesta (use {objectID} para el valor)',
                 pl: 'Odpowiedź (użyj {objectID} dla wartości)',
-                'zh-cn': '答案（使用{objectID}作为值）'
+                'zh-cn': '答案（使用{objectID}作为值）',
             },
             default: {
                 en: '{objectID}',
