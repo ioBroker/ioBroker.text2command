@@ -113,7 +113,7 @@ You can use patterns in acknowledges:
 - `%s`: value
 - `%u`: unit
 - `%n`: name (planned!)
-- `{objectId}`: the state of this objectID will be placed here. Actually it will be same bindings supported as by [iobroker.vis]()
+- `{objectId}`: the state of this objectID will be placed here. Actually it will be same bindings supported as by [iobroker.vis](https://github.com/ioBroker/ioBroker.vis#bindings-of-objects), except special bindings.
 
 Following commands are supported:
 
