@@ -46,5 +46,7 @@
   "Don't save and go": "Non salvare e vattene",
   "Do not answer \"I don't understand\" if no rules found": "Non rispondere \"Non capisco\" se non trovi regole",
   "Convert 0/1 to false/true": "Converti 0/1 in falso/vero",
-  "unsaved": "non salvato"
+  "unsaved": "non salvato",
+  "Apply": "Fare domanda a",
+  "Apply and save": "Applica e salva"
 }

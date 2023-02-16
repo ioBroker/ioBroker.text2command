@@ -109,7 +109,7 @@ function startAdapter(options) {
 
                 default:
                     //noinspection JSUnresolvedVariable
-                    adapter.log.warn('Unknown command: ' + obj.command);
+                    adapter.log.warn(`Unknown command: ${obj.command}`);
                     break;
             }
         }

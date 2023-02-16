@@ -46,5 +46,7 @@
   "Don't save and go": "Nicht speichern und verlassen",
   "Do not answer \"I don't understand\" if no rules found": "Nicht mit „Ich verstehe nicht“ antworten, wenn keine Regeln gefunden wurden",
   "Convert 0/1 to false/true": "0/1 in falsch/wahr kovertieren",
-  "unsaved": "ungespeichert"
+  "unsaved": "ungespeichert",
+  "Apply": "Anwenden",
+  "Apply and save": "Anwenden und speichern"
 }

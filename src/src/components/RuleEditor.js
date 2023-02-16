@@ -13,6 +13,7 @@ import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -21,7 +22,6 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { Utils, I18n } from '@iobroker/adapter-react-v5';
 import DialogSelectID from '@iobroker/adapter-react-v5/Dialogs/SelectID';
-import IconButton from "@mui/material/IconButton";
 
 const styles = theme => ({
     root: {

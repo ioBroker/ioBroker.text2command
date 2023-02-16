@@ -365,18 +365,20 @@ class Layout extends PureComponent {
         let rules = JSON.parse(JSON.stringify(this.state.rules));
         rules = rules.filter(rule => rule.id !== id);
 
-        this.setState({
-            rules,
-            selectedRule: rules.length ? rules[rules.length - 1] : null,
-        },
-        () => {
-            this.props.readConfig()
-                .then(config => {
-                    const newConfig = JSON.parse(JSON.stringify(config));
-                    newConfig.rules = rules.map(rule => Layout.getRuleShortData(rule));
-                    this.props.saveConfig(newConfig);
-                });
-        });
+        this.setState(
+            {
+                rules,
+                selectedRule: rules.length ? rules[rules.length - 1] : null,
+            },
+            () => {
+                this.props.readConfig()
+                    .then(config => {
+                        const newConfig = JSON.parse(JSON.stringify(config));
+                        newConfig.rules = rules.map(rule => Layout.getRuleShortData(rule));
+                        this.props.saveConfig(newConfig);
+                    });
+            },
+        );
     };
 
     updateConfig = async currentSelectedRule => {
