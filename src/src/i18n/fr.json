@@ -45,5 +45,6 @@
   "Save and go": "Économisez et partez",
   "Don't save and go": "Ne sauvez pas et ne partez pas",
   "Do not answer \"I don't understand\" if no rules found": "Ne répondez pas \"je ne comprends pas\" si aucune règle n'a été trouvée",
-  "Convert 0/1 to false/true": "Convertir 0/1 en faux/vrai"
+  "Convert 0/1 to false/true": "Convertir 0/1 en faux/vrai",
+  "unsaved": "non enregistré"
 }

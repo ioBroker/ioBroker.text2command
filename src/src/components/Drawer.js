@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@mui/styles';
 
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 // Material UI Components
 import DialogActions from '@mui/material/DialogActions';
@@ -24,11 +24,10 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert'
+import Alert from '@mui/material/Alert';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Grid } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
+import Grid from '@mui/material/Grid';
 
 // icons
 import AddIcon from '@mui/icons-material/Add';
@@ -38,14 +37,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FormatClearIcon from '@mui/icons-material/FormatClear';
-import ClearIcon from '@mui/icons-material/Close';
 import WarningIcon from '@mui/icons-material/Warning';
+import CheckIcon from '@mui/icons-material/Check';
 
 import { Utils, I18n } from '@iobroker/adapter-react-v5';
 import DialogSelectID from '@iobroker/adapter-react-v5/Dialogs/SelectID';
 
 import Rule from './Rule';
 
+/*
 function mobileCheck() {
     let check = false;
     (function (a) { if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series([46])0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br([ev])w|bumb|bw-([nu])|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do([cp])o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly([-_])|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-([mpt])|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c([- _agpst])|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac([ \-/])|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja([tv])a|jbro|jemu|jigs|kddi|keji|kgt([ /])|klon|kpt |kwc-|kyo([ck])|le(no|xi)|lg( g|\/([klu])|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t([- ov])|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30([02])|n50([025])|n7(0([01])|10)|ne(([cm])-|on|tf|wf|wg|wt)|nok([6i])|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan([adt])|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c([-01])|47|mc|nd|ri)|sgh-|shar|sie([-m])|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel([im])|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c([- ])|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/i.test(a.substr(0, 4))) check = true; }(navigator.userAgent || navigator.vendor || window.opera));
@@ -60,12 +60,13 @@ function isTouchDevice() {
         || (navigator.maxTouchPoints > 0)
         || (navigator.msMaxTouchPoints > 0));
 }
+*/
 
 const styles = theme => ({
     test: {
         width: '100%',
         boxSizing: 'border-box',
-        paddingLeft: theme.spacing(1)
+        paddingLeft: theme.spacing(1),
     },
     main: {
         minWidth: 300,
@@ -80,7 +81,7 @@ const styles = theme => ({
         height: 'calc(100% - 48px - 48px - 8px)',
         overflowX: 'hidden',
         overflowY: 'auto',
-        paddingTop: 0.,
+        paddingTop: 0,
     },
     root: {
         width: 'calc(100% - 48px)',
@@ -122,7 +123,7 @@ const styles = theme => ({
     iconNotAlive: {
         color: '#ffc10a',
         float: 'right',
-        marginRight: theme.spacing(1)
+        marginRight: theme.spacing(1),
     },
     search: {
         flexBasis: '80%',
@@ -137,14 +138,14 @@ const styles = theme => ({
         width: '100%',
     },
     selectIdText: {
-        width: 'calc(100% - 50px)'
+        width: 'calc(100% - 50px)',
     },
     selectIdButton: {
         minWidth: 40,
-    }
+    },
 });
 
-const tooltipStyles = theme => ({
+const tooltipStyles = () => ({
     tooltip: {
         fontSize: 14,
     },
@@ -180,11 +181,11 @@ class Drawer extends Component {
         this.props.socket.subscribeState(`system.adapter.text2command.${this.props.instance}.alive`, this.onAlive);
 
         if (this.props.selectedRule && this.props.selectedRule.id) {
-            //scroll to
+            // scroll to
             setTimeout(() => {
                 const rules = window.document.getElementsByClassName('rule-selected');
                 if (rules.length) {
-                    rules[0].scrollIntoView()
+                    rules[0].scrollIntoView();
                 }
             }, 50);
         }
@@ -195,7 +196,7 @@ class Drawer extends Component {
         this.props.socket.unsubscribeState(`system.adapter.text2command.${this.props.instance}.alive`, this.onAlive);
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps/* , prevState */) {
         if (this.props.settings !== prevProps.settings && this.props.settings) {
             this.getDefaultSettings();
         }
@@ -224,8 +225,8 @@ class Drawer extends Component {
         if (state) {
             if (state.val && state.val.match(/^Error\.|^Fehler\.|^Ошибка\./)) {
                 this.props.socket.getState(`text2command.${this.props.instance}.error`)
-                    .then(state =>
-                        this.setState({ toast: state && state.val ? state.val : (state.val || ''), toastError: true }));
+                    .then(_state =>
+                        this.setState({ toast: _state && _state.val ? _state.val : (_state.val || ''), toastError: true }));
             } else {
                 this.setState({ toast: state.val || '', toastError: false });
             }
@@ -316,7 +317,6 @@ class Drawer extends Component {
         const handleClose = () => {
             this.setState({
                 isSettingsDialogOpen: false,
-                isSettingsWasNotSaved: true,
             });
         };
 
@@ -340,7 +340,8 @@ class Drawer extends Component {
             open={this.state.isSettingsDialogOpen}
             onClose={handleClose}
             fullWidth
-            onExited={this.getDefaultSettings}>
+            onExited={this.getDefaultSettings}
+        >
             <DialogTitle>
                 <Typography variant="h4" component="span" align="center">
                     {t('Settings')}
@@ -351,23 +352,24 @@ class Drawer extends Component {
                     <Grid container direction="column">
                         <Grid item>
                             <FormControl fullWidth classes={{ root: classes.settingsItem }} variant="standard">
-                            <InputLabel id="demo-simple-select-label">{t('Language')}</InputLabel>
-                            <Select
-                                variant="standard"
-                                classes={{ root: classes.width100 }}
-                                onChange={event => handleChange(event, 'language')}
-                                value={
-                                    !this.state.localSettings.language
-                                        ? 'system'
-                                        : this.state.localSettings.language
-                                }>
-                                <MenuItem value="system">{t('System')}</MenuItem>
-                                {Children.toArray(
-                                    options.map(option =>
-                                        <MenuItem value={option}>{t('lang_' + option)}</MenuItem>)
-                                )}
-                            </Select>
-                        </FormControl>
+                                <InputLabel id="demo-simple-select-label">{t('Language')}</InputLabel>
+                                <Select
+                                    variant="standard"
+                                    classes={{ root: classes.width100 }}
+                                    onChange={event => handleChange(event, 'language')}
+                                    value={
+                                        !this.state.localSettings.language
+                                            ? 'system'
+                                            : this.state.localSettings.language
+                                    }
+                                >
+                                    <MenuItem value="system">{t('System')}</MenuItem>
+                                    {Children.toArray(
+                                        options.map(option =>
+                                            <MenuItem value={option}>{t(`lang_${option}`)}</MenuItem>),
+                                    )}
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item>
                             <FormControl fullWidth classes={{ root: Utils.clsx(classes.settingsItem, classes.selectIdText) }} variant="standard">
@@ -388,13 +390,15 @@ class Drawer extends Component {
                                         selectedSettingsName: 'sayitInstance',
                                         selectedId: this.state.localSettings.sayitInstance || '',
                                     })}
-                            >...</Button>
+                            >
+...
+                            </Button>
                         </Grid>
                         <Grid item>
                             <FormControl fullWidth classes={{ root: Utils.clsx(classes.settingsItem, classes.selectIdText) }} variant="standard">
                                 <TextField
                                     variant="standard"
-                                    label={t(`Processor's id`)}
+                                    label={t('Processor\'s id')}
                                     value={this.state.localSettings.processorId}
                                     onChange={event => handleChange(event, 'processorId')}
                                 />
@@ -409,18 +413,20 @@ class Drawer extends Component {
                                         selectedSettingsName: 'processorId',
                                         selectedId: this.state.localSettings.processorId || '',
                                     })}
-                            >...</Button>
+                            >
+...
+                            </Button>
                         </Grid>
                         <Grid item>
                             <FormControl fullWidth classes={{ root: classes.settingsItem }} variant="standard">
-                            <TextField
-                                variant="standard"
-                                label={t('Timeout for processor')}
-                                helperText={t('ms')}
-                                value={this.state.localSettings.processorTimeout}
-                                onChange={e => handleChange(e, 'processorTimeout')}
-                            />
-                        </FormControl>
+                                <TextField
+                                    variant="standard"
+                                    label={t('Timeout for processor')}
+                                    helperText={t('ms')}
+                                    value={this.state.localSettings.processorTimeout}
+                                    onChange={e => handleChange(e, 'processorTimeout')}
+                                />
+                            </FormControl>
                         </Grid>
                         <Grid item>
                             <FormControl fullWidth classes={{ root: classes.settingsItem }} variant="standard">
@@ -442,8 +448,8 @@ class Drawer extends Component {
                 </form>
             </DialogContent>
             <DialogActions>
-                <Button variant="contained" color="primary" onClick={submitSettings} startIcon={<CheckIcon/>}>{I18n.t('Ok')}</Button>
-                <Button variant="contained" color="grey"    onClick={handleClose}    startIcon={<CloseIcon/>}>{I18n.t('Cancel')}</Button>
+                <Button variant="contained" color="primary" onClick={submitSettings} startIcon={<CheckIcon />}>{I18n.t('Ok')}</Button>
+                <Button variant="contained" color="grey" onClick={handleClose} startIcon={<CloseIcon />}>{I18n.t('Cancel')}</Button>
             </DialogActions>
         </Dialog>;
     };
@@ -466,17 +472,18 @@ class Drawer extends Component {
         },
     ];
 
-    createIcons = iconsData =>
-        iconsData.map(({ icon, handler, tooltip }, index) => <CustomTooltip title={tooltip} key={index}>
+    static createIcons(iconsData) {
+        return iconsData.map(({ icon, handler, tooltip }, index) => <CustomTooltip title={tooltip} key={index}>
             <IconButton onClick={handler}>{icon}</IconButton>
         </CustomTooltip>);
+    }
 
     renderSelectIdDialog() {
         return this.state.showDialogSelectId ? (
             <DialogSelectID
-                imagePrefix={'../..'}
+                imagePrefix="../.."
                 socket={this.props.socket}
-                title={'Select ID'}
+                title="Select ID"
                 selected={this.state.selectedId}
                 onClose={() => this.setState({ showDialogSelectId: false })}
                 onOk={selected => this.handleDialogSelectIdSubmit(selected, this.state.selectedSettingsName)}
@@ -489,7 +496,8 @@ class Drawer extends Component {
             <Dialog
                 open={this.state.isConfirmRemoveDialogOpen}
                 onClose={this.handleCloseConfirmRemoveDialog}
-                fullWidth>
+                fullWidth
+            >
                 <DialogTitle>{I18n.t('Are you sure?')}</DialogTitle>
                 <DialogContent>
                     <Typography component="p">
@@ -501,20 +509,22 @@ class Drawer extends Component {
                             color="primary"
                             autoFocus
                             onClick={this.handleDelete}
-                            startIcon={<DeleteIcon/>}
-                        >{I18n.t('Delete')}</Button>
+                            startIcon={<DeleteIcon />}
+                        >
+                            {I18n.t('Delete')}
+                        </Button>
                         <Button
                             color="grey"
                             variant="contained"
                             onClick={this.handleCloseConfirmRemoveDialog}
-                                startIcon={<CloseIcon/>}
-                                >
+                            startIcon={<CloseIcon />}
+                        >
                             {I18n.t('Cancel')}
                         </Button>
                     </DialogActions>
                 </DialogContent>
             </Dialog>
-         : null;
+            : null;
     }
 
     renderToast() {
@@ -524,20 +534,20 @@ class Drawer extends Component {
                     vertical: 'top',
                     horizontal: 'right',
                 }}
-                open={true}
+                open={!0}
                 autoHideDuration={4000}
-                onClose={() => this.setState({toast: ''})}
+                onClose={() => this.setState({ toast: '' })}
             >
                 {
                     this.state.toastError ?
-                        <Alert elevation={6} variant="filled" onClose={() => this.setState({toast: ''})} severity="error">{this.state.toast}</Alert>
+                        <Alert elevation={6} variant="filled" onClose={() => this.setState({ toast: '' })} severity="error">{this.state.toast}</Alert>
                         :
-                        <Alert elevation={6} variant="filled" onClose={() => this.setState({toast: ''})} severity="success">{this.state.toast}</Alert>
+                        <Alert elevation={6} variant="filled" onClose={() => this.setState({ toast: '' })} severity="success">{this.state.toast}</Alert>
                 }
-            </Snackbar>
-        } else {
-            return null;
+            </Snackbar>;
         }
+
+        return null;
     }
 
     render() {
@@ -562,8 +572,7 @@ class Drawer extends Component {
             selectedRule.id &&
             additionalIcons.push({
                 icon: !isSearchActive && <DeleteIcon />,
-                handler: () =>
-                    this.setState({isConfirmRemoveDialogOpen: true,}),
+                handler: () => this.setState({ isConfirmRemoveDialogOpen: true }),
                 tooltip: I18n.t('Remove rule'),
                 key: 'delete',
             });
@@ -586,56 +595,51 @@ class Drawer extends Component {
                         value={this.state.searchedValue}
                         InputProps={{
                             endAdornment: this.state.searchedValue ? (
-                                <IconButton
-                                    onClick={() => this.setState({ searchedValue: '' })}>
-                                    <ClearIcon />
+                                <IconButton onClick={() => this.setState({ searchedValue: '' })}>
+                                    <CloseIcon />
                                 </IconButton>
                             ) : undefined,
                         }}
                         autoFocus
                     />
-                 : <div>{this.createIcons(this.mainIcons)}</div>}
-                <div>{this.createIcons(additionalIcons)}</div>
+                    : <div>{Drawer.createIcons(this.mainIcons)}</div>}
+                <div>{Drawer.createIcons(additionalIcons)}</div>
                 {isMobile && (
                     <IconButton className={classes.closeBtn} onClick={closeDrawer}>
                         <CloseIcon />
                     </IconButton>
                 )}
-                {!isSearchActive && !this.state.alive ? <div style={{flexGrow: 1}}/> : null}
-                {!isSearchActive && !this.state.alive ? <Tooltip title={I18n.t('Instance is not running')}><WarningIcon className={classes.iconNotAlive}/></Tooltip> : null}
+                {!isSearchActive && !this.state.alive ? <div style={{ flexGrow: 1 }} /> : null}
+                {!isSearchActive && !this.state.alive ? <Tooltip title={I18n.t('Instance is not running')}><WarningIcon className={classes.iconNotAlive} /></Tooltip> : null}
             </Toolbar>
 
-            <DragDropContext onDragEnd={(result) => {
-                moveRule(result.source.index, result.destination.index);
-            }}>
+            <DragDropContext onDragEnd={result => moveRule(result.source.index, result.destination.index)}>
                 <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                    <List className={classes.list}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                    >
-
-                    {renderedRules.map((rule, index) => (
-                        <Rule
-                            theme={this.props.theme}
-                            handleEdit={handleEdit}
-                            handleCopy={handleCopy}
-                            unique={rule.unique}
-                            {...rule}
-                            index={index}
-                            moveRule={moveRule}
-                            key={rule.id}
-                            selectRule={selectRule}
-                            selectedRule={selectedRule}
-                            matchingRules={this.state.matchingRules}
-                            unsavedRules={this.props.unsavedRules}
-                            removeMatched={this.removeMatched}
-                        />
-                    ))}
-                    {provided.placeholder}
-                    </List>
-                )}
+                    {(provided/* , snapshot */) => (
+                        <List
+                            className={classes.list}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                        >
+                            {renderedRules.map((rule, index) => <Rule
+                                theme={this.props.theme}
+                                handleEdit={handleEdit}
+                                handleCopy={handleCopy}
+                                unique={rule.unique}
+                                {...rule}
+                                index={index}
+                                moveRule={moveRule}
+                                key={rule.id}
+                                selectRule={selectRule}
+                                selectedRule={selectedRule}
+                                matchingRules={this.state.matchingRules}
+                                unsavedRules={this.props.unsavedRules}
+                                removeMatched={this.removeMatched}
+                            />)}
+                            {provided.placeholder}
+                        </List>
+                    )}
                 </Droppable>
             </DragDropContext>
 
@@ -649,18 +653,20 @@ class Drawer extends Component {
                     className={Utils.clsx('outlined-basic', classes.root)}
                     onKeyDown={this.handleSubmit}
                     value={this.state.textCommand}
-                    inputProps={{style: {padding: '10px 10px'}}}
+                    inputProps={{ style: { padding: '10px 10px' } }}
+                    // eslint-disable-next-line react/jsx-no-duplicate-props
                     InputProps={{
-                        endAdornment: this.state.textCommand ? (
+                        endAdornment: this.state.textCommand ?
                             <IconButton onClick={() => this.setState({ textCommand: '' })}>
-                                <ClearIcon />
+                                <CloseIcon />
                             </IconButton>
-                        ) : undefined,
+                            : undefined,
                     }}
                 />
                 <IconButton
                     variant="outlined"
-                    onClick={event => this.handleSubmit(event, true)}>
+                    onClick={event => this.handleSubmit(event, true)}
+                >
                     <PlayArrowIcon className={classes.play} />
                 </IconButton>
             </Toolbar>
@@ -682,13 +688,13 @@ Drawer.propTypes = {
     rules: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.string,
-        })
+        }),
     ),
     instance: PropTypes.number.isRequired,
     moveRule: PropTypes.func.isRequired,
     selectRule: PropTypes.func.isRequired,
     theme: PropTypes.object.isRequired,
-    selectedRule: PropTypes.shape({id: PropTypes.string}),
+    selectedRule: PropTypes.shape({ id: PropTypes.string }),
     removeRule: PropTypes.func,
     handleEdit: PropTypes.func.isRequired,
     handleCopy: PropTypes.func.isRequired,

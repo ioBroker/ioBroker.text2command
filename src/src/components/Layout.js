@@ -3,17 +3,15 @@ import SplitterLayout from 'react-splitter-layout';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 import { withStyles } from '@mui/styles';
-import { withWidth } from '@iobroker/adapter-react-v5';
+import { withWidth, Utils, I18n } from '@iobroker/adapter-react-v5';
 import 'react-splitter-layout/lib/index.css';
 
 import Drawer from '@mui/material/Drawer';
 
-import { Utils, I18n } from '@iobroker/adapter-react-v5';
-
+import isEqual from 'lodash.isequal';
 import DrawerComponent from './Drawer';
 import RuleEditor from './RuleEditor';
 import CreateRuleDialog from './CreateRuleDialog';
-import isEqual from 'lodash.isequal';
 
 const styles = theme => ({
     layout: {
@@ -58,6 +56,7 @@ class Layout extends PureComponent {
             isLeftBarOpen: window.localStorage.getItem('App.menuHidden') === 'true',
         };
         this.commands = this.getSelectedLanguageCommands();
+
         this.isMobile = this.props.width === 'sm' || this.props.width === 'xs';
     }
 
@@ -65,23 +64,22 @@ class Layout extends PureComponent {
         this.getDataFromConfig()
             .then(({ rules, ...settings }) => {
                 const rulesWithId = rules.map(rule =>
-                    !rule.id || !rule.name
+                    (!rule.id || !rule.name
                         ? {
-                              ...rule,
-                              id: rule.id || uuid(),
-                              name: rule.name || window.commands[rule.template]?.name[I18n.getLanguage()] || window.commands[rule.template]?.name.en,
-                          }
-                        : rule
-                );
+                            ...rule,
+                            id: rule.id || uuid(),
+                            name: rule.name || window.commands[rule.template]?.name[I18n.getLanguage()] || window.commands[rule.template]?.name.en,
+                        }
+                        : rule));
 
                 if (!isEqual(rules, rulesWithId)) {
                     this.props.saveConfig({ rules: rulesWithId, ...settings });
-                    setTimeout(() => this.setState({rules: rulesWithId}), 50);
+                    setTimeout(() => this.setState({ rules: rulesWithId }), 50);
                 }
             });
 
         if (this.isMobile) {
-            this.setState({isLeftBarOpen: true});
+            this.setState({ isLeftBarOpen: true });
         }
     }
 
@@ -109,7 +107,7 @@ class Layout extends PureComponent {
             ...Object.entries(window.commands).map(item => {
                 const [key, command] = item;
                 const { name, ...rest } = command;
-                const obj = {
+                return {
                     ...rest,
                     rule: command?.name[lang],
                     template: key,
@@ -130,27 +128,30 @@ class Layout extends PureComponent {
                             : command.ack.default[lang],
                     },
                 };
-
-                return obj;
             }),
         ];
     };
 
-    commands = this.getSelectedLanguageCommands();
+    moveRule = (sourceIndex, destIndex) => {
+        const rules = JSON.parse(JSON.stringify(this.state.rules));
+        const sourceRule = rules[sourceIndex];
+        rules.splice(sourceIndex, 1);
+        rules.splice(destIndex, 0, sourceRule);
 
-    moveRule = (dragIndex, hoverIndex) => {
-        const { rules } = this.state;
-        const sourceRule = rules.find((_, index) => index === hoverIndex);
-        const sortRules = rules.filter((_, index) => index !== hoverIndex);
-        sortRules.splice(dragIndex, 0, sourceRule);
-        this.setState({ rules: sortRules });
+        this.setState({ rules }, () =>
+            this.props.readConfig()
+                .then(config => {
+                    const newConfig = JSON.parse(JSON.stringify(config));
+                    newConfig.rules = rules;
+                    this.props.saveConfig(newConfig);
+                }));
     };
 
     handleOpen = add => {
         if (add) {
-            this.setState({isEdit: false, isCopy: false, isOpen: true});
+            this.setState({ isEdit: false, isCopy: false, isOpen: true });
         } else {
-            this.setState({isOpen: true,});
+            this.setState({ isOpen: true });
         }
     };
 
@@ -192,28 +193,46 @@ class Layout extends PureComponent {
                 if (isUnsavedChanges) {
                     this.selectRule(rule.id);
                 }
-            }
+            },
         );
 
         this.handleClose();
     };
 
-    handleSubmitOnEdit = (selectedRule, isError) => {
+    handleSubmitOnEdit = (selectedRule, isError, isSave) => {
         if (isError) {
             return;
         }
 
-        const unsavedRules = JSON.parse(JSON.stringify(this.state.unsavedRules));
-        unsavedRules[selectedRule.id] = { id: selectedRule.id, wasChangedGlobally: true};
-
-        this.setState({
-            unsavedRules,
+        const newState = {
             rules: this.updateRule(selectedRule),
+            selectedRule,
+        };
+
+        if (isSave) {
+            newState.unsavedRules = {};
+        } else {
+            const unsavedRules = JSON.parse(JSON.stringify(this.state.unsavedRules));
+            unsavedRules[selectedRule.id] = { id: selectedRule.id, wasChangedGlobally: true };
+
+            newState.unsavedRules = unsavedRules;
+        }
+
+        this.setState(newState, () => {
+            this.handleClose();
+
+            if (isSave) {
+                this.props.readConfig()
+                    .then(config => {
+                        const newConfig = JSON.parse(JSON.stringify(config));
+                        newConfig.rules = newState.rules;
+                        this.props.saveConfig(newConfig);
+                    });
+            }
         });
-        this.handleClose();
     };
 
-    handleSubmitOnCopy = (selectedRule, isError) => {
+    handleSubmitOnCopy = (selectedRule, isError, isSave) => {
         if (isError) {
             return;
         }
@@ -224,19 +243,32 @@ class Layout extends PureComponent {
         const rules = JSON.parse(JSON.stringify(this.state.rules));
         rules.push(newRule);
 
-        const unsavedRules = JSON.parse(JSON.stringify(this.state.unsavedRules));
-        unsavedRules[newRule.id] = {id: newRule.id, wasChangedGlobally: true};
+        const newState = {
+            rules,
+            selectedRule: newRule,
+            isOpen: false,
+        };
 
-        this.setState({
-                rules,
-                unsavedRules,
-                selectedRule: newRule,
-                isOpen: false
-            },
-            () => {
-                this.selectRule(newRule.id);
+        if (isSave) {
+            newState.unsavedRules = {};
+        } else {
+            const unsavedRules = JSON.parse(JSON.stringify(this.state.unsavedRules));
+            unsavedRules[newRule.id] = { id: newRule.id, wasChangedGlobally: true };
+            newState.unsavedRules = unsavedRules;
+        }
+
+        this.setState(newState, () => {
+            this.selectRule(newRule.id);
+
+            if (isSave) {
+                this.props.readConfig()
+                    .then(config => {
+                        const newConfig = JSON.parse(JSON.stringify(config));
+                        newConfig.rules = rules;
+                        this.props.saveConfig(newConfig);
+                    });
             }
-        );
+        });
     };
 
     selectRule = id => {
@@ -245,7 +277,7 @@ class Layout extends PureComponent {
         if (selectedRule.id === id) {
             // ignore
             if (this.isMobile) {
-                this.setState({isLeftBarOpen: false});
+                this.setState({ isLeftBarOpen: false });
             }
         } else if (this.state.unsavedRules[selectedRule.id]) {
             this.setState({
@@ -256,7 +288,7 @@ class Layout extends PureComponent {
 
             this.setState({
                 selectedRule: rule,
-                isLeftBarOpen: this.isMobile ? false : this.state.isLeftBarOpen
+                isLeftBarOpen: this.isMobile ? false : this.state.isLeftBarOpen,
             });
         }
     };
@@ -264,26 +296,28 @@ class Layout extends PureComponent {
     updateRule = selectedRule => {
         const rules = JSON.parse(JSON.stringify(this.state.rules));
 
-        const item = rules.find(item => item.id === selectedRule.id);
-        rules[rules.indexOf(item)] = selectedRule;
+        const index = rules.findIndex(item => item.id === selectedRule.id);
+        rules[index] = selectedRule;
 
         return rules;
     };
 
     handleEdit = () => {
-        this.setState({isEdit: true, isCopy: false}, () =>
+        this.setState({ isEdit: true, isCopy: false }, () =>
             this.handleOpen());
     };
 
     handleCopy = () => {
-        this.setState({isCopy: true, isEdit: true}, () =>
+        this.setState({ isCopy: true, isEdit: true }, () =>
             this.handleOpen());
     };
 
     finishEdit = editableRule => {
         let selectedRule;
 
-        const { rule, id, name, _break, template } = editableRule;
+        const {
+            rule, id, name, _break, template,
+        } = editableRule;
 
         // if rule was updated => apply fields
         if (this.state.selectedRule.rule !== rule) {
@@ -302,9 +336,9 @@ class Layout extends PureComponent {
         }
 
         const rules = JSON.parse(JSON.stringify(this.state.rules));
-        const _rule = rules.find(it => it.id === selectedRule.id);
-        if (_rule) {
-            rules[rules.indexOf(_rule)] = selectedRule;
+        const index = rules.findIndex(it => it.id === selectedRule.id);
+        if (index !== -1) {
+            rules[index] = selectedRule;
         } else {
             rules.push(selectedRule);
         }
@@ -318,7 +352,8 @@ class Layout extends PureComponent {
     };
 
     removeRule = id => {
-        const rules = this.state.rules.filter(rule => rule.id !== id);
+        let rules = JSON.parse(JSON.stringify(this.state.rules));
+        rules = rules.filter(rule => rule.id !== id);
 
         this.setState(
             {
@@ -328,11 +363,12 @@ class Layout extends PureComponent {
             () => {
                 this.props.readConfig()
                     .then(config => {
-                        const { rules, ...settings } = config;
-                        const newConfig = { rules: rules.filter(rule => rule.id !== id), ...settings };
+                        const newConfig = JSON.parse(JSON.stringify(config));
+                        newConfig.rules = rules;
                         this.props.saveConfig(newConfig);
                     });
-            });
+            },
+        );
     };
 
     updateConfig = async currentSelectedRule => {
@@ -341,17 +377,16 @@ class Layout extends PureComponent {
         const { rules, ...settings } = config;
 
         const matchingRule = rules.find(rule => rule.id === currentSelectedRule.id);
-        const updatedCurrentRules = this.updateRule(currentSelectedRule)
+        const updatedCurrentRules = this.updateRule(currentSelectedRule);
 
         let updatedRules;
         if (matchingRule) {
             updatedRules = rules.map(rule =>
-                rule.id === currentSelectedRule.id
-                    ? this.getRuleShortData(currentSelectedRule)
-                    : rule
-            );
+                (rule.id === currentSelectedRule.id
+                    ? Layout.getRuleShortData(currentSelectedRule)
+                    : rule));
         } else {
-            updatedRules = [...rules, this.getRuleShortData(currentSelectedRule)];
+            updatedRules = [...rules, Layout.getRuleShortData(currentSelectedRule)];
         }
 
         const newConfig = { rules: updatedRules, ...settings };
@@ -364,55 +399,53 @@ class Layout extends PureComponent {
         });
     };
 
-    getDataFromConfig = () => {
-        return this.props.readConfig()
-            .then(config => {
-                const { rules, ...settings } = config;
-                const lang = I18n.getLanguage();
+    getDataFromConfig = () => this.props.readConfig()
+        .then(config => {
+            const { rules, ...settings } = config;
+            const lang = I18n.getLanguage();
 
-                const currentRules = rules.map(rule => {
-                    const obj = window.commands[rule?.template];
+            const currentRules = rules.map(rule => {
+                const obj = window.commands[rule?.template];
 
-                    if (!obj) {
-                        window.alert(`Unknown rule: "${rule?.template}". Please report an issue on Github!`);
-                        return null;
-                    }
+                if (!obj) {
+                    window.alert(`Unknown rule: "${rule?.template}". Please report an issue on Github!`);
+                    return null;
+                }
 
-                    return {
-                        ...obj,
-                        rule: obj?.name[lang],
-                        ack: {
-                            ...obj.ack,
-                            default: rule.ack || (obj.ack?.type === 'checkbox' ? false : ''),
-                            name: obj.ack?.name[lang],
-                        },
-                        args: obj.args?.map((arg, index) => ({
-                            ...arg,
-                            default: rule.args[index] || (arg?.type === 'checkbox' ? false : ''),
-                            name: arg?.name[lang] || '',
-                        })),
-                        name: rule.name || obj?.name[lang],
-                        words: rule.words,
-                        _break: rule._break,
-                        id: rule.id || uuid(),
-                        template: rule.template,
-                    };
-                })
-                    .filter(rule => rule);
+                return {
+                    ...obj,
+                    rule: obj.name[lang] || obj.name.en,
+                    ack: {
+                        ...obj.ack,
+                        default: rule.ack ? rule.ack.default : (obj.ack?.type === 'checkbox' ? false : ''),
+                        name: obj.ack?.name[lang] || obj.ack?.name.en,
+                    },
+                    args: obj.args?.map((arg, index) => ({
+                        ...arg,
+                        default: rule.args[index] ? rule.args[index].default : (arg?.type === 'checkbox' ? false : ''),
+                        name: arg?.name[lang] || arg?.name.en || '',
+                    })),
+                    name: rule.name || obj.name[lang] || obj.name.en,
+                    words: rule.words,
+                    _break: rule._break,
+                    id: rule.id || uuid(),
+                    template: rule.template,
+                };
+            })
+                .filter(rule => rule);
 
-                this.setState({
-                    rules: currentRules,
-                    ready: true,
-                    selectedRule:
+            this.setState({
+                rules: currentRules,
+                ready: true,
+                selectedRule:
                         currentRules.find(rule => rule.id === localStorage.getItem('selectedRule')) ||
                         currentRules[currentRules.length - 1] ||
                         null,
-                    settings,
-                });
-
-                return config;
+                settings,
             });
-    };
+
+            return config;
+        });
 
     revertChangesFromConfig = async selectedRule => {
         const actualRules = this.state.rules;
@@ -427,24 +460,23 @@ class Layout extends PureComponent {
         let updatedRules;
         if (matchingRule && isRuleWasUpdatedGlobally) {
             updatedRules = actualRules.map(rule =>
-                rule.id === matchingRule.id
+                (rule.id === matchingRule.id
                     ? {
-                          ...rule,
-                          ack: {
-                              ...rule.ack,
-                              default: matchingRule.ack || '',
-                          },
-                          args: rule.args?.map(arg => ({
-                              ...arg,
-                              default: matchingRule.arg || '',
-                          })),
-                          rule: window.commands[matchingRule.template].name[I18n.getLanguage()],
-                          words: matchingRule.words || '',
-                          name: matchingRule.name || '',
-                          _break: matchingRule._break || true,
-                      }
-                    : rule
-            );
+                        ...rule,
+                        ack: {
+                            ...rule.ack,
+                            default: matchingRule.ack || '',
+                        },
+                        args: rule.args?.map(arg => ({
+                            ...arg,
+                            default: matchingRule.arg || '',
+                        })),
+                        rule: window.commands[matchingRule.template].name[I18n.getLanguage()],
+                        words: matchingRule.words || '',
+                        name: matchingRule.name || '',
+                        _break: matchingRule._break || true,
+                    }
+                    : rule));
         } else if (!matchingRule) {
             updatedRules = actualRules.filter(rule => rule.id !== selectedRule.id);
         }
@@ -472,7 +504,7 @@ class Layout extends PureComponent {
 
         const newConfig = { rules, ...localeSettings };
         await this.props.saveConfig(newConfig);
-        this.setState({settings: localeSettings}, () =>
+        this.setState({ settings: localeSettings }, () =>
             closeModal());
     };
 
@@ -495,15 +527,19 @@ class Layout extends PureComponent {
         });
     };
 
-    getRuleShortData = ({ _break, template, words, ack, args, name, id }) => ({
-        words: words || '',
-        ack: ack?.default || '',
-        args: args?.map(arg => arg.default) || [],
-        _break,
-        template,
-        name,
-        id,
-    });
+    static getRuleShortData({
+        _break, template, words, ack, args, name, id,
+    }) {
+        return {
+            words: words || '',
+            ack: ack?.default || '',
+            args: args?.map(arg => arg.default) || [],
+            _break,
+            template,
+            name,
+            id,
+        };
+    }
 
     clearStateOnConfirmModalUnmount = id => {
         const { [id]: removedId, ...ids } = this.state.unsavedRules;
@@ -516,30 +552,31 @@ class Layout extends PureComponent {
 
     toggleLeftBar = () => {
         window.localStorage.setItem('App.menuHidden', !this.state.isLeftBarOpen);
-        this.setState({isLeftBarOpen: !this.state.isLeftBarOpen,});
+        this.setState({ isLeftBarOpen: !this.state.isLeftBarOpen });
     };
 
     closeDrawer = () => {
-        this.setState({isLeftBarOpen: false});
+        this.setState({ isLeftBarOpen: false });
     };
 
     renderModalDialog() {
-        return this.state.isOpen ?
-            <CreateRuleDialog
-                key="modal"
-                commands={this.commands}
-                isEdit={this.state.isEdit}
-                isCopy={this.state.isCopy}
-                handleSubmitOnCreate={this.handleSubmitOnCreate}
-                handleSubmitOnEdit={this.handleSubmitOnEdit}
-                handleSubmitOnCopy={this.handleSubmitOnCopy}
-                handleClose={this.handleClose}
-                isOpen={this.state.isOpen}
-                rules={this.state.rules}
-                selectedRule={this.state.selectedRule}
-                finishEdit={this.finishEdit}
-            />
-         : null;
+        if (!this.state.isOpen) {
+            return null;
+        }
+        return <CreateRuleDialog
+            key="modal"
+            commands={this.commands}
+            isEdit={this.state.isEdit}
+            isCopy={this.state.isCopy}
+            handleSubmitOnCreate={this.handleSubmitOnCreate}
+            handleSubmitOnEdit={this.handleSubmitOnEdit}
+            handleSubmitOnCopy={this.handleSubmitOnCopy}
+            handleClose={this.handleClose}
+            isOpen
+            rules={this.state.rules}
+            selectedRule={this.state.selectedRule}
+            finishEdit={this.finishEdit}
+        />;
     }
 
     render() {
@@ -552,11 +589,12 @@ class Layout extends PureComponent {
         }
 
         if (this.isMobile) {
-            return <React.Fragment>
+            return <>
                 <Drawer
                     anchor="left"
                     open={this.state.isLeftBarOpen}
-                    onClose={this.closeDrawer}>
+                    onClose={this.closeDrawer}
+                >
                     <DrawerComponent
                         themeType={this.props.themeType}
                         handleOpen={this.handleOpen}
@@ -599,62 +637,62 @@ class Layout extends PureComponent {
                     <div className={classes.noRulesText}>{I18n.t('Create a new rule with a "+" on the left')}</div>}
 
                 {this.renderModalDialog()}
-            </React.Fragment>;
-        } else {
-            return <React.Fragment>
-                <SplitterLayout
-                    key="splitterLayout"
-                    customClassName={Utils.clsx(
-                        isLeftBarOpen ? classes.hidden : classes.opened,
-                        classes.layout
-                    )}
-                    primaryMinSize={350}
-                    primaryIndex={1}
-                    secondaryMinSize={350}
-                    onSecondaryPaneSizeChange={size => (this.menuSize = parseFloat(size))}
-                    onDragEnd={() => window.localStorage.setItem('App.menuSize', this.menuSize.toString())}
-                    secondaryInitialSize={this.menuSize}>
-                    <DrawerComponent
-                        handleOpen={this.handleOpen}
-                        rules={rules}
-                        moveRule={this.moveRule}
-                        handleEdit={this.handleEdit}
-                        handleCopy={this.handleCopy}
-                        selectRule={this.selectRule}
+            </>;
+        }
+        return <>
+            <SplitterLayout
+                key="splitterLayout"
+                customClassName={Utils.clsx(
+                    isLeftBarOpen ? classes.hidden : classes.opened,
+                    classes.layout,
+                )}
+                primaryMinSize={350}
+                primaryIndex={1}
+                secondaryMinSize={350}
+                onSecondaryPaneSizeChange={size => (this.menuSize = parseFloat(size))}
+                onDragEnd={() => window.localStorage.setItem('App.menuSize', this.menuSize.toString())}
+                secondaryInitialSize={this.menuSize}
+            >
+                <DrawerComponent
+                    handleOpen={this.handleOpen}
+                    rules={rules}
+                    moveRule={this.moveRule}
+                    handleEdit={this.handleEdit}
+                    handleCopy={this.handleCopy}
+                    selectRule={this.selectRule}
+                    selectedRule={selectedRule}
+                    removeRule={this.removeRule}
+                    instance={this.props.instance}
+                    settings={this.state.settings}
+                    socket={this.props.socket}
+                    saveSettings={this.saveSettings}
+                    theme={this.props.theme}
+                    unsavedRules={this.state.unsavedRules}
+                    isMobile={this.isMobile}
+                />
+                {this.state.settings && selectedRule ?
+                    <RuleEditor
                         selectedRule={selectedRule}
-                        removeRule={this.removeRule}
-                        instance={this.props.instance}
-                        settings={this.state.settings}
                         socket={this.props.socket}
-                        saveSettings={this.saveSettings}
-                        theme={this.props.theme}
+                        updateRule={this.updateRule}
+                        updateConfig={this.updateConfig}
+                        revertChangesFromConfig={this.revertChangesFromConfig}
+                        pendingSelectedRuleId={this.state.pendingSelectedRuleId}
                         unsavedRules={this.state.unsavedRules}
+                        selectRule={this.selectRule}
+                        clearStateOnConfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
+                        lang={this.state.settings.language}
+                        setUnsavedRule={this.setUnsavedRule}
+                        removeUnsavedRule={this.removeUnsavedRule}
+                        toggleLeftBar={this.toggleLeftBar}
+                        isLeftBarOpen={this.state.isLeftBarOpen}
                         isMobile={this.isMobile}
                     />
-                    {this.state.settings && selectedRule ?
-                        <RuleEditor
-                            selectedRule={selectedRule}
-                            socket={this.props.socket}
-                            updateRule={this.updateRule}
-                            updateConfig={this.updateConfig}
-                            revertChangesFromConfig={this.revertChangesFromConfig}
-                            pendingSelectedRuleId={this.state.pendingSelectedRuleId}
-                            unsavedRules={this.state.unsavedRules}
-                            selectRule={this.selectRule}
-                            clearStateOnConfirmModalUnmount={this.clearStateOnConfirmModalUnmount}
-                            lang={this.state.settings.language}
-                            setUnsavedRule={this.setUnsavedRule}
-                            removeUnsavedRule={this.removeUnsavedRule}
-                            toggleLeftBar={this.toggleLeftBar}
-                            isLeftBarOpen={this.state.isLeftBarOpen}
-                            isMobile={this.isMobile}
-                        />
-                        :
-                        <div className={classes.noRulesText}>{I18n.t('Create a new rule with a "+" on the left')}</div>}
-                </SplitterLayout>
-                {this.renderModalDialog()}
-            </React.Fragment>;
-        }
+                    :
+                    <div className={classes.noRulesText}>{I18n.t('Create a new rule with a "+" on the left')}</div>}
+            </SplitterLayout>
+            {this.renderModalDialog()}
+        </>;
     }
 }
 

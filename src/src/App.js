@@ -22,17 +22,18 @@ const styles = theme => ({
 
 class App extends GenericApp {
     constructor(props) {
-        const extendedProps = {...props};
+        const extendedProps = { ...props };
         extendedProps.translations = {
-            'en': require('./i18n/en'),
-            'de': require('./i18n/de'),
-            'ru': require('./i18n/ru'),
-            'pt': require('./i18n/pt'),
-            'nl': require('./i18n/nl'),
-            'fr': require('./i18n/fr'),
-            'it': require('./i18n/it'),
-            'es': require('./i18n/es'),
-            'pl': require('./i18n/pl'),
+            en: require('./i18n/en'),
+            de: require('./i18n/de'),
+            ru: require('./i18n/ru'),
+            pt: require('./i18n/pt'),
+            nl: require('./i18n/nl'),
+            fr: require('./i18n/fr'),
+            it: require('./i18n/it'),
+            es: require('./i18n/es'),
+            pl: require('./i18n/pl'),
+            uk: require('./i18n/uk'),
             'zh-cn': require('./i18n/zh-cn'),
         };
 
@@ -61,41 +62,36 @@ class App extends GenericApp {
             .catch(e => this.showError(e));
     }
 
-    readConfig() {
-        return this.socket
-            .getObject(`system.adapter.${this.adapterName}.${this.instance}`)
-            .then(config => {
-                config = config || {};
-                const native = config.native || {};
-                native.rules = native.rules || [];
-                native.sayitInstance = native.sayitInstance || '';
-                native.language = native.language || '';
-                native.processorId = native.processorId || '';
-                native.processorTimeout = native.processorTimeout || 1000;
-                return native;
-            });
-    }
+    readConfig = () => this.socket
+        .getObject(`system.adapter.${this.adapterName}.${this.instance}`)
+        .then(config => {
+            config = config || {};
+            const native = config.native || {};
+            native.rules = native.rules || [];
+            native.sayitInstance = native.sayitInstance || '';
+            native.language = native.language || '';
+            native.processorId = native.processorId || '';
+            native.processorTimeout = native.processorTimeout || 1000;
+            return native;
+        });
 
-    saveConfig(config) {
-        return this.socket
-            .getObject(`system.adapter.${this.adapterName}.${this.instance}`)
-            .then(obj => {
-                if (!isEqual(obj.native, config)) {
-                    obj.native = config;
-                    return this.socket.setObject(
-                        `system.adapter.${this.adapterName}.${this.instance}`,
-                        obj
-                    );
-                }
-            });
-    }
+    saveConfig = config => this.socket.getObject(`system.adapter.${this.adapterName}.${this.instance}`)
+        .then(async obj => {
+            if (!isEqual(obj.native, config)) {
+                obj.native = config;
+                await this.socket.setObject(
+                    `system.adapter.${this.adapterName}.${this.instance}`,
+                    obj,
+                );
+            }
+        });
 
     render() {
         if (!this.state.config || !this.state.ready) {
             return <StyledEngineProvider injectFirst>
-                    <ThemeProvider theme={this.state.theme}>
-                        <Loader theme={this.state.themeType} />
-                        {this.state.config === false ? <div>No instance found</div> : null}
+                <ThemeProvider theme={this.state.theme}>
+                    <Loader theme={this.state.themeType} />
+                    {this.state.config === false ? <div>{I18n.t('No instance found')}</div> : null}
                 </ThemeProvider>
             </StyledEngineProvider>;
         }
@@ -108,8 +104,8 @@ class App extends GenericApp {
                         theme={this.state.theme}
                         socket={this.socket}
                         instance={this.instance}
-                        readConfig={this.readConfig.bind(this)}
-                        saveConfig={this.saveConfig.bind(this)}
+                        readConfig={this.readConfig}
+                        saveConfig={this.saveConfig}
                     />
                     {this.renderError()}
                 </div>

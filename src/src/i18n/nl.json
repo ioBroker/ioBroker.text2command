@@ -45,5 +45,6 @@
   "Save and go": "Bewaar en ga",
   "Don't save and go": "Sla niet op en vertrek",
   "Do not answer \"I don't understand\" if no rules found": "Antwoord niet \"Ik begrijp het niet\" als er geen regels zijn gevonden",
-  "Convert 0/1 to false/true": "Converteer 0/1 naar false/true"
+  "Convert 0/1 to false/true": "Converteer 0/1 naar false/true",
+  "unsaved": "niet opgeslagen"
 }

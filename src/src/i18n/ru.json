@@ -45,5 +45,6 @@
   "Save and go": "Сохранить и идти",
   "Don't save and go": "Не сохранять и уйти",
   "Do not answer \"I don't understand\" if no rules found": "Не отвечать «Я не понимаю», если правила не найдены",
-  "Convert 0/1 to false/true": "Преобразовать 0/1 в ложь/истину"
+  "Convert 0/1 to false/true": "Преобразовать 0/1 в ложь/истину",
+  "unsaved": "изменения"
 }

@@ -1,13 +1,11 @@
 import React, {
-    useRef,
-    useImperativeHandle,
     useCallback,
     useState,
     useEffect,
 } from 'react';
 import { makeStyles } from '@mui/styles';
 
-import { Draggable } from "react-beautiful-dnd";
+import { Draggable } from 'react-beautiful-dnd';
 
 import PropTypes from 'prop-types';
 
@@ -24,13 +22,13 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MaximizeIcon from '@mui/icons-material/Maximize';
 import FileCopy from '@mui/icons-material/FileCopy';
 
-const Rule = React.forwardRef((props) => {
+const Rule = React.forwardRef(props => {
     const {
         name,
         handleEdit,
         handleCopy,
         rule,
-        isDragging,
+        // isDragging,
         id,
         selectRule,
         selectedRule,
@@ -51,7 +49,7 @@ const Rule = React.forwardRef((props) => {
             position: 'relative',
             paddingTop: 4,
             paddingBottom: 12,
-            borderBottom: '1px dashed ' + theme.palette.text.primary + (theme.palette.text.primary.startsWith('rgb') ? '' : '30'),
+            borderBottom: `1px dashed ${theme.palette.text.primary}${theme.palette.text.primary.startsWith('rgb') ? '' : '30'}`,
         },
         listItemText: {
         },
@@ -100,7 +98,7 @@ const Rule = React.forwardRef((props) => {
             color: theme.palette.text.primary,
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            textOverflow: 'ellipsis'
+            textOverflow: 'ellipsis',
         },
         emptyButton: {
             width: 30,
@@ -108,7 +106,7 @@ const Rule = React.forwardRef((props) => {
         multiline: {
             marginTop: 0,
             marginBottom: 12,
-        }
+        },
     })();
 
     const selectRuleMemo = useCallback(() => selectRule(id), [id, selectRule]);
@@ -121,10 +119,10 @@ const Rule = React.forwardRef((props) => {
         if (matchingRules.length) {
             const matchingRule = matchingRules.find(item => item.indexOf === index);
             if (matchingRule) {
-                setTimeout(() => setRuleStyle({backgroundColor: theme.palette.mode === 'dark' ? theme?.palette?.secondary.dark : theme?.palette?.secondary.light}), matchingRule.timer);
+                setTimeout(() => setRuleStyle({ backgroundColor: theme.palette.mode === 'dark' ? theme?.palette?.secondary.dark : theme?.palette?.secondary.light }), matchingRule.timer);
 
                 setTimeout(() => {
-                    setRuleStyle(selectedRule.id === id ? {backgroundColor: theme?.palette?.background?.default} : {});
+                    setRuleStyle(selectedRule.id === id ? { backgroundColor: theme?.palette?.background?.default } : {});
                     if (_break || index === matchingRules[matchingRules.length - 1].indexOf) {
                         removeMatched();
                     }
@@ -133,20 +131,20 @@ const Rule = React.forwardRef((props) => {
         } // eslint-disable-next-line
     }, [matchingRules]);
 
-    let secondary = rule !== name ? rule || '' : '';
+    const secondary = rule !== name ? rule || '' : '';
 
     return <Draggable key={id} draggableId={id} index={index}>
-    {(provided, snapshot) => (<div
-        ref={provided.innerRef}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        style={Object.assign({}, provided.draggableProps.style, ruleStyle)}>
-            
+        {(provided/* , snapshot */) => (<div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            style={({ ...provided.draggableProps.style, ...ruleStyle })}
+        >
             <ListItem
                 onClick={selectRuleMemo}
                 selected={selectedRule?.id === id}
                 className={Utils.clsx(selectedRule?.id === id && 'rule-selected')}
-                classes={{root: classes.listItem}}
+                classes={{ root: classes.listItem }}
             >
                 <ListItemText
                     primary={name}
@@ -154,7 +152,8 @@ const Rule = React.forwardRef((props) => {
                     classes={{
                         primary: classes.listItemTextPrimary,
                         secondary: classes.listItemTextSecondary,
-                        multiline: classes.multiline}}
+                        multiline: classes.multiline,
+                    }}
                     className={classes.listItemText}
                 />
                 <ListItemIcon>
@@ -163,8 +162,8 @@ const Rule = React.forwardRef((props) => {
                             <Tooltip title={I18n.t('Interrupt processing')}>
                                 <MaximizeIcon className={Utils.clsx(classes.ruleButton, classes.maximize)} />
                             </Tooltip>
-                        :
-                            <Tooltip title={I18n.t('Do not interrupt processing')}><ArrowDownwardIcon className={classes.ruleButton} color="primary"/></Tooltip>
+                            :
+                            <Tooltip title={I18n.t('Do not interrupt processing')}><ArrowDownwardIcon className={classes.ruleButton} color="primary" /></Tooltip>
                     }
                     {!unique ? <Tooltip title={I18n.t('Copy rule')}>
                         <IconButton onClick={handleCopyMemo} size="small" className={classes.editButton}>
@@ -178,10 +177,14 @@ const Rule = React.forwardRef((props) => {
                     </Tooltip>
                 </ListItemIcon>
                 {unsavedRules[id] && <div className={classes.dot}>{I18n.t('unsaved')}</div>}
-                <div className={classes.words}>[{words}]</div>
+                <div className={classes.words}>
+[
+                    {words}
+]
+                </div>
             </ListItem>
         </div>
-    )}
+        )}
     </Draggable>;
 });
 
@@ -191,7 +194,7 @@ Rule.propTypes = {
     removeRule: PropTypes.func,
     name: PropTypes.string.isRequired,
     theme: PropTypes.object.isRequired,
-    isDragging: PropTypes.bool,
+    //    isDragging: PropTypes.bool,
     connectDropTarget: PropTypes.func,
     connectDragTarget: PropTypes.func,
     _break: PropTypes.bool.isRequired,

@@ -2,7 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@mui/styles';
 
-import {TextField, Switch, Typography, Box, FormLabel} from '@mui/material';
+import {
+    TextField, Switch, Typography, Box, FormLabel,
+} from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -35,7 +37,7 @@ const styles = theme => ({
         position: 'relative',
         '& .outlined-basic': {
             padding: '12px 10px',
-            //border: `2px solid ${theme.palette.grey[700]}`,
+            // border: `2px solid ${theme.palette.grey[700]}`,
         },
         [theme.breakpoints.down('md')]: {
             '& .outlined-basic': {
@@ -47,13 +49,13 @@ const styles = theme => ({
         padding: 0,
         width: '100%',
         height: 'calc(100% - 48px - 48px)',
-        overflow: 'auto'
+        overflow: 'auto',
     },
     boxDesktop: {
         padding: theme.spacing(1),
         width: `calc(100% - ${theme.spacing(2)})`,
         height: `calc(100% - 48px - 48px - ${theme.spacing(2)})`,
-        overflow: 'auto'
+        overflow: 'auto',
     },
     container: {
         width: '100%',
@@ -64,16 +66,16 @@ const styles = theme => ({
             padding: theme.spacing(1),
         },
     },
-    /*textField: {
+    /* textField: {
         flexBasis: '60%',
         [theme.breakpoints.down('sm')]: {
             width: '100%',
             marginTop: theme.spacing(1),
         },
-    },*/
+    }, */
     submitForm: {
         flexDirection: 'row',
-        //margin: '10px auto 20px',
+        // margin: '10px auto 20px',
         display: 'flex',
         justifyContent: 'right',
         width: '100%',
@@ -88,7 +90,7 @@ const styles = theme => ({
         marginBottom: 16,
     },
     title: {
-        whiteSpace: 'nowrap'
+        whiteSpace: 'nowrap',
     },
     row: {
         [theme.breakpoints.down('md')]: {
@@ -106,7 +108,7 @@ const styles = theme => ({
             marginLeft: 0,
             marginTop: theme.spacing(0.5),
         },
-        //backgroundColor: theme.palette.error?.dark,
+        // backgroundColor: theme.palette.error?.dark,
     },
     saveAndGoBtn: {
         marginRight: 20,
@@ -130,8 +132,8 @@ const styles = theme => ({
         borderRadius: '0 5px 5px 0',
     },
     switchControl: {
-        //paddingTop: theme.spacing(1),
-        //flexBasis: '60%',
+        // paddingTop: theme.spacing(1),
+        // flexBasis: '60%',
         marginTop: -5,
     },
     emptyButtons: {
@@ -141,7 +143,7 @@ const styles = theme => ({
     },
     noRulesText: {
         fontSize: 24,
-        color: theme.palette.primary.light
+        color: theme.palette.primary.light,
     },
     header: {
         backgroundColor: theme.palette.secondary.main,
@@ -153,58 +155,61 @@ const styles = theme => ({
     },
     inputOid: {
         width: 'calc(100% - 60px)',
-        display: 'inline-block'
+        display: 'inline-block',
     },
     inputOidButton: {
         minWidth: 40,
         display: 'inline-block',
-        marginLeft: 8
+        marginLeft: 8,
     },
     textField: {
         width: 'calc(100% - 12px)',
     },
     rowPadding: {
         marginBottom: theme.spacing(1),
-    }
+    },
 });
 
 class RuleEditor extends PureComponent {
-    defaultState = {
-        words: I18n.t('Create Rule'),
-        name: I18n.t('Create Rule'),
-        _break: false,
-        editable: false,
-        args: [
-            {
-                default: I18n.t('Argument') + ' 1',
-            },
-            {
-                default: I18n.t('Argument') + ' 2',
-            },
-        ],
-        ack: {
-            name: '',
-            default: `${I18n.t('Confirmation text')}`,
-        },
-        id: 0,
-    };
+    constructor(props) {
+        super(props);
 
-    state = {
-        localRule: null,
-        showDialog: false,
-        editIndex: 0,
-    };
+        /* this.defaultState = {
+            words: I18n.t('Create Rule'),
+            name: I18n.t('Create Rule'),
+            _break: false,
+            editable: false,
+            args: [
+                {
+                    default: `${I18n.t('Argument')} 1`,
+                },
+                {
+                    default: `${I18n.t('Argument')} 2`,
+                },
+            ],
+            ack: {
+                name: '',
+                default: `${I18n.t('Confirmation text')}`,
+            },
+            id: 0,
+        }; */
+
+        this.state = {
+            localRule: null,
+            showDialog: false,
+            editIndex: 0,
+        };
+    }
 
     static getDerivedStateFromProps(props, state) {
         if ((!props.selectedRule && state.localRule) ||
             (props.selectedRule && !state.localRule) ||
             (props.selectedRule?.id !== state.localRule?.id)) {
             return {
-                localRule: {...props.selectedRule}
+                localRule: { ...props.selectedRule },
             };
-        } else {
-            return null;
         }
+        return null;
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -230,7 +235,7 @@ class RuleEditor extends PureComponent {
                 isEqual(this.props.selectedRule, this.state.localRule) &&
                 !unsavedRule?.wasChangedGlobally
             ) {
-                this.setState({isLocalStateWasUpdated: false});
+                this.setState({ isLocalStateWasUpdated: false });
 
                 if (!unsavedRule?.wasChangedGlobally) {
                     this.props.removeUnsavedRule(this.state.localRule.id);
@@ -242,14 +247,14 @@ class RuleEditor extends PureComponent {
             !this.state.isLocalStateWasUpdated &&
             this.props.unsavedRules[this.state.localRule.id]
         ) {
-            this.setState({isLocalStateWasUpdated: true});
+            this.setState({ isLocalStateWasUpdated: true });
         }
 
         if (this.props.pendingSelectedRuleId && this.state.isLocalStateWasUpdated) {
             if (this.props.pendingSelectedRuleId === this.state.localRule.id) {
                 return;
             }
-            this.setState({confirmChanges: true});
+            this.setState({ confirmChanges: true });
         }
 
         if (this.props.lang !== prevProps.lang) {
@@ -297,29 +302,31 @@ class RuleEditor extends PureComponent {
             this.closeConfirmDialog();
         };
         return <FormControl className={classes.submitForm} variant="standard">
-            <div style={{flexGrow: 1}}/>
+            <div style={{ flexGrow: 1 }} />
             <Button
                 variant="contained"
                 onClick={handleSaveAndGo}
                 color="primary"
-                startIcon={<CheckIcon/>}
-                className={classes.saveAndGoBtn}>
+                startIcon={<CheckIcon />}
+                className={classes.saveAndGoBtn}
+            >
                 {t('Save and go')}
             </Button>
             <Button
                 onClick={dontSaveAndGo}
                 variant="contained"
                 color="secondary"
-                startIcon={<CheckIcon/>}
+                startIcon={<CheckIcon />}
             >
-                {t(`Don't save and go`)}
+                {t('Don\'t save and go')}
             </Button>
             <Button
                 color="grey"
                 variant="contained"
                 className={classes.btnDanger}
-                startIcon={<CloseIcon/>}
-                onClick={cancelSavingChanges}>
+                startIcon={<CloseIcon />}
+                onClick={cancelSavingChanges}
+            >
                 {t('Cancel')}
             </Button>
         </FormControl>;
@@ -327,12 +334,14 @@ class RuleEditor extends PureComponent {
 
     createSaveSettingsForm = () => {
         const { t } = I18n;
-        const { updateConfig, classes, revertChangesFromConfig, selectedRule } = this.props;
+        const {
+            updateConfig, classes, revertChangesFromConfig, selectedRule,
+        } = this.props;
         const { localRule } = this.state;
 
         const handleSave = async () => {
             await updateConfig(localRule);
-            this.setState({isLocalStateWasUpdated: false});
+            this.setState({ isLocalStateWasUpdated: false });
         };
 
         const revertChanges = async () => {
@@ -346,26 +355,27 @@ class RuleEditor extends PureComponent {
 
         if (!this.state.isLocalStateWasUpdated) {
             return <div className={this.props.classes.emptyButtons} />;
-        } else {
-            return <FormControl className={classes.submitForm} variant="standard">
-                <div style={{flexGrow: 1}}/>
-                <Button
-                    onClick={handleSave}
-                    variant="contained"
-                    startIcon={<CheckIcon/>}
-                    color="primary">
-                    {t('Save')}
-                </Button>
-                <Button
-                    color="grey"
-                    variant="contained"
-                    className={classes.btnDanger}
-                    startIcon={<CloseIcon/>}
-                    onClick={revertChanges}>
-                    {t('Cancel')}
-                </Button>
-            </FormControl>;
         }
+        return <FormControl className={classes.submitForm} variant="standard">
+            <div style={{ flexGrow: 1 }} />
+            <Button
+                onClick={handleSave}
+                variant="contained"
+                startIcon={<CheckIcon />}
+                color="primary"
+            >
+                {t('Save')}
+            </Button>
+            <Button
+                color="grey"
+                variant="contained"
+                className={classes.btnDanger}
+                startIcon={<CloseIcon />}
+                onClick={revertChanges}
+            >
+                {t('Cancel')}
+            </Button>
+        </FormControl>;
     };
 
     closeConfirmDialog = () => {
@@ -397,10 +407,10 @@ class RuleEditor extends PureComponent {
             return <div>
                 <TextField
                     variant="standard"
-                    classes={{root: classes.inputOid}}
+                    classes={{ root: classes.inputOid }}
                     fullWidth
                     label={isMobile ? label : ''}
-                    //variant="outlined"
+                    // variant="outlined"
                     size="small"
                     disabled={disabled}
                     value={value}
@@ -414,14 +424,16 @@ class RuleEditor extends PureComponent {
                     size="small"
                     className={classes.inputOidButton}
                     variant="outlined"
-                >...</Button>
-            </div>
-        } else if (type !== 'checkbox') {
+                >
+...
+                </Button>
+            </div>;
+        } if (type !== 'checkbox') {
             return <TextField
                 variant="standard"
                 classes={{ root: classes.textField }}
                 label={isMobile ? label : ''}
-                //variant="outlined"
+                // variant="outlined"
                 size="small"
                 disabled={disabled}
                 value={value}
@@ -430,24 +442,27 @@ class RuleEditor extends PureComponent {
                 key={key}
                 className={classes.rowPadding}
                 type={type === 'number' ? 'number' : 'text'}
-                //className={Utils.clsx('outlined-basic', classes.textField)}
+                // className={Utils.clsx('outlined-basic', classes.textField)}
             />;
-        } else {
-            return <FormControl classes={{ root: classes.switchControl }} variant="standard">
-                <Switch
-                    key={key}
-                    onClick={onSwitchChange}
-                    color={'primary'}
-                    disabled={disabled}
-                    checked={!!value}
-                />
-                {isMobile ? <FormLabel>{label}</FormLabel> : null}
-            </FormControl>;
         }
+        return <FormControl classes={{ root: classes.switchControl }} variant="standard">
+            <Switch
+                key={key}
+                onClick={onSwitchChange}
+                color="primary"
+                disabled={disabled}
+                checked={!!value}
+            />
+            {isMobile ? <FormLabel>{label}</FormLabel> : null}
+        </FormControl>;
     };
 
     createOptionsData = (state = this.state) => {
-        const {localRule: { args, ack, editable, _break }} = state;
+        const {
+            localRule: {
+                args, ack, editable, _break,
+            },
+        } = state;
         const { t } = I18n;
 
         const createInput = this.createInput;
@@ -456,7 +471,8 @@ class RuleEditor extends PureComponent {
         const isKeyWordsDisabled = () => {
             if (editable === undefined) {
                 return false;
-            } else if (editable === false) {
+            }
+            if (editable === false) {
                 return true;
             }
             return false;
@@ -489,40 +505,40 @@ class RuleEditor extends PureComponent {
                 id: 2,
             },
             {
-                title: args && args[0]?.name, //`${t('Argument')}:`,
+                title: args && args[0]?.name, // `${t('Argument')}:`,
                 item: createInput({
                     value: args && this.state.localRule.args[0]?.default,
                     type: args && args[0]?.type,
                     onOpenSelectDialog: selectedId => this.openSelectIdDialog(args && args[0], selectedId, 0),
                     onSwitchChange: handlers.param1OnSwitch,
                     key: 'Param1',
-                    label: args && args[0]?.name, //`${t('Argument')}:`,
+                    label: args && args[0]?.name, // `${t('Argument')}:`,
                     isMobile: this.props.isMobile,
                 }),
                 id: 3,
             },
             {
-                title: args && args[1]?.name, //`${t('Argument')}:`,
+                title: args && args[1]?.name, // `${t('Argument')}:`,
                 item: createInput({
                     value: args && this.state.localRule.args[1]?.default,
                     type: args && args[1]?.type,
                     onChange: handlers.param2Text,
                     onSwitchChange: handlers.param2OnSwitch,
                     key: 'Param2',
-                    label: args && args[1]?.name, //`${t('Argument')}:`,
+                    label: args && args[1]?.name, // `${t('Argument')}:`,
                     isMobile: this.props.isMobile,
                 }),
                 id: 4,
             },
             {
-                title: args && args[2]?.name, //`${t('Argument')}:`,
+                title: args && args[2]?.name, // `${t('Argument')}:`,
                 item: createInput({
                     value: args && this.state.localRule.args[2]?.default,
                     type: args && args[2]?.type,
                     onOpenSelectDialog: selectedId => this.openSelectIdDialog(args && args[2], selectedId, 2),
                     onSwitchChange: handlers.param3OnSwitch,
                     key: 'Param3',
-                    label: args && args[2]?.name, //`${t('Argument')}:`,
+                    label: args && args[2]?.name, // `${t('Argument')}:`,
                     isMobile: this.props.isMobile,
                 }),
                 id: 5,
@@ -531,7 +547,7 @@ class RuleEditor extends PureComponent {
                 title: t('Confirmation text'),
                 item: createInput({
                     value: ack && ack.default,
-                    //label: ack && ack.name,
+                    // label: ack && ack.name,
                     note: t('You can use %s, that will be replaced with current value of state. %u will be replaced by unit'),
                     type: ack && ack.type,
                     key: 'confirmationText',
@@ -563,13 +579,12 @@ class RuleEditor extends PureComponent {
                     localRule: {
                         ..._this.state.localRule,
                         args: _this.state.localRule.args.map((arg, index) =>
-                            index > 0
+                            (index > 0
                                 ? {
-                                      ...arg,
-                                      default: event.target.value,
-                                  }
-                                : arg
-                        ),
+                                    ...arg,
+                                    default: event.target.value,
+                                }
+                                : arg)),
                     },
                     isLocalStateWasUpdated: true,
                 });
@@ -591,8 +606,7 @@ class RuleEditor extends PureComponent {
                     localRule: {
                         ..._this.state.localRule,
                         args: _this.state.localRule.args.map((arg, index) =>
-                            index === 0 ? { ...arg, default: !arg.default ? true : !arg.default } : arg
-                        ),
+                            (index === 0 ? { ...arg, default: !arg.default ? true : !arg.default } : arg)),
                     },
                     isLocalStateWasUpdated: true,
                 });
@@ -602,8 +616,7 @@ class RuleEditor extends PureComponent {
                     localRule: {
                         ..._this.state.localRule,
                         args: _this.state.localRule.args.map((arg, index) =>
-                            index === 1 ? { ...arg, default: !arg.default ? true : !arg.default } : arg
-                        ),
+                            (index === 1 ? { ...arg, default: !arg.default ? true : !arg.default } : arg)),
                     },
                     isLocalStateWasUpdated: true,
                 });
@@ -613,8 +626,7 @@ class RuleEditor extends PureComponent {
                     localRule: {
                         ..._this.state.localRule,
                         args: _this.state.localRule.args.map((arg, index) =>
-                            index === 2 ? { ...arg, default: !arg.default ? true : !arg.default } : arg
-                        ),
+                            (index === 2 ? { ...arg, default: !arg.default ? true : !arg.default } : arg)),
                     },
                     isLocalStateWasUpdated: true,
                 });
@@ -647,7 +659,7 @@ class RuleEditor extends PureComponent {
 
     openSelectIdDialog = (arg, selectedId, editIndex) => {
         if (arg.type === 'id') {
-            this.setState({showDialog: true, showDialogId: selectedId, editIndex});
+            this.setState({ showDialog: true, showDialogId: selectedId, editIndex });
         }
     };
 
@@ -656,28 +668,28 @@ class RuleEditor extends PureComponent {
             localRule: {
                 ...this.state.localRule,
                 args: this.state.localRule.args.map((arg, index) =>
-                    index === this.state.editIndex
+                    (index === this.state.editIndex
                         ? {
-                              ...arg,
-                              default: selected,
-                          }
-                        : arg
-                ),
+                            ...arg,
+                            default: selected,
+                        }
+                        : arg)),
             },
             isLocalStateWasUpdated: true,
-            editIndex: 0
+            editIndex: 0,
         });
     };
 
     renderConfirmDialog() {
         return this.state.confirmChanges ? (
-            <Dialog fullWidth open={this.state.confirmChanges} maxWidth={'md'}>
+            <Dialog fullWidth open={this.state.confirmChanges} maxWidth="md">
                 <DialogTitle>
                     {I18n.t('Please confirm or cancel changes before leaving')}
                 </DialogTitle>
                 <DialogContent>
                     <Typography>
-                        {I18n.t('You have changed rule') + ': '}{' '}
+                        {`${I18n.t('You have changed rule')}: `}
+                        {' '}
                         <strong>{this.state.localRule.name}</strong>
                     </Typography>
                     <DialogActions>{this.createConfirmModalActions()}</DialogActions>
@@ -689,17 +701,17 @@ class RuleEditor extends PureComponent {
     renderSelectIdDialog() {
         return this.state.showDialog ?
             <DialogSelectID
-                imagePrefix={'../..'}
+                imagePrefix="../.."
                 socket={this.props.socket}
-                title={'Select ID'}
+                title="Select ID"
                 selected={this.state.showDialogId}
-                onClose={() => this.setState({ showDialog: false})}
+                onClose={() => this.setState({ showDialog: false })}
                 onOk={id => this.onIDSelected(id)}
-            />: null;
+            /> : null;
     }
 
     render() {
-        const {localRule} = this.state;
+        const { localRule } = this.state;
 
         const { classes, isLeftBarOpen, toggleLeftBar } = this.props;
         const name = localRule ? localRule.name : '';
@@ -719,22 +731,21 @@ class RuleEditor extends PureComponent {
             <Box className={Utils.clsx(classes.box, this.props.isMobile ? classes.boxMobile : classes.boxDesktop)} key={this.props.selectedRule ? this.props.selectedRule.id : 'emptyLeft'}>
                 {localRule ?
                     <Paper className={classes.container}>
-                        <div style={this.props.isMobile ? {width: '100%'} : {display: 'grid', gridTemplateColumns: 'minmax(50px, 265px) 1fr'}}>
-                            {this.createOptionsData().map(({title, item, id}) => {
+                        <div style={this.props.isMobile ? { width: '100%' } : { display: 'grid', gridTemplateColumns: 'minmax(50px, 265px) 1fr' }}>
+                            {this.createOptionsData().map(({ title, item /* , id */ }) => {
                                 if (!item) {
                                     return null;
                                 }
 
                                 return [
-                                    !this.props.isMobile ?<div key={1} className={Utils.clsx(classes.title, classes.rowSpace)}>{title}</div> : null,
-                                    <div key={2} className={classes.rowSpace}>{item}</div>
+                                    !this.props.isMobile ? <div key={1} className={Utils.clsx(classes.title, classes.rowSpace)}>{title}</div> : null,
+                                    <div key={2} className={classes.rowSpace}>{item}</div>,
                                 ];
                             })}
                         </div>
                     </Paper>
                     :
-                    null
-                }
+                    null}
 
                 {this.renderSelectIdDialog()}
                 {this.renderConfirmDialog()}
@@ -764,7 +775,7 @@ RuleEditor.propTypes = {
                 name: PropTypes.string,
                 type: PropTypes.string,
                 default: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
-            })
+            }),
         ),
         words: PropTypes.string,
     }).isRequired,
