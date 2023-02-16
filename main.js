@@ -52,14 +52,14 @@ function startAdapter(options) {
                 processTimeout = null;
                 let task = processQueue.shift();
                 //noinspection JSUnresolvedVariable
-                if (state.val) {
+                if (state.val || state.val === '' || state.val === 0) {
                     if (task.callback) {
-                        //noinspection JSUnresolvedVariable
-                        task.callback((task.withLanguage ? task.language + ';' : '') + state.val);
+                        // noinspection JSUnresolvedVariable
+                        task.callback((task.withLanguage ? `${task.language};` : '') + state.val);
                     }
                 } else {
-                    //noinspection JSUnresolvedVariable
-                    processText((task.withLanguage ? task.language + ';' : '') + task.command, task.callback, null, null, true);
+                    // noinspection JSUnresolvedVariable
+                    processText((task.withLanguage ? `${task.language};` : '') + task.command, task.callback, null, null, true);
                 }
                 setImmediate(useExternalProcessor);
             }
@@ -166,7 +166,7 @@ function useExternalProcessor() {
 
             // process with rules
             //noinspection JSUnresolvedVariable
-            processText((_task.withLanguage ? _task.language + ';' : '') + _task.command, _task.callback, null, null, true);
+            processText((_task.withLanguage ? `${_task.language};` : '') + _task.command, _task.callback, null, null, true);
 
             // process next
             useExternalProcessor();
@@ -183,7 +183,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
         adapter.setState('error', 'invalid command', true);
         //noinspection JSUnresolvedFunction
         return simpleAnswers.sayError(lang, 'processText: invalid command!', null, null, result =>
-            cb(result ? ((withLang ? lang + ';' : '') + result) : ''));
+            cb(result ? ((withLang ? `${lang};` : '') + result) : ''));
     }
 
     cmd = cmd.toString();
@@ -220,11 +220,11 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
             adapter.log.error('External process queue is full. Try to use rules.');
         }
     } else if (afterProcessor) {
-        //noinspection JSUnresolvedVariable
-        adapter.log.warn('Timeout for external processor: ' + adapter.config.processorId);
+        // noinspection JSUnresolvedVariable
+        adapter.log.warn(`Timeout for external processor: ${adapter.config.processorId}`);
     }
 
-    //noinspection JSUnresolvedFunction
+    // noinspection JSUnresolvedFunction
     let matchedRules = model.findMatched(cmd, rules);
 
     let result = '';
@@ -241,7 +241,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
         if (commandsCallbacks[rules[matchedRules[m]].template]) {
             //noinspection JSUnresolvedVariable
             commandsCallbacks[rules[matchedRules[m]].template](lang, cmd, rules[matchedRules[m]].args, rules[matchedRules[m]].ack, response => {
-                adapter.log.info('Response: ' + response);
+                adapter.log.info(`Response: ${response}`);
 
                 // somehow combine answers
                 if (response) {
@@ -253,7 +253,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
 
                 if (!--count) {
                     //noinspection JSReferencingMutableVariableFromClosure
-                    cb && cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+                    cb && cb(result ? ((withLang ? `${lang};` : '') + result) : '');
                     cb = null;
                 }
             });
@@ -270,7 +270,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
         //noinspection JSUnresolvedFunction
         if (!adapter.config.noNegativeMessage) {
             simpleAnswers.sayIDontUnderstand(lang, cmd, null, null, result => {
-                cb && cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+                cb && cb(result ? ((withLang ? `${lang};` : '') + result) : '');
                 cb = null;
             });
         } else {
@@ -278,7 +278,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
             cb = null;
         }
     } else if (!count) {
-        cb && cb(result ? ((withLang ? lang + ';' : '') + result) : '');
+        cb && cb(result ? ((withLang ? `${lang};` : '') + result) : '');
         cb = null;
     }
 }
