@@ -415,10 +415,6 @@ class Layout extends PureComponent {
                     rule.ack = rule.ack.default;
                 }
 
-                if (rule.args && !Array.isArray(rule.args)) {
-                    rule.args = [];
-                }
-
                 rule.args && rule.args.forEach((arg, index) => {
                     if (typeof arg === 'object') {
                         rule.args[index] = arg.default;
