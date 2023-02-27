@@ -175,36 +175,33 @@ class Layout extends PureComponent {
         }
 
         const id = uuid();
-        const shortDataRule = {
-            ...selectedRule,
-            id,
-            _break: true,
-        };
+        const shortDataRule = JSON.parse(JSON.stringify(selectedRule));
+        shortDataRule.id = id;
+        shortDataRule._break = true;
 
-        const rule = {
-            ...this.commands.find(command => command.rule === shortDataRule.rule),
-            ...shortDataRule,
-        };
+        const ruleStruct = this.commands.find(command => command.rule === shortDataRule.rule);
+
+        const rule = JSON.parse(JSON.stringify(ruleStruct));
+        Object.assign(rule, shortDataRule);
+
         const isUnsavedChanges = Object.values(this.state.unsavedRules).length;
 
-        this.setState(
-            {
-                rules: [...this.state.rules, rule],
-                unsavedRules: {
-                    ...this.state.unsavedRules,
-                    [id]: {
-                        id,
-                        wasChangedGlobally: true,
-                    },
-                },
-                selectedRule: !isUnsavedChanges ? rule : this.state.selectedRule,
-            },
-            () => {
-                if (isUnsavedChanges) {
-                    this.selectRule(rule.id);
-                }
-            },
-        );
+        const newState = {
+            rules: JSON.parse(JSON.stringify(this.state.rules)),
+            unsavedRules: JSON.parse(JSON.stringify(this.state.unsavedRules)),
+            selectedRule: !isUnsavedChanges ? rule : this.state.selectedRule,
+        };
+        newState.rules.push(rule);
+        newState.unsavedRules[id] = {
+            id,
+            wasChangedGlobally: true,
+        };
+
+        this.setState(newState, () => {
+            if (isUnsavedChanges) {
+                this.selectRule(rule.id);
+            }
+        });
 
         this.handleClose();
     };

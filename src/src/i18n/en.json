@@ -48,5 +48,7 @@
   "Convert 0/1 to false/true": "Convert 0/1 to false/true",
   "unsaved": "unsaved",
   "Apply": "Apply",
-  "Apply and save": "Apply and save"
+  "Apply and save": "Apply and save",
+  "Create": "Create",
+  "Copy": "Copy"
 }

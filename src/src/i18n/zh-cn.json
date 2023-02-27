@@ -48,5 +48,7 @@
   "Convert 0/1 to false/true": "将 0/1 转换为假/真",
   "unsaved": "未保存",
   "Apply": "申请",
-  "Apply and save": "应用并保存"
+  "Apply and save": "应用并保存",
+  "Create": "创造",
+  "Copy": "复制"
 }

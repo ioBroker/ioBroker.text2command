@@ -14,6 +14,8 @@ import {
 
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import AddIcon from '@mui/icons-material/Add';
 
 import I18n from '@iobroker/adapter-react-v5/i18n';
 
@@ -170,6 +172,7 @@ class CreateRuleDialog extends Component {
                     )}
                     startIcon={<CheckIcon />}
                     disabled={disabled}
+                    style={{ whiteSpace: 'nowrap' }}
                 >
                     { I18n.t('Apply and save') }
                 </Button> : null}
@@ -180,10 +183,10 @@ class CreateRuleDialog extends Component {
                         this.state.localRule,
                         this.state.localRule.isError,
                     )}
-                    startIcon={<CheckIcon />}
+                    startIcon={!isEdit ? <AddIcon /> : (isCopy ? <ContentCopyIcon /> : <CheckIcon />)}
                     disabled={disabled}
                 >
-                    { I18n.t('Apply') }
+                    {!isEdit ? I18n.t('Create') : (isCopy ? I18n.t('Copy') : I18n.t('Apply'))}
                 </Button>
                 <Button variant="contained" color="grey" onClick={handleClose} startIcon={<CloseIcon />}>{I18n.t('Cancel')}</Button>
             </DialogActions>

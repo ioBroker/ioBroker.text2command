@@ -48,5 +48,7 @@
   "Convert 0/1 to false/true": "Converteer 0/1 naar false/true",
   "unsaved": "niet opgeslagen",
   "Apply": "Toepassen",
-  "Apply and save": "Toepassen en opslaan"
+  "Apply and save": "Toepassen en opslaan",
+  "Create": "Creëren",
+  "Copy": "Kopiëren"
 }

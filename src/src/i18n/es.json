@@ -48,5 +48,7 @@
   "Convert 0/1 to false/true": "Convertir 0/1 a falso/verdadero",
   "unsaved": "no guardado",
   "Apply": "Aplicar",
-  "Apply and save": "Aplicar y guardar"
+  "Apply and save": "Aplicar y guardar",
+  "Create": "Crear",
+  "Copy": "Copiar"
 }
