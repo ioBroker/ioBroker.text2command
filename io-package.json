@@ -138,7 +138,7 @@
     "eraseOnUpload": true,
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
-    "localLink": "/adapter/text2command/tab.html",
+    "localLink": "/adapter/text2command/tab.html?instance=%instance%",
     "type": "logic",
     "noConfig": true,
     "compact": true,

@@ -78,7 +78,7 @@ class App extends GenericApp {
         .then(obj => {
             if (JSON.stringify(obj.native) !== JSON.stringify(config)) {
                 obj.native = config;
-                return this.socket.setObject(`system.adapter.${this.adapterName}.${this.instance}`, obj)
+                return this.socket.setObject(obj._id, obj)
                     .then(() => true);
             }
 
