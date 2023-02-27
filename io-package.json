@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "text2command",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "news": {
+      "3.0.2": {
+        "en": "Corrected link from admin",
+        "de": "Korrigierter Link von admin",
+        "ru": "Исправлена ссылка от админ",
+        "pt": "Link corrigido de admin",
+        "nl": "Vertaling:",
+        "fr": "Lien corrigé de l'administrateur",
+        "it": "Collegamento corretto da admin",
+        "es": "Enlace corregido de admin",
+        "pl": "Poprawne połączenie z adminem",
+        "uk": "Виправлено посилання від адміністратора",
+        "zh-cn": "A. 来自专注的联系"
+      },
       "3.0.1": {
         "en": "Corrected many GUI errors",
         "de": "Viele GUI-Fehler korrigiert",
@@ -76,18 +89,6 @@
         "es": "Verificó la existencia de la instancia de sayit antes de la salida",
         "pl": "Sprawdzono istnienie instancji sayit przed wyjściem",
         "zh-cn": "在输出前检查 sayit 实例的存在"
-      },
-      "2.1.6": {
-        "en": "Corrected GUI",
-        "de": "Korrigierte GUI",
-        "ru": "Исправлен графический интерфейс",
-        "pt": "GUI corrigida",
-        "nl": "Gecorrigeerde GUI",
-        "fr": "Interface graphique corrigée",
-        "it": "GUI corretta",
-        "es": "Interfaz gráfica de usuario corregida",
-        "pl": "Poprawione GUI",
-        "zh-cn": "更正的图形用户界面"
       }
     },
     "title": "Text to command",
