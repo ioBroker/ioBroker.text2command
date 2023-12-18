@@ -1,6 +1,6 @@
 {
     "name": "text2command-react",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "private": true,
     "dependencies": {
         "@iobroker/adapter-react-v5": "^4.8.1",

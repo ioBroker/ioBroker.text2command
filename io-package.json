@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "text2command",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "news": {
+      "3.0.3": {
+        "en": "Corrected GUI",
+        "de": "Korrigierte GUI",
+        "ru": "Правильный GUI",
+        "pt": "GUI corrigida",
+        "nl": "Vertaling:",
+        "fr": "GUI corrigé",
+        "it": "GUI corretta",
+        "es": "Corregido GUI",
+        "pl": "Kwalifikacja GUI",
+        "uk": "Правильний інтерфейс",
+        "zh-cn": "更正"
+      },
       "3.0.2": {
         "en": "Corrected link from admin",
         "de": "Korrigierter Link von admin",
@@ -77,18 +90,6 @@
         "es": "Verificó la existencia de la instancia de sayit antes de la salida\nSe agregaron los lugares decimales a la temperatura.\nSe agregó el segundo ID de objeto a las consultas de los usuarios.\nSe agregó la opción: \"Sin respuesta negativa\"",
         "pl": "Sprawdzono istnienie instancji sayit przed wyjściem\nDodano ustawienia miejsc dziesiętnych do temperatury\nDodano drugi identyfikator obiektu do zapytań użytkowników\nDodano opcję: „Brak negatywnej odpowiedzi”",
         "zh-cn": "在输出前检查 sayit 实例的存在\n将小数位设置添加到温度\n向用户查询添加了第二个对象 ID\n添加了选项：“没有否定答案”"
-      },
-      "2.1.7": {
-        "en": "Checked the existence of sayit instance before output",
-        "de": "Vor der Ausgabe wurde die Existenz der sayit-Instanz überprüft",
-        "ru": "Проверено существование экземпляра sayit перед выводом",
-        "pt": "Verificada a existência da instância sayit antes da saída",
-        "nl": "Controleer het bestaan van de sayit-instantie vóór de uitvoer",
-        "fr": "Vérifié l'existence de l'instance sayit avant la sortie",
-        "it": "Verificata l'esistenza dell'istanza sayit prima dell'output",
-        "es": "Verificó la existencia de la instancia de sayit antes de la salida",
-        "pl": "Sprawdzono istnienie instancji sayit przed wyjściem",
-        "zh-cn": "在输出前检查 sayit 实例的存在"
       }
     },
     "title": "Text to command",
