@@ -211,8 +211,7 @@ class Drawer extends Component {
     onResponse = (id, state) => {
         if (this.state.toast === null) {
             this.setState({ toast: '', toastError: false });
-        } else
-        if (state) {
+        } else if (state) {
             if (state.val && state.val.match(/^Error\.|^Fehler\.|^Ошибка\./)) {
                 this.props.socket.getState(`text2command.${this.props.instance}.error`)
                     .then(_state =>
