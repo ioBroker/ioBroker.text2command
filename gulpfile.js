@@ -135,7 +135,7 @@ function copyFiles() {
         gulp.src([
             'src/build/index.html',
         ])
-            .pipe(rename('tab.html'))
+            .pipe(rename('tab_m.html'))
             .pipe(gulp.dest('admin/')),
 
         gulp.src([
