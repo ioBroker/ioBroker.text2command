@@ -19,7 +19,7 @@
     "url": "https://github.com/ioBroker/ioBroker.text2command"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.0.6"
+    "@iobroker/adapter-core": "^3.2.1"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^3.8.0",
