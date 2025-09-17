@@ -15,7 +15,7 @@
     "You can use %s, that will be replaced with current value of state. %u will be replaced by unit": "%s wird durch den aktuellen Statuswert ersetzt. %u wird durch die Einheit ersetzt",
     "Ok": "Ok",
     "Create Rule": "Regel erstellen",
-    "Are you sure?": "Bist Du sicher?",
+    "Are you sure?": "Wirklich sicher?",
     "You want to delete: %s": "Soll \"%s\" wirklich gelöscht werden?",
     "refresh": "Aktualisieren",
     "lang_en": "Englisch",
