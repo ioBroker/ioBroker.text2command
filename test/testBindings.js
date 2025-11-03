@@ -6,76 +6,77 @@ const extractBinding = require('../lib/simpleControl')._extractBinding;
 
 const samples = [
     {
-        name:   'Simple val',
+        name: 'Simple val',
         format: '{adapter.0.state}',
         results: [
             {
-                systemOid:  'adapter.0.state',
-                visOid:     'adapter.0.state.val',
-                isSeconds:  false,
+                systemOid: 'adapter.0.state',
+                visOid: 'adapter.0.state.val',
+                isSeconds: false,
                 operations: undefined,
-                token:      '{adapter.0.state}'
-            }
-        ]
+                token: '{adapter.0.state}',
+            },
+        ],
     },
     {
-        name:   'Double val',
+        name: 'Double val',
         format: '{adapter.0.state1}x{adapter.0.state2}',
         results: [
             {
-                systemOid:  'adapter.0.state1',
-                visOid:     'adapter.0.state1.val',
-                isSeconds:  false,
+                systemOid: 'adapter.0.state1',
+                visOid: 'adapter.0.state1.val',
+                isSeconds: false,
                 operations: undefined,
-                token:      '{adapter.0.state1}'
+                token: '{adapter.0.state1}',
             },
             {
-                systemOid:  'adapter.0.state2',
-                visOid:     'adapter.0.state2.val',
-                isSeconds:  false,
+                systemOid: 'adapter.0.state2',
+                visOid: 'adapter.0.state2.val',
+                isSeconds: false,
                 operations: undefined,
-                token:      '{adapter.0.state2}'
-            }
-        ]
+                token: '{adapter.0.state2}',
+            },
+        ],
     },
     {
-        name:   'Simple ts',
+        name: 'Simple ts',
         format: '{adapter.0.state.ts}',
         results: [
             {
-                systemOid:  'adapter.0.state',
-                visOid:     'adapter.0.state.ts',
-                isSeconds:  true,
+                systemOid: 'adapter.0.state',
+                visOid: 'adapter.0.state.ts',
+                isSeconds: true,
                 operations: undefined,
-                token:      '{adapter.0.state.ts}'
-            }
-        ]
+                token: '{adapter.0.state.ts}',
+            },
+        ],
     },
     {
-        name:   'Simple val 2',
+        name: 'Simple val 2',
         format: '{adapter.0.state.val}',
         results: [
             {
-                systemOid:  'adapter.0.state',
-                visOid:     'adapter.0.state.val',
-                isSeconds:  false,
+                systemOid: 'adapter.0.state',
+                visOid: 'adapter.0.state.val',
+                isSeconds: false,
                 operations: undefined,
-                token:      '{adapter.0.state.val}'
-            }
-        ]
+                token: '{adapter.0.state.val}',
+            },
+        ],
     },
     {
-        name:   'Complex val 2',
+        name: 'Complex val 2',
         format: '{adapter.0.state.val:a; a*10}',
         results: [
             {
-                systemOid:  'a',
-                visOid:     'a.val',
-                isSeconds:  false,
-                operations: '[{"op":"eval","arg":[{"name":"adapter.0.state.val","visOid":"a.val","systemOid":"a"}],"formula":" a*10"}]',
-                token:      '{adapter.0.state.val:a; a*10}',
-            }
-        ]
+                systemOid: 'a',
+                visOid: 'a.val',
+                isSeconds: false,
+                operations:
+                    '[{"op":"eval","arg":[{"name":"adapter.0.state.val","visOid":"a.val","systemOid":"a"}],"formula":" a*10"}]',
+                token: '{adapter.0.state.val:a; a*10}',
+            },
+        ],
     },
 ];
 

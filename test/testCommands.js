@@ -19,7 +19,7 @@ const adapter = {
         },
         error: function (txt) {
             console.error(txt);
-        }
+        },
     },
     getForeignObject: function (id, cb) {
         if (id === 'temperatureC') {
@@ -27,22 +27,21 @@ const adapter = {
                 _id: 'temperatureC',
                 common: {
                     role: 'value.temperature',
-                    unit: '°C'
-                }
+                    unit: '°C',
+                },
             });
         } else if (id === 'temperatureF') {
             cb(null, {
                 _id: 'temperatureF',
                 common: {
                     role: 'value.temperature',
-                    unit: '°F'
-                }
+                    unit: '°F',
+                },
             });
         } else if (id === 'temperatureNone') {
             cb(null, {
                 _id: 'temperatureNone',
-                common: {
-                }
+                common: {},
             });
         } else if (id === 'someSwitch') {
             cb(null, {
@@ -50,9 +49,9 @@ const adapter = {
                 common: {
                     name: 'some switch',
                     unit: '%',
-                    type: 'boolean'
+                    type: 'boolean',
                 },
-                type: 'state'
+                type: 'state',
             });
         } else if (id === 'someLevel') {
             cb(null, {
@@ -60,9 +59,9 @@ const adapter = {
                 common: {
                     name: 'some Level',
                     unit: '%',
-                    type: 'number'
+                    type: 'number',
                 },
-                type: 'state'
+                type: 'state',
             });
         } else {
             cb('not found');
@@ -74,22 +73,21 @@ const adapter = {
                 _id: 'temperatureC',
                 common: {
                     role: 'value.temperature',
-                    unit: '°C'
-                }
+                    unit: '°C',
+                },
             });
         } else if (id === 'temperatureF') {
             return Promise.resolve({
                 _id: 'temperatureF',
                 common: {
                     role: 'value.temperature',
-                    unit: '°F'
-                }
+                    unit: '°F',
+                },
             });
         } else if (id === 'temperatureNone') {
             return Promise.resolve({
                 _id: 'temperatureNone',
-                common: {
-                }
+                common: {},
             });
         } else if (id === 'someSwitch') {
             return Promise.resolve({
@@ -97,9 +95,9 @@ const adapter = {
                 common: {
                     name: 'some switch',
                     unit: '%',
-                    type: 'boolean'
+                    type: 'boolean',
                 },
-                type: 'state'
+                type: 'state',
             });
         } else if (id === 'someLevel') {
             return Promise.resolve({
@@ -107,9 +105,9 @@ const adapter = {
                 common: {
                     name: 'some Level',
                     unit: '%',
-                    type: 'number'
+                    type: 'number',
                 },
-                type: 'state'
+                type: 'state',
             });
         } else {
             return Promise.reject('not found');
@@ -123,14 +121,14 @@ const adapter = {
         typeof cb === 'function' && cb(null);
     },
     getForeignState: function (id, cb) {
-        cb(null, {val: 15});
+        cb(null, { val: 15 });
     },
     getForeignStateAsync: function (id, cb) {
-        return Promise.resolve({val: 15});
-    }
+        return Promise.resolve({ val: 15 });
+    },
 };
 let systemConfig = {
-    tempUnit: '°F'
+    tempUnit: '°F',
 };
 
 simpleControl.init(systemConfig, adapter);
@@ -244,21 +242,33 @@ describe('Commands: Test temperature', function () {
         });
     });
     it('must replace template with the value', function (done) {
-        simpleControl.sayTemperature('en', null, ['temperatureC'], '{system.adapter.text2command.alive} a {system.adapter.text2command.0.connected}', function (text) {
-            debug && console.log('sayTemperature(en, C) returned: ' + text);
-            expect(text).to.be.equal('15 a 15');
-            done();
-        });
+        simpleControl.sayTemperature(
+            'en',
+            null,
+            ['temperatureC'],
+            '{system.adapter.text2command.alive} a {system.adapter.text2command.0.connected}',
+            function (text) {
+                debug && console.log('sayTemperature(en, C) returned: ' + text);
+                expect(text).to.be.equal('15 a 15');
+                done();
+            },
+        );
     });
 });
 
 describe('Commands: Build answer', function () {
     it('must replace bindings with the value', function (done) {
-        simpleControl.buildAnswer('en', null, null, '{a: system.adapter.text2command.alive; a * 2} a {system.adapter.text2command.0.connected;*(3)}', function (text) {
-            debug && console.log('Build answer(en) returned: ' + text);
-            expect(text).to.be.equal('30 a 45');
-            done();
-        });
+        simpleControl.buildAnswer(
+            'en',
+            null,
+            null,
+            '{a: system.adapter.text2command.alive; a * 2} a {system.adapter.text2command.0.connected;*(3)}',
+            function (text) {
+                debug && console.log('Build answer(en) returned: ' + text);
+                expect(text).to.be.equal('30 a 45');
+                done();
+            },
+        );
     });
 });
 
@@ -320,13 +330,19 @@ describe('Commands: Test device control', function () {
     });
 
     it('must control device with variable value +60,6', function (done) {
-        simpleControl.userDeviceControl('en', 'control +60,6% value', ['someLevel'], '%n %s%u written', function (text) {
-            debug && console.log('userDeviceControl(someSwitch, +60,6%) returned: ' + text);
-            expect(writtenValue).to.be.equal(60.6);
-            expect(text).to.be.ok;
-            expect(text.indexOf('some Level 60.6% written')).to.be.at.least(0);
-            done();
-        });
+        simpleControl.userDeviceControl(
+            'en',
+            'control +60,6% value',
+            ['someLevel'],
+            '%n %s%u written',
+            function (text) {
+                debug && console.log('userDeviceControl(someSwitch, +60,6%) returned: ' + text);
+                expect(writtenValue).to.be.equal(60.6);
+                expect(text).to.be.ok;
+                expect(text.indexOf('some Level 60.6% written')).to.be.at.least(0);
+                done();
+            },
+        );
     });
 
     it('must not return any ack text', function (done) {
@@ -340,38 +356,84 @@ describe('Commands: Test device control', function () {
 
 describe('Commands: Test extract text', function () {
     it('Must return text except key words', function (done) {
-        simpleControl.sendText('en', simpleControl.extractText('say to computer i will be back', 'say to computer I will be back', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
-            debug && console.log('userText(say to computer I will be late, someSwitch) returned: ' + text);
-            expect(text).to.be.equal('Text: I will be back');
-            done();
-        });
+        simpleControl.sendText(
+            'en',
+            simpleControl.extractText(
+                'say to computer i will be back',
+                'say to computer I will be back',
+                'say [to] computer',
+            ),
+            ['someSwitch'],
+            'Text: %s/Text: %s',
+            function (text) {
+                debug && console.log('userText(say to computer I will be late, someSwitch) returned: ' + text);
+                expect(text).to.be.equal('Text: I will be back');
+                done();
+            },
+        );
     });
     it('Must return value except key words', function (done) {
-        simpleControl.sendText('en', simpleControl.extractText('say to computer active?', 'say to computer Active!', 'say [to] computer'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
-            debug && console.log('userText(say to computer Active!, someSwitch) returned: ' + text);
-            expect(text).to.be.equal('Text: active'); // someSwitch is boolean and active will be replaced with true
-            done();
-        });
+        simpleControl.sendText(
+            'en',
+            simpleControl.extractText('say to computer active?', 'say to computer Active!', 'say [to] computer'),
+            ['someSwitch'],
+            'Text: %s/Text: %s',
+            function (text) {
+                debug && console.log('userText(say to computer Active!, someSwitch) returned: ' + text);
+                expect(text).to.be.equal('Text: active'); // someSwitch is boolean and active will be replaced with true
+                done();
+            },
+        );
     });
     it('Must return text except key words', function (done) {
-        simpleControl.sendText('en', simpleControl.extractText('позвать гаража aндрей ужин готов!', 'позвать гаража Андрей ужин готов!', 'позвать [из] гаража'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
-            debug && console.log('userText(позвать гаража Андрей ужин готов!, someSwitch) returned: ' + text);
-            expect(text).to.be.equal('Text: Андрей ужин готов!');
-            done();
-        });
+        simpleControl.sendText(
+            'en',
+            simpleControl.extractText(
+                'позвать гаража aндрей ужин готов!',
+                'позвать гаража Андрей ужин готов!',
+                'позвать [из] гаража',
+            ),
+            ['someSwitch'],
+            'Text: %s/Text: %s',
+            function (text) {
+                debug && console.log('userText(позвать гаража Андрей ужин готов!, someSwitch) returned: ' + text);
+                expect(text).to.be.equal('Text: Андрей ужин готов!');
+                done();
+            },
+        );
     });
     it('Must return text except key words', function (done) {
-        simpleControl.sendText('en', simpleControl.extractText('позвать из гаража aндрей ужин готов!', 'позвать из гаража Андрей ужин готов!', 'позвать [из] гаража'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
-            debug && console.log('userText(позвать из гаража Андрей ужин готов!, someSwitch) returned: ' + text);
-            expect(text).to.be.equal('Text: Андрей ужин готов!');
-            done();
-        });
+        simpleControl.sendText(
+            'en',
+            simpleControl.extractText(
+                'позвать из гаража aндрей ужин готов!',
+                'позвать из гаража Андрей ужин готов!',
+                'позвать [из] гаража',
+            ),
+            ['someSwitch'],
+            'Text: %s/Text: %s',
+            function (text) {
+                debug && console.log('userText(позвать из гаража Андрей ужин готов!, someSwitch) returned: ' + text);
+                expect(text).to.be.equal('Text: Андрей ужин готов!');
+                done();
+            },
+        );
     });
     it('Must return text except key words', function (done) {
-        simpleControl.sendText('en', simpleControl.extractText('позвать из гаража aндрей ужин готов_', 'позвать из гаража Андрей ужин готов!', 'позвать из гаража'), ['someSwitch'], 'Text: %s/Text: %s', function (text) {
-            debug && console.log('userText(позвать из гаража Андрей ужин готов!, someSwitch) returned: ' + text);
-            expect(text).to.be.equal('Text: Андрей ужин готов!');
-            done();
-        });
+        simpleControl.sendText(
+            'en',
+            simpleControl.extractText(
+                'позвать из гаража aндрей ужин готов_',
+                'позвать из гаража Андрей ужин готов!',
+                'позвать из гаража',
+            ),
+            ['someSwitch'],
+            'Text: %s/Text: %s',
+            function (text) {
+                debug && console.log('userText(позвать из гаража Андрей ужин готов!, someSwitch) returned: ' + text);
+                expect(text).to.be.equal('Text: Андрей ужин готов!');
+                done();
+            },
+        );
     });
 });
