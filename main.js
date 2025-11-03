@@ -13,27 +13,27 @@
 /* jslint node: true */
 'use strict';
 
-const utils           = require('@iobroker/adapter-core'); // Get common adapter utils
-const adapterName     = require('./package.json').name.split('.').pop();
+const utils = require('@iobroker/adapter-core'); // Get common adapter utils
+const adapterName = require('./package.json').name.split('.').pop();
 //noinspection JSUnresolvedFunction
-const model           = require('./admin/langModel');
-const devicesControl  = require('./lib/devicesControl');
-const simpleControl   = require('./lib/simpleControl');
-const simpleAnswers   = require('./lib/simpleAnswers');
+const model = require('./admin/langModel');
+const devicesControl = require('./lib/devicesControl');
+const simpleControl = require('./lib/simpleControl');
+const simpleAnswers = require('./lib/simpleAnswers');
 
 let rules;
 let commandsCallbacks;
-let systemConfig    = {};
-let enums           = {};
-let processTimeout  = null;
-let processQueue    = [];
+let systemConfig = {};
+let enums = {};
+let processTimeout = null;
+let processQueue = [];
 
 let adapter;
 
 function startAdapter(options) {
     options = options || {};
     Object.assign(options, {
-        name: adapterName
+        name: adapterName,
     });
 
     adapter = new utils.Adapter(options);
@@ -43,9 +43,8 @@ function startAdapter(options) {
         if (state && !state.ack && state.val && id === adapter.namespace + '.text') {
             //noinspection JSUnresolvedVariable
             processText(state.val.toString(), sayIt);
-        } else
-        //noinspection JSUnresolvedVariable
-        if (state && id === adapter.config.processorId && state.ack) {
+        } else if (state && id === adapter.config.processorId && state.ack) {
+            //noinspection JSUnresolvedVariable
             // answer received
             if (processTimeout) {
                 clearTimeout(processTimeout);
@@ -59,14 +58,20 @@ function startAdapter(options) {
                     }
                 } else {
                     // noinspection JSUnresolvedVariable
-                    processText((task.withLanguage ? `${task.language};` : '') + task.command, task.callback, null, null, true);
+                    processText(
+                        (task.withLanguage ? `${task.language};` : '') + task.command,
+                        task.callback,
+                        null,
+                        null,
+                        true,
+                    );
                 }
                 setImmediate(useExternalProcessor);
             }
         }
     });
 
-    adapter.on('objectChange', (id/*, obj*/) => {
+    adapter.on('objectChange', (id /*, obj*/) => {
         if (id.substring(0, 5) === 'enum.') {
             // read all enums
             //noinspection JSUnresolvedFunction
@@ -91,19 +96,24 @@ function startAdapter(options) {
                 case 'send':
                     if (obj.message) {
                         //noinspection JSUnresolvedVariable
-                        processText(typeof obj.message === 'object' ? obj.message.text : obj.message, res => {
-                            let responseObj = JSON.parse(JSON.stringify(obj.message));
-                            if (typeof responseObj !== 'object') {
-                                responseObj = {text: responseObj};
-                            }
+                        processText(
+                            typeof obj.message === 'object' ? obj.message.text : obj.message,
+                            res => {
+                                let responseObj = JSON.parse(JSON.stringify(obj.message));
+                                if (typeof responseObj !== 'object') {
+                                    responseObj = { text: responseObj };
+                                }
 
-                            responseObj.response = res;
+                                responseObj.response = res;
 
-                            if (obj.callback) {
-                                //noinspection JSUnresolvedFunction, JSUnresolvedVariable
-                                adapter.sendTo(obj.from, obj.command, responseObj, obj.callback);
-                            }
-                        }, typeof obj.message === 'object' ? JSON.parse(JSON.stringify(obj.message)) : null, obj.from);
+                                if (obj.callback) {
+                                    //noinspection JSUnresolvedFunction, JSUnresolvedVariable
+                                    adapter.sendTo(obj.from, obj.command, responseObj, obj.callback);
+                                }
+                            },
+                            typeof obj.message === 'object' ? JSON.parse(JSON.stringify(obj.message)) : null,
+                            obj.from,
+                        );
                     }
                     break;
 
@@ -130,19 +140,21 @@ function startAdapter(options) {
 
 function sayIt(text) {
     //noinspection JSUnresolvedFunction
-    adapter.setStateAsync('response', text || '', true)
+    adapter
+        .setStateAsync('response', text || '', true)
         .then(() => {
             if (text && adapter.config.sayitInstance) {
                 //noinspection JSUnresolvedVariable
-                return adapter.getForeignObjectAsync(adapter.config.sayitInstance)
-                    .then(obj => {
-                        if (obj) {
-                            //noinspection JSUnresolvedVariable,JSUnresolvedFunction
-                            return adapter.setForeignStateAsync(adapter.config.sayitInstance, text);
-                        } else {
-                            adapter.log.warn('If you want to use sayit functionality, please install sayit or disable it in settings (Answer in id)');
-                        }
-                    });
+                return adapter.getForeignObjectAsync(adapter.config.sayitInstance).then(obj => {
+                    if (obj) {
+                        //noinspection JSUnresolvedVariable,JSUnresolvedFunction
+                        return adapter.setForeignStateAsync(adapter.config.sayitInstance, text);
+                    } else {
+                        adapter.log.warn(
+                            'If you want to use sayit functionality, please install sayit or disable it in settings (Answer in id)',
+                        );
+                    }
+                });
             }
         })
         .catch(err => adapter.log.error(err));
@@ -166,7 +178,13 @@ function useExternalProcessor() {
 
             // process with rules
             //noinspection JSUnresolvedVariable
-            processText((_task.withLanguage ? `${_task.language};` : '') + _task.command, _task.callback, null, null, true);
+            processText(
+                (_task.withLanguage ? `${_task.language};` : '') + _task.command,
+                _task.callback,
+                null,
+                null,
+                true,
+            );
 
             // process next
             useExternalProcessor();
@@ -183,22 +201,23 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
         adapter.setState('error', 'invalid command', true);
         //noinspection JSUnresolvedFunction
         return simpleAnswers.sayError(lang, 'processText: invalid command!', null, null, result =>
-            cb(result ? ((withLang ? `${lang};` : '') + result) : ''));
+            cb(result ? (withLang ? `${lang};` : '') + result : ''),
+        );
     }
 
     cmd = cmd.toString();
     let originalCmd = cmd;
 
     let withLang = false;
-    let ix       = cmd.indexOf(';');
+    let ix = cmd.indexOf(';');
 
     cmd = cmd.toLowerCase();
 
     // extract language
     if (ix !== -1) {
-        withLang    = true;
-        lang        = cmd.substring(0, ix) || lang;
-        cmd         = cmd.substring(ix + 1);
+        withLang = true;
+        lang = cmd.substring(0, ix) || lang;
+        cmd = cmd.substring(ix + 1);
         originalCmd = originalCmd.substring(ix + 1);
     }
 
@@ -207,11 +226,11 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
     if (!afterProcessor && adapter.config.processorId) {
         let task = messageObj || {};
 
-        task.language     = lang;
-        task.command      = originalCmd;
+        task.language = lang;
+        task.command = originalCmd;
         task.withLanguage = withLang;
-        task.from         = from;
-        task.callback     = cb;
+        task.from = from;
+        task.callback = cb;
 
         if (processQueue.length < 100) {
             processQueue.push(task);
@@ -232,7 +251,10 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
 
     for (let m = 0; m < matchedRules.length; m++) {
         //noinspection JSUnresolvedVariable
-        if (model.commands[rules[matchedRules[m]].template] && model.commands[rules[matchedRules[m]].template].extractText) {
+        if (
+            model.commands[rules[matchedRules[m]].template] &&
+            model.commands[rules[matchedRules[m]].template].extractText
+        ) {
             //noinspection JSUnresolvedFunction,JSUnresolvedVariable
             cmd = simpleControl.extractText(cmd, originalCmd, rules[matchedRules[m]].words);
         }
@@ -240,23 +262,29 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
         //noinspection JSUnresolvedVariable
         if (commandsCallbacks[rules[matchedRules[m]].template]) {
             //noinspection JSUnresolvedVariable
-            commandsCallbacks[rules[matchedRules[m]].template](lang, cmd, rules[matchedRules[m]].args, rules[matchedRules[m]].ack, response => {
-                adapter.log.info(`Response: ${response}`);
+            commandsCallbacks[rules[matchedRules[m]].template](
+                lang,
+                cmd,
+                rules[matchedRules[m]].args,
+                rules[matchedRules[m]].ack,
+                response => {
+                    adapter.log.info(`Response: ${response}`);
 
-                // somehow combine answers
-                if (response) {
-                    //noinspection JSReferencingMutableVariableFromClosure
-                    result += (result ? ', ' : '') + response;
-                }
+                    // somehow combine answers
+                    if (response) {
+                        //noinspection JSReferencingMutableVariableFromClosure
+                        result += (result ? ', ' : '') + response;
+                    }
 
-                adapter.config.writeEveryAnswer && adapter.setState('response', response, true);
+                    adapter.config.writeEveryAnswer && adapter.setState('response', response, true);
 
-                if (!--count) {
-                    //noinspection JSReferencingMutableVariableFromClosure
-                    cb && cb(result ? ((withLang ? `${lang};` : '') + result) : '');
-                    cb = null;
-                }
-            });
+                    if (!--count) {
+                        //noinspection JSReferencingMutableVariableFromClosure
+                        cb && cb(result ? (withLang ? `${lang};` : '') + result : '');
+                        cb = null;
+                    }
+                },
+            );
         } else {
             count--;
             if (rules[matchedRules[m]].ack) {
@@ -270,7 +298,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
         //noinspection JSUnresolvedFunction
         if (!adapter.config.noNegativeMessage) {
             simpleAnswers.sayIDontUnderstand(lang, cmd, null, null, result => {
-                cb && cb(result ? ((withLang ? `${lang};` : '') + result) : '');
+                cb && cb(result ? (withLang ? `${lang};` : '') + result : '');
                 cb = null;
             });
         } else {
@@ -278,7 +306,7 @@ function processText(cmd, cb, messageObj, from, afterProcessor) {
             cb = null;
         }
     } else if (!count) {
-        cb && cb(result ? ((withLang ? `${lang};` : '') + result) : '');
+        cb && cb(result ? (withLang ? `${lang};` : '') + result : '');
         cb = null;
     }
 }
@@ -287,17 +315,17 @@ async function main() {
     rules = adapter.config.rules || {};
     //noinspection JSUnresolvedVariable
     commandsCallbacks = {
-        whatTimeIsIt:       simpleControl.sayTime,
-        whatIsYourName:     simpleControl.sayName,
+        whatTimeIsIt: simpleControl.sayTime,
+        whatIsYourName: simpleControl.sayName,
         outsideTemperature: simpleControl.sayTemperature,
-        insideTemperature:  simpleControl.sayTemperature,
-        functionOnOff:      devicesControl.controlByFunction,
-        blindsUpDown:       devicesControl.controlBlinds,
-        userDeviceControl:  simpleControl.userDeviceControl,
-        sendText:           simpleControl.sendText,
-/*        openLock:           openLock,*/
-        userQuery:          simpleControl.userQuery,
-        buildAnswer:        simpleControl.buildAnswer
+        insideTemperature: simpleControl.sayTemperature,
+        functionOnOff: devicesControl.controlByFunction,
+        blindsUpDown: devicesControl.controlBlinds,
+        userDeviceControl: simpleControl.userDeviceControl,
+        sendText: simpleControl.sendText,
+        /*        openLock:           openLock,*/
+        userQuery: simpleControl.userQuery,
+        buildAnswer: simpleControl.buildAnswer,
     };
 
     // read system configuration
