@@ -25,7 +25,7 @@ const commands = {
             it: 'Che ore sono?',
             es: '¿Que hora es?',
             pl: 'Która godzina?',
-            'zh-cn': '现在是几奌？',
+            'zh-cn': '现在是几奌？'
         },
         invisible: true,
         unique: true,
@@ -54,7 +54,7 @@ const commands = {
             it: 'Come ti chiami?',
             es: '¿Cuál es tu nombre?',
             pl: 'Jak masz na imię?',
-            'zh-cn': '你叫什么名字？',
+            'zh-cn': '你叫什么名字？'
         },
         ack: {
             type: 'text',
@@ -68,7 +68,7 @@ const commands = {
                 it: 'Risposta',
                 es: 'Responder',
                 pl: 'Odpowiedź',
-                'zh-cn': '回答',
+                'zh-cn': '回答'
             },
             default: {
                 en: 'My name is Alpha/Alpha',
@@ -116,20 +116,20 @@ const commands = {
             },
             {
                 name: {
-                    en: 'Decimal places',
-                    de: 'Nachkommastellen',
-                    ru: 'Десятичные разряды',
-                    pt: 'Casas decimais',
-                    nl: 'decimalen',
-                    fr: 'Décimales',
-                    it: 'Decimali',
-                    es: 'Lugares decimales',
-                    pl: 'Miejsca dziesiętne',
-                    'zh-cn': '小数位',
+                    "en": "Decimal places",
+                    "de": "Nachkommastellen",
+                    "ru": "Десятичные разряды",
+                    "pt": "Casas decimais",
+                    "nl": "decimalen",
+                    "fr": "Décimales",
+                    "it": "Decimali",
+                    "es": "Lugares decimales",
+                    "pl": "Miejsca dziesiętne",
+                    "zh-cn": "小数位",
                 },
                 type: 'number',
                 decimal: true,
-                default: 0,
+                default: 0
             },
         ],
         ack: {
@@ -192,16 +192,16 @@ const commands = {
             },
             {
                 name: {
-                    en: 'Decimal places',
-                    de: 'Nachkommastellen',
-                    ru: 'Десятичные разряды',
-                    pt: 'Casas decimais',
-                    nl: 'decimalen',
-                    fr: 'Décimales',
-                    it: 'Decimali',
-                    es: 'Lugares decimales',
-                    pl: 'Miejsca dziesiętne',
-                    'zh-cn': '小数位',
+                    "en": "Decimal places",
+                    "de": "Nachkommastellen",
+                    "ru": "Десятичные разряды",
+                    "pt": "Casas decimais",
+                    "nl": "decimalen",
+                    "fr": "Décimales",
+                    "it": "Decimali",
+                    "es": "Lugares decimales",
+                    "pl": "Miejsca dziesiętne",
+                    "zh-cn": "小数位",
                 },
                 decimal: true,
                 type: 'number',
@@ -571,16 +571,16 @@ const commands = {
             },
             {
                 name: {
-                    en: 'Convert 0/1 to yes/no',
-                    de: 'Wandeln 0/1 in ja/nein um',
-                    ru: 'Преобразовать 0/1 в да/нет',
-                    pt: 'Converter 0/1 em falso/verdadeiro',
-                    nl: 'Converteer 0/1 naar false/true',
-                    fr: 'Convertir 0/1 en faux/vrai',
-                    it: 'Converti 0/1 in falso/vero',
-                    es: 'Convertir 0/1 a falso/verdadero',
-                    pl: 'Konwertuj 0/1 na fałsz/prawdę',
-                    'zh-cn': '将 0/1 转换为假/真',
+                    "en": "Convert 0/1 to yes/no",
+                    "de": "Wandeln 0/1 in ja/nein um",
+                    "ru": "Преобразовать 0/1 в да/нет",
+                    "pt": "Converter 0/1 em falso/verdadeiro",
+                    "nl": "Converteer 0/1 naar false/true",
+                    "fr": "Convertir 0/1 en faux/vrai",
+                    "it": "Converti 0/1 in falso/vero",
+                    "es": "Convertir 0/1 a falso/verdadero",
+                    "pl": "Konwertuj 0/1 na fałsz/prawdę",
+                    "zh-cn": "将 0/1 转换为假/真",
                 },
                 default: false,
                 type: 'checkbox',
@@ -670,7 +670,7 @@ const commands = {
             it: 'Sei bravo',
             es: 'Eres bueno',
             pl: 'Jesteś dobry',
-            'zh-cn': '你很好',
+            'zh-cn': '你很好'
         },
         invisible: true,
         unique: true,
@@ -691,7 +691,7 @@ const commands = {
                 it: 'Risposta',
                 es: 'Responder',
                 pl: 'Odpowiedź',
-                'zh-cn': '回答',
+                'zh-cn': '回答'
             },
             default: {
                 en: 'Thank you/You are welcome',
@@ -703,7 +703,7 @@ const commands = {
                 it: 'Grazie, prego',
                 es: 'Gracias / de nada',
                 pl: 'Dziękuję nie ma za co',
-                'zh-cn': '谢谢不用谢',
+                'zh-cn': '谢谢不用谢'
             },
         },
     },
@@ -719,7 +719,7 @@ const commands = {
             it: 'Grazie',
             es: 'Gracias',
             pl: 'Dziękuję Ci',
-            'zh-cn': '谢谢',
+            'zh-cn': '谢谢'
         },
         invisible: true,
         unique: true,
@@ -733,7 +733,7 @@ const commands = {
             it: 'grazie',
             es: 'gracias',
             pl: 'podziękować',
-            'zh-cn': '谢谢',
+            'zh-cn': '谢谢'
         },
         ack: {
             type: 'text',
@@ -747,7 +747,7 @@ const commands = {
                 it: 'Risposta',
                 es: 'Responder',
                 pl: 'Odpowiedź',
-                'zh-cn': '回答',
+                'zh-cn': '回答'
             },
             default: {
                 en: 'No problem/You are welcome',
@@ -759,7 +759,7 @@ const commands = {
                 it: 'Nessun problema/Prego',
                 es: 'No hay problema, de nada',
                 pl: 'Nie ma sprawy, proszę bardzo',
-                'zh-cn': '没问题/不客气',
+                'zh-cn': '没问题/不客气'
             },
         },
     },
