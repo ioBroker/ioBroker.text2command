@@ -1,258 +1,270 @@
 {
-    "common": {
-        "name": "text2command",
-        "version": "3.0.3",
-        "news": {
-            "3.0.3": {
-                "en": "Corrected GUI",
-                "de": "Korrigierte GUI",
-                "ru": "Правильный GUI",
-                "pt": "GUI corrigida",
-                "nl": "Vertaling:",
-                "fr": "GUI corrigé",
-                "it": "GUI corretta",
-                "es": "Corregido GUI",
-                "pl": "Kwalifikacja GUI",
-                "uk": "Правильний інтерфейс",
-                "zh-cn": "更正"
-            },
-            "3.0.2": {
-                "en": "Corrected link from admin",
-                "de": "Korrigierter Link von admin",
-                "ru": "Исправлена ссылка от админ",
-                "pt": "Link corrigido de admin",
-                "nl": "Vertaling:",
-                "fr": "Lien corrigé de l'administrateur",
-                "it": "Collegamento corretto da admin",
-                "es": "Enlace corregido de admin",
-                "pl": "Poprawne połączenie z adminem",
-                "uk": "Виправлено посилання від адміністратора",
-                "zh-cn": "A. 来自专注的联系"
-            },
-            "3.0.1": {
-                "en": "Corrected many GUI errors",
-                "de": "Viele GUI-Fehler korrigiert",
-                "ru": "Исправлено множество ошибок GUI",
-                "pt": "Corrigido muitos erros GUI",
-                "nl": "Vertaling:",
-                "fr": "Correction de nombreuses erreurs GUI",
-                "it": "Corretto molti errori GUI",
-                "es": "Corregido muchos errores de GUI",
-                "pl": "Poprawka wielu błędów GUI",
-                "uk": "Виправлено багато помилок інтерфейсу",
-                "zh-cn": "纠正许多古伊错误"
-            },
-            "2.3.1": {
-                "en": "Migrated GUI to v5",
-                "de": "Migrated GUI to v5",
-                "ru": "Migrated GUI для v5",
-                "pt": "GUI migrado para v5",
-                "nl": "Gemigreerde GUI",
-                "fr": "Migrated GUI to v5",
-                "it": "GUI emigrata a v5",
-                "es": "GUI migrado al v5",
-                "pl": "Migrated GUI (ang.)",
-                "uk": "Миттєвий інтерфейс v5",
-                "zh-cn": "第5条"
-            },
-            "2.2.2": {
-                "en": "Fix crash cases reported by Sentry",
-                "de": "Reparieren Crashfälle gemeldet von Sentry",
-                "ru": "Исправление случаев аварии, описанных Sentry",
-                "pt": "Corrigir casos de acidente relatados por Sentry",
-                "nl": "Vertaling:",
-                "fr": "Troubles de crash signalés par Sentry",
-                "it": "Correzione dei casi di crash segnalati da Sentry",
-                "es": "Casos de accidente fijo reportados por Sentry",
-                "pl": "Sprawy katastrofy Fix podane przez Sentry’a",
-                "zh-cn": "Sentry所报告的六例事故"
-            },
-            "2.2.1": {
-                "en": "Checked the existence of sayit instance before output\nAdded the decimal places settings to temperature  \nAdded the second object ID to user queries\nAdded the option: \"No negative answer\"",
-                "de": "Vor der Ausgabe wurde die Existenz der sayit-Instanz überprüft\nDezimalstelleneinstellungen zur Temperatur hinzugefügt\nDie zweite Objekt-ID wurde zu Benutzerabfragen hinzugefügt\nOption hinzugefügt: „Keine negative Antwort“",
-                "ru": "Проверено существование экземпляра sayit перед выводом\nДобавлены настройки десятичных разрядов к температуре\nДобавлен второй идентификатор объекта в пользовательские запросы\nДобавлена опция: \"Нет отрицательного ответа\"",
-                "pt": "Verificada a existência da instância sayit antes da saída\nAdicionadas as configurações de casas decimais à temperatura\nAdicionado o segundo ID de objeto às consultas do usuário\nAdicionada a opção: \"Nenhuma resposta negativa\"",
-                "nl": "Controleer het bestaan van de sayit-instantie vóór de uitvoer\nDe instellingen voor de decimalen toegevoegd aan de temperatuur\nDe tweede object-ID toegevoegd aan gebruikersquery's\nOptie toegevoegd: \"Geen negatief antwoord\"",
-                "fr": "Vérifié l'existence de l'instance sayit avant la sortie\nAjout des paramètres de décimales à la température\nAjout du deuxième ID d'objet aux requêtes des utilisateurs\nAjout de l'option : \"Pas de réponse négative\"",
-                "it": "Verificata l'esistenza dell'istanza sayit prima dell'output\nAggiunte le impostazioni dei decimali alla temperatura\nAggiunto il secondo ID oggetto alle query degli utenti\nAggiunta l'opzione: \"Nessuna risposta negativa\"",
-                "es": "Verificó la existencia de la instancia de sayit antes de la salida\nSe agregaron los lugares decimales a la temperatura.\nSe agregó el segundo ID de objeto a las consultas de los usuarios.\nSe agregó la opción: \"Sin respuesta negativa\"",
-                "pl": "Sprawdzono istnienie instancji sayit przed wyjściem\nDodano ustawienia miejsc dziesiętnych do temperatury\nDodano drugi identyfikator obiektu do zapytań użytkowników\nDodano opcję: „Brak negatywnej odpowiedzi”",
-                "zh-cn": "在输出前检查 sayit 实例的存在\n将小数位设置添加到温度\n向用户查询添加了第二个对象 ID\n添加了选项：“没有否定答案”"
-            },
-            "2.2.0": {
-                "en": "Checked the existence of sayit instance before output\nAdded the decimal places settings to temperature  \nAdded the second object ID to user queries\nAdded the option: \"No negative answer\"",
-                "de": "Vor der Ausgabe wurde die Existenz der sayit-Instanz überprüft\nDezimalstelleneinstellungen zur Temperatur hinzugefügt\nDie zweite Objekt-ID wurde zu Benutzerabfragen hinzugefügt\nOption hinzugefügt: „Keine negative Antwort“",
-                "ru": "Проверено существование экземпляра sayit перед выводом\nДобавлены настройки десятичных разрядов к температуре\nДобавлен второй идентификатор объекта в пользовательские запросы\nДобавлена опция: \"Нет отрицательного ответа\"",
-                "pt": "Verificada a existência da instância sayit antes da saída\nAdicionadas as configurações de casas decimais à temperatura\nAdicionado o segundo ID de objeto às consultas do usuário\nAdicionada a opção: \"Nenhuma resposta negativa\"",
-                "nl": "Controleer het bestaan van de sayit-instantie vóór de uitvoer\nDe instellingen voor de decimalen toegevoegd aan de temperatuur\nDe tweede object-ID toegevoegd aan gebruikersquery's\nOptie toegevoegd: \"Geen negatief antwoord\"",
-                "fr": "Vérifié l'existence de l'instance sayit avant la sortie\nAjout des paramètres de décimales à la température\nAjout du deuxième ID d'objet aux requêtes des utilisateurs\nAjout de l'option : \"Pas de réponse négative\"",
-                "it": "Verificata l'esistenza dell'istanza sayit prima dell'output\nAggiunte le impostazioni dei decimali alla temperatura\nAggiunto il secondo ID oggetto alle query degli utenti\nAggiunta l'opzione: \"Nessuna risposta negativa\"",
-                "es": "Verificó la existencia de la instancia de sayit antes de la salida\nSe agregaron los lugares decimales a la temperatura.\nSe agregó el segundo ID de objeto a las consultas de los usuarios.\nSe agregó la opción: \"Sin respuesta negativa\"",
-                "pl": "Sprawdzono istnienie instancji sayit przed wyjściem\nDodano ustawienia miejsc dziesiętnych do temperatury\nDodano drugi identyfikator obiektu do zapytań użytkowników\nDodano opcję: „Brak negatywnej odpowiedzi”",
-                "zh-cn": "在输出前检查 sayit 实例的存在\n将小数位设置添加到温度\n向用户查询添加了第二个对象 ID\n添加了选项：“没有否定答案”"
-            }
+  "common": {
+    "name": "text2command",
+    "version": "4.0.0",
+    "news": {
+      "4.0.0": {
+        "en": "GUI was updated to vite\nMinimal nodejs version is 20.x",
+        "de": "GUI wurde auf vite aktualisiert\nMinimal nodejs Version ist 20.x",
+        "ru": "GUI был обновлен до Vite\nМинимальная версия Nodejs 20.x",
+        "pt": "GUI foi atualizada para vite\nVersão mínima do nójs é 20.x",
+        "nl": "GUI is bijgewerkt naar vite\nMinimale nodejs versie is 20.x",
+        "fr": "L'interface utilisateur a été mise à jour pour indiquer\nLa version minimale de nodejs est 20.x",
+        "it": "GUI è stato aggiornato a vite\nVersione minimal nodejs è 20.x",
+        "es": "GUI was updated to vite\nMinimal nodejs versión es 20.x",
+        "pl": "Interfejs GUI został zaktualizowany, aby vite\nMinimal nodejs version is 20.x",
+        "uk": "GUI було оновлено до vite\nВерсія Minimal nodejs 20.x",
+        "zh-cn": "图形用户界面更新为 vite\n最小节点版本为 20.x"
+      },
+      "3.0.3": {
+        "en": "Corrected GUI",
+        "de": "Korrigierte GUI",
+        "ru": "Правильный GUI",
+        "pt": "GUI corrigida",
+        "nl": "Vertaling:",
+        "fr": "GUI corrigé",
+        "it": "GUI corretta",
+        "es": "Corregido GUI",
+        "pl": "Kwalifikacja GUI",
+        "uk": "Правильний інтерфейс",
+        "zh-cn": "更正"
+      },
+      "3.0.2": {
+        "en": "Corrected link from admin",
+        "de": "Korrigierter Link von admin",
+        "ru": "Исправлена ссылка от админ",
+        "pt": "Link corrigido de admin",
+        "nl": "Vertaling:",
+        "fr": "Lien corrigé de l'administrateur",
+        "it": "Collegamento corretto da admin",
+        "es": "Enlace corregido de admin",
+        "pl": "Poprawne połączenie z adminem",
+        "uk": "Виправлено посилання від адміністратора",
+        "zh-cn": "A. 来自专注的联系"
+      },
+      "3.0.1": {
+        "en": "Corrected many GUI errors",
+        "de": "Viele GUI-Fehler korrigiert",
+        "ru": "Исправлено множество ошибок GUI",
+        "pt": "Corrigido muitos erros GUI",
+        "nl": "Vertaling:",
+        "fr": "Correction de nombreuses erreurs GUI",
+        "it": "Corretto molti errori GUI",
+        "es": "Corregido muchos errores de GUI",
+        "pl": "Poprawka wielu błędów GUI",
+        "uk": "Виправлено багато помилок інтерфейсу",
+        "zh-cn": "纠正许多古伊错误"
+      },
+      "2.3.1": {
+        "en": "Migrated GUI to v5",
+        "de": "Migrated GUI to v5",
+        "ru": "Migrated GUI для v5",
+        "pt": "GUI migrado para v5",
+        "nl": "Gemigreerde GUI",
+        "fr": "Migrated GUI to v5",
+        "it": "GUI emigrata a v5",
+        "es": "GUI migrado al v5",
+        "pl": "Migrated GUI (ang.)",
+        "uk": "Миттєвий інтерфейс v5",
+        "zh-cn": "第5条"
+      },
+      "2.2.2": {
+        "en": "Fix crash cases reported by Sentry",
+        "de": "Reparieren Crashfälle gemeldet von Sentry",
+        "ru": "Исправление случаев аварии, описанных Sentry",
+        "pt": "Corrigir casos de acidente relatados por Sentry",
+        "nl": "Vertaling:",
+        "fr": "Troubles de crash signalés par Sentry",
+        "it": "Correzione dei casi di crash segnalati da Sentry",
+        "es": "Casos de accidente fijo reportados por Sentry",
+        "pl": "Sprawy katastrofy Fix podane przez Sentry’a",
+        "zh-cn": "Sentry所报告的六例事故"
+      },
+      "2.2.1": {
+        "en": "Checked the existence of sayit instance before output\nAdded the decimal places settings to temperature  \nAdded the second object ID to user queries\nAdded the option: \"No negative answer\"",
+        "de": "Vor der Ausgabe wurde die Existenz der sayit-Instanz überprüft\nDezimalstelleneinstellungen zur Temperatur hinzugefügt\nDie zweite Objekt-ID wurde zu Benutzerabfragen hinzugefügt\nOption hinzugefügt: „Keine negative Antwort“",
+        "ru": "Проверено существование экземпляра sayit перед выводом\nДобавлены настройки десятичных разрядов к температуре\nДобавлен второй идентификатор объекта в пользовательские запросы\nДобавлена опция: \"Нет отрицательного ответа\"",
+        "pt": "Verificada a existência da instância sayit antes da saída\nAdicionadas as configurações de casas decimais à temperatura\nAdicionado o segundo ID de objeto às consultas do usuário\nAdicionada a opção: \"Nenhuma resposta negativa\"",
+        "nl": "Controleer het bestaan van de sayit-instantie vóór de uitvoer\nDe instellingen voor de decimalen toegevoegd aan de temperatuur\nDe tweede object-ID toegevoegd aan gebruikersquery's\nOptie toegevoegd: \"Geen negatief antwoord\"",
+        "fr": "Vérifié l'existence de l'instance sayit avant la sortie\nAjout des paramètres de décimales à la température\nAjout du deuxième ID d'objet aux requêtes des utilisateurs\nAjout de l'option : \"Pas de réponse négative\"",
+        "it": "Verificata l'esistenza dell'istanza sayit prima dell'output\nAggiunte le impostazioni dei decimali alla temperatura\nAggiunto il secondo ID oggetto alle query degli utenti\nAggiunta l'opzione: \"Nessuna risposta negativa\"",
+        "es": "Verificó la existencia de la instancia de sayit antes de la salida\nSe agregaron los lugares decimales a la temperatura.\nSe agregó el segundo ID de objeto a las consultas de los usuarios.\nSe agregó la opción: \"Sin respuesta negativa\"",
+        "pl": "Sprawdzono istnienie instancji sayit przed wyjściem\nDodano ustawienia miejsc dziesiętnych do temperatury\nDodano drugi identyfikator obiektu do zapytań użytkowników\nDodano opcję: „Brak negatywnej odpowiedzi”",
+        "zh-cn": "在输出前检查 sayit 实例的存在\n将小数位设置添加到温度\n向用户查询添加了第二个对象 ID\n添加了选项：“没有否定答案”"
+      }
+    },
+    "titleLang": {
+      "en": "Text to command",
+      "de": "Text zu Kommandos",
+      "ru": "Текст в команды",
+      "pt": "Texto para comando",
+      "nl": "Te besturen tekst",
+      "fr": "Texte à commander",
+      "it": "Testo da comandare",
+      "es": "Texto para mandar",
+      "pl": "Tekst do polecenia",
+      "zh-cn": "文字指令"
+    },
+    "desc": {
+      "en": "This adapter allows to convert text to commands",
+      "de": "Dieser Adapter ermöglicht es, Text in Befehle zu konvertieren",
+      "ru": "Этот адаптер позволяет преобразовывать текст в команды",
+      "pt": "Este adaptador permite converter texto em comandos",
+      "nl": "Met deze adapter kunt u tekst converteren naar opdrachten",
+      "fr": "Cet adaptateur permet de convertir du texte en commandes",
+      "it": "Questo adattatore consente di convertire il testo in comandi",
+      "es": "Este adaptador permite convertir texto a comandos",
+      "pl": "Ten adapter umożliwia konwertowanie tekstu na polecenia",
+      "zh-cn": "该适配器允许将文本转换为命令"
+    },
+    "authors": [
+      "bluefox <dogafox@gmail.com>"
+    ],
+    "license": "MIT",
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
+    "platform": "Javascript/Node.js",
+    "tier": 3,
+    "mode": "daemon",
+    "readme": "https://github.com/ioBroker/ioBroker.text2command/blob/master/README.md",
+    "loglevel": "info",
+    "icon": "text2command.png",
+    "keywords": [
+      "text",
+      "commands"
+    ],
+    "adminUI": {
+      "config": "none",
+      "tab": "html"
+    },
+    "connectionType": "local",
+    "dataSource": "push",
+    "messagebox": true,
+    "eraseOnUpload": true,
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
+    "localLink": "/adapter/text2command/tab.html?instance=%instance%",
+    "type": "logic",
+    "noConfig": true,
+    "compact": true,
+    "adminTab": {
+      "name": {
+        "en": "Commands",
+        "de": "Kommandos",
+        "ru": "Команды",
+        "pt": "Comandos",
+        "nl": "Commando's",
+        "fr": "Commandes",
+        "it": "Comandi",
+        "es": "Comandos",
+        "pl": "Polecenia",
+        "zh-cn": "指令"
+      },
+      "singleton": false,
+      "ignoreConfigUpdate": true,
+      "fa-icon": "chat"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
+    ],
+    "plugins": {
+      "sentry": {
+        "dsn": "https://b421086baf0546cdb1f2aaf196939d7c@sentry.iobroker.net/49"
+      }
+    },
+    "messages": [
+      {
+        "condition": {
+          "operand": "and",
+          "rules": [
+            "oldVersion<3",
+            "newVersion>=3"
+          ]
         },
-        "titleLang": {
-            "en": "Text to command",
-            "de": "Text zu Kommandos",
-            "ru": "Текст в команды",
-            "pt": "Texto para comando",
-            "nl": "Te besturen tekst",
-            "fr": "Texte à commander",
-            "it": "Testo da comandare",
-            "es": "Texto para mandar",
-            "pl": "Tekst do polecenia",
-            "zh-cn": "文字指令"
+        "title": {
+          "en": "Important notice!",
+          "de": "Wichtiger Hinweis!",
+          "ru": "Важное замечание!",
+          "pt": "Notícia importante!",
+          "nl": "Belangrijke mededeling!",
+          "fr": "Avis important!",
+          "it": "Avviso IMPORTANTE!",
+          "es": "Noticia importante!",
+          "pl": "Ważna uwaga!",
+          "zh-cn": "重要通知!"
         },
-        "desc": {
-            "en": "This adapter allows to convert text to commands",
-            "de": "Dieser Adapter ermöglicht es, Text in Befehle zu konvertieren",
-            "ru": "Этот адаптер позволяет преобразовывать текст в команды",
-            "pt": "Este adaptador permite converter texto em comandos",
-            "nl": "Met deze adapter kunt u tekst converteren naar opdrachten",
-            "fr": "Cet adaptateur permet de convertir du texte en commandes",
-            "it": "Questo adattatore consente di convertire il testo in comandi",
-            "es": "Este adaptador permite convertir texto a comandos",
-            "pl": "Ten adapter umożliwia konwertowanie tekstu na polecenia",
-            "zh-cn": "该适配器允许将文本转换为命令"
+        "text": {
+          "en": "Please check all settings of all rules in settings and save them again!",
+          "de": "Bitte überprüfen Sie alle Einstellungen aller Regeln in Einstellungen und speichern Sie sie wieder!",
+          "ru": "Пожалуйста, проверьте все настройки всех правил в настройках и сохраните их снова!",
+          "pt": "Por favor, verifique todas as configurações de todas as regras nas configurações e salve-as novamente!",
+          "nl": "Controleer alle instellingen van alle regels in de settings en red ze opnieuw!",
+          "fr": "Veuillez vérifier tous les paramètres de toutes les règles dans les paramètres et les sauvegarder à nouveau!",
+          "it": "Si prega di controllare tutte le impostazioni di tutte le regole nelle impostazioni e salvarle di nuovo!",
+          "es": "Por favor, compruebe todos los ajustes de todas las reglas en la configuración y guárdalas de nuevo!",
+          "pl": "Wszystko o wszystkich zasadach i oszczędza ich ponownie!",
+          "uk": "Будь ласка, перевірте всі налаштування всіх правил в налаштуваннях та зберігайте їх знову!",
+          "zh-cn": "请检查一切环境规则,并再次挽救这些规则!"
         },
-        "authors": ["bluefox <dogafox@gmail.com>"],
-        "license": "MIT",
-        "licenseInformation": {
-            "license": "MIT",
-            "type": "free"
-        },
-        "platform": "Javascript/Node.js",
-        "tier": 3,
-        "mode": "daemon",
-        "readme": "https://github.com/ioBroker/ioBroker.text2command/blob/master/README.md",
-        "loglevel": "info",
-        "icon": "text2command.png",
-        "keywords": ["text", "commands"],
-        "adminUI": {
-            "config": "none",
-            "tab": "html"
-        },
-        "connectionType": "local",
-        "dataSource": "push",
-        "messagebox": true,
-        "eraseOnUpload": true,
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
-        "localLink": "/adapter/text2command/tab.html?instance=%instance%",
-        "type": "logic",
-        "noConfig": true,
-        "compact": true,
-        "adminTab": {
-            "name": {
-                "en": "Commands",
-                "de": "Kommandos",
-                "ru": "Команды",
-                "pt": "Comandos",
-                "nl": "Commando's",
-                "fr": "Commandes",
-                "it": "Comandi",
-                "es": "Comandos",
-                "pl": "Polecenia",
-                "zh-cn": "指令"
-            },
-            "singleton": false,
-            "ignoreConfigUpdate": true,
-            "fa-icon": "chat"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=6.0.11"
-            }
-        ],
-        "plugins": {
-            "sentry": {
-                "dsn": "https://b421086baf0546cdb1f2aaf196939d7c@sentry.iobroker.net/49"
-            }
-        },
-        "messages": [
-            {
-                "condition": {
-                    "operand": "and",
-                    "rules": ["oldVersion<3", "newVersion>=3"]
-                },
-                "title": {
-                    "en": "Important notice!",
-                    "de": "Wichtiger Hinweis!",
-                    "ru": "Важное замечание!",
-                    "pt": "Notícia importante!",
-                    "nl": "Belangrijke mededeling!",
-                    "fr": "Avis important!",
-                    "it": "Avviso IMPORTANTE!",
-                    "es": "Noticia importante!",
-                    "pl": "Ważna uwaga!",
-                    "zh-cn": "重要通知!"
-                },
-                "text": {
-                    "en": "Please check all settings of all rules in settings and save them again!",
-                    "de": "Bitte überprüfen Sie alle Einstellungen aller Regeln in Einstellungen und speichern Sie sie wieder!",
-                    "ru": "Пожалуйста, проверьте все настройки всех правил в настройках и сохраните их снова!",
-                    "pt": "Por favor, verifique todas as configurações de todas as regras nas configurações e salve-as novamente!",
-                    "nl": "Controleer alle instellingen van alle regels in de settings en red ze opnieuw!",
-                    "fr": "Veuillez vérifier tous les paramètres de toutes les règles dans les paramètres et les sauvegarder à nouveau!",
-                    "it": "Si prega di controllare tutte le impostazioni di tutte le regole nelle impostazioni e salvarle di nuovo!",
-                    "es": "Por favor, compruebe todos los ajustes de todas las reglas en la configuración y guárdalas de nuevo!",
-                    "pl": "Wszystko o wszystkich zasadach i oszczędza ich ponownie!",
-                    "uk": "Будь ласка, перевірте всі налаштування всіх правил в налаштуваннях та зберігайте їх знову!",
-                    "zh-cn": "请检查一切环境规则,并再次挽救这些规则!"
-                },
-                "level": "warn",
-                "buttons": ["agree", "cancel"]
-            }
+        "level": "warn",
+        "buttons": [
+          "agree",
+          "cancel"
         ]
-    },
-    "native": {
-        "rules": [],
-        "sayitInstance": "sayit.0.tts.text",
-        "language": "",
-        "processorId": "",
-        "processorTimeout": 500,
-        "writeEveryAnswer": false,
-        "noNegativeMessage": false
-    },
-    "instanceObjects": [
-        {
-            "_id": "text",
-            "type": "state",
-            "common": {
-                "name": "Text to process",
-                "type": "string",
-                "role": "text",
-                "read": true,
-                "write": true,
-                "desc": "Write your text here with ack=false, and you will get answer with ack=true"
-            },
-            "native": {}
-        },
-        {
-            "_id": "response",
-            "type": "state",
-            "common": {
-                "name": "Answer on requested question",
-                "type": "string",
-                "role": "text",
-                "read": true,
-                "write": false,
-                "desc": "Answer for written into text2command.0.text text"
-            },
-            "native": {}
-        },
-        {
-            "_id": "error",
-            "type": "state",
-            "common": {
-                "name": "Error text",
-                "type": "string",
-                "role": "value.error",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        }
+      }
     ]
+  },
+  "native": {
+    "rules": [],
+    "sayitInstance": "sayit.0.tts.text",
+    "language": "",
+    "processorId": "",
+    "processorTimeout": 500,
+    "writeEveryAnswer": false,
+    "noNegativeMessage": false
+  },
+  "instanceObjects": [
+    {
+      "_id": "text",
+      "type": "state",
+      "common": {
+        "name": "Text to process",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": true,
+        "desc": "Write your text here with ack=false, and you will get answer with ack=true"
+      },
+      "native": {}
+    },
+    {
+      "_id": "response",
+      "type": "state",
+      "common": {
+        "name": "Answer on requested question",
+        "type": "string",
+        "role": "text",
+        "read": true,
+        "write": false,
+        "desc": "Answer for written into text2command.0.text text"
+      },
+      "native": {}
+    },
+    {
+      "_id": "error",
+      "type": "state",
+      "common": {
+        "name": "Error text",
+        "type": "string",
+        "role": "value.error",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    }
+  ]
 }

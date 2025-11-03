@@ -261,7 +261,7 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 4.0.0 (2025-11-03)
 * (bluefox) GUI was updated to vite
 * (bluefox) Minimal nodejs version is 20.x
 
