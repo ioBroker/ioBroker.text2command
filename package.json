@@ -28,7 +28,7 @@
         "@iobroker/eslint-config": "^2.2.0",
         "@iobroker/build-tools": "^2.0.15",
         "mocha": "^11.7.4",
-        "chai": "^4.5.0"
+        "chai": "^6.2.0"
     },
     "bugs": {
         "url": "https://github.com/ioBroker/ioBroker.text2command/issues"
