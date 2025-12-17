@@ -163,8 +163,7 @@
         "zh-cn": "指令"
       },
       "singleton": false,
-      "ignoreConfigUpdate": true,
-      "fa-icon": "chat"
+      "ignoreConfigUpdate": true
     },
     "dependencies": [
       {
