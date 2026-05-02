@@ -261,6 +261,9 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
+### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22 now
+
 ### 4.0.0 (2025-11-03)
 * (bluefox) GUI was updated to vite
 * (bluefox) Minimal nodejs version is 20.x
