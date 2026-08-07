@@ -1,15 +1,14 @@
 'use strict';
 
-var expect = require('chai').expect;
-//var setup  = require(__dirname + '/lib/setup');
-var formatProvider = require(__dirname + '/../build/lib/formatProvider');
-var debug = true;
+const assert = require('node:assert');
+const formatProvider = require('../build/lib/formatProvider');
+const debug = true;
 
 describe('Commands: Test dateInterval without suffix in default language', function () {
     it('must return 2 minutes and 20 seconds', function (done) {
         let out = formatProvider.formatInterval(new Date().getTime() - 2 * 60 * 1000 - 20 * 1000);
         if (debug) console.log('formatInterval returned: ' + out);
-        expect(out).is.equal('2 minutes and 20 seconds');
+        assert.strictEqual(out, '2 minutes and 20 seconds');
         done();
     });
 
@@ -17,7 +16,7 @@ describe('Commands: Test dateInterval without suffix in default language', funct
         formatProvider.setLanguage('de');
         let out = formatProvider.formatInterval(new Date().getTime() - 7 * 60 * 1000 - 20 * 1000);
         if (debug) console.log('formatInterval returned: ' + out);
-        expect(out).is.equal('7 Minuten');
+        assert.strictEqual(out, '7 Minuten');
         done();
     });
 });
@@ -30,7 +29,7 @@ describe('Commands: Test dateInterval with suffix in german language', function 
             'de',
         );
         if (debug) console.log('formatInterval returned: ' + out);
-        expect(out).is.equal('vor 3 Stunden und 2 Minuten');
+        assert.strictEqual(out, 'vor 3 Stunden und 2 Minuten');
         done();
     });
 
@@ -41,7 +40,7 @@ describe('Commands: Test dateInterval with suffix in german language', function 
             'de',
         );
         if (debug) console.log('formatInterval returned: ' + out);
-        expect(out).is.equal('vor 5 Tagen');
+        assert.strictEqual(out, 'vor 5 Tagen');
         done();
     });
 
@@ -52,7 +51,7 @@ describe('Commands: Test dateInterval with suffix in german language', function 
             'de',
         );
         if (debug) console.log('formatInterval returned: ' + out);
-        expect(out).is.equal('vor einem Tag');
+        assert.strictEqual(out, 'vor einem Tag');
         done();
     });
 });

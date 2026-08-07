@@ -1,7 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
-//const setup  = require(__dirname + '/lib/setup');
+const assert = require('node:assert');
 const extractBinding = require('../build/lib/simpleControl')._extractBinding;
 
 const samples = [
@@ -84,18 +83,18 @@ describe('Extract bindings', function () {
     samples.forEach(test => {
         it(test.name, done => {
             const results = extractBinding(test.format);
-            expect(results.length).to.be.equal(test.results.length);
+            assert.strictEqual(results.length, test.results.length);
             results.forEach((result, i) => {
-                expect(result.systemOid).to.be.equal(test.results[i].systemOid);
-                expect(result.visOid).to.be.equal(test.results[i].visOid);
-                expect(result.isSeconds).to.be.equal(test.results[i].isSeconds);
+                assert.strictEqual(result.systemOid, test.results[i].systemOid);
+                assert.strictEqual(result.visOid, test.results[i].visOid);
+                assert.strictEqual(result.isSeconds, test.results[i].isSeconds);
                 if (test.results[i].operations) {
-                    expect(JSON.stringify(result.operations)).to.be.equal(test.results[i].operations);
+                    assert.strictEqual(JSON.stringify(result.operations), test.results[i].operations);
                 } else {
-                    expect(result.operations).to.be.equal(test.results[i].operations);
+                    assert.strictEqual(result.operations, test.results[i].operations);
                 }
-                expect(result.token).to.be.equal(test.results[i].token);
-                expect(result.format).to.be.equal(test.format);
+                assert.strictEqual(result.token, test.results[i].token);
+                assert.strictEqual(result.format, test.format);
             });
             done();
         });
