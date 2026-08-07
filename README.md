@@ -261,7 +261,7 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 5.0.0 (2026-08-07)
 * (@GermanBluefox) Minimal nodejs version is 22.x
 * (@GermanBluefox) Migrated to React 19
 
