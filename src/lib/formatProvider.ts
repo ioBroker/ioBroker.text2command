@@ -1,20 +1,20 @@
-/* jshint -W097 */
-/* jshint strict: false */
-/* jslint node: true */
-'use strict';
+/** Interval units supported by {@link formatIntervalHelper} */
+export type IntervalType = 'seconds' | 'minutes' | 'hours' | 'days';
 
-let language = 'en'; // default language, if parameter is missed on function calls
+/** Default language, if the parameter is missing on the function calls */
+let language: ioBroker.Languages = 'en';
 
 /**
- * returns a text like 1 second or 5 minutes
- * @param {number} value the value
- * @param {string} type 'seconds', 'minutes', 'hour' or 'days'
- * @param {string} lang optional language, like de,ru or en. default is global language, set by setLanguage
+ * Returns a text like `1 second` or `5 minutes`
+ *
+ * @param value the value
+ * @param type 'seconds', 'minutes', 'hours' or 'days'
+ * @param lang optional language, like de, ru or en. Default is the global language, set by setLanguage
  */
-function formatIntervalHelper(value, type, lang) {
-    let singular;
-    let plural;
-    let special24;
+export function formatIntervalHelper(value: number, type: IntervalType, lang?: ioBroker.Languages): string {
+    let singular = '';
+    let plural = '';
+    let special24 = '';
     // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
     lang = lang || language;
     if (lang === 'de') {
@@ -68,48 +68,52 @@ function formatIntervalHelper(value, type, lang) {
     if (value === 1) {
         if (lang === 'de') {
             if (type === 'days') {
-                return 'einem ' + singular;
-            } else {
-                return 'einer ' + singular;
+                return `einem ${singular}`;
             }
-        } else if (lang === 'ru') {
+            return `einer ${singular}`;
+        }
+        if (lang === 'ru') {
             if (type === 'days' || type === 'hours') {
-                return 'один ' + singular;
-            } else {
-                return 'одну ' + singular;
+                return `один ${singular}`;
             }
-        } else {
-            return 'one ' + singular;
+            return `одну ${singular}`;
         }
-    } else {
-        if (lang === 'de') {
-            return value + ' ' + plural;
-        } else if (lang === 'ru') {
-            const d = value % 10;
-            if (d === 1 && value !== 11) {
-                return value + ' ' + singular;
-            } else if (d >= 2 && d <= 4 && (value > 20 || value < 10)) {
-                return value + ' ' + special24;
-            } else {
-                return value + ' ' + plural;
-            }
-        } else {
-            return value + ' ' + plural;
-        }
+        return `one ${singular}`;
     }
+
+    if (lang === 'de') {
+        return `${value} ${plural}`;
+    }
+    if (lang === 'ru') {
+        const d = value % 10;
+        if (d === 1 && value !== 11) {
+            return `${value} ${singular}`;
+        }
+        if (d >= 2 && d <= 4 && (value > 20 || value < 10)) {
+            return `${value} ${special24}`;
+        }
+        return `${value} ${plural}`;
+    }
+
+    return `${value} ${plural}`;
 }
 
 /**
- * formats a time difference to get something like 5 days and 4 hours ago
- * @param {number} timestamp time to differ with current time
- * @param {boolean} useSuffix if true, the text will end with ago for en, otherwise only the time will retuned
- * @param {string} lang optional language, like de,ru or en. default is global languge, set by setLanguage
+ * Formats a time difference to get something like `5 days and 4 hours ago`
+ *
+ * @param timestamp time to differ with the current time
+ * @param useSuffix if true, the text will end with `ago` for en, otherwise only the time will be returned
+ * @param lang optional language, like de, ru or en. Default is the global language, set by setLanguage
  */
-function formatInterval(timestamp, useSuffix, lang) {
+export function formatInterval(
+    timestamp: number | string,
+    useSuffix?: boolean | string,
+    lang?: ioBroker.Languages,
+): string {
     lang = lang || language;
-    let diff = new Date().getTime() - timestamp;
+    let diff = new Date().getTime() - Number(timestamp);
     diff = Math.round(diff / 1000);
-    let text = '';
+    let text: string;
     // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
     let connectorWord = ' and ';
     if (lang === 'de') {
@@ -148,26 +152,25 @@ function formatInterval(timestamp, useSuffix, lang) {
             text += connectorWord + formatIntervalHelper(h, 'hours', lang);
         }
     }
+
     if (text && useSuffix) {
         if (lang === 'de') {
-            return 'vor ' + text;
-        } else if (lang === 'ru') {
-            return text + ' назад';
-        } else {
-            return text + ' ago';
+            return `vor ${text}`;
         }
-    } else return text;
-}
-/**
- * set default language for format functions
- * @param {*} lang
- */
-function setLanguage(lang) {
-    language = lang;
+        if (lang === 'ru') {
+            return `${text} назад`;
+        }
+        return `${text} ago`;
+    }
+
+    return text;
 }
 
-module.exports = {
-    formatInterval,
-    formatIntervalHelper,
-    setLanguage,
-};
+/**
+ * Set the default language for the format functions
+ *
+ * @param lang language, like de, ru or en
+ */
+export function setLanguage(lang: ioBroker.Languages): void {
+    language = lang;
+}

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import SplitterLayout from 'react-splitter-layout';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
-import { withWidth, Utils, I18n } from '@iobroker/adapter-react-v5';
+import { withWidth, Utils, I18n } from '@iobroker/gui-components';
 import 'react-splitter-layout/lib/index.css';
 
 import { Drawer } from '@mui/material';

@@ -1,18 +1,10 @@
-/* Attention:
-  This file used in Front-end and in the backend. Originally it is placed in /lib/langModel.js
-  and will be coped by gulp to src/public/langModel.js
- */
-/* jshint -W097 */
-/* jshint strict: false */
-/* jslint node: true */
-
-// eslint-disable-next-line
-'use strict';
-
-// TODO: translate it to 'it, es, pl, pt, nl, fr, 'zh-cn''
-// TODO alarm on/off
-// alarm clock set/off
-const commands = {
+/* This file is generated from "src/lib/langModel.ts" by "node tasks". Do not edit it! */
+(function (exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.commands = void 0;
+exports.findMatched = findMatched;
+exports.commands = {
     whatTimeIsIt: {
         icon: '',
         name: {
@@ -417,8 +409,9 @@ const commands = {
                 'zh-cn': '已发送以下文本：%s',
             },
         },
-    } /*
-    'openLock': {
+    },
+    /*
+    openLock: {
         icon: '',
         name: {
             'en': 'Open/close door lock',
@@ -462,7 +455,8 @@ const commands = {
             },
             default: true
         }
-    },*/,
+    },
+    */
     userDeviceControl: {
         icon: '',
         name: {
@@ -764,7 +758,16 @@ const commands = {
         },
     },
 };
-
+/**
+ * Find all rules that match the given command.
+ *
+ * Note: the `words` of the matched rules are replaced in place with the parsed representation,
+ * so the same rule must not be parsed again on the next call.
+ *
+ * @param cmd text to analyse
+ * @param _rules all configured rules
+ * @returns indices of the matched rules in `_rules`
+ */
 function findMatched(cmd, _rules) {
     const matchedRules = [];
     cmd = cmd
@@ -772,68 +775,63 @@ function findMatched(cmd, _rules) {
         .replace(/[#''$&/\\!?.,;:(){}^]+/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
-
     let ix = cmd.indexOf(';');
     if (ix !== -1) {
         cmd = cmd.substring(ix + 1);
     }
-
     ix = cmd.indexOf('[');
     if (ix !== -1) {
         cmd = cmd.substring(0, ix);
     }
-
     const cmdWords = cmd.split(' ');
-
     for (let r = 0; r < _rules.length; r++) {
         const rule = _rules[r];
         if (!rule.words) {
             continue;
         }
-
         let isFound = true;
-
         // split rule words one time
         if (typeof rule.words === 'string') {
             // if regex
             if (rule.words[0] === '/') {
                 rule.words = new RegExp(rule.words.slice(1, -1), 'i');
-            } else {
+            }
+            else {
                 rule.words = rule.words.toLowerCase().trim().split(/\s+/g);
             }
         }
-
         // if regexp
         if (rule.words instanceof RegExp) {
             isFound = rule.words.test(cmd);
-        } else {
+        }
+        else {
+            const ruleWords = rule.words;
             // compare every word
-            for (let j = 0; j < rule.words.length; j++) {
-                if (!rule.words[j]) {
+            for (let j = 0; j < ruleWords.length; j++) {
+                let word = ruleWords[j];
+                if (!word) {
                     continue;
                 }
-
-                if (rule.words[j].includes('/')) {
-                    rule.words[j] = rule.words[j].split('/');
+                if (typeof word === 'string' && word.includes('/')) {
+                    word = word.split('/');
+                    ruleWords[j] = word;
                 }
-
-                if (typeof rule.words[j] === 'string' && rule.words[j][0] === '[') {
-                    continue;
-                }
-
-                // if one of
-                if (typeof rule.words[j] === 'object') {
-                    if (!rule.words[j].find(w => cmdWords.includes(w))) {
+                if (typeof word === 'string') {
+                    if (word[0] === '[') {
+                        continue;
+                    }
+                    if (!cmdWords.includes(word)) {
                         isFound = false;
                         break;
                     }
-                } else if (!cmdWords.includes(rule.words[j])) {
+                }
+                else if (!word.find(w => cmdWords.includes(w))) {
+                    // if one of
                     isFound = false;
                     break;
                 }
             }
         }
-
         if (isFound) {
             matchedRules.push(r);
             if (rule._break) {
@@ -841,16 +839,6 @@ function findMatched(cmd, _rules) {
             }
         }
     }
-
     return matchedRules;
 }
-
-if (typeof module !== 'undefined' && module.parent) {
-    module.exports = {
-        commands,
-        findMatched,
-    };
-} else if (typeof window !== 'undefined') {
-    window.commands = commands;
-    window.findMatched = findMatched;
-}
+})(window);

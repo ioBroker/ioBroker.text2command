@@ -9,7 +9,7 @@ import {
     Typography,
     DialogTitle,
     DialogActions,
-    Grid2 as Grid,
+    Grid,
     FormControl,
     InputLabel,
     Select,
@@ -21,7 +21,7 @@ import {
     Checkbox,
 } from '@mui/material';
 
-import { I18n, Utils, SelectID as DialogSelectID } from '@iobroker/adapter-react-v5';
+import { I18n, Utils, SelectID as DialogSelectID } from '@iobroker/gui-components';
 
 const styles = {
     settingsItem: {

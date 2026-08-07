@@ -1,60 +1,66 @@
 {
-  "name": "iobroker.text2command",
-  "version": "4.0.0",
-  "description": "Convert texts to ioBroker commands.",
-  "author": {
-    "name": "bluefox",
-    "email": "dogafox@gmail.com"
-  },
-  "homepage": "https://github.com/ioBroker/ioBroker.text2command",
-  "keywords": [
-    "ioBroker",
-    "text2command"
-  ],
-  "engines": {
-    "node": ">=20"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ioBroker/ioBroker.text2command"
-  },
-  "dependencies": {
-    "@iobroker/adapter-core": "^3.3.2"
-  },
-  "devDependencies": {
-    "@alcalzone/release-script": "^5.0.0",
-    "@alcalzone/release-script-plugin-iobroker": "^4.0.0",
-    "@alcalzone/release-script-plugin-license": "^4.0.0",
-    "@iobroker/eslint-config": "^2.2.0",
-    "@iobroker/build-tools": "^2.0.15",
-    "@iobroker/legacy-testing": "^2.0.2",
-    "mocha": "^11.7.5",
-    "chai": "^4.5.0"
-  },
-  "bugs": {
-    "url": "https://github.com/ioBroker/ioBroker.text2command/issues"
-  },
-  "main": "main.js",
-  "files": [
-    "admin/",
-    "img/",
-    "lib/",
-    "io-package.json",
-    "LICENSE",
-    "main.js"
-  ],
-  "scripts": {
-    "test": "node node_modules/mocha/bin/mocha --exit",
-    "prepublishOnly": "node tasks",
-    "build": "node tasks",
-    "release": "release-script",
-    "release-patch": "release-script patch --yes",
-    "release-minor": "release-script minor --yes",
-    "release-major": "release-script major --yes",
-    "update-packages": "ncu --upgrade && cd src && ncu --upgrade",
-    "npm": "npm i && cd src-admin && npm i -f",
-    "beforePush": "node tasks"
-  },
-  "license": "MIT",
-  "readmeFilename": "README.md"
+    "name": "iobroker.text2command",
+    "version": "4.0.0",
+    "description": "Convert texts to ioBroker commands.",
+    "author": {
+        "name": "bluefox",
+        "email": "dogafox@gmail.com"
+    },
+    "homepage": "https://github.com/ioBroker/ioBroker.text2command",
+    "keywords": [
+        "ioBroker",
+        "text2command"
+    ],
+    "engines": {
+        "node": ">=20"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ioBroker/ioBroker.text2command"
+    },
+    "dependencies": {
+        "@iobroker/adapter-core": "^3.4.3"
+    },
+    "devDependencies": {
+        "@alcalzone/release-script": "^5.2.1",
+        "@alcalzone/release-script-plugin-iobroker": "^5.2.0",
+        "@alcalzone/release-script-plugin-license": "^5.2.2",
+        "@iobroker/eslint-config": "^2.3.4",
+        "@iobroker/build-tools": "^3.0.1",
+        "@iobroker/legacy-testing": "^3.0.0",
+        "@iobroker/types": "^7.2.2",
+        "@types/node": "^26.1.2",
+        "tsx": "^4.23.10",
+        "typescript": "~6.0.3"
+    },
+    "bugs": {
+        "url": "https://github.com/ioBroker/ioBroker.text2command/issues"
+    },
+    "main": "build/main.js",
+    "files": [
+        "admin/",
+        "build/",
+        "img/",
+        "io-package.json",
+        "LICENSE"
+    ],
+    "scripts": {
+        "test": "node tasks --2-compile && mocha --exit",
+        "test:package": "mocha test/testPackageFiles.js --exit",
+        "test:integration": "mocha test/*.js --exit",
+        "prepublishOnly": "node tasks",
+        "build": "node tasks",
+        "tsc": "node tasks --2-compile",
+        "check-ts": "tsc --noEmit",
+        "lint": "eslint -c eslint.config.mjs",
+        "release": "release-script",
+        "release-patch": "release-script patch --yes",
+        "release-minor": "release-script minor --yes",
+        "release-major": "release-script major --yes",
+        "update-packages": "npx npm-check-updates --upgrade && cd src-admin && npx npm-check-updates --upgrade",
+        "npm": "npm i && cd src-admin && npm i -f",
+        "beforePush": "node tasks"
+    },
+    "license": "MIT",
+    "readmeFilename": "README.md"
 }

@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 //const setup  = require(__dirname + '/lib/setup');
-const extractBinding = require('../lib/simpleControl')._extractBinding;
+const extractBinding = require('../build/lib/simpleControl')._extractBinding;
 
 const samples = [
     {

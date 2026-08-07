@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 //const setup  = require('..'/lib/setup');
-const simpleControl = require('../lib/simpleControl');
+const simpleControl = require('../build/lib/simpleControl');
 const debug = true;
 let writtenValue;
 

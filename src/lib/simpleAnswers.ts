@@ -1,36 +1,45 @@
-/* jshint -W097 */
-/* jshint strict: false */
-/* jslint node: true */
-'use strict';
+import { functionsGenitive } from './functions';
+import { roomsDative } from './rooms';
+import type { AnswerCallback, RuleAck, RuleArgument } from './types';
 
-//noinspection JSUnresolvedVariable
-const functionsGenitive = require('./functions').functionsGenitive;
-//noinspection JSUnresolvedVariable
-const roomsDative = require('./rooms').roomsDative;
-
-function getRandomPhrase(arrOrText) {
-    if (typeof arrOrText === 'string') {
-        arrOrText = arrOrText.split('/');
+/**
+ * Take one of the alternatives, which are separated by `/`
+ *
+ * @param arrOrText text with alternatives separated by `/` or an array of alternatives
+ */
+export function getRandomPhrase(arrOrText: RuleAck): string {
+    if (arrOrText === null || arrOrText === undefined) {
+        return '';
     }
 
-    if (typeof arrOrText === 'object') {
-        if (arrOrText.length > 1) {
-            let randomNumber = Math.floor(Math.random() * arrOrText.length);
-            if (randomNumber > arrOrText.length - 1) {
-                randomNumber = arrOrText.length - 1;
-            }
-            return arrOrText[randomNumber];
-        }
-
-        return arrOrText[0];
+    let alternatives: string[];
+    if (typeof arrOrText === 'string') {
+        alternatives = arrOrText.split('/');
+    } else if (Array.isArray(arrOrText)) {
+        alternatives = arrOrText;
     } else {
         return arrOrText.toString();
     }
+
+    if (alternatives.length > 1) {
+        let randomNumber = Math.floor(Math.random() * alternatives.length);
+        if (randomNumber > alternatives.length - 1) {
+            randomNumber = alternatives.length - 1;
+        }
+        return alternatives[randomNumber];
+    }
+
+    return alternatives[0] ?? '';
 }
 
-//noinspection JSUnusedLocalSymbols
-function sayIDontKnow(lang, text, args, ack, cb) {
-    let toSay;
+export function sayIDontKnow(
+    lang: ioBroker.Languages,
+    _text: string,
+    _args: RuleArgument[] | null | undefined,
+    _ack: RuleAck,
+    cb?: AnswerCallback,
+): string | undefined {
+    let toSay: string | undefined;
     if (lang === 'ru') {
         toSay =
             getRandomPhrase(['Извините, но ', 'Прошу прощения, но ', '']) +
@@ -47,14 +56,19 @@ function sayIDontKnow(lang, text, args, ack, cb) {
 
     if (cb) {
         cb(toSay);
-    } else {
-        return toSay;
+        return undefined;
     }
+    return toSay;
 }
 
-//noinspection JSUnusedLocalSymbols
-function sayNoName(lang, text, args, ack, cb) {
-    let toSay;
+export function sayNoName(
+    lang: ioBroker.Languages,
+    _text: string,
+    _args: RuleArgument[] | null | undefined,
+    _ack: RuleAck,
+    cb?: AnswerCallback,
+): string | undefined {
+    let toSay: string | undefined;
 
     // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
     if (lang === 'ru') {
@@ -67,14 +81,19 @@ function sayNoName(lang, text, args, ack, cb) {
 
     if (cb) {
         cb(toSay);
-    } else {
-        return toSay;
+        return undefined;
     }
+    return toSay;
 }
 
-//noinspection JSUnusedLocalSymbols
-function sayIDontUnderstand(lang, text, args, ack, cb) {
-    let toSay;
+export function sayIDontUnderstand(
+    lang: ioBroker.Languages,
+    text: string,
+    _args: RuleArgument[] | null | undefined,
+    _ack: RuleAck,
+    cb: AnswerCallback,
+): void {
+    let toSay: string | undefined;
     // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
     if (lang === 'ru') {
         if (!text) {
@@ -99,9 +118,14 @@ function sayIDontUnderstand(lang, text, args, ack, cb) {
     cb(toSay);
 }
 
-//noinspection JSUnusedLocalSymbols
-function sayNoSuchRoom(lang, text, args, ack, cb) {
-    let toSay;
+export function sayNoSuchRoom(
+    lang: ioBroker.Languages,
+    _text: string,
+    _args: RuleArgument[] | null | undefined,
+    _ack: RuleAck,
+    cb?: AnswerCallback,
+): string | undefined {
+    let toSay: string;
     // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
     if (lang === 'en') {
         toSay = getRandomPhrase(['Room not present', 'Room not found', "You don't have such a room"]);
@@ -119,14 +143,19 @@ function sayNoSuchRoom(lang, text, args, ack, cb) {
 
     if (cb) {
         cb(toSay);
-    } else {
-        return toSay;
+        return undefined;
     }
+    return toSay;
 }
 
-//noinspection JSUnusedLocalSymbols
-function sayNothingToDo(lang, text, args, ack, cb) {
-    let toSay;
+export function sayNothingToDo(
+    lang: ioBroker.Languages,
+    _text: string,
+    _args: RuleArgument[] | null | undefined,
+    _ack: RuleAck,
+    cb?: AnswerCallback,
+): string | undefined {
+    let toSay: string;
     // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
     if (lang === 'en') {
         toSay = getRandomPhrase(["I don't know, what to do", 'No action defined']);
@@ -140,14 +169,19 @@ function sayNothingToDo(lang, text, args, ack, cb) {
 
     if (cb) {
         cb(toSay);
-    } else {
-        return toSay;
+        return undefined;
     }
+    return toSay;
 }
 
-//noinspection JSUnusedLocalSymbols
-function sayNoSuchFunction(lang, text, args, ack, cb) {
-    let toSay;
+export function sayNoSuchFunction(
+    lang: ioBroker.Languages,
+    _text: string,
+    _args: RuleArgument[] | null | undefined,
+    _ack: RuleAck,
+    cb?: AnswerCallback,
+): string | undefined {
+    let toSay: string;
     // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
     if (lang === 'en') {
         toSay = getRandomPhrase("Function not present/Function not found/You don't have such a device");
@@ -163,17 +197,22 @@ function sayNoSuchFunction(lang, text, args, ack, cb) {
 
     if (cb) {
         cb(toSay);
-    } else {
-        return toSay;
+        return undefined;
     }
+    return toSay;
 }
 
-//noinspection JSUnusedLocalSymbols
-function sayNoFunctionInThisRoom(lang, text, args, ack, cb) {
-    let sRoom = args[0];
-    let sFunction = args[1];
+export function sayNoFunctionInThisRoom(
+    lang: ioBroker.Languages,
+    _text: string,
+    args: RuleArgument[] | null | undefined,
+    _ack: RuleAck,
+    cb?: AnswerCallback,
+): string | undefined {
+    const sRoom = (args?.[0] as string) || '';
+    const sFunction = (args?.[1] as string) || '';
 
-    let toSay;
+    let toSay: string;
     // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
     if (functionsGenitive[sFunction] && roomsDative[sRoom] && lang === 'en') {
         toSay = `There is no ${functionsGenitive[sFunction][lang]} ${roomsDative[sRoom][lang]}`;
@@ -184,16 +223,22 @@ function sayNoFunctionInThisRoom(lang, text, args, ack, cb) {
     } else {
         toSay = '';
     }
+
     if (cb) {
         cb(toSay);
-    } else {
-        return toSay;
+        return undefined;
     }
+    return toSay;
 }
 
-//noinspection JSUnusedLocalSymbols
-function sayError(lang, text, args, ack, cb) {
-    let toSay;
+export function sayError(
+    lang: ioBroker.Languages,
+    _text: string,
+    _args: RuleArgument[] | null | undefined,
+    _ack: RuleAck,
+    cb?: AnswerCallback,
+): string | undefined {
+    let toSay: string;
 
     // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
     if (lang === 'en') {
@@ -208,19 +253,7 @@ function sayError(lang, text, args, ack, cb) {
 
     if (cb) {
         cb(toSay);
-    } else {
-        return toSay;
+        return undefined;
     }
+    return toSay;
 }
-
-module.exports = {
-    getRandomPhrase,
-    sayIDontKnow,
-    sayNoName,
-    sayIDontUnderstand,
-    sayNoSuchRoom,
-    sayNoSuchFunction,
-    sayNothingToDo,
-    sayError,
-    sayNoFunctionInThisRoom,
-};

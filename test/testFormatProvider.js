@@ -2,7 +2,7 @@
 
 var expect = require('chai').expect;
 //var setup  = require(__dirname + '/lib/setup');
-var formatProvider = require(__dirname + '/../lib/formatProvider');
+var formatProvider = require(__dirname + '/../build/lib/formatProvider');
 var debug = true;
 
 describe('Commands: Test dateInterval without suffix in default language', function () {

@@ -16,6 +16,7 @@ import {
     Paper,
     Toolbar,
     IconButton,
+    Chip,
 } from '@mui/material';
 
 import {
@@ -23,20 +24,24 @@ import {
     Menu as MenuIcon,
     Check as CheckIcon,
     Close as CloseIcon,
+    Edit as EditIcon,
 } from '@mui/icons-material';
 
-import { I18n, DialogSelectID } from '@iobroker/adapter-react-v5';
+import { I18n, DialogSelectID } from '@iobroker/gui-components';
 
 const styles = {
+    // Flex column, so the height of the toolbars does not have to be known here
     root: {
         width: '100%',
         height: '100%',
         padding: 0,
         margin: 0,
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
     },
     box: theme => ({
-        display: 'inline-flex',
+        display: 'flex',
         justifyContent: 'space-around',
         position: 'relative',
         '& .outlined-basic': {
@@ -52,13 +57,15 @@ const styles = {
     boxMobile: {
         padding: 0,
         width: '100%',
-        height: 'calc(100% - 48px - 48px)',
+        flexGrow: 1,
+        minHeight: 0,
         overflow: 'auto',
     },
     boxDesktop: {
         padding: 8,
         width: 'calc(100% - 16px)',
-        height: 'calc(100% - 48px - 48px - 16px)',
+        flexGrow: 1,
+        minHeight: 0,
         overflow: 'auto',
     },
     container: theme => ({
@@ -74,6 +81,7 @@ const styles = {
         flexDirection: 'row',
         display: 'flex',
         justifyContent: 'right',
+        alignItems: 'center',
         width: '100%',
         [theme.breakpoints.down('xs')]: {
             flexDirection: 'column',
@@ -113,6 +121,15 @@ const styles = {
             marginBottom: '4px',
         },
     }),
+    // The footer has the primary color, so a "primary" button would be invisible on it.
+    // Give the main action a light surface, like the cancel button has.
+    saveBtn: theme => ({
+        backgroundColor: theme.palette.common.white,
+        color: theme.palette.primary.main,
+        '&:hover': {
+            backgroundColor: theme.palette.grey[200],
+        },
+    }),
     toggleIcon: theme => ({
         position: 'absolute',
         zIndex: 1,
@@ -136,12 +153,52 @@ const styles = {
         },
     }),
     header: theme => ({
-        backgroundColor: theme.palette.secondary.main,
-        fontSize: 18,
-        fontWeight: 'bold',
+        backgroundColor: theme.palette.primary.main,
         paddingLeft: '40px',
+        paddingRight: '12px',
         zIndex: 0,
-        color: '#FFF',
+        color: theme.palette.primary.contrastText,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        // the height comes from the theme (MuiToolbar), so this header and the
+        // toolbar of the side menu always have the same height
+        flexShrink: 0,
+    }),
+    headerTexts: {
+        display: 'flex',
+        flexDirection: 'column',
+        minWidth: 0,
+        overflow: 'hidden',
+    },
+    headerName: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        lineHeight: 1.2,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    headerType: {
+        fontSize: 12,
+        opacity: 0.85,
+        lineHeight: 1.3,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    headerChip: {
+        height: 20,
+        fontSize: 11,
+        flexShrink: 0,
+    },
+    footer: theme => ({
+        backgroundColor: theme.palette.primary.main,
+        zIndex: 0,
+        color: theme.palette.primary.contrastText,
+        display: 'flex',
+        alignItems: 'center',
+        flexShrink: 0,
     }),
     inputOid: {
         width: 'calc(100% - 60px)',
@@ -359,7 +416,7 @@ export default class RuleEditor extends PureComponent {
                     onClick={handleSave}
                     variant="contained"
                     startIcon={<CheckIcon />}
-                    color="primary"
+                    sx={styles.saveBtn}
                 >
                     {t('Save')}
                 </Button>
@@ -747,6 +804,9 @@ export default class RuleEditor extends PureComponent {
 
         const { isLeftBarOpen, toggleLeftBar } = this.props;
         const name = localRule ? localRule.name : '';
+        // type of the rule, only shown if the user renamed it
+        const type = localRule && localRule.rule !== name ? localRule.rule : '';
+        const isUnsaved = !!(localRule && this.props.unsavedRules[localRule.id]);
 
         if (!this.props.selectedRule) {
             return null;
@@ -765,7 +825,20 @@ export default class RuleEditor extends PureComponent {
                     variant="dense"
                     sx={styles.header}
                 >
-                    {name}
+                    <EditIcon />
+                    <Box sx={styles.headerTexts}>
+                        <Box sx={styles.headerName}>{name}</Box>
+                        {type ? <Box sx={styles.headerType}>{type}</Box> : null}
+                    </Box>
+                    <div style={{ flexGrow: 1 }} />
+                    {isUnsaved ? (
+                        <Chip
+                            label={I18n.t('unsaved')}
+                            color="error"
+                            size="small"
+                            sx={styles.headerChip}
+                        />
+                    ) : null}
                 </Toolbar>
 
                 <Box
@@ -816,7 +889,7 @@ export default class RuleEditor extends PureComponent {
                     <Toolbar
                         position="static"
                         variant="dense"
-                        sx={styles.header}
+                        sx={styles.footer}
                     >
                         {this.createSaveSettingsForm()}
                     </Toolbar>

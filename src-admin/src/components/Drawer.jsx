@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 
 // Material UI Components
 import DialogActions from '@mui/material/DialogActions';
@@ -30,7 +30,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FormatClearIcon from '@mui/icons-material/FormatClear';
 import WarningIcon from '@mui/icons-material/Warning';
 
-import { I18n } from '@iobroker/adapter-react-v5';
+import { I18n } from '@iobroker/gui-components';
 
 import Rule from './Rule';
 import SettingsDialog from './SettingsDialog';
@@ -59,20 +59,36 @@ const styles = {
         paddingLeft: 8,
         paddingRight: 8,
         display: 'flex',
+        alignItems: 'center',
         gap: 8,
+        flexShrink: 0,
         backgroundColor: '#88888833',
     },
     main: {
         minWidth: 300,
         overflow: 'hidden',
         height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
     },
     toolbar: theme => ({
         background: theme.palette.primary.main,
+        // the icons must stay readable on the colored background
+        color: theme.palette.primary.contrastText,
         position: 'relative',
+        // the height comes from the theme (MuiToolbar), so this bar and the
+        // header of the rule editor always have the same height
+        flexShrink: 0,
     }),
+    // the theme colors every IconButton with `textSecondary`, which is not readable
+    // on the colored toolbar - and it wins over the `color="inherit"` property
+    toolbarButton: {
+        color: 'inherit',
+        '&:hover': { color: 'inherit' },
+    },
     list: {
-        height: 'calc(100% - 48px - 48px - 8px)',
+        flexGrow: 1,
+        minHeight: 0,
         overflowX: 'hidden',
         overflowY: 'auto',
         paddingTop: 0,
@@ -93,6 +109,20 @@ const styles = {
     },
     search: theme => ({
         flexBasis: '80%',
+        marginLeft: '8px',
+        // the search field stands on the colored toolbar
+        '& .MuiInputBase-root, & .MuiInputBase-input': {
+            color: theme.palette.primary.contrastText,
+        },
+        '& .MuiInput-underline:before': {
+            borderBottomColor: `${theme.palette.primary.contrastText}80`,
+        },
+        '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+            borderBottomColor: theme.palette.primary.contrastText,
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: theme.palette.primary.contrastText,
+        },
         [theme.breakpoints.down('sm')]: {
             flexBasis: '70%',
         },
@@ -281,7 +311,12 @@ export default class Drawer extends Component {
                 title={tooltip}
                 key={index}
             >
-                <IconButton onClick={handler}>{icon}</IconButton>
+                <IconButton
+                    sx={styles.toolbarButton}
+                    onClick={handler}
+                >
+                    {icon}
+                </IconButton>
             </Tooltip>
         ));
     }
@@ -364,7 +399,8 @@ export default class Drawer extends Component {
         const { selectedRule, moveRule, handleEdit, handleCopy, rules, selectRule, isMobile, closeDrawer } = this.props;
 
         const { filteredRules, isSearchActive, searchedValue } = this.state;
-        const renderedRules = isSearchActive && searchedValue.length ? filteredRules : rules;
+        const isFiltered = !!(isSearchActive && searchedValue.length);
+        const renderedRules = isFiltered ? filteredRules : rules;
         const additionalIcons = [];
 
         if (selectedRule && selectedRule.id) {
@@ -402,7 +438,10 @@ export default class Drawer extends Component {
                             slotProps={{
                                 input: {
                                     endAdornment: this.state.searchedValue ? (
-                                        <IconButton onClick={() => this.setState({ searchedValue: '' })}>
+                                        <IconButton
+                                            sx={styles.toolbarButton}
+                                            onClick={() => this.setState({ searchedValue: '' })}
+                                        >
                                             <CloseIcon />
                                         </IconButton>
                                     ) : undefined,
@@ -430,14 +469,21 @@ export default class Drawer extends Component {
                     ) : null}
                 </Toolbar>
 
-                <DragDropContext onDragEnd={result => moveRule(result.source.index, result.destination.index)}>
+                <DragDropContext
+                    onDragEnd={result => {
+                        // dropped outside of the list
+                        if (!result.destination) {
+                            return;
+                        }
+                        moveRule(result.source.index, result.destination.index);
+                    }}
+                >
                     <Droppable droppableId="droppable">
                         {(provided /* , snapshot */) => (
                             <List
                                 style={styles.list}
                                 ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
+                                {...provided.droppableProps}
                             >
                                 {renderedRules.map((rule, index) => (
                                     <Rule
@@ -454,6 +500,9 @@ export default class Drawer extends Component {
                                         matchingRules={this.state.matchingRules}
                                         unsavedRules={this.props.unsavedRules}
                                         removeMatched={this.removeMatched}
+                                        // while searching the shown indices do not match the
+                                        // indices in the config, so reordering would move the wrong rules
+                                        isDragDisabled={isFiltered}
                                     />
                                 ))}
                                 {provided.placeholder}

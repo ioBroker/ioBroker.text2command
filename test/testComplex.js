@@ -2,10 +2,10 @@
 
 const expect = require('chai').expect;
 //var setup  = require(__dirname + '/lib/setup');
-const devicesControl = require(__dirname + '/../lib/devicesControl');
+const devicesControl = require(__dirname + '/../build/lib/devicesControl');
 const enums = require(__dirname + '/lib/testData.json');
-const functions = require(__dirname + '/../lib/functions');
-const rooms = require(__dirname + '/../lib/rooms');
+const functions = require(__dirname + '/../build/lib/functions');
+const rooms = require(__dirname + '/../build/lib/rooms');
 let debug = true;
 let writtenValue;
 

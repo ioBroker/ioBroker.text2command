@@ -1,18 +1,66 @@
-/* Attention:
-  This file used in Front-end and in the backend. Originally it is placed in /lib/langModel.js
-  and will be coped by gulp to src/public/langModel.js
- */
-/* jshint -W097 */
-/* jshint strict: false */
-/* jslint node: true */
+/*
+  Attention:
+  This file is used in the front-end and in the back-end. Originally it is placed in `/src/lib/langModel.ts`
+  and the compiled version will be copied by `tasks.js` to `src-admin/public/langModel.js`,
+  where it exposes `commands` and `findMatched` as globals on `window`.
 
-// eslint-disable-next-line
-'use strict';
+  Therefore, this file must not import anything at runtime (type-only imports are fine).
+ */
+import type { Text2CommandRule } from './types';
 
 // TODO: translate it to 'it, es, pl, pt, nl, fr, 'zh-cn''
 // TODO alarm on/off
 // alarm clock set/off
-const commands = {
+
+/** Translations of one text, used in the GUI */
+export type CommandTranslations = Record<string, string>;
+
+/** Description of one argument of a command template */
+export interface CommandArgument {
+    /** Name of the argument, shown in the GUI */
+    name: CommandTranslations;
+    /** Type of the input control in the GUI */
+    type: 'id' | 'number' | 'checkbox' | 'text' | 'value';
+    /** Filter for the object selection dialog, if `type` is `id` */
+    role?: string;
+    /** If the number could have decimals */
+    decimal?: boolean;
+    /** Default value of the argument */
+    default?: string | number | boolean;
+}
+
+/** Description of the answer of a command template */
+export interface CommandAck {
+    /** Type of the input control in the GUI */
+    type: 'text' | 'checkbox';
+    /** Name of the answer field, shown in the GUI */
+    name: CommandTranslations;
+    /** Default answer, either translated texts or `true` for "just acknowledge" */
+    default?: CommandTranslations | boolean;
+}
+
+/** One command template. The keys of `commands` are used as `template` in the rules */
+export interface CommandDefinition {
+    icon: string;
+    /** Name of the command, shown in the GUI */
+    name: CommandTranslations;
+    /** Do not show this command in the list of the available commands */
+    invisible?: boolean;
+    /** This command could be used only once */
+    unique: boolean;
+    /** The words of this rule could be edited in the GUI */
+    editable?: boolean;
+    /** The text after the detected words will be given to the handler */
+    extractText?: boolean;
+    /** Default words for the detection, per language */
+    words?: CommandTranslations;
+    /** Arguments of the command */
+    args?: CommandArgument[];
+    /** Answer of the command */
+    ack?: CommandAck;
+}
+
+export const commands: Record<string, CommandDefinition> = {
     whatTimeIsIt: {
         icon: '',
         name: {
@@ -417,8 +465,9 @@ const commands = {
                 'zh-cn': '已发送以下文本：%s',
             },
         },
-    } /*
-    'openLock': {
+    },
+    /*
+    openLock: {
         icon: '',
         name: {
             'en': 'Open/close door lock',
@@ -462,7 +511,8 @@ const commands = {
             },
             default: true
         }
-    },*/,
+    },
+    */
     userDeviceControl: {
         icon: '',
         name: {
@@ -765,8 +815,18 @@ const commands = {
     },
 };
 
-function findMatched(cmd, _rules) {
-    const matchedRules = [];
+/**
+ * Find all rules that match the given command.
+ *
+ * Note: the `words` of the matched rules are replaced in place with the parsed representation,
+ * so the same rule must not be parsed again on the next call.
+ *
+ * @param cmd text to analyse
+ * @param _rules all configured rules
+ * @returns indices of the matched rules in `_rules`
+ */
+export function findMatched(cmd: string, _rules: Text2CommandRule[]): number[] {
+    const matchedRules: number[] = [];
     cmd = cmd
         .toLowerCase()
         .replace(/[#''$&/\\!?.,;:(){}^]+/g, ' ')
@@ -807,27 +867,30 @@ function findMatched(cmd, _rules) {
         if (rule.words instanceof RegExp) {
             isFound = rule.words.test(cmd);
         } else {
+            const ruleWords = rule.words;
             // compare every word
-            for (let j = 0; j < rule.words.length; j++) {
-                if (!rule.words[j]) {
+            for (let j = 0; j < ruleWords.length; j++) {
+                let word = ruleWords[j];
+                if (!word) {
                     continue;
                 }
 
-                if (rule.words[j].includes('/')) {
-                    rule.words[j] = rule.words[j].split('/');
+                if (typeof word === 'string' && word.includes('/')) {
+                    word = word.split('/');
+                    ruleWords[j] = word;
                 }
 
-                if (typeof rule.words[j] === 'string' && rule.words[j][0] === '[') {
-                    continue;
-                }
+                if (typeof word === 'string') {
+                    if (word[0] === '[') {
+                        continue;
+                    }
 
-                // if one of
-                if (typeof rule.words[j] === 'object') {
-                    if (!rule.words[j].find(w => cmdWords.includes(w))) {
+                    if (!cmdWords.includes(word)) {
                         isFound = false;
                         break;
                     }
-                } else if (!cmdWords.includes(rule.words[j])) {
+                } else if (!word.find(w => cmdWords.includes(w))) {
+                    // if one of
                     isFound = false;
                     break;
                 }
@@ -843,14 +906,4 @@ function findMatched(cmd, _rules) {
     }
 
     return matchedRules;
-}
-
-if (typeof module !== 'undefined' && module.parent) {
-    module.exports = {
-        commands,
-        findMatched,
-    };
-} else if (typeof window !== 'undefined') {
-    window.commands = commands;
-    window.findMatched = findMatched;
 }

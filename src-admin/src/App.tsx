@@ -1,7 +1,7 @@
 import React from 'react';
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 
-import { Loader, I18n, GenericApp, type GenericAppProps, type GenericAppState } from '@iobroker/adapter-react-v5';
+import { Loader, I18n, GenericApp, type GenericAppProps, type GenericAppState } from '@iobroker/gui-components';
 
 import Layout from './components/Layout';
 import enLang from './i18n/en.json';

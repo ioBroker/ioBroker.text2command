@@ -1,12 +1,9 @@
-/* jshint -W097 */
-/* jshint strict: false */
-/* jslint node: true */
-'use strict';
+import type { LanguageMap } from './types';
 
 // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
 
-// Translations for rooms, used for detection
-const rooms = {
+/** Translations for rooms, used for detection */
+export const rooms: Record<string, LanguageMap> = {
     everywhere: { ru: 'везде/весь/все/всё', de: 'alle/überall', en: 'everywhere' },
     'livingroom/wohnzimmer/зал': { ru: 'зал', de: 'wohnzimmer', en: 'living' },
     'bedroom/sleepingroom/schlafzimmer/спальня': { ru: 'спальн', de: 'schlafzimmer', en: 'bedroom' },
@@ -45,8 +42,8 @@ const rooms = {
     'summerhouse/gartenhaus/теплица': { ru: 'теплиц', de: 'gartenhaus', en: 'summer' },
 };
 
-// In room: used for answers
-const roomsDative = {
+/** In room: used for answers */
+export const roomsDative: Record<string, LanguageMap> = {
     everywhere: { ru: 'во всём доме', de: 'überall', en: 'everywhere' },
     'livingroom/wohnzimmer/зал': { ru: 'в зале', de: 'im Wohnzimmer', en: 'in the living room' },
     'bedroom/sleepingroom/schlafzimmer/спальня': { ru: 'в спальне', de: 'im Schlafzimmer', en: 'in the bedroom' },
@@ -71,9 +68,4 @@ const roomsDative = {
     'heatroom/heatingroom/heizungsraum/котельная': { ru: 'в котельной', de: 'im Heizungsraum', en: 'in the heat room' },
     'hovel/schuppen/scheune/сарай': { ru: 'в сарае', de: 'im Schuppen', en: 'in the hovel' },
     'summerhouse/gartenhaus/теплица': { ru: 'в теплице', de: 'im Gartenhaus', en: 'in the summer house' },
-};
-
-module.exports = {
-    rooms,
-    roomsDative,
 };

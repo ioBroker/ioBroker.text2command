@@ -1,12 +1,9 @@
-/* jshint -W097 */
-/* jshint strict: false */
-/* jslint node: true */
-'use strict';
+import type { LanguageMap } from './types';
 
 // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
 
-// Translation of functions, used for detection
-const functions = {
+/** Translation of functions, used for detection */
+export const functions: Record<string, LanguageMap> = {
     'backlight/beleuchtung/подсветка': {
         ru: 'подсветк/светильник',
         de: 'beleuchtung/rücklicht',
@@ -24,8 +21,8 @@ const functions = {
     'lock/door/schloß/tür/замок/дверь': { ru: 'замок/дверь/ворота', de: 'verschluß/schloß/tür', en: 'lock/door' },
 };
 
-// Used for answer
-const functionsGenitive = {
+/** Used for answer */
+export const functionsGenitive: Record<string, LanguageMap> = {
     'backlight/beleuchtung/подсветка': { ru: 'подсветки', de: 'e Beleuchtung', en: 'back light' },
     'light/licht/свет': { ru: 'ламп', de: 'e Lampen', en: 'light' },
     'heating/heizung/отопление': { ru: 'отопление', de: 'e Heizung', en: 'heating' },
@@ -39,8 +36,8 @@ const functionsGenitive = {
     'lock/door/schloß/tür/замок/дверь': { ru: 'замков', de: 'e Verschluße', en: 'lock' },
 };
 
-// Used for answer
-const functionsAccusative = {
+/** Used for answer */
+export const functionsAccusative: Record<string, LanguageMap> = {
     'backlight/beleuchtung/подсветка': { ru: 'подсветку', de: 'die Beleuchtung', en: 'back light' },
     'light/licht/свет': { ru: 'свет', de: 'das Licht', en: 'light' },
     'heating/heizung/отопление': { ru: 'отопление', de: 'die Heizung', en: 'heating' },
@@ -52,10 +49,4 @@ const functionsAccusative = {
         en: 'security',
     },
     'lock/door/schloß/tür/замок/дверь': { ru: 'замок', de: 'den Verschluß', en: 'lock' },
-};
-
-module.exports = {
-    functionsAccusative,
-    functionsGenitive,
-    functions,
 };

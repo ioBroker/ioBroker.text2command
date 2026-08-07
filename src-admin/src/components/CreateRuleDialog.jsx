@@ -22,7 +22,7 @@ import {
     Add as AddIcon,
 } from '@mui/icons-material';
 
-import { I18n } from '@iobroker/adapter-react-v5';
+import { I18n } from '@iobroker/gui-components';
 
 const styles = {
     select: {
