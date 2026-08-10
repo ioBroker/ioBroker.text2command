@@ -31,7 +31,7 @@
     "@iobroker/types": "^7.2.2",
     "@types/node": "^26.1.2",
     "tsx": "^4.23.10",
-    "typescript": "~6.0.3"
+    "typescript": "~7.0.2"
   },
   "bugs": {
     "url": "https://github.com/ioBroker/ioBroker.text2command/issues"
