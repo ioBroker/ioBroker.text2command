@@ -13,7 +13,7 @@
         "react": "^19.2.8",
         "react-dom": "^19.2.8",
         "react-splitter-layout": "^4.0.0",
-        "uuid": "^14.0.1"
+        "uuid": "^14.0.2"
     },
     "scripts": {
         "start": "vite --host",
