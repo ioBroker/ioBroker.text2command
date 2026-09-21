@@ -1,6 +1,6 @@
 {
     "Select rule": "Выберите правило",
-    "System": "Системные настройки",
+    "System": "Системные",
     "Language": "язык",
     "Answer in id": "Ответ в ID",
     "Processor's id": "ID обработчика",
@@ -24,7 +24,7 @@
     "lang_en": "английский",
     "lang_de": "Немецкий",
     "lang_ru": "русский",
-    "ms": "мс",
+    "ms": "РС",
     "Save": "Сохранить",
     "Do not interrupt processing": "Применять последующие правила",
     "Instance is not running": "Инстанция не запущена",
