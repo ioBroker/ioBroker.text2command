@@ -430,6 +430,8 @@ If activated so by every command (no matter if the request came via state or sen
 ### 0.0.1 (2016-02-09)
 * (bluefox) initial commit
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 
 The MIT License (MIT)
