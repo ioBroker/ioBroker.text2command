@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "text2command",
-    "version": "5.0.0",
+    "version": "5.0.1",
     "news": {
+      "5.0.1": {
+        "en": "Adapter requires node.js >= 22 now.\nAdmin 7.6.20+ is required. Added Ukrainian translations. Older changelog entries are moved to CHANGELOG_OLD.md",
+        "de": "Adapter benötigt jetzt node.js >= 22.\nAdmin 7.6.20+ ist nötig. Ukrainisch hinzugefügt. Ältere Einträge wurden nach CHANGELOG_OLD.md verschoben",
+        "ru": "Теперь для адаптера требуется файл node.js >= 22.\nТребуется администратор версии 7.6.20+. Добавлены переводы на украинский язык. Старые записи в журнале изменений перемещены на Changelog_old.md",
+        "pt": "O adaptador exige node.js >= 2.\nRequer o Admin 7.6.20+. Adição de traduções ucranianas. Entradas antigas são movidas para CHANGELOG_OLD.md",
+        "nl": "Voor de adapter is nu node.js >= 22 nodig.\nAdmin 7.6.20+ is vereist. Oekraïense vertalingen toegevoegd. Oudere changelog-items worden verplaatst naar Changelog_old.md",
+        "fr": "Adapter nécessite node.js >= 22.\nAdmin 7.6.20+ est requis. Ajout de traductions en ukrainien. Les anciens changelog sont déplacés vers CHANGELOG_Old.md",
+        "it": "Adapter richiede node.js >= 2 ora.\nServe Admin 7.6.20+. Aggiunte traduzioni ucraine I vecchi changelog sono spostati in Changelog_old.md",
+        "es": "El adaptador necesita node.js >= 22 ahora.\nSe necesita Admin 7.6.20+. Añadió traducciones al ucraniano Las entradas antiguas se mueven a ChangeLog_old.md",
+        "pl": "Adapter wymaga teraz node.js >= 22.\nWymagany jest Admin 7.6.20+. Dodano tłumaczenia ukraińskie. Starsze wpisy w dzienniku zmian są przenoszone do Changelog_old.md",
+        "uk": "Тепер адаптер вимагає node.js >= 22.\nАдміністратор 7.6.20+ обов'язковий. Додані українські переклади. Старіші записи журналу змін переміщуються до Changelog_old.md",
+        "zh-cn": "适配器现在需要 node.js >= 22。\n需要管理员 7.6.20+。添加了乌克兰语翻译。较旧的变更日志条目已移至 Changelog_old.md"
+      },
       "5.0.0": {
         "en": "Minimal nodejs version is 22.x\nMigrated to React 19",
         "de": "Minimale Nodejs-Version ist 22.x\nMigration zu React 19",
