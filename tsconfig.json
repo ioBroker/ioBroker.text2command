@@ -39,6 +39,6 @@
         "useUnknownInCatchVariables": false,
         "types": ["@iobroker/types", "node"]
     },
-    "include": ["src/**/*.ts"],
+    "include": ["src/**/*.ts", "tasks.ts"],
     "exclude": ["build/**", "node_modules/**", "src-admin/**"]
 }

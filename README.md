@@ -3,9 +3,11 @@
 
 ![Number of Installations](http://iobroker.live/badges/text2command-installed.svg) ![Number of Installations](http://iobroker.live/badges/text2command-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.text2command.svg)](https://www.npmjs.com/package/iobroker.text2command)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.text2command.svg)](https://www.npmjs.com/package/iobroker.text2command)
-[![Tests](https://travis-ci.org/ioBroker/ioBroker.text2command.svg?branch=master)](https://travis-ci.org/ioBroker/ioBroker.text2command)
+![Test and Release](https://github.com/ioBroker/ioBroker.text2command/workflows/Test%20and%20Release/badge.svg)
 
 [![NPM](https://nodei.co/npm/iobroker.text2command.png?downloads=true)](https://nodei.co/npm/iobroker.text2command/)
+
+**This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information on how to disable the error reporting, see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
 
 ## Description
 This adapter can convert normal sentences, like `Switch light in kitchen on` to specific command and sets the state `adapter.0.device.kitchenLight` to `true`.
@@ -252,7 +254,7 @@ The first, the command will be processed with your `javascript`, and if `javascr
 ### Option: Write to response by every command
 If activated so by every command (no matter if the request came via state or sendTo) the `text2command.X.response` will be written with the answer. 
 
-# ToDo
+## ToDo
 - in Russian, male and female answers.
 
 <!--
@@ -263,7 +265,9 @@ If activated so by every command (no matter if the request came via state or sen
 ## Changelog
 
 ### **WORK IN PROGRESS**
-- (iobroker-bot) Adapter requires node.js >= 22 now.
+* (iobroker-bot) Adapter requires node.js >= 22 now.
+* (@GermanBluefox) Admin 7.6.20+ is required. Added Ukrainian translations. Older changelog entries are moved to CHANGELOG_OLD.md
+
 ### 5.0.0 (2026-08-07)
 * (@GermanBluefox) Minimal nodejs version is 22.x
 * (@GermanBluefox) Migrated to React 19
@@ -429,6 +433,8 @@ If activated so by every command (no matter if the request came via state or sen
 
 ### 0.0.1 (2016-02-09)
 * (bluefox) initial commit
+
+[Older changelogs can be found there](CHANGELOG_OLD.md)
 
 ## License
 

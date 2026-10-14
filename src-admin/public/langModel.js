@@ -1,4 +1,4 @@
-/* This file is generated from "src/lib/langModel.ts" by "node tasks". Do not edit it! */
+/* This file is generated from "src/lib/langModel.ts" by "npm run build". Do not edit it! */
 (function (exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

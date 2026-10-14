@@ -13,16 +13,7 @@ export default [
         },
     },
     {
-        ignores: [
-            'src-admin/**/*',
-            'admin/**/*',
-            'node_modules/**/*',
-            'test/**/*',
-            'build/**/*',
-            'tasks.js',
-            'tmp/**/*',
-            '.**/*',
-        ],
+        ignores: ['src-admin/**/*', 'admin/**/*', 'node_modules/**/*', 'test/**/*', 'build/**/*', 'tmp/**/*', '.**/*'],
     },
     {
         // disable temporary the rule 'jsdoc/require-param' and enable 'jsdoc/require-jsdoc'

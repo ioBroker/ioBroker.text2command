@@ -68,19 +68,6 @@
         "uk": "Виправлено багато помилок інтерфейсу",
         "zh-cn": "纠正许多古伊错误"
       },
-      "2.3.1": {
-        "en": "Migrated GUI to v5",
-        "de": "Migrated GUI to v5",
-        "ru": "Migrated GUI для v5",
-        "pt": "GUI migrado para v5",
-        "nl": "Gemigreerde GUI",
-        "fr": "Migrated GUI to v5",
-        "it": "GUI emigrata a v5",
-        "es": "GUI migrado al v5",
-        "pl": "Migrated GUI (ang.)",
-        "uk": "Миттєвий інтерфейс v5",
-        "zh-cn": "第5条"
-      },
       "2.2.2": {
         "en": "Fix crash cases reported by Sentry",
         "de": "Reparieren Crashfälle gemeldet von Sentry",
@@ -91,7 +78,8 @@
         "it": "Correzione dei casi di crash segnalati da Sentry",
         "es": "Casos de accidente fijo reportados por Sentry",
         "pl": "Sprawy katastrofy Fix podane przez Sentry’a",
-        "zh-cn": "Sentry所报告的六例事故"
+        "zh-cn": "Sentry所报告的六例事故",
+        "uk": "Виправлено збої, про які повідомив Sentry"
       }
     },
     "titleLang": {
@@ -104,7 +92,8 @@
       "it": "Testo da comandare",
       "es": "Texto para mandar",
       "pl": "Tekst do polecenia",
-      "zh-cn": "文字指令"
+      "zh-cn": "文字指令",
+      "uk": "Текст у команди"
     },
     "desc": {
       "en": "This adapter allows to convert text to commands",
@@ -116,12 +105,12 @@
       "it": "Questo adattatore consente di convertire il testo in comandi",
       "es": "Este adaptador permite convertir texto a comandos",
       "pl": "Ten adapter umożliwia konwertowanie tekstu na polecenia",
-      "zh-cn": "该适配器允许将文本转换为命令"
+      "zh-cn": "该适配器允许将文本转换为命令",
+      "uk": "Цей адаптер дозволяє перетворювати текст на команди"
     },
     "authors": [
       "bluefox <dogafox@gmail.com>"
     ],
-    "license": "MIT",
     "licenseInformation": {
       "license": "MIT",
       "type": "free"
@@ -146,7 +135,9 @@
     "eraseOnUpload": true,
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/ioBroker/ioBroker.text2command/master/admin/text2command.png",
-    "localLink": "/adapter/text2command/tab.html?instance=%instance%",
+    "localLinks": {
+      "_default": "/adapter/text2command/tab.html?instance=%instance%"
+    },
     "type": "logic",
     "compact": true,
     "adminTab": {
@@ -215,7 +206,13 @@
           "cancel"
         ]
       }
-    ]
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=7.6.20"
+      }
+    ],
+    "nogit": true
   },
   "native": {
     "rules": [],
@@ -259,7 +256,7 @@
       "common": {
         "name": "Error text",
         "type": "string",
-        "role": "value.error",
+        "role": "text",
         "read": true,
         "write": false
       },

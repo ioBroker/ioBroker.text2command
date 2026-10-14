@@ -3,24 +3,20 @@
  *
  * MIT License
  *
- **/
-'use strict';
-
-const { existsSync, copyFileSync, writeFileSync, readFileSync } = require('node:fs');
-const { fork } = require('node:child_process');
-const { deleteFoldersRecursive, npmInstall, buildReact, copyFiles, patchHtmlFile } = require('@iobroker/build-tools');
+ */
+import { existsSync, copyFileSync, writeFileSync, readFileSync } from 'node:fs';
+import { fork } from 'node:child_process';
+import { deleteFoldersRecursive, npmInstall, buildReact, copyFiles, patchHtmlFile } from '@iobroker/build-tools';
 
 /** Compile the back-end (src/**\/*.ts) into `build/` */
-function compileTypeScript() {
+function compileTypeScript(): Promise<void> {
     return new Promise((resolve, reject) => {
         const child = fork(`${__dirname}/node_modules/typescript/bin/tsc`, ['-p', 'tsconfig.build.json'], {
             stdio: 'inherit',
             cwd: __dirname,
         });
         child.on('error', reject);
-        child.on('close', code =>
-            code ? reject(new Error(`tsc exited with code ${code}`)) : resolve(),
-        );
+        child.on('close', code => (code ? reject(new Error(`tsc exited with code ${code}`)) : resolve()));
     });
 }
 
@@ -29,7 +25,7 @@ function compileTypeScript() {
  * The GUI loads it as a simple script (see `src-admin/index.html`), so the compiled CommonJS module
  * is wrapped here into a function that exports `commands` and `findMatched` as globals on `window`.
  */
-function buildGuiLangModel() {
+function buildGuiLangModel(): void {
     const compiled = readFileSync(`${__dirname}/build/lib/langModel.js`)
         .toString('utf8')
         .replace(/^\/\/# sourceMappingURL=.*$/m, '')
@@ -37,22 +33,27 @@ function buildGuiLangModel() {
 
     writeFileSync(
         `${__dirname}/src-admin/public/langModel.js`,
-        `/* This file is generated from "src/lib/langModel.ts" by "node tasks". Do not edit it! */\n` +
+        `/* This file is generated from "src/lib/langModel.ts" by "npm run build". Do not edit it! */\n` +
             `(function (exports) {\n${compiled}\n})(window);\n`,
     );
 }
 
-async function buildBackend() {
+async function buildBackend(): Promise<void> {
     await compileTypeScript();
     buildGuiLangModel();
 }
 
-async function copyAllFiles() {
+async function copyAllFiles(): Promise<void> {
     deleteFoldersRecursive(`${__dirname}/admin`);
 
     copyFiles(['src-admin/build/**/*', '!src-admin/build/index.html'], 'admin/');
     copyFileSync('src-admin/build/index.html', 'admin/tab.html');
     await patchHtmlFile('admin/tab.html');
+}
+
+function exitOnError(e: Error): void {
+    console.log(`Error: ${e.toString()}`);
+    process.exit(2);
 }
 
 if (process.argv.includes('--0-clean')) {
@@ -61,41 +62,23 @@ if (process.argv.includes('--0-clean')) {
     deleteFoldersRecursive(`${__dirname}/src-admin/build`);
 } else if (process.argv.includes('--1-npm')) {
     if (!existsSync(`${__dirname}/src-admin/node_modules`)) {
-        npmInstall(`${__dirname}/src-admin`).catch(e => {
-            console.log(`Error: ${e.toString()}`);
-            process.exit(2);
-        });
+        npmInstall(`${__dirname}/src-admin`).catch(exitOnError);
     }
 } else if (process.argv.includes('--2-compile')) {
-    buildBackend().catch(e => {
-        console.log(`Error: ${e.toString()}`);
-        process.exit(2);
-    });
+    buildBackend().catch(exitOnError);
 } else if (process.argv.includes('--3-build')) {
-    buildReact(`${__dirname}/src-admin`, { rootDir: `${__dirname}/src-admin`, vite: true }).catch(e => {
-        console.log(`Error: ${e.toString()}`);
-        process.exit(2);
-    });
+    buildReact(`${__dirname}/src-admin`, { rootDir: `${__dirname}/src-admin`, vite: true }).catch(exitOnError);
 } else if (process.argv.includes('--4-copy')) {
-    copyAllFiles().catch(e => {
-        console.log(`Error: ${e.toString()}`);
-        process.exit(2);
-    });
+    copyAllFiles().catch(exitOnError);
 } else {
     deleteFoldersRecursive(`${__dirname}/admin`);
     deleteFoldersRecursive(`${__dirname}/build`);
     deleteFoldersRecursive(`${__dirname}/src-admin/build`);
-    let npm;
-    if (!existsSync(`${__dirname}/src-admin/node_modules`)) {
-        npm = npmInstall(`${__dirname}/src-admin`);
-    } else {
-        npm = Promise.resolve();
-    }
+    const npm = existsSync(`${__dirname}/src-admin/node_modules`)
+        ? Promise.resolve()
+        : npmInstall(`${__dirname}/src-admin`);
     npm.then(() => buildBackend())
         .then(() => buildReact(`${__dirname}/src-admin`, { rootDir: `${__dirname}/src-admin`, vite: true }))
         .then(() => copyAllFiles())
-        .catch(e => {
-            console.log(`Error: ${e.toString()}`);
-            process.exit(2);
-        });
+        .catch(exitOnError);
 }

@@ -12,7 +12,7 @@
     "text2command"
   ],
   "engines": {
-    "node": ">=22"
+    "node": ">=22.19.0"
   },
   "repository": {
     "type": "git",
@@ -27,11 +27,11 @@
     "@alcalzone/release-script-plugin-license": "^5.2.2",
     "@iobroker/build-tools": "^3.0.3",
     "@iobroker/eslint-config": "^2.3.4",
-    "@iobroker/legacy-testing": "^3.0.0",
-    "@iobroker/types": "^7.2.2",
+    "@iobroker/legacy-testing": "^4.0.0",
+    "@iobroker/types": "^7.2.5",
     "@tsconfig/node22": "^22.0.6",
-    "@types/node": "^26.1.2",
-    "tsx": "^4.23.13",
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.3"
   },
   "bugs": {
@@ -46,12 +46,12 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node tasks --2-compile && mocha --exit",
+    "test": "tsx tasks.ts --2-compile && mocha --exit",
     "test:package": "mocha test/testPackageFiles.js --exit",
     "test:integration": "mocha test/*.js --exit",
-    "prepublishOnly": "node tasks",
-    "build": "node tasks",
-    "tsc": "node tasks --2-compile",
+    "prepublishOnly": "tsx tasks.ts",
+    "build": "tsx tasks.ts",
+    "tsc": "tsx tasks.ts --2-compile",
     "check-ts": "tsc --noEmit",
     "lint": "eslint -c eslint.config.mjs",
     "release": "release-script",
@@ -60,7 +60,7 @@
     "release-major": "release-script major --yes",
     "update-packages": "npx npm-check-updates --upgrade && cd src-admin && npx npm-check-updates --upgrade",
     "npm": "npm i && cd src-admin && npm i -f",
-    "beforePush": "node tasks"
+    "beforePush": "tsx tasks.ts"
   },
   "license": "MIT",
   "readmeFilename": "README.md"

@@ -6,14 +6,14 @@
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.1",
         "@hello-pangea/dnd": "^18.0.1",
-        "@iobroker/gui-components": "^10.1.0",
-        "@mui/icons-material": "^9.3.1",
-        "@mui/material": "9.3.1",
-        "@vitejs/plugin-react": "^6.1.0",
-        "react": "^19.2.8",
-        "react-dom": "^19.2.8",
+        "@iobroker/gui-components": "^10.3.10",
+        "@mui/icons-material": "^9.5.0",
+        "@mui/material": "9.5.0",
+        "@vitejs/plugin-react": "^6.1.2",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0",
         "react-splitter-layout": "^4.0.0",
-        "uuid": "^14.0.2"
+        "uuid": "^14.0.3"
     },
     "scripts": {
         "start": "vite --host",

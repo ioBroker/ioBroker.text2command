@@ -1,7 +1,7 @@
 /*
   Attention:
   This file is used in the front-end and in the back-end. Originally it is placed in `/src/lib/langModel.ts`
-  and the compiled version will be copied by `tasks.js` to `src-admin/public/langModel.js`,
+  and the compiled version will be copied by `tasks.ts` to `src-admin/public/langModel.js`,
   where it exposes `commands` and `findMatched` as globals on `window`.
 
   Therefore, this file must not import anything at runtime (type-only imports are fine).
