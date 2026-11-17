@@ -21,15 +21,19 @@ export function getRandomPhrase(arrOrText: RuleAck): string {
         return arrOrText.toString();
     }
 
+    let phrase: string;
     if (alternatives.length > 1) {
         let randomNumber = Math.floor(Math.random() * alternatives.length);
         if (randomNumber > alternatives.length - 1) {
             randomNumber = alternatives.length - 1;
         }
-        return alternatives[randomNumber];
+        phrase = alternatives[randomNumber];
+    } else {
+        phrase = alternatives[0] ?? '';
     }
 
-    return alternatives[0] ?? '';
+    // Convert literal "\n" (backslash + n) into a real line break
+    return typeof phrase === 'string' ? phrase.replace(/\\n/g, '\n') : phrase;
 }
 
 export function sayIDontKnow(
