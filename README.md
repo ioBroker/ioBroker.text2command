@@ -264,7 +264,7 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 5.0.2 (2026-11-21)
 * (@GermanBluefox) Allowed new line (\n) in the answer texts of rules (#220)
 
 ### 5.0.1 (2026-10-14)
@@ -281,9 +281,6 @@ If activated so by every command (no matter if the request came via state or sen
 
 ### 3.0.3 (2023-12-18)
 * (bluefox) Corrected GUI
-
-### 3.0.2 (2023-02-27)
-* (bluefox) Corrected link from admin
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

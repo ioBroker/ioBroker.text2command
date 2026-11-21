@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "text2command",
-    "version": "5.0.1",
+    "version": "5.0.2",
     "news": {
+      "5.0.2": {
+        "en": "Allowed new line (\\n) in the answer texts of rules (#220)",
+        "de": "Zulässige neue Zeile (\\n) im Regeltext (#220)",
+        "ru": "Разрешена новая строка (\\n) в текстах ответов правил (#220)",
+        "pt": "Nova linha permitida (\\n) nas respostas das regras (#220)",
+        "nl": "Toegestane nieuwe regel (\\n) in de antwoordteksten van de regels (#220)",
+        "fr": "Nouvelle ligne autorisée (\\n) dans les réponses aux règles (#220)",
+        "it": "Nuova riga consentita (\\n) nelle risposte (#220)",
+        "es": "Se permite una nueva línea (\\n) en las respuestas de las reglas (#220)",
+        "pl": "Dozwolony nowy wiersz (\\n) w tekstach odpowiedzi reguł (#220)",
+        "uk": "Дозволено новий рядок (\\n) у текстах відповідей правил (#220)",
+        "zh-cn": "允许在规则的答案文本中使用换行 (\\n) (#220)"
+      },
       "5.0.1": {
         "en": "Adapter requires node.js >= 22 now.\nAdmin 7.6.20+ is required. Added Ukrainian translations. Older changelog entries are moved to CHANGELOG_OLD.md",
         "de": "Adapter benötigt jetzt node.js >= 22.\nAdmin 7.6.20+ ist nötig. Ukrainisch hinzugefügt. Ältere Einträge wurden nach CHANGELOG_OLD.md verschoben",
@@ -80,19 +93,6 @@
         "pl": "Poprawka wielu błędów GUI",
         "uk": "Виправлено багато помилок інтерфейсу",
         "zh-cn": "纠正许多古伊错误"
-      },
-      "2.2.2": {
-        "en": "Fix crash cases reported by Sentry",
-        "de": "Reparieren Crashfälle gemeldet von Sentry",
-        "ru": "Исправление случаев аварии, описанных Sentry",
-        "pt": "Corrigir casos de acidente relatados por Sentry",
-        "nl": "Vertaling:",
-        "fr": "Troubles de crash signalés par Sentry",
-        "it": "Correzione dei casi di crash segnalati da Sentry",
-        "es": "Casos de accidente fijo reportados por Sentry",
-        "pl": "Sprawy katastrofy Fix podane przez Sentry’a",
-        "zh-cn": "Sentry所报告的六例事故",
-        "uk": "Виправлено збої, про які повідомив Sentry"
       }
     },
     "titleLang": {
