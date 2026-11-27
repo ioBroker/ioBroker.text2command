@@ -52,7 +52,7 @@ Following functions will be interpreted as
 - roles - `level.backlight`
 - roles - `switch.backlight`
 
-**`enum.functions.blinds/shutter`** (Rollladen | Жалюзи/окна)
+**`enum.functions.blinds`** (Rollladen | Жалюзи/окна). Accepted IDs: `blinds`, `blind`, `shutter`, `shutters`, `rollladen`, `rolladen`, `jalousie`, `jalousien`, `жалюзи`, `окна` (case-insensitive)
 
 - roles - `level.blind`
 - roles - `switch.blind`
@@ -153,7 +153,8 @@ Command accepts the numeric value too. It has priority, e.g. in command `switch 
 You can define default room in []. E.g. `switch the light on[sleepingroom]`
 
 ### Open/close blinds
-This command reads information from enums. It uses **`enum.functions.blind`** to find type blinds or shutter and **`enum.rooms`** to detect room name.
+This command reads information from enums. It uses **`enum.functions.blinds`** to find type blinds or shutter and **`enum.rooms`** to detect room name.
+Instead of `blinds` the function can have one of the IDs listed above, e.g. `enum.functions.rollladen` or `enum.functions.shutter`.
 
 Keywords to move blinds up are: *blinds up*, e.g. `set blinds up in sleeping room`
 
@@ -264,6 +265,9 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (@GermanBluefox) Blinds command finds enum.functions with all supported names (e.g. rollladen, shutter), not only blinds (#264)
+
 ### 5.0.2 (2026-11-21)
 * (@GermanBluefox) Allowed new line (\n) in the answer texts of rules (#220)
 

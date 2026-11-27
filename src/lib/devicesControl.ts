@@ -1,5 +1,5 @@
 import { roomsDative, rooms } from './rooms';
-import { functions, functionsAccusative } from './functions';
+import { BLINDS_FUNCTION, functions, functionsAccusative } from './functions';
 import { sayNoFunctionInThisRoom, sayNoSuchFunction, sayNoSuchRoom, sayNothingToDo } from './simpleAnswers';
 import type { AnswerCallback, ControlCallback, RuleAck, RuleArgument } from './types';
 
@@ -590,7 +590,7 @@ export function controlBlinds(
     ack: RuleAck,
     cb: AnswerCallback,
 ): void {
-    controlByFunctionHelper(lang, text, args, ack, cb, 'blinds', extractBlindCmd, generateAnswerBlinds);
+    controlByFunctionHelper(lang, text, args, ack, cb, BLINDS_FUNCTION, extractBlindCmd, generateAnswerBlinds);
 }
 
 /**
