@@ -264,6 +264,9 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (@GermanBluefox) Empty answer from external processor falls back to rules again; timeout warning only on real timeout (#150)
+
 ### 5.0.2 (2026-11-21)
 * (@GermanBluefox) Allowed new line (\n) in the answer texts of rules (#220)
 
