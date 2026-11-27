@@ -51,7 +51,7 @@ function startAdapter(options?: Partial<utils.AdapterOptions>): ioBroker.Adapter
                 processTimeout = null;
                 const task = processQueue.shift();
                 if (task) {
-                    if (state.val || state.val === '' || state.val === 0) {
+                    if (state.val || state.val === 0) {
                         task.callback?.((task.withLanguage ? `${task.language};` : '') + String(state.val));
                     } else {
                         processText(
@@ -164,6 +164,7 @@ function useExternalProcessor(): void {
                 const _task = processQueue.shift();
 
                 if (_task) {
+                    adapter.log.warn(`Timeout for external processor: ${adapter.config.processorId}`);
                     // process with rules
                     processText(
                         (_task.withLanguage ? `${_task.language};` : '') + _task.command,
@@ -236,7 +237,7 @@ function processText(
         }
         adapter.log.error('External process queue is full. Try to use rules.');
     } else if (afterProcessor) {
-        adapter.log.warn(`Timeout for external processor: ${adapter.config.processorId}`);
+        adapter.log.debug(`Processing by rules after external processor: ${adapter.config.processorId}`);
     }
 
     const matchedRules = findMatched(cmd, rules);
