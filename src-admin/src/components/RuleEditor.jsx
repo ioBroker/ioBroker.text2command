@@ -462,7 +462,6 @@ export default class RuleEditor extends PureComponent {
                 <div style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 4 }}>
                     <TextField
                         variant="standard"
-                        styles={styles.inputOid}
                         fullWidth
                         label={isMobile ? label : ''}
                         size="small"
@@ -473,11 +472,12 @@ export default class RuleEditor extends PureComponent {
                         key={key}
                         slotProps={{
                             input: {
-                                endAdornment: value ? (
-                                    <IconButton onClick={() => onChange({ target: { value: '' } })}>
-                                        <CloseIcon />
-                                    </IconButton>
-                                ) : undefined,
+                                endAdornment:
+                                    value && onChange ? (
+                                        <IconButton onClick={() => onChange({ target: { value: '' } })}>
+                                            <CloseIcon />
+                                        </IconButton>
+                                    ) : undefined,
                             },
                         }}
                     />
@@ -588,6 +588,7 @@ export default class RuleEditor extends PureComponent {
                     value: args && this.state.localRule.args[0]?.default,
                     type: args && args[0]?.type,
                     onOpenSelectDialog: selectedId => this.openSelectIdDialog(args && args[0], selectedId, 0),
+                    onChange: handlers.param1Text,
                     onSwitchChange: handlers.param1OnSwitch,
                     key: 'Param1',
                     label: args && args[0]?.name, // `${t('Argument')}:`,
@@ -614,6 +615,7 @@ export default class RuleEditor extends PureComponent {
                     value: args && this.state.localRule.args[2]?.default,
                     type: args && args[2]?.type,
                     onOpenSelectDialog: selectedId => this.openSelectIdDialog(args && args[2], selectedId, 2),
+                    onChange: handlers.param3Text,
                     onSwitchChange: handlers.param3OnSwitch,
                     key: 'Param3',
                     label: args && args[2]?.name, // `${t('Argument')}:`,
@@ -655,12 +657,44 @@ export default class RuleEditor extends PureComponent {
                     isLocalStateWasUpdated: true,
                 });
             },
+            param1Text(event) {
+                that.setState({
+                    localRule: {
+                        ...that.state.localRule,
+                        args: that.state.localRule.args.map((arg, index) =>
+                            index === 0
+                                ? {
+                                      ...arg,
+                                      default: event.target.value,
+                                  }
+                                : arg,
+                        ),
+                    },
+                    isLocalStateWasUpdated: true,
+                });
+            },
             param2Text(event) {
                 that.setState({
                     localRule: {
                         ...that.state.localRule,
                         args: that.state.localRule.args.map((arg, index) =>
-                            index > 0
+                            index === 1
+                                ? {
+                                      ...arg,
+                                      default: event.target.value,
+                                  }
+                                : arg,
+                        ),
+                    },
+                    isLocalStateWasUpdated: true,
+                });
+            },
+            param3Text(event) {
+                that.setState({
+                    localRule: {
+                        ...that.state.localRule,
+                        args: that.state.localRule.args.map((arg, index) =>
+                            index === 2
                                 ? {
                                       ...arg,
                                       default: event.target.value,
