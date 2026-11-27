@@ -2,6 +2,9 @@ import type { LanguageMap } from './types';
 
 // TODO: translate it to "it, es, pl, pt, nl, fr, zh-cn"
 
+/** All accepted IDs of the blinds function in enum.functions. "blinds" must be first */
+export const BLINDS_FUNCTION = 'blinds/blind/shutter/shutters/rollladen/rolladen/jalousie/jalousien/жалюзи/окна';
+
 /** Translation of functions, used for detection */
 export const functions: Record<string, LanguageMap> = {
     'backlight/beleuchtung/подсветка': {
@@ -11,7 +14,7 @@ export const functions: Record<string, LanguageMap> = {
     },
     'light/licht/свет': { ru: 'свет/лампу/лампа', de: 'licht/lampe', en: 'light/lamp' },
     'heating/heizung/отопление': { ru: 'отопление/батаре', de: 'heizung', en: 'heating' },
-    'blind/rollladen/rolladen/жалюзи/окна': { ru: 'жалюзи/ставни', de: 'rollladen', en: 'shutter' },
+    [BLINDS_FUNCTION]: { ru: 'жалюзи/ставни', de: 'rollladen', en: 'shutter' },
     'music/musik/музыка': { ru: 'музык', de: 'musik', en: 'music' },
     'security/sicherheit/alarm/alarmanlage/сигнализация/охрана': {
         ru: 'сигнал/охран',
@@ -26,7 +29,7 @@ export const functionsGenitive: Record<string, LanguageMap> = {
     'backlight/beleuchtung/подсветка': { ru: 'подсветки', de: 'e Beleuchtung', en: 'back light' },
     'light/licht/свет': { ru: 'ламп', de: 'e Lampen', en: 'light' },
     'heating/heizung/отопление': { ru: 'отопление', de: 'e Heizung', en: 'heating' },
-    'blind/rollladen/rolladen/жалюзи/окна': { ru: 'жалюзей', de: 'e Rollladen', en: 'shutter' },
+    [BLINDS_FUNCTION]: { ru: 'жалюзей', de: 'e Rollladen', en: 'shutter' },
     'music/musik/музыка': { ru: 'музыки', de: 'e Musik', en: 'music' },
     'security/sicherheit/alarm/alarmanlage/сигнализация/охрана': {
         ru: 'сигнализации',
@@ -41,7 +44,7 @@ export const functionsAccusative: Record<string, LanguageMap> = {
     'backlight/beleuchtung/подсветка': { ru: 'подсветку', de: 'die Beleuchtung', en: 'back light' },
     'light/licht/свет': { ru: 'свет', de: 'das Licht', en: 'light' },
     'heating/heizung/отопление': { ru: 'отопление', de: 'die Heizung', en: 'heating' },
-    'blind/rollladen/rolladen/жалюзи/окна': { ru: 'жалюзи', de: 'die Rollladen', en: 'shutter' },
+    [BLINDS_FUNCTION]: { ru: 'жалюзи', de: 'die Rollladen', en: 'shutter' },
     'music/musik/музыка': { ru: 'музыку', de: 'die Musik', en: 'music' },
     'security/sicherheit/alarm/alarmanlage/сигнализация/охрана': {
         ru: 'сигнализацию',

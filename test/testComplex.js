@@ -214,3 +214,32 @@ describe('Commands: Control by function', function () {
         }
     }
 });
+
+describe('Commands: Control blinds', function () {
+    before(function () {
+        const blindsEnums = JSON.parse(JSON.stringify(enums));
+        blindsEnums['enum.functions']['enum.functions.Rollladen'] = {
+            type: 'enum',
+            common: {
+                name: 'Rollladen',
+                members: ['hm-rpc.0.AAA0103754.4'],
+            },
+            native: {},
+            _id: 'enum.functions.Rollladen',
+        };
+        devicesControl.init(blindsEnums, adapter);
+    });
+    after(function () {
+        devicesControl.init(enums, adapter);
+    });
+
+    it('Must find enum.functions.Rollladen', function (done) {
+        writtenValue = undefined;
+        devicesControl.controlBlinds('de', 'mache rollladen im bad auf', [], true, function (response) {
+            if (debug) console.log('controlBlinds(mache rollladen im bad auf) returned: ' + response);
+            assert.strictEqual(response, 'Öffne Rollladen im Bad');
+            assert.strictEqual(writtenValue, true);
+            done();
+        });
+    });
+});
