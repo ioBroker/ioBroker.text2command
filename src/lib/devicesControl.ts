@@ -74,6 +74,46 @@ function findFunction(text: string, lang: ioBroker.Languages): string {
     return sFunction;
 }
 
+/**
+ * Collect the members of the enum including the members of nested enums (e.g. rooms in floors)
+ *
+ * @param enumId ID of the enum, e.g. `enum.rooms.livingroom`
+ * @param _enums all enums of the system
+ * @param visited already processed enum IDs to prevent endless loops
+ */
+function collectMembers(enumId: string, _enums: Enums, visited: Set<string>): string[] {
+    if (visited.has(enumId)) {
+        return [];
+    }
+    visited.add(enumId);
+
+    // enum group, e.g. `enum.rooms`
+    const group = _enums[enumId.split('.', 2).join('.')];
+    if (!group) {
+        return [];
+    }
+
+    const result: string[] = [];
+    const members = group[enumId]?.common?.members || [];
+    for (const member of members) {
+        if (member.startsWith('enum.')) {
+            // enum as member, e.g. room as member of floor
+            result.push(...collectMembers(member, _enums, visited));
+        } else {
+            result.push(member);
+        }
+    }
+
+    // subgroups, e.g. `enum.rooms.floor.livingroom`
+    for (const id in group) {
+        if (id.startsWith(`${enumId}.`)) {
+            result.push(...collectMembers(id, _enums, visited));
+        }
+    }
+
+    return [...new Set(result)];
+}
+
 function getEnum(enumType: string, text: string | string[], _enums: Enums): string[] | null {
     enumType = `enum.${enumType}`;
     if (!_enums[enumType]) {
@@ -82,26 +122,40 @@ function getEnum(enumType: string, text: string | string[], _enums: Enums): stri
     }
     const texts = Array.isArray(text) ? text : text.split('/');
 
-    for (let t = 0; t < texts.length; t++) {
+    let enumId: string | null = null;
+    for (let t = 0; t < texts.length && !enumId; t++) {
         if (_enums[enumType][`${enumType}.${texts[t]}`]) {
-            if (_enums[enumType][`${enumType}.${texts[t]}`].common) {
-                return _enums[enumType][`${enumType}.${texts[t]}`].common.members || null;
-            }
-            adapter.log.error(`Invalid enum object "${enumType}.${texts[t]}"`);
-            return null;
+            enumId = `${enumType}.${texts[t]}`;
+            break;
         }
         // sometimes rooms are in capital
         for (const rId in _enums[enumType]) {
-            if (rId.toLowerCase().replace('_', '') === `${enumType}.${texts[t]}`) {
-                if (_enums[enumType][rId].common) {
-                    return _enums[enumType][rId].common.members || null;
-                }
-                adapter.log.error(`Invalid enum object "${rId}"`);
-                return null;
+            if (rId.toLowerCase().replace(/_/g, '') === `${enumType}.${texts[t]}`) {
+                enumId = rId;
+                break;
             }
         }
     }
-    return null;
+
+    // rooms could be nested in floors, e.g. `enum.rooms.EG.living_room`
+    for (let t = 0; t < texts.length && !enumId; t++) {
+        for (const rId in _enums[enumType]) {
+            if (rId.split('.').pop()?.toLowerCase().replace(/_/g, '') === texts[t]) {
+                enumId = rId;
+                break;
+            }
+        }
+    }
+
+    if (!enumId) {
+        return null;
+    }
+    if (!_enums[enumType][enumId].common) {
+        adapter.log.error(`Invalid enum object "${enumId}"`);
+        return null;
+    }
+
+    return collectMembers(enumId, _enums, new Set());
 }
 
 function controlState(
