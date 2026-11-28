@@ -188,7 +188,7 @@ class Layout extends PureComponent {
         const rule = JSON.parse(JSON.stringify(ruleStruct));
         Object.assign(rule, shortDataRule);
 
-        const isUnsavedChanges = Object.values(this.state.unsavedRules).length;
+        const isUnsavedChanges = !!(this.state.selectedRule && this.state.unsavedRules[this.state.selectedRule.id]);
 
         const newState = {
             rules: JSON.parse(JSON.stringify(this.state.rules)),
@@ -283,12 +283,12 @@ class Layout extends PureComponent {
     selectRule = id => {
         const { selectedRule, rules } = this.state;
 
-        if (selectedRule.id === id) {
+        if (selectedRule?.id === id) {
             // ignore
             if (this.isMobile) {
                 this.setState({ isLeftBarOpen: false });
             }
-        } else if (this.state.unsavedRules[selectedRule.id]) {
+        } else if (selectedRule && this.state.unsavedRules[selectedRule.id]) {
             this.setState({
                 pendingSelectedRuleId: id,
             });
@@ -359,11 +359,13 @@ class Layout extends PureComponent {
     removeRule = id => {
         let rules = JSON.parse(JSON.stringify(this.state.rules));
         rules = rules.filter(rule => rule.id !== id);
+        const { [id]: removedId, ...unsavedRules } = this.state.unsavedRules;
 
         this.setState(
             {
                 rules,
                 selectedRule: rules.length ? rules[rules.length - 1] : null,
+                unsavedRules,
             },
             () => {
                 this.props.readConfig().then(config => {
