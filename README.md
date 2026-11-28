@@ -264,6 +264,9 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (GermanBluefox) Fixed blank admin page after creating a rule when an unsaved rule was deleted before (#303)
+
 ### 5.0.2 (2026-11-21)
 * (@GermanBluefox) Allowed new line (\n) in the answer texts of rules (#220)
 
