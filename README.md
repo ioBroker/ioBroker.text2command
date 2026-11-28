@@ -264,6 +264,9 @@ If activated so by every command (no matter if the request came via state or sen
 -->
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (GermanBluefox) Rooms nested in floors (enum subgroups) are now supported by blinds and function rules (#287)
+
 ### 5.0.2 (2026-11-21)
 * (@GermanBluefox) Allowed new line (\n) in the answer texts of rules (#220)
 
